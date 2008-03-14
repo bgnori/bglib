@@ -1,6 +1,7 @@
 #!/usr/bin/gnubg -p
 from struct import pack, unpack
-from base64 import standard_b64encode, standard_b64decode, urlsafe_b64encode, urlsafe_b64decode
+from base64 import standard_b64encode, standard_b64decode
+from base64 import urlsafe_b64encode, urlsafe_b64decode
 
 def _fact(n):
   if n == 0:
@@ -369,6 +370,15 @@ def convert_to_urlsafe(s):
 
 def convert_from_urlsafe(s):
   return s.replace('-', '+').replace('_', '/')
+
+
+def FIBSdecode(s):
+  pass
+
+def FIBSencode(s):
+  '''no use?!'''
+  raise NotImplemented
+  pass
 
 if __name__ == "__main__":
   import doctest
