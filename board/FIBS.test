@@ -1,12 +1,87 @@
 >>> from FIBS import *
 >>> b = FIBSDecode('board:You:someplayer:3:0:0:0:-2:0:0:0:0:5:0:3:0:0:0:-5:5:0:0:0:-3:0:-5:0:0:0:0:2:0:1:6:2:0:0:1:1:1:0:1:-1:0:25:0:0:0:0:2:0:0:0')
 
->>> b.position
-((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
-
 >>> b.data
 ['board', 'You', 'someplayer', '3', '0', '0', '0', '-2', '0', '0', '0', '0', '5', '0', '3', '0', '0', '0', '-5', '5', '0', '0', '0', '-3', '0', '-5', '0', '0', '0', '0', '2', '0', '1', '6', '2', '0', '0', '1', '1', '1', '0', '1', '-1', '0', '25', '0', '0', '0', '0', '2', '0', '0', '0']
 >>> b.data[b.index['you'][0]:b.index['you'][1]]
 ['You']
+
 >>> b.you
-['You']
+'You'
+
+>>> b.him
+'someplayer'
+
+>>> b.matchlength
+3
+
+>>> b.your_score
+0
+
+>>> b.his_score
+0
+
+>>> b.board
+(0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0)
+
+>>> b.turn
+1
+
+>>> b.your_dice
+(6, 2)
+
+>>> b.his_dice
+(0, 0)
+
+>>> b.doubling_cube
+1
+
+>>> b.you_may_double
+1
+
+>>> b.he_may_double
+1
+
+>>> b.was_doubled
+0
+
+This means you are O. If got -1, your are X.
+>>> b.your_colour
+1
+
+This means you are playing from position 24 to position 1. 
+If got 1 yor are playing from position 1 to position 24.
+>>> b.your_direction
+-1
+
+>>> b.your_home
+0
+
+>>> b.your_bar
+25
+
+>>> b.your_chequers_on_home
+0
+
+>>> b.his_chequers_on_home
+0
+
+>>> b.your_chequers_on_bar
+0
+
+>>> b.his_chequers_on_bar
+0
+
+How many chequers can you play?
+>>> b.your_chequers_to_play
+2
+
+redouble for unlimited games. we are talking about beaver!
+>>> b.redoubles
+0
+
+>>> b.position()
+((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+
+
+
