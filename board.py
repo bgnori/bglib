@@ -382,20 +382,60 @@ def urlsafe_match_decode(s):
   pass
 
 
-def FIBSdecode(s):
+def FIBSDecode(s):
   '''
->>> b = FIBSdecode('board:You:someplayer:3:0:0:0:-2:0:0:0:0:5:0:3:0:0:0:-5:5:0:0:0:-3:0:-5:0:0:0:0:2:0:1:6:2:0:0:1:1:1:0:1:-1:0:25:0:0:0:0:2:0:0:0')
+>>> b = FIBSDecode('board:You:someplayer:3:0:0:0:-2:0:0:0:0:5:0:3:0:0:0:-5:5:0:0:0:-3:0:-5:0:0:0:0:2:0:1:6:2:0:0:1:1:1:0:1:-1:0:25:0:0:0:0:2:0:0:0')
 >>> b.position
 ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
  (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+>>> b.data
+['board', 'You', 'someplayer', '3', '0', '0', '0', '-2',\
+ '0', '0', '0', '0', '5', '0', '3', '0', '0', '0', '-5',\
+ '5', '0', '0', '0', '-3', '0', '-5', '0', '0', '0', '0',\
+ '2', '0', '1', '6', '2', '0', '0', '1', '1', '1', '0',\
+ '1', '-1', '0', '25', '0', '0', '0', '0', '2', '0', '0', '0']
+>>> b.data[b.index['you'][0]:b.index['you'][1]]
+['You']
+>>> b.you
+['You']
+
+
   '''
-  class X:
-    def __init__(self):
-      self.position =None
-      pass
-  ret = X()
+  class FIBSBoardState:
+    index = dict(
+        you=(1, 2), 
+        him=(2, 3),
+        matchlength=(3, 4),
+        your_score=(4, 5),
+        his_score=(5, 6),
+        board=(6, 32),
+        turn=(32, 33),
+        dice=(),
+        may_double=(),
+        was_doubled=(),
+        colour=(),#ugh!
+        direction=(),#ugh!
+        OnHome=(), 
+        OnBar=(),
+        CanMove=(),
+        ForcedMove=(),# Not USED! 
+        Redoubles=(),
+      )
+
+    def __init__(self, s):
+      ''' see bellow address for definition.
+      http://www.fibs.com/fibs_interface.html#board_state
+      '''
+      self.data = s.split(':')
+
+  class Decoded(FIBSBoardState):
+    def __init__(self, s):
+      FIBSBoardState.__init__(self, s)
+      self.position = None
+
+  ret = Decoded(s)
   ret.position = \
 ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
@@ -404,13 +444,9 @@ def FIBSdecode(s):
   return ret
 
 
-
-
-
-def FIBSencode(s):
-  '''no use?!'''
+def FIBSEncode(s):
+  '''currently no use.'''
   raise NotImplemented
-  pass
 
 
 if __name__ == "__main__":
