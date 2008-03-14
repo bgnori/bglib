@@ -10,26 +10,12 @@ from setuptools import setup, Extension
 
 __version__ = "0.0.1"
 
-FIBSCookieMonster = Extension(
-          name = 'FIBSCookieMonster', 
-          include_dirs=['FCM'],
+name = 'FIBSCookieMonster'
+
+soFIBSCookieMonster = Extension(
+          name='_FIBSCookieMonster',
           sources=[
-            'FCM/FIBSCookieMonster.c',
             'FCM/FIBSCookieMonster.i',
-          ],
-          extra_compile_args= [
-            '-IFIBSCookieMonster.h',
-            '-Iclip.h',
-            #'-IFIBSCookies.h',
-          ],
-          depends=[
-            'FCM/FIBSCookieMonster.h',
-            'FCM/clip.h',
-            #'FCM/FIBSCookies.h',
-            'FCM/FIBSCookieMonster.c',
-            'FCM/FIBSCookieMonster.i',
-            'FCM/FIBSCookies.i',
-            'FCM/CLIP.i',
           ],
          )
 
@@ -42,22 +28,21 @@ setup(
 """This package contains:
   - gnubg postion id decoder/decoder
   - FIBS board: decoder
-  - FIBSCookieMonster Extension(wrapper generated with swig, originally written by Chris)
+  - FIBSCookieMonster Extension(wrapper generated with swig, originally written by Paul Ferguson)
 """,
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
+  packages = ['bgutil',],
+  package_dir = {'bgutil': 'FCM'},
   py_modules=[
+      '__init__',
       'positionhash',
+      'FIBSCookieMonster',
       ],
-  headers=[
-            'FCM/FIBSCookieMonster.h',
-            'FCM/clip.h',
-            #'FCM/FIBSCookies.h',
-            ],
   ext_modules=[
-              FIBSCookieMonster,
+              soFIBSCookieMonster,
              ],
   url="http://www.backgammonbase.com",
   license="apache 2.0",
 )
-               #'FCM/FIBSCookieMonster.h', 'FCM/CLIP.h', 'FCM/FIBSCookies.h',
+
