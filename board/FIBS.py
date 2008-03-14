@@ -53,12 +53,28 @@ class _FIBSBoardState(object):
 
   def position(self):
     '''returns (you, him)'''
-    self.board
+    def your_chequers(x):
+      if self.your_colour * x > 0:
+        return x
+      return 0
+    def his_chequers(x):
+      if self.your_colour * x < 0:
+        return -x
+      return 0
+      
+    if self.your_direction < 0:
+      # your_bar = his_home
+      # your_home = his_bar
+      you = self.board[self.your_home+1:self.your_bar+1]
+      him = list(self.board[self.your_home:self.your_bar-1+1])
+    else:
+      you = self.board[self.your_bar:self.your_home-1+1]
+      him = list(self.board[self.your_bar+1:self.your_home+1])
 
-    return ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
- 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
- (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
- 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+    him.reverse()
+    you = map(your_chequers, you)
+    him = map(his_chequers, him)
+    return tuple(you), tuple(him)
 
 
 def FIBSDecode(s):
