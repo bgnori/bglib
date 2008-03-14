@@ -8,12 +8,12 @@ from base64 import standard_b64encode, standard_b64decode
 from base import *
 
 
-def gnubg_position_encode(xs):
+def encode_position(xs):
   """ encodes tuple expression into gnubg position id """
   return standard_b64encode(twoside_encode(xs)).rstrip('=')
 
 
-def gnubg_position_decode(s):
+def decode_position(s):
   """ decode tuple expression from gnubg position id """
   while True:
     try:
@@ -25,6 +25,14 @@ def gnubg_position_decode(s):
     else:
       break
   return twoside_decode(bin)
+
+
+def encode_match(s):
+  pass
+
+
+def decode_match(s):
+  pass
 
 
 def convert_to_urlsafe(s):

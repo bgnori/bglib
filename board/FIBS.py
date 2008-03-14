@@ -77,10 +77,10 @@ class _FIBSBoardState(object):
     return tuple(you), tuple(him)
 
 
-def FIBSDecode(s):
+def decode(s):
   return _FIBSBoardState(s)
 
-def FIBSEncode(s):
+def encode(s):
   '''currently no use.'''
   raise NotImplemented
 
