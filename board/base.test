@@ -1,0 +1,78 @@
+This is testing and example file for base.py
+
+>>> from base import *
+>>> from base import _fact
+
+
+>>> fact = Fact()
+>>> for i in range(0, 10):
+...    assert(fact(i) == _fact(i))
+
+
+>>> C(0, 0)
+1
+
+
+>>> C(1, 1)
+1
+
+
+>>> C(4, 2)
+6
+
+
+>>> def _C(n, m):
+...   return fact(n)/(fact(m) * fact(n-m))
+>>> for i in range(0, 20):
+...     for j in range(0, i):
+...         assert(_C(i, j) == C(i, j))
+
+>>> sum = 0
+>>> for m in range(0, 16):
+...     sum += BackgammonCombination(m)
+>>> sum == WTN
+True
+
+
+>>> sum = 0
+>>> for m in range(0, 16):
+...     sum += BackgammonCombination_allC(m)
+>>> sum == WTN
+True
+
+>>> xs = [1, 0, 1, 0, 0]
+>>> C_Hash(xs, r=2)
+8
+>>> xs = [0, 0, 0, 1, 1]
+>>> C_Hash(xs, r=2)
+0
+
+>>> C_RHash(8, 5, 2)
+[1, 0, 1, 0, 0]
+
+
+>>> for x in encode((0, 0, 0, 0, 0, 5, 2, 3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)):
+...     x
+'\xe0'
+'\xdb'
+'\xc1'
+'\x03'
+'\x00'
+
+
+>>> list(decode('\xe0\xdb\xc1\x03\x00'))
+[0, 0, 0, 0, 0, 5, 2, 3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+>>> oneside_decode(oneside_encode((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1)))
+(6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1)
+
+
+>>> oneside_decode(oneside_encode((0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0)))
+(0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0)
+
+
+>>> twoside_decode(twoside_encode(((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1), (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0))))
+((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1), (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0))
+
+
