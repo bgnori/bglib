@@ -5,19 +5,11 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-from setuptools import setup, Extension
+from setuptools import setup
 
 
 __version__ = "0.0.1"
 
-name = 'FIBSCookieMonster'
-
-soFIBSCookieMonster = Extension(
-          name='_FIBSCookieMonster',
-          sources=[
-            'FCM/FIBSCookieMonster.i',
-          ],
-         )
 
 setup(
   name='backgammonbase-bgutil',
@@ -28,20 +20,15 @@ setup(
 """This package contains:
   - gnubg postion id decoder/decoder
   - FIBS board: decoder
-  - FIBSCookieMonster Extension(wrapper generated with swig, originally written by Paul Ferguson)
 """,
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
   packages = ['bgutil',],
-  package_dir = {'bgutil': 'FCM'},
+  package_dir = {'bgutil': ''},
   py_modules=[
       '__init__',
-      'positionhash',
-      'FIBSCookieMonster',
+      'board',
       ],
-  ext_modules=[
-              soFIBSCookieMonster,
-             ],
   url="http://www.backgammonbase.com",
   license="apache 2.0",
 )
