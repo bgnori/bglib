@@ -284,14 +284,14 @@ def twoside_decode(s):
   return (tuple(xs[:25]), tuple(xs[25:50]))
 
 
-def gnubg_encode(xs):
+def gnubg_position_encode(xs):
   """
->>> gnubg_encode(((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
+>>> gnubg_position_encode(((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1),\
                   (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0,\
                    0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0)))
 'vzsAAFhu2xFABA'
->>> gnubg_encode(((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
+>>> gnubg_position_encode(((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
                    5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
                   (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
                    5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
@@ -299,15 +299,15 @@ def gnubg_encode(xs):
   """
   return standard_b64encode(twoside_encode(xs)).rstrip('=')
 
-def gnubg_decode(s):
+def gnubg_position_decode(s):
   """
->>> gnubg_decode("vzsAAFhu2xFABA")
+>>> gnubg_position_decode("vzsAAFhu2xFABA")
 ((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1),\
  (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0,\
  0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0))
 
->>> gnubg_decode("4HPwATDgc/ABMA")
+>>> gnubg_position_decode("4HPwATDgc/ABMA")
 ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
  (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
@@ -325,14 +325,14 @@ def gnubg_decode(s):
   return twoside_decode(bin)
 
 
-def urlsafe_encode(xs):
+def urlsafe_position_encode(xs):
   """
->>> urlsafe_encode(((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
+>>> urlsafe_position_encode(((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1),\
                     (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0,\
                      0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0)))
 'vzsAAFhu2xFABA'
->>> urlsafe_encode(((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
+>>> urlsafe_position_encode(((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
                      5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
                     (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
                      5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
@@ -341,14 +341,14 @@ def urlsafe_encode(xs):
   return urlsafe_b64encode(twoside_encode(xs)).rstrip('=')
 
 
-def urlsafe_decode(s):
+def urlsafe_position_decode(s):
   """
->>> urlsafe_decode("vzsAAFhu2xFABA")
+>>> urlsafe_position_decode("vzsAAFhu2xFABA")
 ((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1),\
  (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0,\
  0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0))
->>> urlsafe_decode("4HPwATDgc_ABMA")
+>>> urlsafe_position_decode("4HPwATDgc_ABMA")
 ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
  (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
@@ -365,20 +365,53 @@ def urlsafe_decode(s):
       break
   return twoside_decode(bin)
 
+
 def convert_to_urlsafe(s):
   return s.replace('+', '-').replace('/', '_')
+
 
 def convert_from_urlsafe(s):
   return s.replace('-', '+').replace('_', '/')
 
 
-def FIBSdecode(s):
+def urlsafe_match_encode(m):
   pass
+
+
+def urlsafe_match_decode(s):
+  pass
+
+
+def FIBSdecode(s):
+  '''
+>>> b = FIBSdecode('board:You:someplayer:3:0:0:0:-2:0:0:0:0:5:0:3:0:0:0:-5:5:0:0:0:-3:0:-5:0:0:0:0:2:0:1:6:2:0:0:1:1:1:0:1:-1:0:25:0:0:0:0:2:0:0:0')
+>>> b.position
+((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
+ 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
+ (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
+ 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+  '''
+  class X:
+    def __init__(self):
+      self.position =None
+      pass
+  ret = X()
+  ret.position = \
+((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
+ 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
+ (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
+ 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+  return ret
+
+
+
+
 
 def FIBSencode(s):
   '''no use?!'''
   raise NotImplemented
   pass
+
 
 if __name__ == "__main__":
   import doctest
