@@ -52,6 +52,9 @@ class _FIBSBoardState(object):
       return tuple(L)
 
   def position(self):
+    '''returns (you, him)'''
+    self.board
+
     return ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),\
  (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,\
