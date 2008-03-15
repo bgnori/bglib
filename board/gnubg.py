@@ -75,7 +75,7 @@ class BitArray:
 
   def __getitem__(self, nth):
     pos_of_byte, pos_in_byte = self._getpos(nth)
-    byte = struct.unpack(self.strcut_fmt, self.binary)[pos_of_byte]
+    byte = struct.unpack(self.strcut_fmt, self.binary[pos_of_byte])[0]
 
     if byte & 1 << pos_in_byte:
       return 1
@@ -99,7 +99,8 @@ class BitArray:
                    )[:self.size]
 
   def __iter__(self):
-    pass
+    for x in range(self.size):
+      yield self[x]
       
 
   '''unsupported'''
