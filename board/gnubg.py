@@ -40,6 +40,7 @@ def byte_length(length_in_bit):
 import struct
 
 class BitArray:
+  strcut_fmt = '!B'
   def __init__(self, size, binary=None, endian=None):
     self.size = size
     if binary: 
@@ -75,8 +76,7 @@ class BitArray:
 
   def __getitem__(self, nth):
     pos_of_byte, pos_in_byte = self._getpos(nth)
-    fmt = '%s%iB'%(self.endian, byte_length(self.size))
-    byte = struct.unpack(fmt, self.binary)[pos_of_byte]
+    byte = struct.unpack(self.strcut_fmt, self.binary)[pos_of_byte]
 
     if byte & 1 << pos_in_byte:
       return 1
@@ -88,16 +88,14 @@ class BitArray:
       raise ValueError('value for asignment must be 0 or 1')
     pos_of_byte, pos_in_byte = self._getpos(nth)
 
-    #fmt = '%sB'%(self.endian) 
-    fmt = '=B'
-    data = list(struct.unpack(fmt, self.binary[pos_of_byte]))[0]
+    data = list(struct.unpack(self.strcut_fmt, self.binary[pos_of_byte]))[0]
 
     if value:
         data |= 1 << pos_in_byte
     else:
       data &= ~(1 << pos_of_byte)
     self.binary = (self.binary[:pos_of_byte]
-                   + struct.pack(fmt, data) 
+                   + struct.pack(self.strcut_fmt, data) 
                    + self.binary[pos_of_byte+1:]
                    )[:self.size]
 
