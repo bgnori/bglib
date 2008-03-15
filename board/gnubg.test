@@ -12,3 +12,89 @@
 
 >>> decode_position("4HPwATDgc/ABMA")
 ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+
+
+>>> b = BitArray(8, '\x00')
+>>> b.endian
+'<'
+>>> b.binary
+'\x00'
+
+>>> b[0]
+0
+>>> b[7]
+0
+>>> b[8] #doctest: +ELLIPSIS
+Traceback (most recent call last): 
+  ...
+IndexError: out of range
+
+>>> b['a'] #doctest: +ELLIPSIS
+Traceback (most recent call last): 
+  ...
+TypeError: index must be int
+
+>>> b[0] = 'a'#doctest: +ELLIPSIS
+Traceback (most recent call last): 
+  ...
+ValueError: value for asignment must be 0 or 1
+
+
+>>> b = BitArray(8, endian='<')
+>>> b[7] = 1
+>>> b.binary
+'\x80'
+
+
+>>> b = BitArray(8, endian='>')
+>>> b.binary
+'\x00'
+>>> b.endian
+'>'
+
+>>> b[0] = 1
+>>> b.binary
+'\x80'
+
+>>> b = BitArray(8, endian='>')
+>>> b[7] = 1
+>>> b.binary
+'\x01'
+
+
+>>> b = BitArray(16, endian='<')
+>>> b[0] = 1
+>>> b.binary
+'\x01\x00'
+
+>>> b = BitArray(16, endian='<')
+>>> b[15] = 1
+>>> b.binary
+'\x00\x80'
+
+
+>>> b = BitArray(16, endian='>')
+>>> b[0] = 1
+>>> b.binary
+'\x80\x00'
+
+>>> b = BitArray(16, endian='>')
+>>> b[15] = 1
+>>> b.binary
+'\x00\x01'
+
+
+
+>>> b = BitArray(12, endian='>')
+>>> b.binary
+'\x00\x00'
+>>> b[0] = 1
+>>> b.binary
+'\x01\x00'
+
+>>> b = BitArray(12, endian='>')
+>>> b[11] = 1
+>>> b.binary
+'\x00\x08'
+
+
