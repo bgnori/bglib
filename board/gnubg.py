@@ -121,8 +121,8 @@ class MatchProxy(object):
     pass
   def __setattr__(self, name, value):
     pass
-  def __init__(self):
-    self.__dict__['_data']=BitArray()
+  def __init__(self, s=None):
+    self.__dict__['_data']=BitArray(66, binary=s)
 
   def decode(self, s):
     self.__dict__['_data']=BitArray(s)

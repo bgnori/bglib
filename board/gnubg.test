@@ -109,3 +109,10 @@ ValueError: value for asignment must be 0 or 1
 >>> b.binary
 '\x00\x08'
 
+
+
+
+>>> b = MatchProxy('\x41\x89\x2a\x01\x20\x00\x20\x00\x00')
+>>> map(int, list(b.__dict__['_data']))
+1000 00 1 0 100 1 0 00 101 010 10010000000000 01000000000000 00000000000000
+
