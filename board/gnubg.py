@@ -117,6 +117,19 @@ class BitArray:
 
 class MatchProxy(object):
   '''you:him'''
+  index = dict(
+      cube_in_logarithm=(0, 4, None),
+      cube_owner = (4, 6, None),
+      on_action = (6, 7, None),
+      crawford = (7, 8, None),
+      game_state = (8, 11, None),
+      on_inner_action = (11, 12, None),
+      doubled = (12, 13, None),
+      resign_offer = (13, 15, None),
+      rolled = (15, 21, None),
+      match_length = (21, 36, None),
+      score = (36, 66, None),
+      )
 
   def __getattr__(self, name):
     pass
