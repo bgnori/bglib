@@ -61,7 +61,6 @@ class BitArray:
     if 0 >  nth or nth >= self.size:
       raise IndexError('out of range')
 
-
     pos_of_byte = nth/bits_in_byte
 
     if self.endian == '<':

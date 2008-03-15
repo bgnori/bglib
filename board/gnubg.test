@@ -84,17 +84,28 @@ ValueError: value for asignment must be 0 or 1
 '\x00\x01'
 
 
+>>> b = BitArray(12, endian='>')
+>>> b.binary
+'\x00\x00'
+>>> b[0] = 1
+>>> b.binary
+'\x80\x00'
 
 >>> b = BitArray(12, endian='>')
+>>> b[11] = 1
+>>> b.binary
+'\x00\x10'
+
+
+>>> b = BitArray(12, endian='<')
 >>> b.binary
 '\x00\x00'
 >>> b[0] = 1
 >>> b.binary
 '\x01\x00'
 
->>> b = BitArray(12, endian='>')
+>>> b = BitArray(12, endian='<')
 >>> b[11] = 1
 >>> b.binary
 '\x00\x08'
-
 
