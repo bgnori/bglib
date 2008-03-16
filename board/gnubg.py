@@ -27,6 +27,18 @@ def decode_position(s):
   return twoside_decode(bin)
 
 
+def single_int(bitarray):
+  return bitarray.int()
+  
+def single_boolean(bitarray):
+  return bitarray.int()!=0
+
+def double_int_tuple(bitarray):
+  n = bitarray.size
+  upper=bitarray[:n/2]
+  bottom = bitarray[n/2:n]
+  return upper.int(), bottom.int()
+
 class MatchProxy(object):
   '''you:him'''
   index = dict(
@@ -56,19 +68,27 @@ class MatchProxy(object):
     self.__dict__['_data']=BitArray(66, binary=s, endian='<')
 
   def decode(self, s):
-    self.__dict__['_data']=BitArray(s)
+    self._data = BitArray(s)
 
   def encode(self):
-    return self.__dict__['_data']
+    return self._data.binary
     
 
-def encode_match(s):
-  mp = MatchProxy()
-  return mp.encode()
-
+def encode_match(m):
+  return standard_b64encode(m.encode()).rstrip('=')
 
 def decode_match(s):
-  return MatchProxy().decode(s)
+  """ decode tuple expression from gnubg position id """
+  while True:
+    try:
+      bin = standard_b64decode(s)
+    except TypeError, e:
+      if str(e) != 'Incorrect padding':
+        raise
+      s += '='
+    else:
+      break
+  return MatchProxy(bin)
 
 
 def convert_to_urlsafe(s):

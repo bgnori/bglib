@@ -5,7 +5,7 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-from struct import pack, unpack
+import struct
 
 def _fact(n):
   if n == 0:
@@ -156,7 +156,7 @@ class ByteContext:
     return self.count < 8
     
   def pack(self):
-    r = pack('<B', self.byte)
+    r = struct.pack('<B', self.byte)
     self.reset()
     return r
 
@@ -191,7 +191,7 @@ def encode(xs):
 def decode(b):
   n = 0
   for fragment in b:
-    byte = unpack('<B', fragment)[0]
+    byte = struct.unpack('<B', fragment)[0]
     for j in range(8):
       if byte & (1 << j):
         n += 1
@@ -230,7 +230,6 @@ def byte_length(length_in_bit):
   return length_in_bit / bits_in_byte + roundup
 
 
-import struct
 
 class BitArray:
   strcut_fmt = '!B'
@@ -339,19 +338,6 @@ class BitArray:
   def __mul__(self, x): raise NotImplemented
   def __rmul__(self, x): raise NotImplemented
   def __imul__(self, x): raise NotImplemented
-
-
-def single_int(bitarray):
-  return bitarray.int()
-  
-def single_boolean(bitarray):
-  return bitarray.int()!=0
-
-def double_int_tuple(bitarray):
-  n = bitarray.size
-  upper=bitarray[:n/2]
-  bottom = bitarray[n/2:n]
-  return upper.int(), bottom.int()
 
 
 if __name__ == '__main__':
