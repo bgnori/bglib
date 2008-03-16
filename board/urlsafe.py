@@ -7,6 +7,7 @@
 
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 from base import *
+from gnubg import MatchProxy
 
 def encode_position(xs):
   """ encode tuple expression into urlsafe gnubg position id"""
@@ -25,11 +26,23 @@ def decode_position(s):
       break
   return twoside_decode(bin)
 
+
 def encode_match(m):
-  pass
+  return urlsafe_b64encode(m.encode()).rstrip('=')
+
 
 def decode_match(s):
-  pass
+  """ decode tuple expression from gnubg position id """
+  while True:
+    try:
+      bin = urlsafe_b64decode(s)
+    except TypeError, e:
+      if str(e) != 'Incorrect padding':
+        raise
+      s += '='
+    else:
+      break
+  return MatchProxy(bin)
 
 if __name__ == '__main__':
   import doctest
