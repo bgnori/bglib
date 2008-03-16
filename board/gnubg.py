@@ -56,8 +56,7 @@ class BitArray:
       self.endian = '<' # little endian
 
   def _getpos(self, nth):
-    if not isinstance(nth, int):
-      raise TypeError('index must be int')
+    assert(isinstance(nth, int))
     if 0 >  nth or nth >= self.size:
       raise IndexError('out of range')
 
@@ -73,10 +72,23 @@ class BitArray:
   def __len__(self):
     return self.size
 
-  def __getitem__(self, nth):
+  def __getitem__(self, nth_or_slice):
+    if isinstance(nth_or_slice, int):
+      return self.getnth(nth_or_slice)
+    elif isinstance(nth_or_slice, slice):
+      #assert(nth_or_slice.step == 1)
+      ret = BitArray(size=nth_or_slice.stop - nth_or_slice.start,
+                     endian = self.endian
+                      )
+      for i in range(nth_or_slice.stop -  nth_or_slice.start):
+        ret[i] = self.getnth(nth_or_slice.start + i)
+      return ret
+    else:
+      raise TypeError('index must be int or slice, but got %s'%str(type(nth_or_slice)))
+      
+  def getnth(self, nth):
     pos_of_byte, pos_in_byte = self._getpos(nth)
     byte = struct.unpack(self.strcut_fmt, self.binary[pos_of_byte])[0]
-
     if byte & 1 << pos_in_byte:
       return 1
     else:
@@ -132,7 +144,9 @@ class MatchProxy(object):
       )
 
   def __getattr__(self, name):
-    pass
+    begin, end, func = self.index[name]
+    return self._data[begin]
+
   def __setattr__(self, name, value):
     pass
   def __init__(self, s=None):

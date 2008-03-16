@@ -32,12 +32,32 @@ IndexError: out of range
 >>> b['a'] #doctest: +ELLIPSIS
 Traceback (most recent call last): 
   ...
-TypeError: index must be int
+TypeError: index must be int or slice, but got <type 'str'>
 
 >>> b[0] = 'a'#doctest: +ELLIPSIS
 Traceback (most recent call last): 
   ...
 ValueError: value for asignment must be 0 or 1
+
+>>> b[0:1].binary
+'\x00'
+
+>>> c = b[0:2]
+>>> c[0] = 0
+>>> c.binary
+'\x00'
+
+>>> c[1] = 1
+>>> c.binary
+'\x02'
+
+>>> b[3] = 1
+>>> c = b[0:4]
+>>> c.binary
+'\x08'
+
+
+
 
 
 >>> b = BitArray(8, endian='<')
