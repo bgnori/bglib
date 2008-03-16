@@ -76,3 +76,198 @@ True
 ((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1), (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0))
 
 
+>>> b = BitArray(8, '\x00')
+>>> b.endian
+'<'
+>>> b.binary
+'\x00'
+
+
+Accessing bit by index
+
+>>> b[0]
+0
+>>> b[7]
+0
+>>> b[8] #doctest: +ELLIPSIS
+Traceback (most recent call last): 
+  ...
+IndexError: out of range
+
+>>> b['a'] #doctest: +ELLIPSIS
+Traceback (most recent call last): 
+  ...
+TypeError: index must be int or slice, but got <type 'str'>
+
+>>> b[0] = 'a'#doctest: +ELLIPSIS
+Traceback (most recent call last): 
+  ...
+ValueError: value for asignment must be 0 or 1
+
+
+Accessing bit by slice
+
+>>> b[0:1].binary
+'\x00'
+
+>>> c = b[0:2]
+>>> c[0] = 0
+>>> c.binary
+'\x00'
+
+>>> c[1] = 1
+>>> c.binary
+'\x02'
+
+>>> c[0] = 1
+>>> c.binary
+'\x03'
+
+>>> c
+<BitArray Instance '1:1'>
+
+>>> b[3] = 1
+>>> c = b[0:4]
+>>> c.binary
+'\x08'
+
+>>> c
+<BitArray Instance '0:0:0:1'>
+
+>>> b = BitArray(8, '\x00')
+>>> b[0] = 1
+>>> b.int()
+1
+
+>>> b = BitArray(8, '\x00')
+>>> b[7] = 1
+>>> b.int()
+128
+
+>>> b = BitArray(8, '\x00')
+>>> b[0] = 1
+>>> b[7] = 1
+>>> b.int()
+129
+
+>>> b = BitArray(16, '\x41\x89')
+>>> ord(b.binary[0]) == ord('\x41')
+True
+
+>>> ord(b.binary[1]) == ord('\x89')
+True
+
+>>> ''.join(map(str, list(b)))
+'1000001010010001'
+
+>>> b
+<BitArray Instance '1:0:0:0:0:0:1:0:1:0:0:1:0:0:0:1'>
+
+>>> b[0:16]
+<BitArray Instance '1:0:0:0:0:0:1:0:1:0:0:1:0:0:0:1'>
+
+>>> b[0:8]
+<BitArray Instance '1:0:0:0:0:0:1:0'>
+
+>>> ord('\x41')
+65
+
+>>> ord(b[0:8].binary)
+65
+
+
+>>> b[8:16]
+<BitArray Instance '1:0:0:1:0:0:0:1'>
+
+
+Setter
+
+>>> b = BitArray(16)
+>>> for i,x in enumerate('1000001010010001'):
+...     b[i] = int(x)
+
+>>> b
+<BitArray Instance '1:0:0:0:0:0:1:0:1:0:0:1:0:0:0:1'>
+
+
+Endians
+
+>>> b = BitArray(8, endian='<')
+>>> b[7] = 1
+>>> b.binary
+'\x80'
+
+
+>>> b = BitArray(8, endian='>')
+>>> b.binary
+'\x00'
+>>> b.endian
+'>'
+
+>>> b[0] = 1
+>>> b.binary
+'\x80'
+
+>>> b = BitArray(8, endian='>')
+>>> b[7] = 1
+>>> b.binary
+'\x01'
+
+
+>>> b = BitArray(16, endian='<')
+>>> b[0] = 1
+>>> b.binary
+'\x01\x00'
+
+>>> b = BitArray(16, endian='<')
+>>> b[15] = 1
+>>> b.binary
+'\x00\x80'
+
+
+>>> b = BitArray(16, endian='>')
+>>> b[0] = 1
+>>> b.binary
+'\x80\x00'
+
+>>> b = BitArray(16, endian='>')
+>>> b[15] = 1
+>>> b.binary
+'\x00\x01'
+
+
+>>> b = BitArray(12, endian='>')
+>>> b.binary
+'\x00\x00'
+>>> b[0] = 1
+>>> b.binary
+'\x80\x00'
+
+>>> b = BitArray(12, endian='>')
+>>> b[11] = 1
+>>> b.binary
+'\x00\x10'
+
+
+>>> b = BitArray(12, endian='<')
+>>> b.binary
+'\x00\x00'
+>>> b[0] = 1
+>>> b.binary
+'\x01\x00'
+
+
+Casting to int
+
+>>> b.int()
+1
+
+>>> b = BitArray(12, endian='<')
+>>> b[11] = 1
+>>> b.binary
+'\x00\x08'
+
+>>> b.int()
+2048
+
+
