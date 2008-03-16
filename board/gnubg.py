@@ -95,6 +95,7 @@ class BitArray:
       return 0
 
   def __setitem__(self, nth, value):
+    assert(isinstance(nth, int))
     if not value in (0, 1):
       raise ValueError('value for asignment must be 0 or 1')
     pos_of_byte, pos_in_byte = self._getpos(nth)
