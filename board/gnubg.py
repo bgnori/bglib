@@ -126,7 +126,7 @@ class BitArray:
     if value:
       data |= 1 << pos_in_byte
     else:
-      data &= ~(1 << pos_of_byte)
+      data &= ~(1 << pos_in_byte)
 
     self._setbyte(pos_of_byte, data)
 
