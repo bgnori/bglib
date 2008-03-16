@@ -6,15 +6,16 @@
 #
 
 from distutils.core import setup
+#from setuptools import setup
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 setup(
   name='backgammonbase-bgutil',
   version=__version__,
-  zip_safe=False,
+  #zip_safe=False,
   description="backgammon programming utilities",
   long_description=
 """This package contains:
@@ -26,8 +27,8 @@ setup(
 """,
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
-  packages = ['bgutil',],
-  package_dir = {'bgutil': ''},
+  packages = ['bgutil.board','bgutil'],
+  package_dir = {'bgutil.board': 'board', 'bgutil':''},
   py_modules=[
       'board.base',
       'board.gnubg',
