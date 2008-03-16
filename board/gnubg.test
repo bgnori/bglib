@@ -89,6 +89,12 @@ Accessing bit by slice
 129
 
 >>> b = BitArray(16, '\x41\x89')
+>>> ord(b.binary[0]) == ord('\x41')
+True
+
+>>> ord(b.binary[1]) == ord('\x89')
+True
+
 >>> b
 <BitArray Instance '1:0:0:0:0:0:1:0:1:0:0:1:0:0:0:1'>
 

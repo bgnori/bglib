@@ -92,7 +92,6 @@ class BitArray:
       raise IndexError('out of range')
     return (nth/bits_in_byte, self._pos_in_byte(nth%bits_in_byte))
 
-
   def getnth(self, nth):
     pos_of_byte, pos_in_byte = self._getpos(nth)
 
