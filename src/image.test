@@ -1,2 +1,8 @@
 
+>>> import model
 >>> import image
+>>> import helper
+
+>>> b = model.board()
+>>> i = image.generate(b)
+>>> i.show()
