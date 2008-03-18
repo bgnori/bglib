@@ -7,13 +7,16 @@
 
 
 
-def new(chequers,
+# def new(
+'''
+chequers,
         cube_value=None
         cube_owner=(you, him, center, None),
         rolled=(None, ()),
         on_action=(you, him),
         on_inner_action=(you, him),
         doubled=(True, False),
+'''
 
 
 
