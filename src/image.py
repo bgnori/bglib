@@ -14,11 +14,7 @@ import model
 debug_color = config.active.image.debug_color
 rpath = config.active.image.resource
 
-
-def generate(board):
-  X, O = board.position
-  im = Image.new("RGB",(291, 232), debug_color)
-  for i in range(0,24):
+def draw_point(im, i, O, X):
     fn = rpath + ''
     xoffset = 0
     yoffset = 0
@@ -57,15 +53,11 @@ def generate(board):
     pt = Image.open(fn)
     if rotate:
       pt = pt.rotate(180)
+    print i, xoffset, yoffset
     im.paste(pt, (xoffset, yoffset))
 
-  if X[24]:
-    res = Image.open(rpath+"bar-green-%i.jpg"%(X[24]))
-  else:
-    res = Image.open(rpath+"bar-none.jpg")
-  im.paste(res, (133, 18))
 
-
+def draw_bar(im, O, X ):
   if O[24]:
     logging.debug("%i"%(O[24]))
     res = Image.open(rpath+"bar-white-%i.jpg"%(O[24]))
@@ -73,7 +65,23 @@ def generate(board):
   else:
     res = Image.open(rpath+"bar-none.jpg")
   im.paste(res , (133, 126))
-  
+  print "O[24]", 133, 126
+
+  if X[24]:
+    res = Image.open(rpath+"bar-green-%i.jpg"%(X[24]))
+  else:
+    res = Image.open(rpath+"bar-none.jpg")
+  im.paste(res, (133, 18))
+  print "X[24]", 133, 18
+
+
+def generate(board):
+  X, O = board.position
+  im = Image.new("RGB",(291, 232), debug_color)
+  for i in range(0,24):
+    draw_point(im, i, O, X)
+  draw_bar(im, O, X)
+
   im.paste(Image.open(rpath+"center.jpg"), (133, 106))
   im.paste(Image.open(rpath+"field.jpg"), (25, 106))
   im.paste(Image.open(rpath+"field.jpg"), (158, 106))
