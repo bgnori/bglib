@@ -33,6 +33,7 @@ setup(
   py_modules=[
       'bgutil.model',
       'bgutil.image',
+      'bgutil.helper',
       'bgutil.encoding.base',
       'bgutil.encoding.gnubg',
       'bgutil.encoding.urlsafe',
