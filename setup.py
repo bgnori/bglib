@@ -19,21 +19,21 @@ setup(
   description="backgammon programming utilities",
   long_description=
 """This package contains:
-  board subpackage
-  - base module is basic component for board subpackage
+  encoding subpackage
+  - base module is basic component for encoding subpackage
   - gnubg module is gnubg postion id decoder/decoder
   - urlsafe module is urlsafe version of gnubg position decoder/encoder
-  - FIBS module is FIBS 'board:' decoder
+  - FIBS module is FIBS 'board:' responce  decoder
 """,
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
-  packages = ['bgutil.board','bgutil'],
-  package_dir = {'bgutil.board': 'board', 'bgutil':''},
+  packages = ['bgutil.encoding','bgutil'],
+  package_dir = {'bgutil.encoding': 'encoding', 'bgutil':''},
   py_modules=[
-      'board.base',
-      'board.gnubg',
-      'board.urlsafe',
-      'board.FIBS',
+      'encoding.base',
+      'encoding.gnubg',
+      'encoding.urlsafe',
+      'encoding.FIBS',
       ],
   url="http://www.backgammonbase.com",
   license="apache 2.0",
