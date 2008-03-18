@@ -28,8 +28,8 @@ setup(
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
   packages = ['bgutil.encoding','bgutil'],
-  package_dir = {'bgutil.encoding': 'encoding', 'bgutil':''},
-  package_data = {'bgutil':'resource/*.jpg'},
+  package_dir = {'bgutil.encoding': 'encoding', 'bgutil':'.'},
+  package_data = {'bgutil':['./resource/*.jpg'], },
   py_modules=[
       'board',
       'image',
