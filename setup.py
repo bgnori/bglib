@@ -6,7 +6,7 @@
 #
 
 from distutils.core import setup
-#from setuptools import setup
+import os.path
 
 
 __version__ = "0.0.2"
@@ -27,16 +27,16 @@ setup(
 """,
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
-  packages = ['bgnori', 'bgutil.encoding'],
-  package_dir = {'bgutil':'src', 'bgutil.encoding': 'src/encoding', },
-  package_data = {'bgutil':['resource/*.jpg',], },
+  package_dir = {'bgutil':'src',},
+  packages = ['bgutil', 'bgutil.encoding'],
+  package_data = {'bgutil':[os.path.join('resource','*.jpg'),], },
   py_modules=[
-      'board',
-      'image',
-      'encoding.base',
-      'encoding.gnubg',
-      'encoding.urlsafe',
-      'encoding.FIBS',
+      'bgutil.board',
+      'bgutil.image',
+      'bgutil.encoding.base',
+      'bgutil.encoding.gnubg',
+      'bgutil.encoding.urlsafe',
+      'bgutil.encoding.FIBS',
       ],
   url="http://www.backgammonbase.com",
   license="apache 2.0",
