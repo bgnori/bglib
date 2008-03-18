@@ -6,6 +6,8 @@ src/model.test
 src/image.py
 src/image.test
 src/image.cfg
+src/helper.test
+src/helper.cfg
 src/encoding/__init__.py
 src/encoding/base.py
 src/encoding/base.test

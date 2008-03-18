@@ -5,6 +5,8 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 from base64 import standard_b64encode, standard_b64decode
+
+# local 
 from base import *
 
 
@@ -97,6 +99,7 @@ def convert_to_urlsafe(s):
 
 def convert_from_urlsafe(s):
   return s.replace('-', '+').replace('_', '/')
+
 
 
 if __name__ == '__main__':

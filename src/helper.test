@@ -1,0 +1,3 @@
+
+>>> import helper
+>>> b = helper.decode_gnubg('vzsAAFhu2xFABA','QYkqASAAIAAA')

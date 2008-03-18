@@ -1,7 +1,14 @@
->>> import base
->>> im = base.Image()
->>> im
 
+>>> import model
+>>> b = model.board()
+>>> b.position
+((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
+>>> b.cube_value
+0
+
+>>> b.cube_value = 1024
+>>> b.cube_value
+1024
 
 
