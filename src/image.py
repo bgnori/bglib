@@ -65,9 +65,6 @@ def generate(board):
     res = Image.open(rpath+"bar-none.jpg")
   im.paste(res, (133, 18))
 
-  im.paste(Image.open(rpath+"center.jpg"), (133, 106))
-  im.paste(Image.open(rpath+"field.jpg"), (25, 106))
-  im.paste(Image.open(rpath+"field.jpg"), (158, 106))
 
   if O[24]:
     logging.debug("%i"%(O[24]))
@@ -77,6 +74,10 @@ def generate(board):
     res = Image.open(rpath+"bar-none.jpg")
   im.paste(res , (133, 126))
   
+  im.paste(Image.open(rpath+"center.jpg"), (133, 106))
+  im.paste(Image.open(rpath+"field.jpg"), (25, 106))
+  im.paste(Image.open(rpath+"field.jpg"), (158, 106))
+
   return im
 
 if __name__ == '__main__':
