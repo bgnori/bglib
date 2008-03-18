@@ -31,7 +31,7 @@ setup(
   packages = ['bgutil', 'bgutil.encoding'],
   package_data = {'bgutil':[os.path.join('resource','*.jpg'),], },
   py_modules=[
-      'bgutil.board',
+      'bgutil.model',
       'bgutil.image',
       'bgutil.encoding.base',
       'bgutil.encoding.gnubg',

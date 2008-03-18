@@ -1,8 +1,8 @@
 setup.cfg
 setup.py
 src/__init__.py
-src/board.py
-src/board.test
+src/model.py
+src/model.test
 src/image.py
 src/image.test
 src/image.cfg
