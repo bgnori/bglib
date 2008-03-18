@@ -4,6 +4,9 @@
 >>> import image
 >>> import helper
 >>> list(image.parse_align())[0]
+['size', 'null', '291', '232']
+
+>>> list(image.parse_align())[3]
 ['point', '1', '248', '126']
 
 >>> list(image.parse_align())[-1]

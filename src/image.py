@@ -27,11 +27,19 @@ def parse_align():
 
 class Painter(object):
   def __init__(self, board):
-    self.image = Image.new("RGB",(291, 232), debug_color)
     self.board = board
     self.rpath = config.active.image.resource
-    self.colormap = {model.him:"green-", model.you:"white-"}
+    self.colormap = dict()
     
+  def size(self, param, x, y):
+    self.image = Image.new("RGB",(x, y), debug_color)
+    
+  def you(self, param, x, y):
+    self.colormap.update({model.you:param})
+
+  def him(self, param, x, y):
+    self.colormap.update({model.him:param})
+
   def point(self, param, x, y):
     you, him = self.board.position
     i = int(param) - 1
@@ -73,17 +81,17 @@ class Painter(object):
     self.image.paste(Image.open(self.rpath+"field.jpg"), (x, y))
 
   def center(self, param, x, y):
-    self.image.paste(Image.open(self.rpath+"center.jpg"), (133, 106))
-
-  def handle(self, name, param, x, y):
-    f = getattr(self, name)
-    f(param, int(x), int(y))
+    self.image.paste(Image.open(self.rpath+"center.jpg"), (x, y))
 
 
 def generate(board):
   p = Painter(board)
   for name, param, x, y in parse_align():
-    p.handle(name, param, int(x), int(y))
+    f = getattr(p, name)
+    if f:
+      f(param, int(x), int(y))
+    else:
+      raise
   return p.image
 
 
