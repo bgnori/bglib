@@ -27,7 +27,7 @@ setup(
 """,
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
-  packages = ['bgnori', 'bgutil.encoding'],
+  packages = ['', 'bgnori', 'bgutil.encoding'],
   package_dir = {'bgutil':'src', 'bgutil.encoding': 'src/encoding', },
   package_data = {'bgutil':['resource/*.jpg',], },
   py_modules=[
