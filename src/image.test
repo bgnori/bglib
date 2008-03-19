@@ -3,13 +3,16 @@
 >>> import model
 >>> import image
 >>> import helper
->>> list(image.parse_align())[0]
+>>> f = file('./resource/align.txt')
+>>> list(image.parse_align(f))[0]
 ['size', 'null', '291', '232']
 
->>> list(image.parse_align())[3]
+>>> f = file('./resource/align.txt')
+>>> list(image.parse_align(f))[3]
 ['point', '1', '248', '126']
 
->>> list(image.parse_align())[-1]
+>>> f = file('./resource/align.txt')
+>>> list(image.parse_align(f))[-1]
 ['field', 'null', '158', '106']
 
 >>> reference = Image.open('ok.png')

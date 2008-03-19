@@ -4,6 +4,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import os.path
 import logging
 import csv
 
@@ -15,20 +16,18 @@ import model
 
 debug_color = config.active.image.debug_color
 
-def parse_align():
-  f = file('./resource/align.txt', 'r')
+def parse_align(f):
   for line in f.readlines():
     x = line.split()
     if x:
       yield line.split()
     else:
       raise StopIteration
-    
 
 class Painter(object):
-  def __init__(self, board):
+  def __init__(self, board, rpath):
     self.board = board
-    self.rpath = config.active.image.resource
+    self.rpath = rpath
     self.colormap = dict()
     
   def size(self, param, x, y):
@@ -85,14 +84,19 @@ class Painter(object):
 
 
 def generate(board):
-  p = Painter(board)
-  for name, param, x, y in parse_align():
-    f = getattr(p, name)
-    if f:
-      f(param, int(x), int(y))
-    else:
-      raise
-  return p.image
+  rpath = config.active.image.resource
+  p = Painter(board, rpath)
+  f = file(os.path.join(rpath, 'align.txt'))
+  try:
+    for name, param, x, y in parse_align(f):
+      m = getattr(p, name)
+      if m and callable(m):
+        m(param, int(x), int(y))
+      else:
+        raise
+    return p.image
+  finally:
+    f.close()
 
 
 if __name__ == '__main__':
