@@ -68,11 +68,13 @@ class Painter(object):
         res = Image.open(self.rpath+"bar-"+self.colormap[model.you]+"%i.jpg"%(you[24]))
       else:
         res = Image.open(self.rpath+"bar-none.jpg")
-    if param == 'Him':
+    elif param == 'Him':
       if him[24]:
         res = Image.open(self.rpath+"bar-"+self.colormap[model.him]+"%i.jpg"%(him[24]))
       else:
         res = Image.open(self.rpath+"bar-none.jpg")
+    else:
+      raise TypeError("bad parameter for bar: %s"%param)
       
     self.image.paste(res , (x, y))
 
