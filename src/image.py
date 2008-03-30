@@ -11,10 +11,11 @@ import csv
 import Image
 import ImageDraw
 
-import config
+import tito.config
 import model
 
-debug_color = config.active.image.debug_color
+conf = tito.config.use(__file__)
+debug_color = conf.image.debug_color
 
 def parse_align(f):
   for line in f.readlines():
@@ -86,7 +87,7 @@ class Painter(object):
 
 
 def generate(board):
-  rpath = config.active.image.resource
+  rpath = conf.image.resource
   p = Painter(board, rpath)
   f = file(os.path.join(rpath, 'align.txt'))
   try:

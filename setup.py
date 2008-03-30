@@ -40,6 +40,6 @@ setup(
       'bglib.encoding.FIBS',
       ],
   url="http://www.backgammonbase.com",
-  license="apache 2.0",
+  license="proprietary",
 )
 
