@@ -9,6 +9,7 @@
 
 
 # constants
+invalid = -1
 you = 0
 him = 1
 center = 2

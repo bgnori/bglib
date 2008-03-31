@@ -5,6 +5,9 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
+import tito.smuggle
+tito.smuggle.module('../..', 'bglib.model', locals())
+
 class _FIBSBoardState(object):
   '''
   http://www.fibs.com/fibs_interface.html#board_state
@@ -78,7 +81,50 @@ class _FIBSBoardState(object):
 
 
 def decode(s):
-  return _FIBSBoardState(s)
+  fibs = _FIBSBoardState(s)
+  m = bglib.model.board()
+  m.position = fibs.position()
+  m.cube_value=fibs.doubling_cube
+
+  if fibs.you_may_double and fibs.he_may_double:
+    m.cube_owner = bglib.model.center
+    m.crawford = False
+  elif fibs.you_may_double and not fibs.he_may_double:
+    m.cube_owner = bglib.model.you
+    m.crawford = False
+  elif not fibs.you_may_double and fibs.he_may_double:
+    m.cube_owner = bglib.model.him
+    m.crawford = False
+  else:
+    m.cube_owner = bglib.model.center
+    m.crawford = True
+
+  if fibs.turn == fibs.your_colour:
+    m.on_action = bglib.model.you
+    m.rolled = fibs.your_dice
+    m.game_state = bglib.model.on_going
+  elif fibs.turn == fibs.your_colour * -1: #opposite colour
+    m.rolled = fibs.his_dice
+    m.on_action = bglib.model.him
+    m.game_state = bglib.model.on_going
+  else:
+    m.rolled=(0, 0)
+    m.on_action = bglib.model.invalid
+    m.game_state = bglib.model.finished
+    #m.game_state = bglib.model.resigned
+    #ugh! There is no way to define it
+    #may be we need to add some thing.
+
+  if fibs.was_doubled:
+    m.on_inner_action=bglib.model.you
+    m.doubled = True
+
+  m.resign_offer = bglib.model.resign_none
+  # can't define!
+
+  m.match_length = fibs.matchlength
+  m.score = (fibs.your_score, fibs.his_score)
+  return m
 
 def encode(s):
   '''currently no use.'''
@@ -87,4 +133,5 @@ def encode(s):
 if __name__ == '__main__':
   import doctest
   doctest.testfile('FIBS.test')
+
 
