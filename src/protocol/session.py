@@ -111,9 +111,8 @@ class Transport(telnetlib.Telnet):
 
 class Subscriber:
   lock = lambda self, *args, **kw : self._lock
-  def __init__(self, transport, **kw):
+  def __init__(self, **kw):
     self._lock = threading.Condition()
-    self.transport = transport
     self.kw = kw
     self._done = False
     self.results = list()
@@ -155,61 +154,6 @@ class BannerGrabber(Subscriber):
   def CLIP_MOTD_END(self, got):
     self.done()
 
-class Login(Subscriber):
-  def __init__(self, transport, **kw):
-    Subscriber.__init__(self, transport, **kw)
-    self.first_attempt = True
-
-  def FIBS_LoginPrompt(self, got):
-    if self.first_attempt:
-      self.first_attempt = False
-      t = Template('login $client_name $clip_version $username $password')
-      self.transport.send_line(t.substitute(self.kw))
-    else:
-      #  getting Login: again means fauled to login.
-      self.append(False)
-      self.done()
-  def CLIP_MOTD_END(self, got):
-    self.append(True)
-    self.done()
-
-class OwnInfo(Subscriber):
-  def CLIP_OWN_INFO(self, got):
-    self.append(got)
-    self.done()
-
-class Welcome(Subscriber):
-  def CLIP_WELCOME(self, got):
-    self.append(got)
-    self.done()
-
-class MotGrabber(Subscriber):
-  def CLIP_MOTD_BEGIN(self, got):
-    pass
-  def FIBS_MOTD(self, got):
-    self.append(got)
-  def CLIP_MOTD_END(self, got):
-    self.done()
-
-
-class Exit(Subscriber):
-  def post_register(self):
-    self.transport.send_line('bye')
-
-  def FIBS_Goodbye(self, got):
-    self.append(got) # single line goobye
-
-  def FIBS_PostGoodbye(self, got):
-    self.append(got) #multiline
-
-  def EOFError(self, got):
-    self.done()
-    self.transport.close()
-
-  def socket_error(self, got):
-    self.done()
-    self.transport.close()
-
 
 class Session(Transport):
   def __init__(self, timeout=None, debug=0):
@@ -226,31 +170,6 @@ class Session(Transport):
     ret = subscriber.wait_for_result()
     self.unregister(subscriber)
     return ret
-    
-  def login(self, **kw):
-    #client_name, clip_version, username, password):
-    if kw['username'] =='guest':
-      raise 'use Session::create_account'
-    login = Login(self, **kw)
-    bg = BannerGrabber(self)
-    oi = OwnInfo(self)
-    w = Welcome(self)
-    mg = MotGrabber(self)
-    self.register(bg, oi, w, mg)
-
-    authresult = self.blocking(login)[0]
-    if not authresult:
-      raise 'login failed'
-    assert(bg.is_done())
-    assert(oi.is_done())
-    assert(w.is_done())
-    assert(mg.is_done())
-    self.unregister(bg, oi, w, mg)
-
-    self.send_line('rawwho')
-    # Ugh! 
-    # by forcing rawwho command, avoid incomplete listing of players
-    return bg.results, w.results, oi.results, mg.results
     
   def exit(self, **kw):
     subscriber = Exit(self, **kw)
