@@ -171,13 +171,6 @@ class Session(Transport):
     self.unregister(subscriber)
     return ret
     
-  def exit(self, **kw):
-    subscriber = Exit(self, **kw)
-    self.blocking(subscriber)
-    self.unregister(*self.debug_subscribers)
-    return subscriber.results
-
-
 if __name__ == '__main__':
   logging.basicConfig(level=logging.DEBUG,
                      format='%(asctime)s %(levelname)s %(message)s',
