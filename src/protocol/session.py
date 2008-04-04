@@ -47,16 +47,26 @@ class Transport(telnetlib.Telnet):
       self.set_debuglevel(debug)
     self.r, self.w = os.pipe()
     self.subscribers = list()
+    self._active = False
+    self._termination_requested = False
 
   def open(self, hostname, port):
     telnetlib.Telnet.open(self, hostname, port)
+    self._active = True
     thread.start_new_thread(self._listener, ())
+
+  @synchronized_with(lock)
+  def is_active(self):
+    return self._active
 
   @synchronized_with(lock)
   def close(self):
     for subscriber in self.subscribers:
       logging.debug('subscriber %s is not unregistered.', str(subscriber))
     telnetlib.Telnet.close(self)
+    self._active = False
+    self._termination_requested = True
+    
 
   def _listener(self):
     logging.debug('started listener')
@@ -73,9 +83,12 @@ class Transport(telnetlib.Telnet):
       self._dispatch('EOFError', e)
     except:
       logging.exception('exception in listener thread:')
+    thread.exit()
 
   @synchronized_with(lock)
   def _dispatch(self, id, got):
+    if self._termination_requested:
+      thread.exit()
     try:
       int(id)
       name = ntop[id]
@@ -144,15 +157,6 @@ class Subscriber:
     if not self._done:
       raise Timeout
     return self.results
-
-
-class BannerGrabber(Subscriber):
-  def FIBS_PreLogin(self, got):
-    self.append(got)
-  def FIBS_LoginPrompt(self, got):
-    pass #self.done() # it is not okay on login fail
-  def CLIP_MOTD_END(self, got):
-    self.done()
 
 
 class Session(Transport):
