@@ -34,6 +34,8 @@ def synchronized_with(accessor):
 class Transport(telnetlib.Telnet):
   _lock = threading.RLock()
   lock = lambda self, *args, **kw : self._lock
+  
+  subscribers = list()
 
   def __init__(self, timeout=None, debug=None):
     telnetlib.Telnet.__init__(self)
@@ -46,7 +48,6 @@ class Transport(telnetlib.Telnet):
     else:
       self.set_debuglevel(debug)
     self.r, self.w = os.pipe()
-    self.subscribers = list()
     self._active = False
     self._termination_requested = False
 
@@ -108,18 +109,25 @@ class Transport(telnetlib.Telnet):
     logging.debug('sending %s', line)
     self.write(line+CRLF)
 
-  @synchronized_with(lock)
-  def register(self, *args):
-    for subscriber in args:
-      self.subscribers.append(subscriber)
-      subscriber.post_register()
-      logging.debug('subscriber %s is registered.', str(subscriber))
+  @classmethod
+  def register(cls, *args):
+    cls._lock.acquire() #ugh!
+    try:
+      for subscriber in args:
+        cls.subscribers.append(subscriber)
+        logging.debug('subscriber %s is registered.', str(subscriber))
+    finally:
+      cls._lock.release()
 
-  @synchronized_with(lock)
+  @classmethod
   def unregister(self, *args):
-    for subscriber in args:
-      self.subscribers.remove(subscriber)
-      logging.debug('subscriber %s is unregistered.', str(subscriber))
+    cls._lock.acquire() #ugh!
+    try:
+      for subscriber in args:
+        cls.subscribers.remove(subscriber)
+        logging.debug('subscriber %s is unregistered.', str(subscriber))
+    finally:
+      cls._lock.release()
 
 
 class Subscriber:
@@ -127,64 +135,24 @@ class Subscriber:
   def __init__(self, **kw):
     self._lock = threading.Condition()
     self.kw = kw
-    self._done = False
-    self.results = list()
+    Session.register(self)
+  def __del__(self):
+    Session.unregister(self)
     
   @synchronized_with(lock)
-  def post_register(self):
+  def nop(self):
     pass
-
-  @synchronized_with(lock)
-  def append(self, result):
-    if self._done:
-      raise ValueError("already done!")
-    self.results.append(result)
-    
-  @synchronized_with(lock)
-  def done(self):
-    if self._done:
-      raise ValueError("already done!")
-    self._done = True
-    self._lock.notifyAll()
-
-  @synchronized_with(lock)
-  def is_done(self):
-    return self._done
-
-  @synchronized_with(lock)
-  def wait_for_result(self): # this must be in Main thread
-    self._lock.wait()
-    if not self._done:
-      raise Timeout
-    return self.results
 
 
 class Session(Transport):
   def __init__(self, timeout=None, debug=0):
     Transport.__init__(self, timeout=timeout, debug=debug)
     if self.debuglevel:
-      from debugging import Debug
-      self.debug_subscribers = [Debug(self)]
-      self.register(*self.debug_subscribers)
-    else:
-      self.debug_subscribers = []
+      from fibs.debugging import Debug
+      Debug()
 
-  def blocking(self, subscriber):
-    self.register(subscriber)
-    ret = subscriber.wait_for_result()
-    self.unregister(subscriber)
-    return ret
-    
 if __name__ == '__main__':
   logging.basicConfig(level=logging.DEBUG,
                      format='%(asctime)s %(levelname)s %(message)s',
                      filename='./session.log',
                      filemode='w')
-  session = Session(debug=1)
-  session.open('fibs.com', 4321)
-  print session.login(client_name='test', 
-                      clip_version=FIBSCookieMonster.CLIP_VERSION, 
-                      username='bgnori', password='hogehoge')
-  time.sleep(10)
-  print session.exit()
-
