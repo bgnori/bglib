@@ -35,8 +35,6 @@ class Transport(telnetlib.Telnet):
   _lock = threading.RLock()
   lock = lambda self, *args, **kw : self._lock
   
-  subscribers = list()
-
   def __init__(self, timeout=None, debug=None):
     telnetlib.Telnet.__init__(self)
     if timeout:
@@ -62,12 +60,36 @@ class Transport(telnetlib.Telnet):
 
   @synchronized_with(lock)
   def close(self):
-    for subscriber in self.subscribers:
-      logging.debug('subscriber %s is not unregistered.', str(subscriber))
     telnetlib.Telnet.close(self)
     self._active = False
     self._termination_requested = True
     
+  @synchronized_with(lock)
+  def send_line(self, line):
+    logging.debug('sending %s', line)
+    self.write(line+CRLF)
+
+
+class Subscriber:
+  lock = lambda self, *args, **kw : self._lock
+  def __init__(self, **kw):
+    self._lock = threading.Condition()
+    self.kw = kw
+    Session.register(self)
+    
+  @synchronized_with(lock)
+  def nop(self):
+    pass
+
+
+class Session(Transport):
+  subscribers = list()
+
+  def __init__(self, timeout=None, debug=0):
+    Transport.__init__(self, timeout=timeout, debug=debug)
+    if self.debuglevel:
+      from fibs.debugging import Debug
+      Debug()
 
   def _listener(self):
     logging.debug('started listener')
@@ -86,7 +108,7 @@ class Transport(telnetlib.Telnet):
       logging.exception('exception in listener thread:')
     thread.exit()
 
-  @synchronized_with(lock)
+  @synchronized_with(Transport.lock)
   def _dispatch(self, id, got):
     if self._termination_requested:
       thread.exit()
@@ -103,11 +125,6 @@ class Transport(telnetlib.Telnet):
       if f:
         f(got)
         logging.debug('dispatched %s', str(f))
-
-  @synchronized_with(lock)
-  def send_line(self, line):
-    logging.debug('sending %s', line)
-    self.write(line+CRLF)
 
   @classmethod
   def register(cls, *args):
@@ -129,27 +146,6 @@ class Transport(telnetlib.Telnet):
     finally:
       cls._lock.release()
 
-
-class Subscriber:
-  lock = lambda self, *args, **kw : self._lock
-  def __init__(self, **kw):
-    self._lock = threading.Condition()
-    self.kw = kw
-    Session.register(self)
-  def __del__(self):
-    Session.unregister(self)
-    
-  @synchronized_with(lock)
-  def nop(self):
-    pass
-
-
-class Session(Transport):
-  def __init__(self, timeout=None, debug=0):
-    Transport.__init__(self, timeout=timeout, debug=debug)
-    if self.debuglevel:
-      from fibs.debugging import Debug
-      Debug()
 
 if __name__ == '__main__':
   logging.basicConfig(level=logging.DEBUG,
