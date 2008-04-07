@@ -82,10 +82,9 @@ class Subscriber:
 
 
 class Session(Transport):
-  subscribers = list()
-
   def __init__(self, timeout=None, debug=0):
     Transport.__init__(self, timeout=timeout, debug=debug)
+    self.subscribers = list()
     if self.debuglevel:
       from fibs.debugging import Debug
       Debug()
