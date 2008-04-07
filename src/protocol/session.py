@@ -75,7 +75,6 @@ class Subscriber:
   def __init__(self, **kw):
     self._lock = threading.Condition()
     self.kw = kw
-    Session.register(self)
     
   @synchronized_with(lock)
   def nop(self):
@@ -126,25 +125,17 @@ class Session(Transport):
         f(got)
         logging.debug('dispatched %s', str(f))
 
-  @classmethod
-  def register(cls, *args):
-    cls._lock.acquire() #ugh!
-    try:
-      for subscriber in args:
-        cls.subscribers.append(subscriber)
-        logging.debug('subscriber %s is registered.', str(subscriber))
-    finally:
-      cls._lock.release()
+  @synchronized_with(Transport.lock)
+  def register(self, *args):
+    for subscriber in args:
+      self.subscribers.append(subscriber)
+      logging.debug('subscriber %s is registered.', str(subscriber))
 
-  @classmethod
+  @synchronized_with(Transport.lock)
   def unregister(self, *args):
-    cls._lock.acquire() #ugh!
-    try:
-      for subscriber in args:
-        cls.subscribers.remove(subscriber)
-        logging.debug('subscriber %s is unregistered.', str(subscriber))
-    finally:
-      cls._lock.release()
+    for subscriber in args:
+      self.subscribers.remove(subscriber)
+      logging.debug('subscriber %s is unregistered.', str(subscriber))
 
 
 if __name__ == '__main__':
