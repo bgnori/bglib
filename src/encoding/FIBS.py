@@ -8,6 +8,8 @@
 import tito.smuggle
 tito.smuggle.module('../..', 'bglib.model', locals())
 
+import bglib.model
+
 class _FIBSBoardState(object):
   '''
   http://www.fibs.com/fibs_interface.html#board_state
@@ -58,11 +60,11 @@ class _FIBSBoardState(object):
     '''returns (you, him)'''
     def your_chequers(x):
       if self.your_colour * x > 0:
-        return x
+        return abs(x)
       return 0
     def his_chequers(x):
       if self.your_colour * x < 0:
-        return -x
+        return abs(x)
       return 0
       
     if self.your_direction < 0:

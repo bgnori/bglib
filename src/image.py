@@ -14,8 +14,13 @@ import ImageDraw
 import tito.config
 import model
 
+<<<<<<< .mine
+#debug_color = config.active.image.debug_color
+debug_color = 'blue'
+=======
 conf = tito.config.use(__file__)
 debug_color = conf.image.debug_color
+>>>>>>> .r1217
 
 def parse_align(f):
   for line in f.readlines():
@@ -50,10 +55,12 @@ class Painter(object):
     else:
       fn += "odd-"
 
+    assert(you[i] >=0 and him[i] >=0)
+
     if you[i]:
-      fn += self.colormap[model.you]+ str(you[i]) + ".jpg"
+      fn += self.colormap[model.you] + '-' + str(you[i]) + ".jpg"
     elif him[23-i]:
-      fn += self.colormap[model.him] + str(him[23-i]) + ".jpg"
+      fn += self.colormap[model.him] + '-' + str(him[23-i]) + ".jpg"
     else:
       fn += "none.jpg"
 
@@ -66,12 +73,12 @@ class Painter(object):
     you, him = self.board.position
     if param == 'You':
       if you[24]:
-        res = Image.open(self.rpath+"bar-"+self.colormap[model.you]+"%i.jpg"%(you[24]))
+        res = Image.open(self.rpath+"bar-"+self.colormap[model.you]+"-%i.jpg"%(you[24]))
       else:
         res = Image.open(self.rpath+"bar-none.jpg")
     elif param == 'Him':
       if him[24]:
-        res = Image.open(self.rpath+"bar-"+self.colormap[model.him]+"%i.jpg"%(him[24]))
+        res = Image.open(self.rpath+"bar-"+self.colormap[model.him]+"-%i.jpg"%(him[24]))
       else:
         res = Image.open(self.rpath+"bar-none.jpg")
     else:
@@ -87,7 +94,8 @@ class Painter(object):
 
 
 def generate(board):
-  rpath = conf.image.resource
+  #rpath = config.active.image.resource
+  rpath = './bglib/resource/'
   p = Painter(board, rpath)
   f = file(os.path.join(rpath, 'align.txt'))
   try:
