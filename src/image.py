@@ -14,13 +14,8 @@ import ImageDraw
 import tito.config
 import model
 
-<<<<<<< .mine
 #debug_color = config.active.image.debug_color
 debug_color = 'blue'
-=======
-conf = tito.config.use(__file__)
-debug_color = conf.image.debug_color
->>>>>>> .r1217
 
 def parse_align(f):
   for line in f.readlines():
