@@ -10,11 +10,11 @@ import csv
 import Image
 import ImageDraw
 
-import bglib.image.base
+import bglib.image.context
 
 debug_color = 'blue'
 
-class Context(bglib.image.base.Context):
+class Context(bglib.image.context.Context):
   pass
 
 def parse_align(f):
@@ -109,8 +109,8 @@ def generate(board):
 
 if __name__ == '__main__':
   style = ''
-  renderer = bglib.image.base.renderer
-  context_factory = bglib.image.base.context_factory
+  renderer = bglib.image.context.renderer
+  context_factory = bglib.image.context.context_factory
   context = context_factory('PIL', style)
   image = renderer.render(context, board)
   image.Show()

@@ -7,10 +7,10 @@
 import logging
 
 import bglib.model
-import bglib.image.base
+import bglib.image.context
 import bglib.image.PIL
 
-bglib.image.base.context_factory.register(bglib.image.PIL.Context)
+bglib.image.context.context_factory.register(bglib.image.PIL.Context)
 
 class Renderer(object):
   def context(self):
@@ -163,7 +163,7 @@ class Renderer(object):
 renderer = Renderer()
 if __name__ == '__main__':
   style = ''
-  context = bglib.image.base.context_factory.new_context('Null', style)
+  context = bglib.image.context.context_factory.new_context('Null', style)
   board = bglib.model.board()
   image = renderer.render(context, board)
 
