@@ -162,7 +162,7 @@ class Renderer(object):
 
 renderer = Renderer()
 if __name__ == '__main__':
-  style = ''
+  style = bglib.image.context.Style(hoge='piyo')
   context = bglib.image.context.context_factory.new_context('Null', style)
   board = bglib.model.board()
   image = renderer.render(context, board)
