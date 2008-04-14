@@ -4,108 +4,158 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
-import os.path
 import logging
-import csv
-
-import Image
-import ImageDraw
-
-import tito.config
 import model
 
-#debug_color = config.active.image.debug_color
-debug_color = 'blue'
 
-def parse_align(f):
-  for line in f.readlines():
-    x = line.split()
-    if x:
-      yield line.split()
-    else:
-      raise StopIteration
+class ContextFactroy(object):
+  def __init__(self):
+    self._cls = dict()
+  def register(self, context_class):
+    self._context_classes.update({context_class.name:context_class})
+  def new_context(self, name, style):
+    # ContextFactroy needs size of picture, which is in style
+    # Rendering process DOES NOT depend on style
+    # thus Renderer object does not have style.
+    return self._context_classes[name](style)
 
-class Painter(object):
-  def __init__(self, board, rpath):
-    self.board = board
-    self.rpath = rpath
-    self.colormap = dict()
-    
-  def size(self, param, x, y):
-    self.image = Image.new("RGB",(x, y), debug_color)
-    
-  def you(self, param, x, y):
-    self.colormap.update({model.you:param})
+context_factory = ContextFactroy()
 
-  def him(self, param, x, y):
-    self.colormap.update({model.him:param})
 
-  def point(self, param, x, y):
-    you, him = self.board.position
-    i = int(param) - 1
-    fn = self.rpath
+class Style(object):
+  def __init__(self, **kw):
+    self.__dict__['_d'] = dict()
+    for key, value in kw.items():
+      self._d.update({key:value})
 
-    if i % 2:
-      fn += "even-"
-    else:
-      fn += "odd-"
+  def __getattr__(self, name):
+    return self._d[name]
 
-    assert(you[i] >=0 and him[i] >=0)
+  def __setattr__(self, name, value):
+    self._d[name] = value
 
-    if you[i]:
-      fn += self.colormap[model.you] + '-' + str(you[i]) + ".jpg"
-    elif him[23-i]:
-      fn += self.colormap[model.him] + '-' + str(him[23-i]) + ".jpg"
-    else:
-      fn += "none.jpg"
+class Contenxt(object):
+  name = 'base'
+  def __init__(self, style):
+    self._style = style
+    self._result = None
+  def style(self):
+    return self._style
+  def result(self):
+    return self._result
+  def draw_your_point_at(self, point, checker_count):
+    raise NotImplemented('')
+  def draw_his_point_at(self, point, checker_count):
+    raise NotImplemented('')
+  def draw_empty_point_at(self, point):
+    raise NotImplemented('')
+  def draw_your_bar(self, checker_count):
+    raise NotImplemented('')
+  def draw_his_bar(self, checker_count):
+    raise NotImplemented('')
+  def draw_center_bar(self):
+    raise NotImplemented('')
+  def draw_your_home(self, checker_count);
+    raise NotImplemented('')
+  def draw_his_home(self. checker_count):
+    raise NotImplemented('')
 
-    pt = Image.open(fn)
-    if i < 12:
-      pt = pt.rotate(180)
-    self.image.paste(pt, (x, y))
+  def draw_cube(self):
+    raise NotImplemented('')
+  def draw_home(self):
+    raise NotImplemented('')
+  def draw_field(self):
+    raise NotImplemented('')
+  def draw_who_to_play(self):
+    raise NotImplemented('')
+  def draw_dice(self):
+    raise NotImplemented('')
+  def draw_center(self):
+    raise NotImplemented('')
 
-  def bar(self, param, x, y):
-    you, him = self.board.position
-    if param == 'You':
-      if you[24]:
-        res = Image.open(self.rpath+"bar-"+self.colormap[model.you]+"-%i.jpg"%(you[24]))
+import bglib.image.PIL
+_factory.register(bglib.image.PIL.Context)
+
+class Renderer(object):
+  def context(self):
+    return self._context()
+
+  def draw_points(self, board):
+    context = self.context()
+    you, him = board.position
+    for i in range(1, 25):
+      if you[i-1]:
+        context.draw_your_point_at(i, you[i-1])
+      elif him[24-i]:
+        context.draw_his_point_at(i, him[24-i])
       else:
-        res = Image.open(self.rpath+"bar-none.jpg")
-    elif param == 'Him':
-      if him[24]:
-        res = Image.open(self.rpath+"bar-"+self.colormap[model.him]+"-%i.jpg"%(him[24]))
-      else:
-        res = Image.open(self.rpath+"bar-none.jpg")
-    else:
-      raise TypeError("bad parameter for bar: %s"%param)
-      
-    self.image.paste(res , (x, y))
+        context.draw_empty_point_at(i)
 
-  def field(self, param, x, y):
-    self.image.paste(Image.open(self.rpath+"field.jpg"), (x, y))
+  def draw_bar(self, board):
+    context = self.context()
+    you, him = board.position
+    context.draw_your_bar(you[24])
+    context.draw_his_bar(him[24])
+    context.draw_center_bar()
 
-  def center(self, param, x, y):
-    self.image.paste(Image.open(self.rpath+"center.jpg"), (x, y))
+  def draw_home(self, board):
+    context = self.context()
+    you, him = board.position
+    contect.draw_your_home(15 - reduce(lambda x, y: x+y, you))
+    contect.draw_his_home(15 - reduce(lambda x, y: x+y, him))
 
+  def draw_field(self. board):
+    '''Following Cases with 
+      - board.on_action
+      - board.on_inner_action
+    '''
+    context = self.context()
 
-def generate(board):
-  #rpath = config.active.image.resource
-  rpath = './bglib/resource/'
-  p = Painter(board, rpath)
-  f = file(os.path.join(rpath, 'align.txt'))
-  try:
-    for name, param, x, y in parse_align(f):
-      m = getattr(p, name)
-      if m and callable(m):
-        m(param, int(x), int(y))
-      else:
-        raise
-    return p.image
-  finally:
-    f.close()
+    """ you are on roll cube action. """
+    """ you doubled. he is on take or pass. """
+    """ you double, he took. you are on roll. """
+    """ you rolled x, y. """
+    if board.on_action == model.you and not board.rolled:
+      if not board.doubled and board.on_inner_action == model.you:
+        context.draw_empty_field()
+      if board.doubled and board.on_inner_action == model.him:
+        context.draw_you_offered_double(board.cube_value)
+        context.draw_your_cube(0)
+        context.draw_his_cube(0)
+      if board.doubled and board.on_inner_action == model.you:
+        context.draw_empty_field()
+        context.draw_your_cube(0)
+        context.draw_his_cube(board.cube_value)
 
+    if board.on_action == model.you and  board.rolled:
+      context.draw_your_dice_in_field(board.rolled())
 
-if __name__ == '__main__':
-  import doctest
-  doctest.testfile('image.test')
+    """ he is  on roll cube action. """
+    """ he doubled. you are on take or pass. """
+    """ he doubled. you took. he is on roll. """
+    """ he rolled x, y. """
+    if board.on_action == model.him and not board.rolled:
+      if not board.doubled and board.on_inner_action == model.him:
+        context.draw_center()
+        pass
+      if board.doubled and board.on_inner_action == model.you:
+        pass
+      if board.doubled and board.on_inner_action == model.him:
+        pass
+    if board.on_action == model.him and  board.rolled:
+      context.draw_his_dice(board.rolled())
+
+  def self.draw_frame(self):
+    context = self.context()
+    context.draw_frame()
+
+  def render(context, board):
+    self._context = context
+
+    self.draw_points(board)
+    self.draw_bar(board)
+    self.draw_home(board)
+    self.draw_field(board)
+    self.draw_frame()
+    return context.result()
 
