@@ -20,7 +20,7 @@ class Proxy(bglib.depot.base.Proxy):
     else:
       return x in self._impl.sections()
 
-  def _is_node_(self, x):
+  def _has_child_(self, x):
     return not bool(self._apth)
 
   def _get_by_x_(self, x):

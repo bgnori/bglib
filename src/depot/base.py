@@ -27,15 +27,15 @@ class Proxy(object):
   def _is_in_(self, x):
     pass
 
-  def _is_node_(self, x):
+  def _has_child_(self, x):
     # assert(self._is_in_(x))
     pass
 
   def _get_by_x_(self, x):
-    assert(not self._is_node_(x))
+    assert(not self._has_child_(x))
 
   def _set_by_x_(self, x, value):
-    assert(not self._is_node_(x))
+    assert(not self._has_child_(x))
 
   def __repr__(self):
     return "<Proxy for %s of  %s>"%(self._apth, str(self._impl))
@@ -44,7 +44,7 @@ class Proxy(object):
     pass
 
   def _get_node_(self, x):
-    assert(self._is_node_(x))
+    assert(self._has_child_(x))
     return self._cls(self._cls, self._impl, self._apth+[x])
     
   def _write_back_(self):
@@ -56,15 +56,15 @@ class Proxy(object):
 
   # May, to support deletion
   def _del_by_x_(self, x):
-    assert(not self._is_node_(x))
+    assert(not self._has_child_(x))
 
   def _rm_node_(self, x):
-    assert(self._is_node_(x))
+    assert(self._has_child_(x))
 
 
   # nested Dictionary emulation
   def __getitem__(self, key):
-    if self._is_node_(key):
+    if self._has_child_(key):
       return self._get_node_(key)
     else:
       return self._get_by_x_(key)
@@ -73,12 +73,12 @@ class Proxy(object):
     return self._is_in_(key)
 
   def __setitem__(self, key, value):
-    if not self._is_node_(key):
+    if not self._has_child_(key):
       return Proxy() #ugh!
     self._set_by_x_(key, value)
 
   def __delitem__(self, key):
-    if not self._is_node_(key):
+    if not self._has_child_(key):
       return Proxy() #ugh!
     self._del_by_x_(key)
 
@@ -90,7 +90,7 @@ class Proxy(object):
   def __getattr__(self, name):
     if not self._is_in_(name):
       raise AttributeError("not such attribute %s in %s"%(name, str(self)))
-    if self._is_node_(name):
+    if self._has_child_(name):
       return self._get_node_(name)
     else:
       return self._get_by_x_(name)
@@ -99,7 +99,7 @@ class Proxy(object):
   def __setattr__(self, name, value):
     if not self._is_in_(name):
       raise AttributeError("not such attribute %s in %s"%(name, str(self)))
-    if self._is_node_(name):
+    if self._has_child_(name):
       pass
     else:
       self._set_by_x_(name, value)
