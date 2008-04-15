@@ -8,6 +8,7 @@ import logging
 
 import bglib.model
 import bglib.image.context
+#import bglib.image.style
 import bglib.image.PIL
 
 bglib.image.context.context_factory.register(bglib.image.PIL.Context)
@@ -162,7 +163,7 @@ class Renderer(object):
 
 renderer = Renderer()
 if __name__ == '__main__':
-  style = bglib.image.context.Style(hoge='piyo')
+  style = bglib.image.style.Style(hoge='piyo')
   context = bglib.image.context.context_factory.new_context('Null', style)
   board = bglib.model.board()
   image = renderer.render(context, board)

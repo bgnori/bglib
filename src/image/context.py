@@ -20,18 +20,6 @@ class ContextFactroy(object):
 context_factory = ContextFactroy()
 
 
-class Style(object):
-  def __init__(self, **kw):
-    self.__dict__['_d'] = dict()
-    for key, value in kw.items():
-      self._d.update({key:value})
-
-  def __getattr__(self, name):
-    return self._d[name]
-
-  def __setattr__(self, name, value):
-    self._d[name] = value
-
 class Context(object):
   name = 'base'
   def __init__(self, style):

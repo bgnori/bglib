@@ -12,6 +12,12 @@ class Proxy(bglib.depot.base.Proxy):
   def __repr__(self):
     return "<lines.Proxy for %s of  %s>"%(self._apth, str(self._impl))
 
+  def _is_in_(self, x):
+    if len(self._apth) > 0:
+      return x in self._impl[self._apth[0]]
+    else:
+      return x in self._impl
+
   def _has_child_(self, x):
     return len(self._apth) < 1
 
@@ -27,8 +33,10 @@ def CRLFProxy(filename):
       x = line.split()
       if x:
         d = config.get(x[0], dict())
-        e = d.get(x[1], list())
-        e.append(x[2:])
+        try:
+          e = (int(x[2]), int(x[3]))
+        except:
+          e = x[2]
         d.update({x[1]: e})
         config.update({x[0]: d})
       else:
