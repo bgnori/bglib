@@ -43,7 +43,7 @@ class Context(bglib.image.context.Context):
       fn = "even-"
     fn += self.style().color.you + '-' + str(checker_count) + ".jpg"
     pt = self.open_image(fn, self.style().size.point)
-    if point < 13:
+    if point > 12:
       pt = pt.rotate(180)
     self.image.paste(pt, (x, y))
     
@@ -55,7 +55,7 @@ class Context(bglib.image.context.Context):
       fn = "even-"
     fn += self.style().color.him + '-' + str(checker_count) + ".jpg"
     pt = self.open_image(fn, self.style().size.point)
-    if point < 13:
+    if point > 12:
       pt = pt.rotate(180)
     self.image.paste(pt, (x, y))
 
@@ -67,7 +67,7 @@ class Context(bglib.image.context.Context):
       fn = "even-"
     fn += "none.jpg"
     pt = self.open_image(fn, self.style().size.point)
-    if point < 13:
+    if point > 12:
       pt = pt.rotate(180)
     self.image.paste(pt, (x, y))
   
