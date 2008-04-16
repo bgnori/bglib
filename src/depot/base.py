@@ -23,7 +23,7 @@ class Proxy(object):
     self.__dict__['_impl'] = impl
     self.__dict__['_apth'] = access_path
   # MUST
-    
+
   def _is_in_(self, x):
     pass
 
@@ -111,6 +111,3 @@ class Proxy(object):
 
   def __eq__(self, x):
     return id(self) == id(x)
-
-
-
