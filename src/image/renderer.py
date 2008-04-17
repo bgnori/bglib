@@ -10,8 +10,10 @@ import bglib.model
 import bglib.image.context
 #import bglib.image.style
 import bglib.image.PIL
-
 bglib.image.context.context_factory.register(bglib.image.PIL.Context)
+
+import bglib.image.wxpython
+bglib.image.context.context_factory.register(bglib.image.wxpython.Context)
 
 class Renderer(object):
   def context(self):

@@ -5,7 +5,6 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 import os.path
-import csv
 
 import Image
 import ImageDraw
@@ -33,6 +32,9 @@ class Context(bglib.image.context.Context):
     else:
       j = self.cache[(fn, size)]
     return j
+
+  def paste_image(self, image, position):
+    self.image.paste(image, position)
     
   # points + home +  bar
   def draw_your_point_at(self, point, checker_count):
@@ -45,7 +47,7 @@ class Context(bglib.image.context.Context):
     pt = self.open_image(fn, self.style().size.point)
     if point > 12:
       pt = pt.rotate(180)
-    self.image.paste(pt, (x, y))
+    self.paste_image(pt, (x, y))
     
   def draw_his_point_at(self, point, checker_count):
     x, y = self.style().point[str(point)]
@@ -57,7 +59,7 @@ class Context(bglib.image.context.Context):
     pt = self.open_image(fn, self.style().size.point)
     if point > 12:
       pt = pt.rotate(180)
-    self.image.paste(pt, (x, y))
+    self.paste_image(pt, (x, y))
 
   def draw_empty_point_at(self, point):
     x, y = self.style().point[str(point)]
@@ -69,7 +71,7 @@ class Context(bglib.image.context.Context):
     pt = self.open_image(fn, self.style().size.point)
     if point > 12:
       pt = pt.rotate(180)
-    self.image.paste(pt, (x, y))
+    self.paste_image(pt, (x, y))
   
   def draw_your_bar(self, checker_count):
     x, y = self.style().bar.you
@@ -80,7 +82,7 @@ class Context(bglib.image.context.Context):
       res = self.open_image("bar-none.jpg",
                             self.style().size.bar
                             )
-    self.image.paste(res, (x, y))
+    self.paste_image(res, (x, y))
 
   def draw_his_bar(self, checker_count):
     x, y = self.style().bar.him
@@ -92,14 +94,14 @@ class Context(bglib.image.context.Context):
       res = self.open_image("bar-none.jpg",
                             self.style().size.bar
                             )
-    self.image.paste(res, (x, y))
+    self.paste_image(res, (x, y))
 
   def draw_center_bar(self):
     x, y = self.style().center.null
     image = self.open_image("center.jpg",
                             self.style().size.bar
                            )
-    self.image.paste(image, (x, y))
+    self.paste_image(image, (x, y))
 
   def draw_your_home(self, checker_count):pass
   def draw_his_home(self, checker_count):pass
@@ -115,28 +117,28 @@ class Context(bglib.image.context.Context):
     image = self.open_image("field.jpg",
                             self.style().size.field
                             )
-    self.image.paste(image, (x, y))
+    self.paste_image(image, (x, y))
 
   def draw_he_offered_double(self, cube_value):
     x, y = self.style().field.him
     image = self.open_image("field.jpg",
                             self.style().size.field
                             )
-    self.image.paste(image, (x, y))
+    self.paste_image(image, (x, y))
 
   def draw_your_dice_in_field(self, dice):
     x, y = self.style().field.you
     image = self.open_image("field.jpg",
                             self.style().size.field
                             )
-    self.image.paste(image, (x, y))
+    self.paste_image(image, (x, y))
 
   def draw_his_dice_in_field(self, dice):
     x, y = self.style().field.him
     image = self.open_image("field.jpg",
                             self.style().size.field
                             )
-    self.image.paste(image, (x, y))
+    self.paste_image(image, (x, y))
 
   # who is on action
   def draw_you_to_play(self):pass
