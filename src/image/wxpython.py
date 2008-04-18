@@ -173,10 +173,33 @@ class Context(bglib.image.PIL.Context):
   def draw_center_cube(self, cube_value):pass
 
   # field
-  def draw_you_offered_double(self, cube_value):pass
-  def draw_he_offered_double(self, cube_value):pass
-  def draw_your_dice_in_field(self, dice):pass
-  def draw_his_dice_in_field(self, dice):pass
+  def draw_you_offered_double(self, cube_value):
+    x, y = self.apply_mag(self.style().field.you)
+    w, h = self.apply_mag(self.style().size.field)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_you_offered_double(self)
+
+  def draw_he_offered_double(self, cube_value):
+    x, y = self.apply_mag(self.style().field.him)
+    w, h = self.apply_mag(self.style().size.field)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_he_offered_double(self)
+
+  def draw_your_dice_in_field(self, dice):
+    x, y = self.apply_mag(self.style().field.you)
+    w, h = self.apply_mag(self.style().size.field)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_your_dice_in_field(self, dice)
+
+  def draw_his_dice_in_field(self, dice):
+    x, y = self.apply_mag(self.style().field.him)
+    w, h = self.apply_mag(self.style().size.field)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_his_dice_in_field(self, dice)
 
   # who is on action
   def draw_you_to_play(self):pass

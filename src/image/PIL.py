@@ -135,31 +135,35 @@ class Context(bglib.image.context.Context):
 
   # field
   def draw_you_offered_double(self, cube_value):
-    x, y = self.style().field.you
+    size = self.apply_mag(self.style().size.field)
     image = self.open_image("field.jpg",
-                            self.style().size.field
+                            size
                             )
+    x, y = self.apply_mag(self.style().field.you)
     self.paste_image(image, (x, y))
 
   def draw_he_offered_double(self, cube_value):
-    x, y = self.style().field.him
+    size = self.apply_mag(self.style().size.field)
     image = self.open_image("field.jpg",
-                            self.style().size.field
+                            size
                             )
+    x, y = self.apply_mag(self.style().field.him)
     self.paste_image(image, (x, y))
 
   def draw_your_dice_in_field(self, dice):
-    x, y = self.style().field.you
+    size = self.apply_mag(self.style().size.field)
     image = self.open_image("field.jpg",
-                            self.style().size.field
+                            size
                             )
+    x, y = self.apply_mag(self.style().field.you)
     self.paste_image(image, (x, y))
 
   def draw_his_dice_in_field(self, dice):
-    x, y = self.style().field.him
+    size = self.apply_mag(self.style().size.field)
     image = self.open_image("field.jpg",
-                            self.style().size.field
+                            size
                             )
+    x, y = self.apply_mag(self.style().field.him)
     self.paste_image(image, (x, y))
 
   # who is on action
