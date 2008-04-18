@@ -15,10 +15,13 @@ import bglib.image.renderer
 
 
 class Region(object):
-  def __init__(self, image, x, y):
+  def __init__(self, x, y, w, h):
+    self.rect = wx.Rect(x, y ,w, h)
+    self.wxbmp = None
+
+  def set_image(self, image):
     assert(isinstance(image, Image.Image))
     w, h = image.size
-    self.rect = wx.Rect(x, y ,w, h)
     wximage = wx.EmptyImage(image.size[0], image.size[1])
     wximage.SetData(image.convert('RGB').tostring())
     self.wxbmp = wximage.ConvertToBitmap()
@@ -31,8 +34,14 @@ class Region(object):
   def Inside(self, pt):
     return self.rect.Inside(pt)
 
+  def InsideXY(self, x, y):
+    return self.rect.InsideXY(x, y)
+
   def Draw(self, dc):
     dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
+
+  def __repr__(self):
+    return  str(self.rect)
 
 class BoardPanel(wx.Panel):
   def __init__(self, parent, id, **kw):
@@ -50,6 +59,12 @@ class BoardPanel(wx.Panel):
         return region
     return None
 
+  def which_by_xy(self, x, y):
+    for region in self.regions:
+      if region.InsideXY(x, y):
+        return region
+    return None
+
   def append(self, region):
     #print region
     assert(isinstance(region, bglib.image.wxpython.Region))
@@ -61,9 +76,14 @@ class BoardPanel(wx.Panel):
       region.Draw(dc)
 
   def OnLeftDown(self, evt):
-    pass
+    print 'OnLeftDown'
+    print 'GetPosition', evt.GetPosition()
+    print 'at region ; ',  self.which(evt.GetPosition())
+
   def OnLeftUp(self, evt):
-    pass
+    print 'OnLeftUp'
+    print 'GetPosition', evt.GetPosition()
+    print 'at region ; ',  self.which(evt.GetPosition())
 
   def OnSize(self, evt):
     size = self.GetClientSize()
@@ -77,6 +97,8 @@ class BoardPanel(wx.Panel):
     context = context_factory.new_context('wx', style)
     board = bglib.model.board()
     renderer.render(context, board)
+    self.Refresh()
+
 
 class Context(bglib.image.PIL.Context):
   name = 'wx'
@@ -85,23 +107,82 @@ class Context(bglib.image.PIL.Context):
     bglib.image.PIL.Context.__init__(self, style.image)
     
     ix = style.image.size.board[0]
-    print ix
     self.window = style.window
     sx = self.window.GetSizeTuple()[0]
-    print sx
-
     self.mag_numer  = sx
     self.mag_denom  = ix
+    self.fn = None
 
   def paste_image(self, image, position):
-    position = self.apply_mag(position)
     x, y = position
-    r = Region(image, x, y)
-    self.window.append(r)
+    r = self.window.which_by_xy(x, y)
+    if r:
+      r.set_image(image)
 
   def result(self):
     return self.window
 
+  def draw_your_point_at(self, point, checker_count):
+    x, y = self.apply_mag(self.style().point[str(point)])
+    w, h = self.apply_mag(self.style().size.point)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_your_point_at(self, point, checker_count)
+  
+  def draw_his_point_at(self, point, checker_count):
+    x, y = self.apply_mag(self.style().point[str(point)])
+    w, h = self.apply_mag(self.style().size.point)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_his_point_at(self, point, checker_count)
+
+  def draw_empty_point_at(self, point):
+    x, y = self.apply_mag(self.style().point[str(point)])
+    w, h = self.apply_mag(self.style().size.point)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_empty_point_at(self, point)
+
+  def draw_your_bar(self, checker_count):
+    x, y = self.apply_mag(self.style().bar.you)
+    w, h = self.apply_mag(self.style().size.bar)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_your_bar(self, checker_count)
+
+  def draw_his_bar(self, checker_count):
+    x, y = self.apply_mag(self.style().bar.him)
+    w, h = self.apply_mag(self.style().size.bar)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_his_bar(self, checker_count)
+
+  def draw_center_bar(self):
+    x, y = self.apply_mag(self.style().center.null)
+    w, h = self.apply_mag(self.style().size.center)
+    r = Region(x, y, w, h)
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_center_bar(self)
+
+  def draw_your_home(self, checker_count):pass
+  def draw_his_home(self, checker_count):pass
+
+  # cube holder
+  def draw_your_cube(self, cube_value):pass
+  def draw_his_cube(self, cube_value):pass
+  def draw_center_cube(self, cube_value):pass
+
+  # field
+  def draw_you_offered_double(self, cube_value):pass
+  def draw_he_offered_double(self, cube_value):pass
+  def draw_your_dice_in_field(self, dice):pass
+  def draw_his_dice_in_field(self, dice):pass
+
+  # who is on action
+  def draw_you_to_play(self):pass
+  def draw_him_to_play(self):pass
+
+  def draw_frame(self):pass
 
 if __name__ == '__main__':
   app = wx.PySimpleApp()

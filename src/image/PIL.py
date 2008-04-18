@@ -34,7 +34,6 @@ class Context(bglib.image.context.Context):
 
   def open_image(self, fn, size):
     assert(len(size)==2)
-    size = self.apply_mag(size)
     if (fn, size) not in self.cache:
       i = Image.open('./bglib/image/resource/'+fn)
       j = i.resize(size, resample=1)
@@ -44,74 +43,86 @@ class Context(bglib.image.context.Context):
     return j
 
   def paste_image(self, image, position):
-    position = self.apply_mag(position)
     self.image.paste(image, position)
+
     
   # points + home +  bar
   def draw_your_point_at(self, point, checker_count):
-    x, y = self.style().point[str(point)]
     if point  % 2:
       fn = "odd-"
     else:
       fn = "even-"
     fn += self.style().color.you + '-' + str(checker_count) + ".jpg"
-    pt = self.open_image(fn, self.style().size.point)
+    size = self.apply_mag(self.style().size.point)
+
+    pt = self.open_image(fn, size)
     if point > 12:
       pt = pt.rotate(180)
+
+    x, y = self.apply_mag(self.style().point[str(point)])
     self.paste_image(pt, (x, y))
     
   def draw_his_point_at(self, point, checker_count):
-    x, y = self.style().point[str(point)]
     if point % 2:
       fn = "odd-"
     else:
       fn = "even-"
     fn += self.style().color.him + '-' + str(checker_count) + ".jpg"
-    pt = self.open_image(fn, self.style().size.point)
+
+    size = self.apply_mag(self.style().size.point)
+    pt = self.open_image(fn, size)
     if point > 12:
       pt = pt.rotate(180)
+
+    x, y = self.apply_mag(self.style().point[str(point)])
     self.paste_image(pt, (x, y))
 
   def draw_empty_point_at(self, point):
-    x, y = self.style().point[str(point)]
     if point % 2:
       fn = "odd-"
     else:
       fn = "even-"
     fn += "none.jpg"
-    pt = self.open_image(fn, self.style().size.point)
+
+    size = self.apply_mag(self.style().size.point)
+    pt = self.open_image(fn, size)
     if point > 12:
       pt = pt.rotate(180)
+
+    x, y = self.apply_mag(self.style().point[str(point)])
     self.paste_image(pt, (x, y))
   
   def draw_your_bar(self, checker_count):
-    x, y = self.style().bar.you
+    size = self.apply_mag(self.style().size.bar)
     if checker_count:
       res = self.open_image("bar-"+self.style().color.you + "-%i.jpg"%(checker_count),
-                            self.style().size.bar)
+                            size)
     else:
       res = self.open_image("bar-none.jpg",
-                            self.style().size.bar
+                            size
                             )
+    x, y = self.apply_mag(self.style().bar.you)
     self.paste_image(res, (x, y))
 
   def draw_his_bar(self, checker_count):
-    x, y = self.style().bar.him
+    size = self.apply_mag(self.style().size.bar)
     if checker_count:
       res = self.open_image("bar-"+self.style().color.him+"-%i.jpg"%(checker_count),
-                            self.style().size.bar
+                            size
                             )
     else:
       res = self.open_image("bar-none.jpg",
-                            self.style().size.bar
-                            )
+                            size
+                           )
+    x, y = self.apply_mag(self.style().bar.him)
     self.paste_image(res, (x, y))
 
   def draw_center_bar(self):
-    x, y = self.style().center.null
+    size = self.apply_mag(self.style().size.center)
     image = self.open_image("center.jpg",
-                            self.style().size.bar
+                            size
                            )
+    x, y = self.apply_mag(self.style().center.null)
     self.paste_image(image, (x, y))
 
   def draw_your_home(self, checker_count):pass
