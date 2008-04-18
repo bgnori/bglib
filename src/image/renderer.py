@@ -110,7 +110,7 @@ class Renderer(object):
   def draw_he_rolled(self, board):
     context = self.context()
     context.draw_him_to_play()
-    context.draw_your_dice_in_field()
+    context.draw_your_dice_in_field(board.rolled)
     context.draw_his_dice_in_field(board.rolled)
     context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_value or 0)
     context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_value or 0)
