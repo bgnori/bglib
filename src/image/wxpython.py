@@ -10,6 +10,7 @@ import Image
 import wx
 from wx.lib.colourchooser.canvas import Canvas
 
+import bglib.depot.dict
 import bglib.image.context
 import bglib.image.renderer
 
@@ -38,7 +39,8 @@ class Region(object):
     return self.rect.InsideXY(x, y)
 
   def Draw(self, dc):
-    dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
+    if self.wxbmp:
+      dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
 
   def __repr__(self):
     return  str(self.rect)
@@ -47,6 +49,15 @@ class BoardPanel(wx.Panel):
   def __init__(self, parent, id, **kw):
     wx.Panel.__init__(self, parent, **kw)
     self.regions = list()
+
+    self.board = bglib.model.board()
+
+    style = bglib.depot.dict.Proxy(
+                                  window = self,
+                                  image=bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt'),
+                                )
+    context_factory = bglib.image.context.context_factory
+    self.context = context_factory.new_context('wx', style)
 
     self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
     self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
@@ -66,7 +77,6 @@ class BoardPanel(wx.Panel):
     return None
 
   def append(self, region):
-    #print region
     assert(isinstance(region, bglib.image.wxpython.Region))
     self.regions.append(region)
 
@@ -89,14 +99,12 @@ class BoardPanel(wx.Panel):
     size = self.GetClientSize()
     print 'resized ', size
     self.regions = list()
-    style = bglib.depot.dict.Proxy(
-                                  window = self,
-                                  image=bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt'),
-                                )
-    context_factory = bglib.image.context.context_factory
-    context = context_factory.new_context('wx', style)
-    board = bglib.model.board()
-    renderer.render(context, board)
+    bglib.image.renderer.renderer.render(self.context, self.board)
+    self.Refresh()
+
+  def SetBoard(self, board):
+    self.board = board
+    bglib.image.renderer.renderer.render(self.context, board)
     self.Refresh()
 
 
@@ -108,11 +116,15 @@ class Context(bglib.image.PIL.Context):
     
     ix = style.image.size.board[0]
     self.window = style.window
-    sx = self.window.GetSizeTuple()[0]
-    self.mag_numer  = sx
-    self.mag_denom  = ix
     self.fn = None
 
+  def apply_mag(self, t):
+    ix = self.style().size.board[0]
+    sx = self.window.GetSizeTuple()[0]
+    return (
+            t[0] *sx/ix,
+            t[1] *sx/ix
+            )
   def paste_image(self, image, position):
     x, y = position
     r = self.window.which_by_xy(x, y)
@@ -214,17 +226,7 @@ if __name__ == '__main__':
 
   board = bglib.model.board()
   import bglib.depot.dict
-  style = bglib.depot.dict.Proxy(
-                                  window = BoardPanel(frame, id=-1, 
-                                                      pos=wx.DefaultPosition,
-                                                     ),
-                                  image=bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt'),
-                                  size=(100, 200)
-                                )
-  renderer = bglib.image.renderer.renderer
-  context_factory = bglib.image.context.context_factory
-  context = context_factory.new_context('wx', style)
-  renderer.render(context, board)
+  BoardPanel(frame, -1)
   frame.Show()
   app.MainLoop()
 
