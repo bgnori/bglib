@@ -23,8 +23,18 @@ class Context(bglib.image.context.Context):
     self.image = Image.new("RGB", (x, y), debug_color)
     self.cache = dict()
 
+    self.mag_numer  = 1
+    self.mag_denom  = 1
+
+  def apply_mag(self, t):
+    return (
+            t[0] *self.mag_numer/ self.mag_denom,
+            t[1] *self.mag_numer/ self.mag_denom
+            )
+
   def open_image(self, fn, size):
     assert(len(size)==2)
+    size = self.apply_mag(size)
     if (fn, size) not in self.cache:
       i = Image.open('./bglib/image/resource/'+fn)
       j = i.resize(size, resample=1)
@@ -34,6 +44,7 @@ class Context(bglib.image.context.Context):
     return j
 
   def paste_image(self, image, position):
+    position = self.apply_mag(position)
     self.image.paste(image, position)
     
   # points + home +  bar
