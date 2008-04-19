@@ -48,7 +48,7 @@ class Region(object):
 class BoardPanel(wx.Panel):
   def __init__(self, parent, id, **kw):
     wx.Panel.__init__(self, parent, **kw)
-    self.regions = list()
+    self.reset_regions()
 
     self.board = bglib.model.board()
 
@@ -64,6 +64,9 @@ class BoardPanel(wx.Panel):
     self.Bind(wx.EVT_PAINT, self.OnPaint)
     self.Bind(wx.EVT_SIZE, self.OnSize)
     
+  def reset_regions(self):
+    self.regions = list()
+
   def which(self, pt):
     for region in self.regions:
       if region.Inside(pt):
@@ -98,7 +101,7 @@ class BoardPanel(wx.Panel):
   def OnSize(self, evt):
     size = self.GetClientSize()
     print 'resized ', size
-    self.regions = list()
+    self.reset_regions()
     bglib.image.renderer.renderer.render(self.context, self.board)
     self.Refresh()
 
