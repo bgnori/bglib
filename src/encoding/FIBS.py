@@ -68,15 +68,16 @@ class _FIBSBoardState(object):
       return 0
       
     if self.your_direction < 0:
-      # your_bar = his_home
-      # your_home = his_bar
-      you = self.board[self.your_home+1:self.your_bar+1]
-      him = list(self.board[self.your_home:self.your_bar-1+1])
+      you = self.board[1:25] + (self.board[25], )
+      him = (self.board[0], )+ self.board[1:25]
+      him= list(him)
+      him.reverse()
     else:
-      you = self.board[self.your_bar:self.your_home-1+1]
-      him = list(self.board[self.your_bar+1:self.your_home+1])
+      you = (self.board[0], ) + self.board[1:25]
+      him = self.board[1:25] + (self.board[25],)
+      you = list(you)
+      you.reverse()
 
-    him.reverse()
     you = map(your_chequers, you)
     him = map(his_chequers, him)
     return tuple(you), tuple(him)
