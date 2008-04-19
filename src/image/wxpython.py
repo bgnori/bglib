@@ -6,7 +6,6 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-import Image
 import wx
 from wx.lib.colourchooser.canvas import Canvas
 
@@ -21,11 +20,7 @@ class Region(object):
     self.wxbmp = None
 
   def set_image(self, image):
-    assert(isinstance(image, Image.Image))
-    w, h = image.size
-    wximage = wx.EmptyImage(image.size[0], image.size[1])
-    wximage.SetData(image.convert('RGB').tostring())
-    self.wxbmp = wximage.ConvertToBitmap()
+    self.wxbmp = image.ConvertToBitmap()
   
   def GetX(self):
     return self.rect.GetX()
@@ -113,7 +108,6 @@ class BoardPanel(wx.Panel):
 
 class Context(bglib.image.PIL.Context):
   name = 'wx'
-
   def __init__(self, style):
     bglib.image.PIL.Context.__init__(self, style.image)
     
@@ -128,6 +122,22 @@ class Context(bglib.image.PIL.Context):
             t[0] *sx/ix,
             t[1] *sx/ix
             )
+
+  def open_image(self, fn, size, upside_down=None):
+    assert(len(size)==2)
+    if upside_down is None:
+      upside_down = False
+
+    if (fn, size, upside_down) not in self.cache:
+      i = wx.Image('./bglib/image/resource/'+fn, wx.BITMAP_TYPE_JPEG)
+      j = i.Scale(size[0], size[1])
+      if upside_down:
+        j = j.Mirror(False)
+      self.cache.update({(fn, size, upside_down): j})
+    else:
+      j = self.cache[(fn, size, upside_down)]
+    return j
+
   def paste_image(self, image, position):
     x, y = position
     r = self.window.which_by_xy(x, y)

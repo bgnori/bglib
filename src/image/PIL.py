@@ -32,14 +32,19 @@ class Context(bglib.image.context.Context):
             t[1] *self.mag_numer/ self.mag_denom
             )
 
-  def open_image(self, fn, size):
+  def open_image(self, fn, size, upside_down=None):
     assert(len(size)==2)
-    if (fn, size) not in self.cache:
+    if upside_down is None:
+      upside_down = False
+
+    if (fn, size, upside_down) not in self.cache:
       i = Image.open('./bglib/image/resource/'+fn)
       j = i.resize(size, resample=1)
-      self.cache.update({(fn, size): j})
+      if upside_down:
+        j = j.rotate(180)
+      self.cache.update({(fn, size, upside_down): j})
     else:
-      j = self.cache[(fn, size)]
+      j = self.cache[(fn, size, upside_down)]
     return j
 
   def paste_image(self, image, position):
@@ -55,9 +60,7 @@ class Context(bglib.image.context.Context):
     fn += self.style().color.you + '-' + str(checker_count) + ".jpg"
     size = self.apply_mag(self.style().size.point)
 
-    pt = self.open_image(fn, size)
-    if point > 12:
-      pt = pt.rotate(180)
+    pt = self.open_image(fn, size, point > 12)
 
     x, y = self.apply_mag(self.style().point[str(point)])
     self.paste_image(pt, (x, y))
@@ -70,9 +73,7 @@ class Context(bglib.image.context.Context):
     fn += self.style().color.him + '-' + str(checker_count) + ".jpg"
 
     size = self.apply_mag(self.style().size.point)
-    pt = self.open_image(fn, size)
-    if point > 12:
-      pt = pt.rotate(180)
+    pt = self.open_image(fn, size, point > 12)
 
     x, y = self.apply_mag(self.style().point[str(point)])
     self.paste_image(pt, (x, y))
@@ -85,9 +86,7 @@ class Context(bglib.image.context.Context):
     fn += "none.jpg"
 
     size = self.apply_mag(self.style().size.point)
-    pt = self.open_image(fn, size)
-    if point > 12:
-      pt = pt.rotate(180)
+    pt = self.open_image(fn, size, point > 12)
 
     x, y = self.apply_mag(self.style().point[str(point)])
     self.paste_image(pt, (x, y))
