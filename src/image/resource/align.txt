@@ -29,8 +29,8 @@ point  21  194   18
 point  22  212   18
 point  23  230   18
 point  24  248   18
-bar   you  133  126
-bar   him  133   18
+bar   him  133  126
+bar   you  133   18
 center null 133 106
 field him 25 106
 field you  158 106
