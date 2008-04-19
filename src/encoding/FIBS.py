@@ -5,9 +5,6 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-import tito.smuggle
-tito.smuggle.module('../..', 'bglib.model', locals())
-
 import bglib.model
 
 class _FIBSBoardState(object):
