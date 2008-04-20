@@ -5,6 +5,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import time
 
 import wx
 from wx.lib.colourchooser.canvas import Canvas
@@ -49,7 +50,7 @@ class Region(object):
 
 
 
-class DragDragBetweenRegion(wx.PyCommandEvent):
+class LeftDrag(wx.PyCommandEvent):
   def __init__(self, evtType, id):
     wx.PyCommandEvent.__init__(self, evtType, id)
     self.up = None
@@ -64,8 +65,28 @@ class DragDragBetweenRegion(wx.PyCommandEvent):
   def SetDown(self, down):
     self.down = down
 
-EVT_DDBR_TYPE = wx.NewEventType()
-EVT_DDBR = wx.PyEventBinder(EVT_DDBR_TYPE, 1)
+class RegionClick(wx.PyCommandEvent):
+  def __init__(self, evtType, id):
+    wx.PyCommandEvent.__init__(self, evtType, id)
+    self.region = None
+  def GetRegion(self):
+    return self.region
+  def SetRegion(self, r):
+    self.region = r
+
+class LeftClick(RegionClick):
+  pass
+class RightClick(RegionClick):
+  pass
+
+EVT_REGION_LEFT_DRAG_TYPE = wx.NewEventType()
+EVT_REGION_LEFT_DRAG = wx.PyEventBinder(EVT_REGION_LEFT_DRAG_TYPE, 1)
+
+EVT_REGION_LEFT_CLICK_TYPE = wx.NewEventType()
+EVT_REGION_LEFT_CLICK = wx.PyEventBinder(EVT_REGION_LEFT_CLICK_TYPE, 1)
+
+EVT_REGION_RIGHT_CLICK_TYPE = wx.NewEventType()
+EVT_REGION_RIGHT_CLICK = wx.PyEventBinder(EVT_REGION_RIGHT_CLICK_TYPE, 1)
 
 class BoardPanel(wx.Panel):
   def __init__(self, parent, id, **kw):
@@ -84,9 +105,10 @@ class BoardPanel(wx.Panel):
 
     self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
     self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+    self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightClick)
+
     self.Bind(wx.EVT_PAINT, self.OnPaint)
     self.Bind(wx.EVT_SIZE, self.OnSize)
-    self.Bind(EVT_DDBR, self.OnDragBetweenReion)
 
   def reset_regions(self):
     self.regions = list()
@@ -112,21 +134,48 @@ class BoardPanel(wx.Panel):
     for region in self.regions:
       region.Draw(dc)
 
+  def OnRightClick(self, evt):
+    region = self.which(evt.GetPosition())
+    if region:
+      evt = RightClick(EVT_REGION_RIGHT_CLICK_TYPE, self.GetId())
+      evt.SetRegion(region)
+      self.GetEventHandler().ProcessEvent(evt)
+
   def OnLeftDown(self, evt):
     down = self.which(evt.GetPosition())
+    assert(not self.left_q)
     self.left_q.append(down)
 
   def OnLeftUp(self, evt):
     up = self.which(evt.GetPosition())
-    down = self.left_q.pop()
-    assert(not self.left_q)
-    evt = DragDragBetweenRegion(EVT_DDBR_TYPE, self.GetId())
-    evt.SetUp(up)
-    evt.SetDown(down)
-    self.GetEventHandler().ProcessEvent(evt)
+    if not up:
+      # drag out to out of region. ignore.
 
-  def OnDragBetweenReion(self, evt):
-    print 'OnDragBetweenReion from ', evt.GetDown(), 'to', evt.GetUp()
+      # consume down
+      try:
+        self.left_q.pop()
+      except:
+        pass
+      return
+
+    if not self.left_q:
+      # ignores double click
+      # double click comes with down-up-up
+      return
+
+    down = self.left_q.pop()
+    if down is None:
+      # drag from out of region. ignore.
+      return
+
+    if down == up:
+      evt = LeftClick(EVT_REGION_LEFT_CLICK_TYPE, self.GetId())
+      evt.SetRegion(up)
+    else:
+      evt = LeftDrag(EVT_REGION_LEFT_DRAG_TYPE, self.GetId())
+      evt.SetUp(up)
+      evt.SetDown(down)
+    self.GetEventHandler().ProcessEvent(evt)
 
   def OnSize(self, evt):
     size = self.GetClientSize()
