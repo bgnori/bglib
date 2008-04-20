@@ -15,15 +15,22 @@ import bglib.image.renderer
 
 
 class Region(object):
-  def __init__(self, x, y, w, h):
+  def __init__(self, x, y, w, h, name=None):
+    if name is None:
+      name = str(id(self))
+    self.name = name
     self.rect = wx.Rect(x, y ,w, h)
     self.wxbmp = None
 
   def set_image(self, image):
     self.wxbmp = image.ConvertToBitmap()
+
+  def __hash__(self):
+    return hash(self.name)
   
   def GetX(self):
     return self.rect.GetX()
+
   def GetY(self):
     return self.rect.GetY()
 
@@ -38,12 +45,33 @@ class Region(object):
       dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
 
   def __repr__(self):
-    return  str(self.rect)
+    return  self.name + ' @ ' + str(self.rect)
+
+
+
+class DragDragBetweenRegion(wx.PyCommandEvent):
+  def __init__(self, evtType, id):
+    wx.PyCommandEvent.__init__(self, evtType, id)
+    self.up = None
+    self.down= None
+
+  def GetUp(self):
+    return self.up
+  def SetUp(self, up):
+    self.up = up
+  def GetDown(self):
+    return self.down
+  def SetDown(self, down):
+    self.down = down
+
+EVT_DDBR_TYPE = wx.NewEventType()
+EVT_DDBR = wx.PyEventBinder(EVT_DDBR_TYPE, 1)
 
 class BoardPanel(wx.Panel):
   def __init__(self, parent, id, **kw):
     wx.Panel.__init__(self, parent, **kw)
     self.reset_regions()
+    self.left_q = list()
 
     self.board = bglib.model.board()
 
@@ -58,7 +86,8 @@ class BoardPanel(wx.Panel):
     self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
     self.Bind(wx.EVT_PAINT, self.OnPaint)
     self.Bind(wx.EVT_SIZE, self.OnSize)
-    
+    self.Bind(EVT_DDBR, self.OnDragBetweenReion)
+
   def reset_regions(self):
     self.regions = list()
 
@@ -84,14 +113,20 @@ class BoardPanel(wx.Panel):
       region.Draw(dc)
 
   def OnLeftDown(self, evt):
-    print 'OnLeftDown'
-    print 'GetPosition', evt.GetPosition()
-    print 'at region ; ',  self.which(evt.GetPosition())
+    down = self.which(evt.GetPosition())
+    self.left_q.append(down)
 
   def OnLeftUp(self, evt):
-    print 'OnLeftUp'
-    print 'GetPosition', evt.GetPosition()
-    print 'at region ; ',  self.which(evt.GetPosition())
+    up = self.which(evt.GetPosition())
+    down = self.left_q.pop()
+    assert(not self.left_q)
+    evt = DragDragBetweenRegion(EVT_DDBR_TYPE, self.GetId())
+    evt.SetUp(up)
+    evt.SetDown(down)
+    self.GetEventHandler().ProcessEvent(evt)
+
+  def OnDragBetweenReion(self, evt):
+    print 'OnDragBetweenReion from ', evt.GetDown(), 'to', evt.GetUp()
 
   def OnSize(self, evt):
     size = self.GetClientSize()
@@ -150,42 +185,42 @@ class Context(bglib.image.PIL.Context):
   def draw_your_point_at(self, point, checker_count):
     x, y = self.apply_mag(self.style().point[str(point)])
     w, h = self.apply_mag(self.style().size.point)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, str(point))
     self.window.append(r)
     bglib.image.PIL.Context.draw_your_point_at(self, point, checker_count)
   
   def draw_his_point_at(self, point, checker_count):
     x, y = self.apply_mag(self.style().point[str(point)])
     w, h = self.apply_mag(self.style().size.point)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, str(point))
     self.window.append(r)
     bglib.image.PIL.Context.draw_his_point_at(self, point, checker_count)
 
   def draw_empty_point_at(self, point):
     x, y = self.apply_mag(self.style().point[str(point)])
     w, h = self.apply_mag(self.style().size.point)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, str(point))
     self.window.append(r)
     bglib.image.PIL.Context.draw_empty_point_at(self, point)
 
   def draw_your_bar(self, checker_count):
     x, y = self.apply_mag(self.style().bar.you)
     w, h = self.apply_mag(self.style().size.bar)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, 'your bar')
     self.window.append(r)
     bglib.image.PIL.Context.draw_your_bar(self, checker_count)
 
   def draw_his_bar(self, checker_count):
     x, y = self.apply_mag(self.style().bar.him)
     w, h = self.apply_mag(self.style().size.bar)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, 'his bar')
     self.window.append(r)
     bglib.image.PIL.Context.draw_his_bar(self, checker_count)
 
   def draw_center_bar(self):
     x, y = self.apply_mag(self.style().center.null)
     w, h = self.apply_mag(self.style().size.center)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, 'center bar')
     self.window.append(r)
     bglib.image.PIL.Context.draw_center_bar(self)
 
@@ -201,28 +236,28 @@ class Context(bglib.image.PIL.Context):
   def draw_you_offered_double(self, cube_value):
     x, y = self.apply_mag(self.style().field.you)
     w, h = self.apply_mag(self.style().size.field)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, 'your field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_you_offered_double(self)
 
   def draw_he_offered_double(self, cube_value):
     x, y = self.apply_mag(self.style().field.him)
     w, h = self.apply_mag(self.style().size.field)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, 'his field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_he_offered_double(self)
 
   def draw_your_dice_in_field(self, dice):
     x, y = self.apply_mag(self.style().field.you)
     w, h = self.apply_mag(self.style().size.field)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, 'your field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_your_dice_in_field(self, dice)
 
   def draw_his_dice_in_field(self, dice):
     x, y = self.apply_mag(self.style().field.him)
     w, h = self.apply_mag(self.style().size.field)
-    r = Region(x, y, w, h)
+    r = Region(x, y, w, h, 'his field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_his_dice_in_field(self, dice)
 
