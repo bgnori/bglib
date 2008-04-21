@@ -168,7 +168,30 @@ class Context(bglib.image.context.Context):
   # who is on action
   def draw_you_to_play(self):pass
   def draw_him_to_play(self):pass
-  def draw_frame(self):pass
+
+  def draw_frame(self):
+    size = self.apply_mag(self.style().size.edge)
+    image = self.open_image("empty-edge.jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().edge.null)
+    self.paste_image(image, (x, y))
+
+    size = self.apply_mag(self.style().size.home)
+    image = self.open_image("empty-home.jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().home.null)
+    self.paste_image(image, (x, y))
+
+    size = self.apply_mag(self.style().size.frame)
+    image = self.open_image("frame.jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().frame.top)
+    self.paste_image(image, (x, y))
+    x, y = self.apply_mag(self.style().frame.bottom)
+    self.paste_image(image, (x, y))
 
   def result(self):
     return self.image

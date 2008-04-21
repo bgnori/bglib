@@ -156,11 +156,11 @@ class Renderer(object):
   def render(self, context, board):
     self._context = context
 
+    self.draw_frame()
     self.draw_points(board)
     self.draw_bar(board)
     self.draw_home(board)
     self.draw_field(board)
-    self.draw_frame()
     return context.result()
 
 renderer = Renderer()
