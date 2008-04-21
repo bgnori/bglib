@@ -100,6 +100,7 @@ class BoardPanel(wx.Panel):
                                   window = self,
                                   image=bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt'),
                                 )
+    self.SetSize(style.image.size.board) # MINIMUM SIZE
     context_factory = bglib.image.context.context_factory
     self.context = context_factory.new_context('wx', style)
 
