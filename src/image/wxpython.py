@@ -1,10 +1,10 @@
-
 #!/usrbin/env python
 # -*- coding: us-ascii -*-
 # vim: syntax=python
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import logging
 import time
 
 import wx
@@ -24,7 +24,8 @@ class Region(object):
     self.wxbmp = None
 
   def set_image(self, image):
-    self.wxbmp = image.ConvertToBitmap()
+    self.wxbmp = wx.BitmapFromImage(image)
+    #self.wxbmp = image.ConvertToBitmap()
 
   def __hash__(self):
     return hash(self.name)
@@ -89,12 +90,11 @@ EVT_REGION_RIGHT_CLICK_TYPE = wx.NewEventType()
 EVT_REGION_RIGHT_CLICK = wx.PyEventBinder(EVT_REGION_RIGHT_CLICK_TYPE, 1)
 
 class BoardPanel(wx.Panel):
-  def __init__(self, parent, id, **kw):
-    wx.Panel.__init__(self, parent, **kw)
+  def __init__(self, parent, id):
+    wx.Panel.__init__(self, parent, style=wx.FULL_REPAINT_ON_RESIZE)
     self.reset_regions()
     self.left_q = list()
 
-    self.board = bglib.model.board()
 
     style = bglib.depot.dict.Proxy(
                                   window = self,
@@ -109,6 +109,8 @@ class BoardPanel(wx.Panel):
 
     self.Bind(wx.EVT_PAINT, self.OnPaint)
     self.Bind(wx.EVT_SIZE, self.OnSize)
+
+    self.SetBoard(bglib.model.board())
 
   def reset_regions(self):
     self.regions = list()
@@ -131,6 +133,10 @@ class BoardPanel(wx.Panel):
 
   def OnPaint(self, evt):
     dc = wx.PaintDC(self)
+    # debug fill
+    dc.SetBackground(wx.Brush('sky blue'))
+    dc.Clear()
+
     for region in self.regions:
       region.Draw(dc)
 
@@ -179,7 +185,7 @@ class BoardPanel(wx.Panel):
 
   def OnSize(self, evt):
     size = self.GetClientSize()
-    print 'resized ', size
+    logging.debug('resized %s', str(size))
     self.reset_regions()
     bglib.image.renderer.renderer.render(self.context, self.board)
     self.Refresh()
