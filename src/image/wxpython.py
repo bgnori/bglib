@@ -17,18 +17,12 @@ class Context(bglib.image.PIL.Context):
   name = 'wx'
   def __init__(self, style):
     bglib.image.PIL.Context.__init__(self, style.image)
-    
-    ix = style.image.size.board[0]
     self.window = style.window
-    self.fn = None
 
   def apply_mag(self, t):
-    ix = self.style().size.board[0]
-    sx = self.window.GetSizeTuple()[0]
-    return (
-            t[0] *sx/ix,
-            t[1] *sx/ix
-            )
+    board_size = self.style().size.board[0]
+    window_size = self.window.GetSizeTuple()[0]
+    return (t[0] *window_size/board_size, t[1] *window_size/board_size)
 
   def open_image(self, fn, size, upside_down=None):
     assert(len(size)==2)
@@ -50,6 +44,8 @@ class Context(bglib.image.PIL.Context):
     r = self.window.which_by_xy(x, y)
     if r:
       r.set_image(image)
+    else:
+      self.window.paste_image(image, x, y)
 
   def result(self):
     return self.window
@@ -137,7 +133,10 @@ class Context(bglib.image.PIL.Context):
   def draw_you_to_play(self):pass
   def draw_him_to_play(self):pass
 
-  def draw_frame(self):pass
+  def draw_frame(self):
+    w, h  = self.apply_mag(self.style().size.board)
+    self.window.set_bgimage(wx.EmptyImage(w, h))
+    bglib.image.PIL.Context.draw_frame(self)
 
 
 if __name__ == '__main__':

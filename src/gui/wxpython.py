@@ -96,7 +96,6 @@ class BoardPanel(wx.Panel):
     self.reset_regions()
     self.left_q = list()
 
-
     style = bglib.depot.dict.Proxy(
                                   window = self,
                                   image=bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt'),
@@ -116,6 +115,7 @@ class BoardPanel(wx.Panel):
 
   def reset_regions(self):
     self.regions = list()
+    self.bgimage = None
 
   def which(self, pt):
     for region in self.regions:
@@ -133,12 +133,21 @@ class BoardPanel(wx.Panel):
     assert(isinstance(region, bglib.gui.wxpython.Region))
     self.regions.append(region)
 
+  def set_bgimage(self, image):
+    self.bgimage = image
+
+  def paste_image(self, image, x, y):
+    self.bgimage.Paste(image, x, y)
+
   def OnPaint(self, evt):
     dc = wx.PaintDC(self)
     # debug fill
     dc.SetBackground(wx.Brush('sky blue'))
     dc.Clear()
 
+    print self.bgimage.GetSize()
+    bgbmp = wx.BitmapFromImage(self.bgimage)
+    dc.DrawBitmap(bgbmp, 0, 0)
     for region in self.regions:
       region.Draw(dc)
 
