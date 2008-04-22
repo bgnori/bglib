@@ -93,6 +93,8 @@ class BoardPanel(wx.Panel):
   '''
   def __init__(self, parent):
     wx.Panel.__init__(self, parent, style=wx.FULL_REPAINT_ON_RESIZE)
+    self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+
     self.reset_regions()
     self.left_q = list()
 
@@ -109,6 +111,7 @@ class BoardPanel(wx.Panel):
     self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightClick)
 
     self.Bind(wx.EVT_PAINT, self.OnPaint)
+    self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
     self.Bind(wx.EVT_SIZE, self.OnSize)
 
     self.SetBoard(bglib.model.board())
@@ -139,13 +142,15 @@ class BoardPanel(wx.Panel):
   def paste_image(self, image, x, y):
     self.bgimage.Paste(image, x, y)
 
+  def OnEraseBackground(self, evt):
+    pass
+
   def OnPaint(self, evt):
     dc = wx.PaintDC(self)
     # debug fill
     dc.SetBackground(wx.Brush('sky blue'))
     dc.Clear()
 
-    print self.bgimage.GetSize()
     bgbmp = wx.BitmapFromImage(self.bgimage)
     dc.DrawBitmap(bgbmp, 0, 0)
     for region in self.regions:
@@ -195,16 +200,18 @@ class BoardPanel(wx.Panel):
     self.GetEventHandler().ProcessEvent(evt)
 
   def OnSize(self, evt):
-    size = self.GetClientSize()
-    logging.debug('resized %s', str(size))
+    logging.debug('resized %s', str(self.GetClientSize()))
     self.reset_regions()
     bglib.image.renderer.renderer.render(self.context, self.board)
     self.Refresh()
+    self.Update()
 
   def SetBoard(self, board):
     self.board = board
     bglib.image.renderer.renderer.render(self.context, board)
     self.Refresh()
+    self.Update()
+
 
 
 class Board(BoardPanel):
