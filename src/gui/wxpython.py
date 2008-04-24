@@ -212,6 +212,8 @@ class BoardPanel(wx.Panel):
     self.Refresh()
     self.Update()
 
+  def GetBoard(self):
+    return self.board
 
 
 class Board(BoardPanel):
@@ -233,8 +235,21 @@ class Board(BoardPanel):
     print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
 
   def OnRegionLeftClick(self, evt):
-    r = evt.GetRegion()
-    print 'Board::OnRegionLeftClick:', r
+    region = evt.GetRegion()
+    board = self.GetBoard()
+    points = ['%i'%i for i in range(1, 25)]
+
+    print 'Board::OnRegionLeftClick:', region
+    if region.name == 'your field':
+      if board.is_leagal_to_double():
+        print 'double!'
+      else:
+        print 'not allowed to double'
+    elif region.name in points:
+      print 'moving from ', region.name
+    elif region.name == 'you bar':
+      print 'moving from ', region.name
+
 
   def OnRegionRightClick(self, evt):
     r = evt.GetRegion()
