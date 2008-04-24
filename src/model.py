@@ -77,6 +77,7 @@ class PartialMove(object):
   def is_undo(self):
     return self.dest > self.src
   def apply_to(self, position):
+    position[you] #ugh!
     return position
   def are_invertible_element(self, pm):
     assert(isinstance(pm, PartialMove))
@@ -94,9 +95,19 @@ class Move(object):
   def __init__(self):
     self._pms = list()
   def append(self, pm):
+    for p in reversed(self._pms):
+      if p.are_invertible_element(pm):
+        self._pms.remove(p)
+        return
     self._pms,append(pm)
+  def add(self, pms):
+    self._pms = self._pms + pms
   def undo(self, pm):
     self._pms,remove(pm)
+  def find(self, dest):
+    for pm in reversed(self,_pms):
+      if pm.dest == dest:
+        yield pm
 
 
 class AvailableToPlay(object):
@@ -107,7 +118,6 @@ class AvailableToPlay(object):
     else:
       self._imp[rolled[0]] = 1
       self._imp[rolled[1]] = 1
-
   def __getitem__(self, key):
     assert(key in [1, 2, 3, 4, 5, 6])
     return self._imp[key]
@@ -145,9 +155,11 @@ class MoveFactory(object):
   def end(self):
     return self.move
 
-  def append(self, partial_move):
-    assert(isinstance(partial_move, PartialMove))
-    self.move
+  def append(self, pm):
+    assert(isinstance(pm, PartialMove))
+    self.move.append(pm)
+
+
     
   def guess_your_single_pm_from_source(self, src, postiion=None, available=None):
     '''
@@ -237,10 +249,7 @@ class MoveFactory(object):
     else:
       return None
 
-
-
-
-  def guess_your_multiple_partial_move(self, src, dest, position=None, available=None, pms=None):
+  def guess_your_multiple_partial_moves(self, src, dest, position=None, available=None, pms=None):
     '''
     returns
     - accepted: list of partial move
@@ -257,31 +266,30 @@ class MoveFactory(object):
     pm = selg.guess_your_single_pm_from_source(src, position, available)
     if pm.dest == dest:
       return pms.append(pm)
-    elif pm,dest > dest:
+    elif pm.dest > dest:
       return self.guess_your_multiple_partial_move(pm.dest, dest, pm.apply_to(postion),
                                                    available.consume(pm.die), pms.append(pm))
     else:
       assert(pm,dest < dest)
       return None
 
-  def guess_your_multiple_partial_undo(self, src, dest, position=None, available=None, pms=None):
+  def guess_your_multiple_partial_undoes(self, src, dest, position=None, pms=None):
     assert(src < dest)
-    if available is None:
-      available = AvailableToPlay(self.board.rolled)
     if position is None:
       position = self.board.position
     if pms is None:
       pms = []
-    # possibly input for undo.
-      pm = selg.guess_your_single_pm_from_dest(dest, position, available)
-      return 
-      
-      
-      return (-die, src, dest, True)
-    else:
-      assert(src == dest)
-      assert(false)
-
+    for pm in self.move.find(src):
+      r_pm = PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting)
+      pms.append(r_pm)
+      if pm.src == dest:
+        return pms
+      elif pm.src < dest:
+        return self.guess_your_multiple_partial_undoes(self, pm.src, dest, r_pm.apply_to(position), pms=pms)
+      else:
+        assert(pm.src > dest)
+        return None
+    return None
 
 
 class ViewerInputHelperMixin(object):
@@ -365,14 +373,14 @@ class PlayInputHelperMixin(object):
     return self.on_action == bglib.model.you
   def offer_resign(self):pass
   def is_to_accept_resign(self):
+    #  and self.on_inner_action == bglib.model.you
     return self.resign_offer in (bglib.model.resign_single, 
                                  bglib.model.resign_gammon,
                                  bglib.model.resign_backgammon
-                                 ) \
-      and self.on_inner_action == bglib.model.you
+                                 ) 
   def accept_resign(self):pass
 
-  def who_to_play(self):pass
+  def who_to_play(self):
     pass
 
 
