@@ -142,7 +142,7 @@ class Context(bglib.image.PIL.Context):
 if __name__ == '__main__':
   app = wx.PySimpleApp()
   frame = wx.Frame(None)
-  board = bglib.model.board()
-  bglib.gui.wxpython.BoardPanel(frame)
+  model = bglib.model.board()
+  bglib.gui.wxpython.BaseBoard(frame, model)
   frame.Show()
   app.MainLoop()

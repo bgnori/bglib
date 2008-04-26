@@ -7,7 +7,8 @@
 from base64 import standard_b64encode, standard_b64decode
 
 # local 
-from base import *
+#from bglib.encoding.base import *
+import bglib.encoding.base
 
 
 def encode_position(xs):
@@ -26,7 +27,7 @@ def decode_position(s):
       s += '='
     else:
       break
-  return twoside_decode(bin)
+  return bglib.encoding.base.twoside_decode(bin)
 
 
 def single_int(bitarray):
@@ -67,10 +68,10 @@ class MatchProxy(object):
     pass
 
   def __init__(self, s=None):
-    self.__dict__['_data']=BitArray(66, binary=s, endian='<')
+    self.__dict__['_data'] = bglib.encoding.base.BitArray(66, binary=s, endian='<')
 
   def decode(self, s):
-    self._data = BitArray(s)
+    self._data = bglib.encoding.base.BitArray(s)
 
   def encode(self):
     return self._data.binary

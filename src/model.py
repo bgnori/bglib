@@ -20,6 +20,8 @@ on_going = 1
 finished = 2
 resigned = 3
 
+
+
 #resing type
 resign_none = 0
 resign_single=1
@@ -27,6 +29,27 @@ resign_gammon=2
 resign_backgammon=3
 
 initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+
+def position_pton(p):
+  if p == 'your home' and p == 'his home':
+    return -1
+  elif p == 'your bar' and p == 'his bar':
+    return 24
+  else:
+    i = int(p)
+    if 0 < i and i < 25:
+      return i-1
+  assert(false)
+
+def position_ntop(n):
+  if n < 0:
+    return 'home'
+  elif 0 <= n and n < 24:
+    return str(n+1)
+  elif n == 24:
+    return 'bar'
+  else:
+    assert(False)
 
 
 class board(object):
@@ -72,6 +95,11 @@ class PartialMove(object):
     self.src = src
     self.dest = dest
     self.is_hitting = is_hitting
+  def __repr__(self):
+    s = "%s/%s"%(position_ntop(self.src), position_ntop(self.dest))
+    if self.is_hitting:
+      return s + '*'
+    return s
   def is_dance(self):
     return self.src == self.dest
   def is_undo(self):
@@ -94,18 +122,20 @@ class PartialMove(object):
 class Move(object):
   def __init__(self):
     self._pms = list()
+  def __repr__(self):
+    return "<Move:%s>"%str(self._pms)
   def append(self, pm):
     for p in reversed(self._pms):
       if p.are_invertible_element(pm):
         self._pms.remove(p)
         return
-    self._pms,append(pm)
+    self._pms.append(pm)
   def add(self, pms):
     self._pms = self._pms + pms
   def undo(self, pm):
     self._pms,remove(pm)
   def find(self, dest):
-    for pm in reversed(self,_pms):
+    for pm in reversed(self._pms):
       if pm.dest == dest:
         yield pm
 
@@ -129,7 +159,7 @@ class AvailableToPlay(object):
     self._imp[key] = value
   def consume(self, die):
     if die in self:
-      self[partial.die] -= 1
+      self[die] -= 1
     else:
       raise
   def is_doubles(self):
@@ -139,14 +169,14 @@ class AvailableToPlay(object):
     return False
   def get_max(self):
     for i in range(1, 7):
-      if i in self and i != dont_use:
+      if i in self:
         return i
     return None
 
 
 class MoveFactory(object):
   def __init__(self, board):
-    self.set_board(board)
+    self.begin(board)
 
   def begin(self, board):
     self.board = board
@@ -158,10 +188,8 @@ class MoveFactory(object):
   def append(self, pm):
     assert(isinstance(pm, PartialMove))
     self.move.append(pm)
-
-
     
-  def guess_your_single_pm_from_source(self, src, postiion=None, available=None):
+  def guess_your_single_pm_from_source(self, src, position=None, available=None):
     '''
     returns
     - acceptable: partial move
@@ -193,6 +221,7 @@ class MoveFactory(object):
     elif dest in range(0, 24):
       if position[him][23 - dest] > 1: # is blocked?
         # then try another die.
+        available.consume(die)
         return self.guess_your_single_pm_from_source(src, position, available)
       else:
         # some one is there, hit it
@@ -226,7 +255,8 @@ class MoveFactory(object):
         # no chequer to bearoff behind
         for i in range(src, 6):
           if position[you][i] > 0:
-            return self.guess_your_single_pm_from_dest(dest, position, available,consume(die))
+            available.consume(die)
+            return self.guess_your_single_pm_from_dest(dest, position, available)
         assert(position[you][src] == 0)
         for i in range(src, -1, -1):
           if position[you][i] > 0:
@@ -245,7 +275,8 @@ class MoveFactory(object):
           return PartialMove(die, src, dest, position[him][23 - dest] == 1) # some one is there, hit it
         else:
           # no source chequer, try another die.
-          return self.guess_your_single_pm_from_dest(self, dest, position, available.consume(die))
+          available.consume(die)
+          return self.guess_your_single_pm_from_dest(self, dest, position, available)
     else:
       return None
 
@@ -263,12 +294,19 @@ class MoveFactory(object):
       pms = []
 
     assert(src > dest)
-    pm = selg.guess_your_single_pm_from_source(src, position, available)
+    pm = self.guess_your_single_pm_from_source(src, position, available)
+    if pm is None:
+      return pm
+    print pm
+
     if pm.dest == dest:
-      return pms.append(pm)
+      pms.append(pm)
+      return pms
     elif pm.dest > dest:
-      return self.guess_your_multiple_partial_move(pm.dest, dest, pm.apply_to(postion),
-                                                   available.consume(pm.die), pms.append(pm))
+      available.consume(pm.die)
+      pms.append(pm)
+      return self.guess_your_multiple_partial_moves(pm.dest, dest, 
+                    pm.apply_to(position), available, pms)
     else:
       assert(pm,dest < dest)
       return None
@@ -280,15 +318,36 @@ class MoveFactory(object):
     if pms is None:
       pms = []
     for pm in self.move.find(src):
-      r_pm = PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting)
-      pms.append(r_pm)
+      inverse = PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting)
+      if inverse is None:
+        return None
+      pms.append(inverse)
       if pm.src == dest:
         return pms
       elif pm.src < dest:
-        return self.guess_your_multiple_partial_undoes(self, pm.src, dest, r_pm.apply_to(position), pms=pms)
+        pms.append(pm)
+        return self.guess_your_multiple_partial_undoes(self, pm.src, dest, inverse.apply_to(position), pms=pms)
       else:
         assert(pm.src > dest)
         return None
+    return None
+
+  def guess_your_making_point(self, dest, position=None, available=None, pms=None):
+    if available is None:
+      available = AvailableToPlay(self.board.rolled)
+    if position is None:
+      position = self.board.position
+    if pms is None:
+      pms = []
+
+    pm = self.guess_your_single_pm_from_dest(dest)
+    if pm:
+      pms.append(pm)
+      available = available.consume(pm)
+      pm = self.guess_your_single_pm_from_dest(dest, position=pm.apply_to(position), available=available)
+      if pm:
+        pms.append(pm)
+        return pms
     return None
 
 
