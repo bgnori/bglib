@@ -87,7 +87,7 @@ EVT_REGION_RIGHT_CLICK_TYPE = wx.NewEventType()
 EVT_REGION_RIGHT_CLICK = wx.PyEventBinder(EVT_REGION_RIGHT_CLICK_TYPE, 1)
 
 
-class BaseBoard(wx.Panel):
+class Viewer(wx.Panel):
   '''
     It does low level works.
     such as:
@@ -217,7 +217,7 @@ class BaseBoard(wx.Panel):
     self.Update()
 
 
-class Board(BaseBoard):
+class Player(Viewer):
   '''
     It does high level works.
     such as:
@@ -283,11 +283,10 @@ class Board(BaseBoard):
     BaseBoard.SetModel(self, model)
 
 
-class BoardEditor(wx.Panel):
+class IDEditor(wx.Panel):
   def __init__(self, parent, model):
     wx.Panel.__init__(self, parent)
     self.model = model
-
     label_position = wx.StaticText(self, -1, 'position id:')
     position_id = wx.TextCtrl(self, -1, 'jGfwATDg8+ABUA', 
                 style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
@@ -299,6 +298,46 @@ class BoardEditor(wx.Panel):
                 style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
                )
     match_id.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMatchId)
+
+    space = 4
+    sizer = wx.FlexGridSizer(cols=2, hgap=space, vgap=space)
+    sizer.AddMany([
+        label_position, position_id,
+        label_match,    match_id,
+        ])
+    self.SetSizer(sizer)
+    self.Fit()
+  def Notify(self):
+    pass
+  def OnChangePositionId(self, evt):
+    print 'OnChangePositionId', evt.GetString(), evt.GetEventObject()
+    p = bglib.encoding.gnubg.decode_position(evt.GetString())
+    print p
+    self.model.position = p
+
+  def OnChangeMatchId(self, evt):
+    print 'OnChangeMatchId', evt.GetString(), evt.GetEventObject()
+    m = bglib.encoding.gnubg.decode_match(evt.GetString())
+
+    print m.cube_in_logarithm
+    print type(m.cube_in_logarithm)
+    self.model.cube_value = (1 << m.cube_in_logarithm)
+    self.model.cube_owner = m.cube_owner
+    self.model.on_action = m.on_action
+    self.model.crawford = m.crawford
+    self.model.game_state = m.game_state
+    self.model.on_inner_action = m.on_inner_action
+    self.model.doubled = m.doubled
+    self.model.resign_offer = m.resign_offer
+    self.model.rolled = m.rolled
+    self.model.match_length = m.match_length
+    self.model.score = m.score
+
+
+class WYSIWYGEditor(wx.Panel):
+  def __init__(self, parent, model):
+    wx.Panel.__init__(self, parent)
+    self.model = model
 
     label_length = wx.StaticText(self, -1, 'length:')
     length = wx.lib.intctrl.IntCtrl(self, -1, 0, 
@@ -325,8 +364,6 @@ class BoardEditor(wx.Panel):
     space = 4
     sizer = wx.FlexGridSizer(cols=2, hgap=space, vgap=space)
     sizer.AddMany([
-        label_position, position_id,
-        label_match,    match_id,
         label_length,   length,
         label_his_score, his_score,
         label_your_score, your_score,
@@ -338,30 +375,6 @@ class BoardEditor(wx.Panel):
   def Notify(self):
     pass
     
-  def OnChangePositionId(self, evt):
-    print 'OnChangePositionId', evt.GetString(), evt.GetEventObject()
-    p = bglib.encoding.gnubg.decode_position(evt.GetString())
-    print p
-    self.model.position = p
-
-  def OnChangeMatchId(self, evt):
-    print 'OnChangeMatchId', evt.GetString(), evt.GetEventObject()
-    m = bglib.encoding.gnubg.decode_match(evt.GetString())
-
-    print m.cube_in_logarithm
-    print type(m.cube_in_logarithm)
-    self.model.cube_value = (1 << m.cube_in_logarithm)
-    self.model.cube_owner = m.cube_owner
-    self.model.on_action = m.on_action
-    self.model.crawford = m.crawford
-    self.model.game_state = m.game_state
-    self.model.on_inner_action = m.on_inner_action
-    self.model.doubled = m.doubled
-    self.model.resign_offer = m.resign_offer
-    self.model.rolled = m.rolled
-    self.model.match_length = m.match_length
-    self.model.score = m.score
-
   def OnChangeLength(self, evt):
     print 'OnChangeLength', evt.GetString(), evt.GetEventObject()
 
@@ -383,14 +396,17 @@ if __name__ == '__main__':
   proxy = bglib.pubsubproxy.Proxy(model)
   sizer = wx.BoxSizer(wx.VERTICAL)
 
-  b = bglib.gui.wxpython.Board(frame, proxy)
+  b = bglib.gui.wxpython.Viewer(frame, proxy)
   proxy.register(b.Notify)
-
   sizer.Add(b, proportion=1, flag=wx.SHAPED)
-  be = BoardEditor(frame, proxy)
+  
+  be = WYSIWYGEditor(frame, proxy)
   proxy.register(be.Notify)
-
   sizer.Add(be, proportion=0, flag=wx.EXPAND)
+
+  ie = IDEditor(frame, proxy)
+  proxy.register(ie.Notify)
+  sizer.Add(ie, proportion=0, flag=wx.EXPAND)
   frame.SetSizer(sizer)
 
   frame.Fit()
