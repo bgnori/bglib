@@ -217,125 +217,6 @@ class Viewer(wx.Panel):
     self.Update()
 
 
-class Player(Viewer):
-  '''
-    It does high level works.
-    such as:
-    - determining leagality of move.
-    - emitting board change event envoked by user action.
-  '''
-  def __init__(self, parent, model):
-    BaseBoard.__init__(self, parent, model)
-    self.Bind(bglib.gui.wxpython.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
-    self.Bind(bglib.gui.wxpython.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
-    self.Bind(bglib.gui.wxpython.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
-
-  def OnRegionLeftDrag(self, evt):
-    down = evt.GetDown()
-    up = evt.GetUp()
-    print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
-    down = bglib.model.position_pton(down.name)
-    up = bglib.model.position_pton(up.name)
-    mf = bglib.model.MoveFactory(self.model)
-    if down > up:
-      pms = mf.guess_your_multiple_partial_moves(down, up)
-    elif down < up:
-      pms = mf.guess_your_multiple_partial_undoes(down, up)
-    else:
-      assert(up == donw)
-
-    if pms:
-      for pm in pms:
-        mf.append(pm)
-      mv = mf.end()
-      print mv
-    else:
-      print 'illeagal input'
-
-  def OnRegionLeftClick(self, evt):
-    region = evt.GetRegion()
-    board = self.model
-    mf = bglib.model.MoveFactory(self.model)
-
-    points = ['%i'%i for i in range(1, 25)]
-
-    print 'Board::OnRegionLeftClick:', region
-    if region.name == 'your field':
-      if board.is_leagal_to_double():
-        print 'double!'
-      else:
-        print 'not allowed to double'
-    elif region.name in points or region.name == 'your bar':
-      print 'moving from ', region.name
-      src = bglib.model.position_pton(region.name)
-      print mf.guess_your_single_pm_from_source(src)
-    else:
-      pass
-
-  def OnRegionRightClick(self, evt):
-    region = evt.GetRegion()
-    print 'Board::OnRegionRightClick:', region
-    mf = bglib.model.MoveFactory(self.model)
-    dest = bglib.model.position_pton(region.name)
-    print mf.guess_your_making_point(dest)
-      
-  def SetModel(self, model):
-    BaseBoard.SetModel(self, model)
-
-
-class IDEditor(wx.Panel):
-  def __init__(self, parent, model):
-    wx.Panel.__init__(self, parent)
-    self.model = model
-    label_position = wx.StaticText(self, -1, 'position id:')
-    position_id = wx.TextCtrl(self, -1, 'jGfwATDg8+ABUA', 
-                style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
-               )
-    position_id.Bind(wx.EVT_TEXT_ENTER, self.OnChangePositionId)
-
-    label_match = wx.StaticText(self, -1, 'match id:')
-    match_id = wx.TextCtrl(self, -1, 'cIkWAAAAAAAA', 
-                style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
-               )
-    match_id.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMatchId)
-
-    space = 4
-    sizer = wx.FlexGridSizer(cols=2, hgap=space, vgap=space)
-    sizer.AddMany([
-        label_position, position_id,
-        label_match,    match_id,
-        ])
-    self.SetSizer(sizer)
-    self.Fit()
-  def Notify(self):
-    pass
-  def OnChangePositionId(self, evt):
-    print 'OnChangePositionId', evt.GetString(), evt.GetEventObject()
-    p = bglib.encoding.gnubg.decode_position(evt.GetString())
-    print p
-    self.model.position = p
-
-  def OnChangeMatchId(self, evt):
-    print 'OnChangeMatchId', evt.GetString(), evt.GetEventObject()
-    m = bglib.encoding.gnubg.decode_match(evt.GetString())
-
-    print m.cube_in_logarithm
-    print type(m.cube_in_logarithm)
-    self.model.cube_value = (1 << m.cube_in_logarithm)
-    self.model.cube_owner = m.cube_owner
-    self.model.on_action = m.on_action
-    self.model.crawford = m.crawford
-    self.model.game_state = m.game_state
-    self.model.on_inner_action = m.on_inner_action
-    self.model.doubled = m.doubled
-    self.model.resign_offer = m.resign_offer
-    self.model.rolled = m.rolled
-    self.model.match_length = m.match_length
-    self.model.score = m.score
-
-
-
-
 if __name__ == '__main__':
   import bglib.pubsubproxy
   app = wx.PySimpleApp()
@@ -348,9 +229,6 @@ if __name__ == '__main__':
   proxy.register(b.Notify)
   sizer.Add(b, proportion=1, flag=wx.SHAPED)
   
-  ie = IDEditor(frame, proxy)
-  proxy.register(ie.Notify)
-  sizer.Add(ie, proportion=0, flag=wx.EXPAND)
   frame.SetSizer(sizer)
 
   frame.Fit()
