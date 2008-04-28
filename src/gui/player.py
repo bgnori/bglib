@@ -8,9 +8,9 @@ import logging
 import wx
 import wx.lib.intctrl
 
-import bglib.gui.wxpython
+import bglib.gui.viewer
 
-class Player(bglib.gui.wxpython.Viewer):
+class Player(bglib.gui.viewer.Viewer):
   '''
     It does high level works.
     such as:
@@ -19,9 +19,9 @@ class Player(bglib.gui.wxpython.Viewer):
   '''
   def __init__(self, parent, model):
     BaseBoard.__init__(self, parent, model)
-    self.Bind(bglib.gui.wxpython.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
-    self.Bind(bglib.gui.wxpython.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
-    self.Bind(bglib.gui.wxpython.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
+    self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
+    self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
+    self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
 
   def OnRegionLeftDrag(self, evt):
     down = evt.GetDown()
@@ -86,7 +86,7 @@ if __name__ == '__main__':
   proxy = bglib.pubsubproxy.Proxy(model)
   sizer = wx.BoxSizer(wx.VERTICAL)
 
-  b = bglib.gui.wxpython.Viewer(frame, proxy)
+  b = bglib.gui.viewer.Viewer(frame, proxy)
   proxy.register(b.Notify)
   sizer.Add(b, proportion=1, flag=wx.SHAPED)
   

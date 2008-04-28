@@ -194,7 +194,7 @@ if __name__ == '__main__':
   proxy = bglib.pubsubproxy.Proxy(model)
   sizer = wx.BoxSizer(wx.VERTICAL)
 
-  #b = bglib.gui.wxpython.Viewer(frame, proxy)
+  #b = bglib.gui.viewer.Viewer(frame, proxy)
   b = Viewer(frame, proxy)
   proxy.register(b.Notify)
   sizer.Add(b, proportion=1, flag=wx.SHAPED)

@@ -170,4 +170,4 @@ class Context(bglib.image.PIL.Context):
 bglib.image.context.context_factory.register(Context)
 
 if __name__ == '__main__':
-  print 'test code is in bglib/gui/wxpython,py'''
+  print 'test code is in bglib/gui/viewer,py'

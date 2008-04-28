@@ -8,13 +8,13 @@ import logging
 
 import wx
 import wx.lib.intctrl
-import bglib.gui.wxpython
+import bglib.gui.viewer
 
 
 class WYSIWYGEditor(wx.Panel):
   def __init__(self, parent, model):
     wx.Panel.__init__(self, parent)
-    board = bglib.gui.wxpython.Viewer(self, model)
+    board = bglib.gui.viewer.Viewer(self, model)
 
     label_length = wx.StaticText(self, -1, 'length:')
     length = wx.lib.intctrl.IntCtrl(self, -1, 0, 
