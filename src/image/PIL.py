@@ -196,6 +196,8 @@ class Context(bglib.image.context.Context):
   def result(self):
     return self.image
 
+bglib.image.context.context_factory.register(Context)
+
 
 if __name__ == '__main__':
   board = bglib.model.board()

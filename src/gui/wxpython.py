@@ -8,43 +8,13 @@ import logging
 import wx
 import wx.lib.intctrl
 
+import bglib.model
 import bglib.encoding.gnubg
 import bglib.depot.dict
+import bglib.depot.lines
 import bglib.image.context
 import bglib.image.renderer
-
-class Region(object):
-  def __init__(self, x, y, w, h, name=None):
-    if name is None:
-      name = str(id(self))
-    self.name = name
-    self.rect = wx.Rect(x, y ,w, h)
-    self.wxbmp = None
-
-  def set_image(self, image):
-    self.wxbmp = wx.BitmapFromImage(image)
-
-  def __hash__(self):
-    return hash(self.name)
-  
-  def GetX(self):
-    return self.rect.GetX()
-
-  def GetY(self):
-    return self.rect.GetY()
-
-  def Inside(self, pt):
-    return self.rect.Inside(pt)
-
-  def InsideXY(self, x, y):
-    return self.rect.InsideXY(x, y)
-
-  def Draw(self, dc):
-    if self.wxbmp:
-      dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
-
-  def __repr__(self):
-    return  self.name + ' @ ' + str(self.rect)
+import bglib.image.wxpython
 
 
 class LeftDrag(wx.PyCommandEvent):
@@ -75,7 +45,6 @@ class LeftClick(RegionClick):
   pass
 class RightClick(RegionClick):
   pass
-
 
 EVT_REGION_LEFT_DRAG_TYPE = wx.NewEventType()
 EVT_REGION_LEFT_DRAG = wx.PyEventBinder(EVT_REGION_LEFT_DRAG_TYPE, 1)
@@ -136,7 +105,7 @@ class Viewer(wx.Panel):
     return None
 
   def append(self, region):
-    assert(isinstance(region, bglib.gui.wxpython.Region))
+    assert(isinstance(region, bglib.image.wxpython.Region))
     self.regions.append(region)
 
   def set_bgimage(self, image):
@@ -225,7 +194,8 @@ if __name__ == '__main__':
   proxy = bglib.pubsubproxy.Proxy(model)
   sizer = wx.BoxSizer(wx.VERTICAL)
 
-  b = bglib.gui.wxpython.Viewer(frame, proxy)
+  #b = bglib.gui.wxpython.Viewer(frame, proxy)
+  b = Viewer(frame, proxy)
   proxy.register(b.Notify)
   sizer.Add(b, proportion=1, flag=wx.SHAPED)
   

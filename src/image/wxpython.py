@@ -6,12 +6,41 @@
 #
 import wx
 
-import bglib.gui.wxpython
+import bglib.image.PIL
 
-# FIXME
-# Why
-# import  bglib.image.PIL
-# is NOT needed??
+class Region(object):
+  def __init__(self, x, y, w, h, name=None):
+    if name is None:
+      name = str(id(self))
+    self.name = name
+    self.rect = wx.Rect(x, y ,w, h)
+    self.wxbmp = None
+
+  def set_image(self, image):
+    self.wxbmp = wx.BitmapFromImage(image)
+
+  def __hash__(self):
+    return hash(self.name)
+  
+  def GetX(self):
+    return self.rect.GetX()
+
+  def GetY(self):
+    return self.rect.GetY()
+
+  def Inside(self, pt):
+    return self.rect.Inside(pt)
+
+  def InsideXY(self, x, y):
+    return self.rect.InsideXY(x, y)
+
+  def Draw(self, dc):
+    if self.wxbmp:
+      dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
+
+  def __repr__(self):
+    return  self.name + ' @ ' + str(self.rect)
+
 
 class Context(bglib.image.PIL.Context):
   name = 'wx'
@@ -53,42 +82,42 @@ class Context(bglib.image.PIL.Context):
   def draw_your_point_at(self, point, checker_count):
     x, y = self.apply_mag(self.style().point[str(point)])
     w, h = self.apply_mag(self.style().size.point)
-    r = bglib.gui.wxpython.Region(x, y, w, h, str(point))
+    r = Region(x, y, w, h, str(point))
     self.window.append(r)
     bglib.image.PIL.Context.draw_your_point_at(self, point, checker_count)
   
   def draw_his_point_at(self, point, checker_count):
     x, y = self.apply_mag(self.style().point[str(point)])
     w, h = self.apply_mag(self.style().size.point)
-    r = bglib.gui.wxpython.Region(x, y, w, h, str(point))
+    r = Region(x, y, w, h, str(point))
     self.window.append(r)
     bglib.image.PIL.Context.draw_his_point_at(self, point, checker_count)
 
   def draw_empty_point_at(self, point):
     x, y = self.apply_mag(self.style().point[str(point)])
     w, h = self.apply_mag(self.style().size.point)
-    r = bglib.gui.wxpython.Region(x, y, w, h, str(point))
+    r = Region(x, y, w, h, str(point))
     self.window.append(r)
     bglib.image.PIL.Context.draw_empty_point_at(self, point)
 
   def draw_your_bar(self, checker_count):
     x, y = self.apply_mag(self.style().bar.you)
     w, h = self.apply_mag(self.style().size.bar)
-    r = bglib.gui.wxpython.Region(x, y, w, h, 'your bar')
+    r = Region(x, y, w, h, 'your bar')
     self.window.append(r)
     bglib.image.PIL.Context.draw_your_bar(self, checker_count)
 
   def draw_his_bar(self, checker_count):
     x, y = self.apply_mag(self.style().bar.him)
     w, h = self.apply_mag(self.style().size.bar)
-    r = bglib.gui.wxpython.Region(x, y, w, h, 'his bar')
+    r = Region(x, y, w, h, 'his bar')
     self.window.append(r)
     bglib.image.PIL.Context.draw_his_bar(self, checker_count)
 
   def draw_center_bar(self):
     x, y = self.apply_mag(self.style().center.null)
     w, h = self.apply_mag(self.style().size.center)
-    r = bglib.gui.wxpython.Region(x, y, w, h, 'center bar')
+    r = Region(x, y, w, h, 'center bar')
     self.window.append(r)
     bglib.image.PIL.Context.draw_center_bar(self)
 
@@ -104,28 +133,28 @@ class Context(bglib.image.PIL.Context):
   def draw_you_offered_double(self, cube_value):
     x, y = self.apply_mag(self.style().field.you)
     w, h = self.apply_mag(self.style().size.field)
-    r = bglib.gui.wxpython.Region(x, y, w, h, 'your field')
+    r = Region(x, y, w, h, 'your field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_you_offered_double(self)
 
   def draw_he_offered_double(self, cube_value):
     x, y = self.apply_mag(self.style().field.him)
     w, h = self.apply_mag(self.style().size.field)
-    r = bglib.gui.wxpython.Region(x, y, w, h, 'his field')
+    r = Region(x, y, w, h, 'his field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_he_offered_double(self)
 
   def draw_your_dice_in_field(self, dice):
     x, y = self.apply_mag(self.style().field.you)
     w, h = self.apply_mag(self.style().size.field)
-    r = bglib.gui.wxpython.Region(x, y, w, h, 'your field')
+    r = Region(x, y, w, h, 'your field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_your_dice_in_field(self, dice)
 
   def draw_his_dice_in_field(self, dice):
     x, y = self.apply_mag(self.style().field.him)
     w, h = self.apply_mag(self.style().size.field)
-    r = bglib.gui.wxpython.Region(x, y, w, h, 'his field')
+    r = Region(x, y, w, h, 'his field')
     self.window.append(r)
     bglib.image.PIL.Context.draw_his_dice_in_field(self, dice)
 
@@ -138,11 +167,7 @@ class Context(bglib.image.PIL.Context):
     self.window.set_bgimage(wx.EmptyImage(w, h))
     bglib.image.PIL.Context.draw_frame(self)
 
+bglib.image.context.context_factory.register(Context)
 
 if __name__ == '__main__':
-  app = wx.PySimpleApp()
-  frame = wx.Frame(None)
-  model = bglib.model.board()
-  bglib.gui.wxpython.BaseBoard(frame, model)
-  frame.Show()
-  app.MainLoop()
+  print 'test code is in bglib/gui/wxpython,py'''
