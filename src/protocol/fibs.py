@@ -46,7 +46,7 @@ class State(object):
           cookie = name
           break
       except re.error:
-        logging.exception("%s can't match with  s"%(regexp, message))
+        logging.exception("%s can't match with %s"%(regexp, message))
     return cookie
 
 
@@ -66,7 +66,7 @@ class RunState(State):
           cookie = name
           break
       except re.error:
-        logging.exception("%s can't match with  s"%(regexp, message))
+        logging.exception("%s can't match with %s"%(regexp, message))
     return cookie
 
   FIBS_Board = ["^board:[a-zA-Z_<>]+:[a-zA-Z_<>]+:[0-9:\\-]+$"]
