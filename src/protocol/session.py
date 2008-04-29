@@ -8,9 +8,10 @@ import logging
 import telnetlib
 from string import Template
 
-from bglib.protocol.fibshelper import pton, ntop
-import FIBSCookieMonster
+#from bglib.protocol.fibshelper import pton, ntop
+#import FIBSCookieMonster
 
+import bglib.protocol.fibs
 
 class Timeout(Exception):
   pass
@@ -84,6 +85,7 @@ class Subscriber:
 class Session(Transport):
   def __init__(self, timeout=None, debug=0):
     Transport.__init__(self, timeout=timeout, debug=debug)
+    self.monster = bglib.protocol.fibs.CookieMonster()
     self.subscribers = list()
     if self.debuglevel:
       from fibs.debugging import Debug
@@ -91,13 +93,12 @@ class Session(Transport):
 
   def _listener(self):
     logging.debug('started listener')
-    FIBSCookieMonster.ResetFIBSCookieMonster()
     try:
       while True:
         nth, matchobj, s = self.expect([CRLF, 'login: '])
         if not nth:
           s = s[:-2] # remove CRLF
-        self._dispatch(FIBSCookieMonster.FIBSCookie(s), s)
+        self._dispatch(self.monster.make_cookie(s), s)
     except socket.error, e:
       self._dispatch('socket_error', e)
     except EOFError, e:
@@ -107,14 +108,9 @@ class Session(Transport):
     thread.exit()
 
   @synchronized_with(Transport.lock)
-  def _dispatch(self, id, got):
+  def _dispatch(self, name, got):
     if self._termination_requested:
       thread.exit()
-    try:
-      int(id)
-      name = ntop[id]
-    except ValueError:
-      name = id
     for subscriber in self.subscribers:
       try:
         f = getattr(subscriber, name)
