@@ -102,5 +102,7 @@ Bit 37-51 and bit 52-66 is the score for player 0 and player 1 respectively. The
 >>> ''.join(map(str, list(m._data)))
 '100000101001000101010100100000000000010000000000000001000000000000'
 
+>>> b = bglib.model.board()
+>>> b = decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA')
 
 

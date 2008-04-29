@@ -55,7 +55,7 @@ def position_ntop(n):
 class board(object):
   defaults = dict(
                   position=initial_position,
-                  cube_value=0,
+                  cube_in_logarithm=0,
                   cube_owner=center,
                   on_action=you,
                   crawford=False,

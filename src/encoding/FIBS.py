@@ -81,10 +81,17 @@ class _FIBSBoardState(object):
 
 
 def decode(s):
+  def log(power_of_two):
+    r = 0
+    while power_of_two > 1:
+      power_of_two = power_of_two >> 1
+      r+=1
+    return r
+      
   fibs = _FIBSBoardState(s)
   m = bglib.model.board()
   m.position = fibs.position()
-  m.cube_value=fibs.doubling_cube
+  m.cube_in_logarithm = log(fibs.doubling_cube)
 
   if fibs.you_may_double and fibs.he_may_double:
     m.cube_owner = bglib.model.center

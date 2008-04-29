@@ -128,12 +128,12 @@ class Context(bglib.image.context.Context):
   def draw_his_home(self, checker_count):pass
 
   # cube holder
-  def draw_your_cube(self, cube_value):pass
-  def draw_his_cube(self, cube_value):pass
-  def draw_center_cube(self, cube_value):pass
+  def draw_your_cube(self, cube_in_logarithm):pass
+  def draw_his_cube(self, cube_in_logarithm):pass
+  def draw_center_cube(self, cube_in_logarithm):pass
 
   # field
-  def draw_you_offered_double(self, cube_value):
+  def draw_you_offered_double(self, cube_in_logarithm):
     size = self.apply_mag(self.style().size.field)
     image = self.open_image("field.jpg",
                             size
@@ -141,7 +141,7 @@ class Context(bglib.image.context.Context):
     x, y = self.apply_mag(self.style().field.you)
     self.paste_image(image, (x, y))
 
-  def draw_he_offered_double(self, cube_value):
+  def draw_he_offered_double(self, cube_in_logarithm):
     size = self.apply_mag(self.style().size.field)
     image = self.open_image("field.jpg",
                             size

@@ -8,6 +8,8 @@ import logging
 import wx
 import wx.lib.intctrl
 
+import bglib.encoding.gnubg
+
 import bglib.gui.viewer
 
 class IDEditor(wx.Panel):
@@ -15,13 +17,14 @@ class IDEditor(wx.Panel):
     wx.Panel.__init__(self, parent)
     self.model = model
     label_position = wx.StaticText(self, -1, 'position id:')
-    position_id = wx.TextCtrl(self, -1, 'jGfwATDg8+ABUA', 
+    pid, mid = bglib.encoding.gnubg.encode(model)
+    position_id = wx.TextCtrl(self, -1, pid,
                 style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
                )
     position_id.Bind(wx.EVT_TEXT_ENTER, self.OnChangePositionId)
 
     label_match = wx.StaticText(self, -1, 'match id:')
-    match_id = wx.TextCtrl(self, -1, 'cIkWAAAAAAAA', 
+    match_id = wx.TextCtrl(self, -1, mid,
                 style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
                )
     match_id.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMatchId)
@@ -48,7 +51,7 @@ class IDEditor(wx.Panel):
 
     print m.cube_in_logarithm
     print type(m.cube_in_logarithm)
-    self.model.cube_value = (1 << m.cube_in_logarithm)
+    self.model.cube_in_logarithm = (1 << m.cube_in_logarithm)
     self.model.cube_owner = m.cube_owner
     self.model.on_action = m.on_action
     self.model.crawford = m.crawford
@@ -66,6 +69,7 @@ if __name__ == '__main__':
   app = wx.PySimpleApp()
   frame = wx.Frame(None)
   model = bglib.model.board()
+  #model.position = bglib.encoding.gnubg.decode_position(
   proxy = bglib.pubsubproxy.Proxy(model)
   sizer = wx.BoxSizer(wx.VERTICAL)
 

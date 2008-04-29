@@ -42,14 +42,14 @@ class Renderer(object):
     context.draw_you_to_play()
     context.draw_he_offered_double(0)
     context.draw_you_offered_double(0)
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_value or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_value or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_value or 0)
+    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
+    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
+    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
 
   def draw_you_doubled_he_is_on_take_or_pass(self, board):
     context = self.context()
     context.draw_him_to_play()
-    context.draw_you_offered_double(board.cube_value)
+    context.draw_you_offered_double(board.cube_in_logarithm)
     context.draw_he_offered_double(0)
     context.draw_your_cube(0)
     context.draw_his_cube(0)
@@ -61,7 +61,7 @@ class Renderer(object):
     context.draw_you_offered_double(0)
     context.draw_he_offered_double(0)
     context.draw_your_cube(0)
-    context.draw_his_cube(board.cube_value)
+    context.draw_his_cube(board.cube_in_logarithm)
     context.draw_center_cube(0)
 
   def draw_you_rolled(self, board):
@@ -69,25 +69,25 @@ class Renderer(object):
     context.draw_you_to_play()
     context.draw_your_dice_in_field(board.rolled)
     context.draw_his_dice_in_field(0)
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_value or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_value or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_value or 0)
+    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
+    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
+    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
 
   def draw_he_is_on_roll_cube_action(self, board):
     context = self.context()
     context.draw_him_to_play()
     context.draw_he_offered_double(0)
     context.draw_you_offered_double(0)
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_value or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_value or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_value or 0)
+    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
+    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
+    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
 
 
   def draw_he_doubled_you_are_on_take_or_pass(self, board):
     context = self.context()
     context.draw_you_to_play()
     context.draw_you_offered_double(0)
-    context.draw_he_offered_double(board.cube_value)
+    context.draw_he_offered_double(board.cube_in_logarithm)
     context.draw_your_cube(0)
     context.draw_his_cube(0)
     context.draw_center_cube(0)
@@ -97,7 +97,7 @@ class Renderer(object):
     context.draw_him_to_play()
     context.draw_you_offered_double(0)
     context.draw_he_offered_double(0)
-    context.draw_your_cube(board.cube_value)
+    context.draw_your_cube(board.cube_in_logarithm)
     context.draw_his_cube(0)
     context.draw_center_cube(0)
 
@@ -106,9 +106,9 @@ class Renderer(object):
     context.draw_him_to_play()
     context.draw_your_dice_in_field(board.rolled)
     context.draw_his_dice_in_field(board.rolled)
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_value or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_value or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_value or 0)
+    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
+    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
+    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
 
   def draw_field(self, board):
     '''Following Cases with 

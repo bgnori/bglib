@@ -16,6 +16,10 @@ class WYSIWYGEditor(wx.Panel):
     wx.Panel.__init__(self, parent)
     board = bglib.gui.viewer.Viewer(self, model)
 
+    self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
+    self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
+    self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
+
     label_length = wx.StaticText(self, -1, 'length:')
     length = wx.lib.intctrl.IntCtrl(self, -1, 0, 
                 style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
@@ -52,6 +56,14 @@ class WYSIWYGEditor(wx.Panel):
 
   def Notify(self):
     pass
+
+  def OnRegionLeftDrag(self, evt):
+    print 'OnRegionLeftDrag'
+  def OnRegionLeftClick(self, evt):
+    print 'OnRegionLeftClick'
+    region = evt.GetRegion()
+  def OnRegionRightClick(self, evt):
+    print 'OnRegionRightClick'
     
   def OnChangeLength(self, evt):
     print 'OnChangeLength', evt.GetString(), evt.GetEventObject()

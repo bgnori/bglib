@@ -13,7 +13,7 @@ import bglib.encoding.base
 
 def encode_position(xs):
   """ encodes tuple expression into gnubg position id """
-  return standard_b64encode(twoside_encode(xs)).rstrip('=')
+  return standard_b64encode(bglib.encoding.base.twoside_encode(xs)).rstrip('=')
 
 
 def decode_position(s):
@@ -93,6 +93,39 @@ def decode_match(s):
       break
   return MatchProxy(bin)
 
+def encode(model):
+  pid = bglib.encoding.gnubg.encode_position(model.position)
+  mp = MatchProxy()
+
+  mp.cube_in_logarithm = model.cube_in_logarithm 
+  mp.cube_owner = model.cube_owner 
+  mp.on_action = model.on_action 
+  mp.crawford = model.crawford 
+  mp.game_state = model.game_state 
+  mp.on_inner_action = model.on_inner_action 
+  mp.doubled = model.doubled 
+  mp.resign_offer = model.resign_offer 
+  mp.rolled = model.rolled 
+  mp.match_length = model.match_length 
+  mp.score = model.score 
+  mid = encode_match(mp)
+  return pid, mid
+
+def decode(model, pid, mid):
+  model.position = decode_position(pid),
+  mp = decode_match(mid)
+  model.cube_in_logarithm = mp.cube_in_logarithm
+  model.cube_owner = mp.cube_owner
+  model.on_action = mp.on_action
+  model.crawford = mp.crawford
+  model.game_state = mp.game_state
+  model.on_inner_action = mp.on_inner_action
+  model.doubled = mp.doubled
+  model.resign_offer = mp.resign_offer
+  model.rolled = mp.rolled
+  model.match_length = mp.match_length
+  model.score = mp.score
+  return model
 
 def convert_to_urlsafe(s):
   return s.replace('+', '-').replace('/', '_')
@@ -100,7 +133,6 @@ def convert_to_urlsafe(s):
 
 def convert_from_urlsafe(s):
   return s.replace('-', '+').replace('_', '/')
-
 
 
 if __name__ == '__main__':
