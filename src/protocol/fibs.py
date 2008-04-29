@@ -299,9 +299,9 @@ class RunState(State):
                    ]
 
   FIBS_Stat = ["^[0-9]+ bytes", # output from stat command
-               "^[0-9,+ accounts",
-               "^[0-9,+ ratings saved. reset log",
-               "^[0-9,+ registered users.",
+               "^[0-9]+ accounts",
+               "^[0-9]+ ratings saved. reset log",
+               "^[0-9]+ registered users.",
                "^[0-9]+\\([0-9]+\\) saved games check by cron",
                ]
 
