@@ -8,9 +8,6 @@ import logging
 import telnetlib
 from string import Template
 
-#from bglib.protocol.fibshelper import pton, ntop
-#import FIBSCookieMonster
-
 import bglib.protocol.fibs
 
 class Timeout(Exception):

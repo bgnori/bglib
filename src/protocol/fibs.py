@@ -17,6 +17,7 @@ import re
     AlphaBatch + NumericBatch + StarsBatch 
   FIBS_LOGOUT_STATE / NULL         <==>  LogoutState
 '''
+CLIP_VERSION = '1008'
   
 class CookieMonster(object):
   def __init__(self):
