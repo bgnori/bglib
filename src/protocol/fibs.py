@@ -29,7 +29,7 @@ class CookieMonster(object):
 class State(object):
   def __iter__(self):
     for name, value in self.__class__.__dict__.items():
-      if name.startswith('FIBS') or name.startswith('CLIP'):
+      if name.startswith('CLIP') or name.startswith('FIBS'):
         for regexp in value:
           yield name, regexp
   def default(self):
@@ -413,7 +413,8 @@ class RunState(State):
 
 
 class LoginState(State):
-  CLIP_WELCOME = ["^1 [a-zA-Z_<>]+ [0-9]+ "]
+  FIBS_LoginPrompt = ["^login:", ]
+  CLIP_WELCOME = ["^1 [a-zA-Z_<>]+ [0-9]+ ",]
   CLIP_OWN_INFO = ["^2 [a-zA-Z_<>]+ [01] [01]"]
   CLIP_MOTD_BEGIN = ["^3$"]
   FIBS_FailedLogin = ["^> [0-9]+"]
