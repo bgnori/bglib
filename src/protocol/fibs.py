@@ -7,30 +7,68 @@
 import re
 
 '''
-  FIBS_UNINITIALIZED_STATE,
-  FIBS_LOGIN_STATE,
-  FIBS_MOTD_STATE,
-  FIBS_RUN_STATE,
-  FIBS_LOGOUT_STATE
+  in original code                       in mine
+   ( State ) / ( Batch )
+  FIBS_UNINITIALIZED_STATE / NULL  <==>  None
+  FIBS_LOGIN_STATE / LoginBatch    <==>  LoginState
+  FIBS_MOTD_STATE / MOTDBatch      <==>  MOTState
+  FIBS_RUN_STATE /                 <==>  RunState
+    AlphaBatch + NumericBatch + StarsBatch 
+  FIBS_LOGOUT_STATE / NULL         <==>  LogoutState
 '''
   
-class Monster(object):
-  pass
+class CookieMonster(object):
+  def __init__(self):
+    self.state = LoginState()
+  def make_cookie(self, message):
+    cookie = self.state.make_cookie(message)
+    self.state = self.state.next_state(cookie)
+    return cookie
 
 
-class Batch(object):
+class State(object):
   def __iter__(self):
-    pass
+    for name, value in self.__class__.__dict__.items():
+      if name.startswith('FIBS') or name.startswith('CLIP'):
+        for regexp in value:
+          yield name, regexp
+  def default(self):
+    return 'FIBS_Unknown'
+  def next_state(self, name):
+    return self
 
-# CookieDough of originarl code is an item in list in this code'
+  def make_cookie(self, message):
+    cookie = self.default()
+    for name, regexp in self:
+      if re.match(regexp, message):
+        cookie = name
+        break
+    return cookie
 
-class AlphaBatch(Batch):
+
+class RunState(State):
+  ''' =  AlphaBatch + NumericBatch + StarsBatch'''
+  def next_state(self, name):
+    if name == 'FIBS_Goodbye':
+      return LoginState()
+    return self
+  def make_cookie(self, message):
+    if len(message) == 0:
+      return 'FIBS_Empty'
+    cookie = 'FIBS_Unknown'
+    for name, regexp in self:
+      if re.match(regexp, message):
+        cookie = name
+        break
+    return cookie
+
   FIBS_Board = ["^board:[a-zA-Z_<>]+:[a-zA-Z_<>]+:[0-9:\\-]+$"]
   FIBS_BAD_Board = ["^board:"]
   FIBS_YouRoll = ["^You roll [1-6] and [1-6]"]
   FIBS_PlayerRolls = ["^[a-zA-Z_<>]+ rolls [1-6] and [1-6]"]
-  FIBS_RollOrDouble = ["^It's your turn to roll or double\\."]
-  FIBS_RollOrDouble = ["^It's your turn\\. Please roll or double"]
+  FIBS_RollOrDouble = ["^It's your turn to roll or double\\.",
+                       "^It's your turn\\. Please roll or double",
+                      ]
   FIBS_AcceptRejectDouble = ["doubles\\. Type 'accept' or 'reject'\\."]
   FIBS_Doubles = ["^[a-zA-Z_<>]+ doubles\\."]
   FIBS_PlayerAcceptsDouble = ["accepts the double\\."]
@@ -68,8 +106,9 @@ class AlphaBatch(Batch):
   FIBS_YouStopWatching = ["^You stop watching "]
   # overloaded
 
-  FIBS_PlayerStartsWatching = ["[a-zA-Z_<>]+ starts watching [a-zA-Z_<>]+\\."]
-  FIBS_PlayerStartsWatching = ["[a-zA-Z_<>]+ is watching you\\."]
+  FIBS_PlayerStartsWatching = ["[a-zA-Z_<>]+ starts watching [a-zA-Z_<>]+\\.",
+                               "[a-zA-Z_<>]+ is watching you\\.",
+                              ]
   FIBS_PlayerStopsWatching = ["[a-zA-Z_<>]+ stops watching [a-zA-Z_<>]+\\."]
   FIBS_PlayerIsWatching = ["[a-zA-Z_<>]+ is watching "]
   FIBS_ResignWins = ["^[a-zA-Z_<>]+ gives up\\. [a-zA-Z_<>]+ wins [0-9]+ points?\\."]
@@ -99,17 +138,17 @@ class AlphaBatch(Batch):
 
   FIBS_BAD_AcceptDouble = ["^[a-zA-Z_<>]+ accepts? the double\\. The cube shows [0-9]+\\..+"]
   FIBS_YouAcceptDouble = ["^You accept the double\\. The cube shows"]
-  FIBS_PlayerAcceptsDouble = ["^[a-zA-Z_<>]+ accepts the double\\. The cube shows "]
-  FIBS_PlayerAcceptsDouble = ["^[a-zA-Z_<>]+ accepts the double\\."]
-  # while watching
+  FIBS_PlayerAcceptsDouble = ["^[a-zA-Z_<>]+ accepts the double\\. The cube shows ", 
+                              "^[a-zA-Z_<>]+ accepts the double\\.", # while watching
+                              ]
 
   FIBS_ResumeMatchRequest = ["^[a-zA-Z_<>]+ wants to resume a saved match with you\\."]
   FIBS_ResumeMatchAck0 = ["has joined you\\. Your running match was loaded"]
   FIBS_YouWinGame = ["^You win the game and get"]
   FIBS_UnlimitedInvite = ["^[a-zA-Z_<>]+ wants to play an unlimted match with you\\."]
-  FIBS_PlayerWinsGame = ["^[a-zA-Z_<>]+ wins the game and gets [0-9]+ points?. Sorry."]
-  FIBS_PlayerWinsGame = ["^[a-zA-Z_<>]+ wins the game and gets [0-9]+ points?."]
-  # (when watching)
+  FIBS_PlayerWinsGame = ["^[a-zA-Z_<>]+ wins the game and gets [0-9]+ points?. Sorry.", 
+                         "^[a-zA-Z_<>]+ wins the game and gets [0-9]+ points?.", # (when watching)
+                         ]
 
   FIBS_WatchGameWins = ["wins the game and gets"]
   FIBS_PlayersStartingUnlimitedMatch = ["start an unlimited match\\."]
@@ -148,8 +187,7 @@ class AlphaBatch(Batch):
   FIBS_EmailAddress = ["^  Email address:"]
   FIBS_NoEmail = ["^  No email address\\."]
   FIBS_WavesAgain = ["^[a-zA-Z_<>]+ waves goodbye again\\."]
-  FIBS_Waves = ["waves goodbye"]
-  FIBS_Waves = ["^You wave goodbye\\."]
+  FIBS_Waves = ["waves goodbye", "^You wave goodbye\\."]
   FIBS_WavesAgain = ["^You wave goodbye again and log out\\."]
   FIBS_NoSavedGames = ["^no saved games\\."]
   FIBS_TypeBack = ["^You're away\\. Please type 'back'"]
@@ -206,21 +244,15 @@ class AlphaBatch(Batch):
   FIBS_DiceTest = ["^[nST]: "]
   FIBS_LastLogout = ["^  Last logout:"]
   FIBS_RatingCalcStart = ["^rating calculation:"]
-  FIBS_RatingCalcInfo = ["^Probability that underdog wins:"]
-  FIBS_RatingCalcInfo = ["is 1-Pu if underdog wins"]
-  # P=0.505861 is 1-Pu if underdog wins and Pu if favorite wins
+  FIBS_RatingCalcInfo = ["^Probability that underdog wins:", 
+                         "is 1-Pu if underdog wins", # P=0.505861 is 1-Pu if underdog wins and Pu if favorite wins
+                         "^Experience: ", # Experience: fergy 500 - jfk 5832
+                         "^K=max\\(1", # K=max(1 ,    -Experience/100+5) for fergy: 1.000000
+                         "^rating difference",
+                         "^change for", # change for fergy: 4*K*sqrt(N)*P=2.023443
+                         "^match length  ",
+                        ]
 
-  FIBS_RatingCalcInfo = ["^Experience: "]
-  # Experience: fergy 500 - jfk 5832
-
-  FIBS_RatingCalcInfo = ["^K=max\\(1"]
-  # K=max(1 ,    -Experience/100+5) for fergy: 1.000000
-
-  FIBS_RatingCalcInfo = ["^rating difference"]
-  FIBS_RatingCalcInfo = ["^change for"]
-  # change for fergy: 4*K*sqrt(N)*P=2.023443
-
-  FIBS_RatingCalcInfo = ["^match length  "]
   FIBS_WatchingHeader = ["^Watching players:"]
   FIBS_SettingsHeader = ["^The current settings are:"]
   FIBS_AwayListHeader = ["^The following users are away:"]
@@ -246,25 +278,25 @@ class AlphaBatch(Batch):
   FIBS_LastLogin = ["^  Last login:"]
   FIBS_NoInfo = ["^No information found on user"]
 
-class NumericBatch(Batch):
-  CLIP_WHO_INFO = ["^5 [^ ]+ - - [01]"]
-  CLIP_WHO_INFO = ["^5 [^ ]+ [^ ]+ - [01]"]
-  CLIP_WHO_INFO = ["^5 [^ ]+ - [^ ]+ [01]"]
+  # class NumericBatch(Batch):
+  CLIP_WHO_INFO = ["^5 [^ ]+ - - [01]", 
+                   "^5 [^ ]+ [^ ]+ - [01]",
+                   "^5 [^ ]+ - [^ ]+ [01]",
+                   ]
 
   FIBS_Average = ["^[0-9][0-9]:[0-9][0-9]-"]
   # output of average command
 
-  FIBS_DiceTest = ["^[1-6]-1 [0-9]"]
-  # output of dicetest command
+  FIBS_DiceTest = ["^[1-6]-1 [0-9]", # output of dicetest command
+                   "^[1-6]: [0-9]",
+                   ]
 
-  FIBS_DiceTest = ["^[1-6]: [0-9]"]
-  FIBS_Stat = ["^[0-9]+ bytes"]
-  # output from stat command
-
-  FIBS_Stat = ["^[0-9]+ accounts"]
-  FIBS_Stat = ["^[0-9]+ ratings saved. reset log"]
-  FIBS_Stat = ["^[0-9]+ registered users."]
-  FIBS_Stat = ["^[0-9]+\\([0-9]+\\) saved games check by cron"]
+  FIBS_Stat = ["^[0-9]+ bytes", # output from stat command
+               "^[0-9,+ accounts",
+               "^[0-9,+ ratings saved. reset log",
+               "^[0-9,+ registered users.",
+               "^[0-9]+\\([0-9]+\\) saved games check by cron",
+               ]
 
   CLIP_WHO_END = ["^6$"]
   CLIP_SHOUTS = ["^13 [a-zA-Z_<>]+ "]
@@ -281,8 +313,7 @@ class NumericBatch(Batch):
   CLIP_MESSAGE_DELIVERED = ["^10 [a-zA-Z_<>]+$"]
   CLIP_MESSAGE_SAVED = ["^11 [a-zA-Z_<>]+$"]
 
-
-class StarsBatch(Batch):
+  # class StarsBatch(Batch):
   FIBS_Username = ["^\\*\\* User"]
   FIBS_Junk = ["^\\*\\* You tell "]
   # "** You tell PLAYER: xxxxx"]
@@ -381,17 +412,78 @@ class StarsBatch(Batch):
   FIBS_CantBlindYourself = ["^\\*\\* You can't read this message now, can you\\?"]
 
 
-class LoginBatch(Batch):
+class LoginState(State):
   CLIP_WELCOME = ["^1 [a-zA-Z_<>]+ [0-9]+ "]
   CLIP_OWN_INFO = ["^2 [a-zA-Z_<>]+ [01] [01]"]
   CLIP_MOTD_BEGIN = ["^3$"]
   FIBS_FailedLogin = ["^> [0-9]+"]
   # bogus CLIP messages sent after a failed login
+  def next_state(self, name):
+    if name == 'CLIP_MOTD_BEGIN':
+      return MOTDState()
+    return self
+  def default(self):
+    return 'FIBS_PreLogin'
 
-class MOTDBatch(Batch):
+class MOTDState(State):
+  def next_state(self, name):
+    if name == 'CLIP_MOTD_END':
+      return RunState()
+    return self
   CLIP_MOTD_END = ["^4$"]
+  def default(self):
+    return 'FIBS_MOTD'
 
+class LogoutState(State):
+  def next_state(self, name):
+    return self
 
 if __name__ == '__main__':
-  print 'test!'
+  m = CookieMonster()
+
+  print m.make_cookie('')
+  print m.make_cookie('WELCOME TO THE')
+  print m.make_cookie('            _______   _          ______            _____')
+  print m.make_cookie('           |  _____| | |        |  __  \          / ____|')
+  print m.make_cookie('           | |___    | |        | |__|  |        | |____')
+  print m.make_cookie('           |  ___|   | |        |  __  <          \____ \\')
+  print m.make_cookie('           | |       | |        | |__|  |          ____| |')
+  print m.make_cookie('           |_|irst   |_|nternet |______/ackgammon |_____/erver')
+  print m.make_cookie('')
+  print m.make_cookie('         If something unexpected happens please send mail to:')
+  print m.make_cookie('                 marvin@fibs.com (Andreas Schneider)')
+  print m.make_cookie('                      Bug reports are welcome.')
+  print m.make_cookie('')
+  print m.make_cookie('       This server is on the net to meet people from all countries.')
+  print m.make_cookie('     All sorts of racists and fascists are not allowed to login here!')
+  print m.make_cookie('        Rude language will not be tolerated on this server. Be nice.')
+  print m.make_cookie(' ')
+  print m.make_cookie('              LOGIN AS guest IF YOU ARE NEW TO THIS SERVER! ')
+  print m.make_cookie('        One account per person only!')
+  print m.make_cookie('')
+  print m.make_cookie('Wednesday, April 09 09:08:53 MEST   ( Wed Apr  9 07:08:53 2008 UTC )')
+  print m.make_cookie('login: ')
+  print m.make_cookie('1 wxpygammon 1207724539 v113117.ppp.asahi-net.or.jp')
+  print m.make_cookie('2 wxpygammon 1 1 0 0 0 0 1 1 0 0 0 0 1 1500.00 0 0 0 1 0 UTC')
+  print m.make_cookie('3')
+  print m.make_cookie('+--------------------------------------------------------+')
+  print m.make_cookie('|                                                        |')
+  print m.make_cookie('| All bots, even non-playing ones, must have a valid     |')
+  print m.make_cookie('| email address entered via the address command.  Any    |')
+  print m.make_cookie("| bot that doesn't have that information may be booted.  |")
+  print m.make_cookie('|                                                        |')
+  print m.make_cookie('| Shoutbots are limited to one shout per hour per        |')
+  print m.make_cookie('| owner, no matter how many shoutbots that person        |')
+  print m.make_cookie("| has.  I'm not going to throw shoutbots out entirely,   |")
+  print m.make_cookie("| but don't be obnoxious with them.                      |")
+  print m.make_cookie('|                                                        |')
+  print m.make_cookie('+--------------------------------------------------------+')
+  print m.make_cookie('4')
+  print m.make_cookie('')
+  print m.make_cookie('5 monitor - - 0 0 1500.00 0 18 1199472484 localhost - PattisMaintenanceBot__pattib@fibs.com')
+  print m.make_cookie('5 MonteCarlo spooky - 1 0 1928.52 935201 1 1200210127 swangames.com - ComputerPlayer___MonteCarlo@gamercafe.com')
+  print m.make_cookie('5 RepBot - - 0 0 1500.00 0 8 1206246158 vl656.host111.netvision.net.il - avi@argo.co.il')
+  print m.make_cookie('5 tobgol - - 0 0 1500.00 0 4 1205702585 www.schneiderp.de - -')
+  print m.make_cookie('5 donzbot_IV michele_ - 1 0 1954.43 7615 12 1207472950 extra.ooyo.net - bots@donzaemon.com')
+  print m.make_cookie('6')
 
