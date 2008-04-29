@@ -22,11 +22,7 @@ class CookieMonster(object):
   def __init__(self):
     self.state = LoginState()
   def make_cookie(self, message):
-    try:
-      cookie = self.state.make_cookie(message)
-    except re.error:
-      logging.warning("can't match %s", message)
-      logging.exception()
+    cookie = self.state.make_cookie(message)
     self.state = self.state.next_state(cookie)
     return cookie
 
@@ -45,9 +41,12 @@ class State(object):
   def make_cookie(self, message):
     cookie = self.default()
     for name, regexp in self:
-      if re.match(regexp, message):
-        cookie = name
-        break
+      try:
+        if re.match(regexp, message):
+          cookie = name
+          break
+      except re.error:
+        logging.exception("%s can't match with  s"%(regexp, message))
     return cookie
 
 
@@ -62,9 +61,12 @@ class RunState(State):
       return 'FIBS_Empty'
     cookie = 'FIBS_Unknown'
     for name, regexp in self:
-      if re.match(regexp, message):
-        cookie = name
-        break
+      try:
+        if re.match(regexp, message):
+          cookie = name
+          break
+      except re.error:
+        logging.exception("%s can't match with  s"%(regexp, message))
     return cookie
 
   FIBS_Board = ["^board:[a-zA-Z_<>]+:[a-zA-Z_<>]+:[0-9:\\-]+$"]
