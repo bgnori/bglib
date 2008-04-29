@@ -4,6 +4,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import logging
 import re
 
 '''
@@ -21,7 +22,11 @@ class CookieMonster(object):
   def __init__(self):
     self.state = LoginState()
   def make_cookie(self, message):
-    cookie = self.state.make_cookie(message)
+    try:
+      cookie = self.state.make_cookie(message)
+    except re.error:
+      logging.warning("can't match %s", message)
+      logging.exception()
     self.state = self.state.next_state(cookie)
     return cookie
 
