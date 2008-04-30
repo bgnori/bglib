@@ -118,7 +118,7 @@ class Viewer(wx.Panel):
     pass
 
   def OnPaint(self, evt):
-    dc = wx.PaintDC(self)
+    dc = wx.BufferedPaintDC(self)
     # debug fill
     dc.SetBackground(wx.Brush('sky blue'))
     dc.Clear()
