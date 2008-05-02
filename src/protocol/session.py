@@ -46,6 +46,8 @@ class Transport(telnetlib.Telnet):
     self.r, self.w = os.pipe()
     self._active = False
     self._termination_requested = False
+    self.terminated = threading.Event()
+    self.terminated.clear()
 
   def open(self, hostname, port):
     telnetlib.Telnet.open(self, hostname, port)
@@ -107,6 +109,7 @@ class Session(Transport):
   @synchronized_with(Transport.lock)
   def _dispatch(self, name, got):
     if self._termination_requested:
+      self.terminated.set()
       thread.exit()
     for subscriber in self.subscribers:
       try:
