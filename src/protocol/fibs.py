@@ -29,10 +29,15 @@ class CookieMonster(object):
 
 
 class State(object):
+  def __init__(self):
+    self.regexp_cache = dict()
+
   def __iter__(self):
     for name, value in self.__class__.__dict__.items():
       if name.startswith('CLIP') or name.startswith('FIBS'):
-        for regexp in value:
+        if name not in self.regexp_cache:
+          self.regexp_cache.update({name: [re.compile(regexp) for regexp in value]})
+        for regexp in self.regexp_cache[name]:
           yield name, regexp
   def default(self):
     return 'FIBS_Unknown'
@@ -43,7 +48,7 @@ class State(object):
     cookie = self.default()
     for name, regexp in self:
       try:
-        if re.match(regexp, message):
+        if regexp.match(message):
           cookie = name
           break
       except re.error:
