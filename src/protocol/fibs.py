@@ -29,8 +29,7 @@ class CookieMonster(object):
 
 
 class State(object):
-  def __init__(self):
-    self.regexp_cache = dict()
+  regexp_cache = dict()
 
   def __iter__(self):
     for name, value in self.__class__.__dict__.items():
