@@ -71,9 +71,10 @@ class Viewer(wx.Panel):
     self.left_q = list()
 
     style = bglib.depot.dict.Proxy(
-                                  window = self,
-                                  image=bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt'),
-                                )
+                                   window = self,
+                                   image=bglib.depot.lines.CRLFProxy(
+                                     './bglib/image/resource/align.txt'),
+                                  )
     self.SetSize(style.image.size.board) # MINIMUM SIZE
     context_factory = bglib.image.context.context_factory
     self.context = context_factory.new_context('wx', style)
@@ -173,7 +174,6 @@ class Viewer(wx.Panel):
 
   def OnSize(self, evt):
     logging.debug('resized %s', str(self.GetClientSize()))
-    self.reset_regions()
     self.Notify()
 
   def SetModel(self, model):
@@ -181,6 +181,7 @@ class Viewer(wx.Panel):
     self.Notify()
   
   def Notify(self):
+    self.reset_regions()
     bglib.image.renderer.renderer.render(self.context, self.model)
     self.Refresh()
     self.Update()

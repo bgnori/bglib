@@ -38,9 +38,8 @@ class Region(object):
     return self.rect.InsideXY(x, y)
 
   def Draw(self, dc):
-    if self.wxbmp:
-      bmp = self.wxbmp.ConvertToBitmap()
-      dc.DrawBitmap(bmp, self.GetX(), self.GetY())
+    bmp = self.wxbmp.ConvertToBitmap()
+    dc.DrawBitmap(bmp, self.GetX(), self.GetY())
 
   def __repr__(self):
     return  self.name + ' @ ' + str(self.rect)

@@ -37,20 +37,19 @@ class IDEditor(wx.Panel):
         ])
     self.SetSizer(sizer)
     self.Fit()
+
   def Notify(self):
     pass
+
   def OnChangePositionId(self, evt):
-    print 'OnChangePositionId', evt.GetString(), evt.GetEventObject()
+    logging.debug('OnChangePositionId', evt.GetString(), evt.GetEventObject())
     p = bglib.encoding.gnubg.decode_position(evt.GetString())
-    print p
     self.model.position = p
 
   def OnChangeMatchId(self, evt):
-    print 'OnChangeMatchId', evt.GetString(), evt.GetEventObject()
+    logging.debug('OnChangeMatchId', evt.GetString(), evt.GetEventObject())
     m = bglib.encoding.gnubg.decode_match(evt.GetString())
 
-    print m.cube_in_logarithm
-    print type(m.cube_in_logarithm)
     self.model.cube_in_logarithm = (1 << m.cube_in_logarithm)
     self.model.cube_owner = m.cube_owner
     self.model.on_action = m.on_action

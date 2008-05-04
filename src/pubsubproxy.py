@@ -18,7 +18,6 @@ class Proxy(object):
   def __getattr__(self, name):
     return getattr(self._model, name)
   def __setattr__(self, name, value):
-    print value
     setattr(self._model, name, value)
     for notify in self._notify:
       notify()
