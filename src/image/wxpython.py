@@ -14,10 +14,13 @@ class Region(object):
       name = str(id(self))
     self.name = name
     self.rect = wx.Rect(x, y ,w, h)
-    self.wxbmp = None
+    self.wxbmp = wx.EmptyImage(w, h)
 
-  def set_image(self, image):
-    self.wxbmp = wx.BitmapFromImage(image)
+  def window_to_region(self, x, y):
+    return x - self.GetX(), y - self.GetY()
+
+  def paste_image(self, image, x, y):
+    self.wxbmp.Paste(image, x, y)
 
   def __hash__(self):
     return hash(self.name)
@@ -36,7 +39,8 @@ class Region(object):
 
   def Draw(self, dc):
     if self.wxbmp:
-      dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
+      bmp = self.wxbmp.ConvertToBitmap()
+      dc.DrawBitmap(bmp, self.GetX(), self.GetY())
 
   def __repr__(self):
     return  self.name + ' @ ' + str(self.rect)
@@ -72,7 +76,8 @@ class Context(bglib.image.PIL.Context):
     x, y = position
     r = self.window.which_by_xy(x, y)
     if r:
-      r.set_image(image)
+      x, y = r.window_to_region(x, y)
+      r.paste_image(image, x, y)
     else:
       self.window.paste_image(image, x, y)
 

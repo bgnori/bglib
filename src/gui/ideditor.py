@@ -69,7 +69,8 @@ if __name__ == '__main__':
   app = wx.PySimpleApp()
   frame = wx.Frame(None)
   model = bglib.model.board()
-  #model.position = bglib.encoding.gnubg.decode_position(
+  bglib.encoding.gnubg.decode(model, '4HPiASHgc/ABMA','cAn1AAAAAAAA')
+
   proxy = bglib.pubsubproxy.Proxy(model)
   sizer = wx.BoxSizer(wx.VERTICAL)
 

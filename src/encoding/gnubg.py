@@ -112,7 +112,7 @@ def encode(model):
   return pid, mid
 
 def decode(model, pid, mid):
-  model.position = decode_position(pid),
+  model.position = decode_position(pid)
   mp = decode_match(mid)
   model.cube_in_logarithm = mp.cube_in_logarithm
   model.cube_owner = mp.cube_owner
@@ -125,7 +125,6 @@ def decode(model, pid, mid):
   model.rolled = mp.rolled
   model.match_length = mp.match_length
   model.score = mp.score
-  return model
 
 def convert_to_urlsafe(s):
   return s.replace('+', '-').replace('/', '_')

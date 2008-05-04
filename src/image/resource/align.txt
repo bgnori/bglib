@@ -3,6 +3,7 @@ size point 18 88
 size field 108 46
 size bar 25  88
 size center 25 46
+size dice 15 15
 color you white 0
 color him green 0
 point   1  248  139
@@ -29,6 +30,10 @@ point  21  194   5
 point  22  212   5
 point  23  230   5
 point  24  248   5
+die_a him 43 95
+die_b him 61 95
+die_a you 176 95
+die_b you 194 95
 bar   him  133  139
 bar   you  133   5
 center null 133 93 
@@ -42,4 +47,3 @@ home null  266  0
 size  frame  241 5
 frame top     25 0
 frame bottom  25 227
-

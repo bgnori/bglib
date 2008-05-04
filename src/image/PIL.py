@@ -157,6 +157,22 @@ class Context(bglib.image.context.Context):
     x, y = self.apply_mag(self.style().field.you)
     self.paste_image(image, (x, y))
 
+    if dice[0]:
+      size = self.apply_mag(self.style().size.dice)
+      image = self.open_image('die_' + str(dice[0]) + '.jpg',
+                              size
+                              )
+      x, y = self.apply_mag(self.style().die_a.you)
+      self.paste_image(image, (x, y))
+
+    if dice[1]:
+      size = self.apply_mag(self.style().size.dice)
+      image = self.open_image('die_' + str(dice[1]) + '.jpg',
+                              size
+                              )
+      x, y = self.apply_mag(self.style().die_b.you)
+      self.paste_image(image, (x, y))
+
   def draw_his_dice_in_field(self, dice):
     size = self.apply_mag(self.style().size.field)
     image = self.open_image("field.jpg",
@@ -164,6 +180,22 @@ class Context(bglib.image.context.Context):
                             )
     x, y = self.apply_mag(self.style().field.him)
     self.paste_image(image, (x, y))
+
+    if dice[0]:
+      size = self.apply_mag(self.style().size.dice)
+      image = self.open_image('die_' + str(dice[0]) + '.jpg',
+                              size
+                              )
+      x, y = self.apply_mag(self.style().die_a.him)
+      self.paste_image(image, (x, y))
+
+    if dice[1]:
+      size = self.apply_mag(self.style().size.dice)
+      image = self.open_image('die_' + str(dice[1]) + '.jpg',
+                              size
+                              )
+      x, y = self.apply_mag(self.style().die_b.him)
+      self.paste_image(image, (x, y))
 
   # who is on action
   def draw_you_to_play(self):pass

@@ -102,6 +102,8 @@ class Session(Transport):
       self._dispatch('socket_error', e)
     except EOFError, e:
       self._dispatch('EOFError', e)
+    except AttributeError, e:
+      logging.exception('exception in listener thread:')
     except:
       logging.exception('exception in listener thread:')
     thread.exit()
