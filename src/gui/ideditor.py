@@ -22,12 +22,14 @@ class IDEditor(wx.Panel):
                 style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
                )
     position_id.Bind(wx.EVT_TEXT_ENTER, self.OnChangePositionId)
+    self.position_id = position_id
 
     label_match = wx.StaticText(self, -1, 'match id:')
     match_id = wx.TextCtrl(self, -1, mid,
                 style=wx.TE_PROCESS_ENTER|wx.TE_NO_VSCROLL,
                )
     match_id.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMatchId)
+    self.match_id = match_id
 
     space = 4
     sizer = wx.FlexGridSizer(cols=2, hgap=space, vgap=space)
@@ -39,7 +41,9 @@ class IDEditor(wx.Panel):
     self.Fit()
 
   def Notify(self):
-    pass
+    pid, mid = bglib.encoding.gnubg.encode(self.model)
+    self.position_id.SetValue(pid)
+    self.match_id.SetValue(mid)
 
   def OnChangePositionId(self, evt):
     logging.debug('OnChangePositionId', evt.GetString(), evt.GetEventObject())
@@ -68,7 +72,6 @@ if __name__ == '__main__':
   app = wx.PySimpleApp()
   frame = wx.Frame(None)
   model = bglib.model.board()
-  bglib.encoding.gnubg.decode(model, '4HPiASHgc/ABMA','cAn1AAAAAAAA')
 
   proxy = bglib.pubsubproxy.Proxy(model)
   sizer = wx.BoxSizer(wx.VERTICAL)
@@ -81,6 +84,11 @@ if __name__ == '__main__':
   proxy.register(ie.Notify)
   sizer.Add(ie, proportion=0, flag=wx.EXPAND)
   frame.SetSizer(sizer)
+
+  bglib.encoding.gnubg.decode(model, '4HPiASHgc/ABMA','UQn1AAAAAAAA')
+  #bglib.encoding.gnubg.decode(model, '4HPiASHgc/ABMA','Qgn1AAAAAAAA')
+
+  proxy.set_model(model)
 
   frame.Fit()
   frame.Show()

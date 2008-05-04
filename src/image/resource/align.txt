@@ -3,7 +3,8 @@ size point 18 88
 size field 108 46
 size bar 25  88
 size center 25 46
-size dice 15 15
+size dice 16 16
+size cube 25 25
 color you white 0
 color him green 0
 point   1  248  139
@@ -38,7 +39,12 @@ bar   him  133  139
 bar   you  133   5
 center null 133 93 
 field him 25 93
+cube him 50 100
+cube his 50 100
 field you  158 93
+cube you  180 100
+cube yours  180 100
+cube center 133 105
 board null 0 0
 size edge 25  232
 edge null  0    0
