@@ -31,8 +31,18 @@ class CookieMonster(object):
 class State(object):
   regexp_cache = dict()
 
-  def __iter__(self):
+  def __init__(self):
+    self.order = list()
+    
+  def last_match_first(self):
+    for name in list():
+      yield name, getattr(self, name)
     for name, value in self.__class__.__dict__.items():
+      yield name, value
+    
+  def candidates(self):
+    # try to match latest match first.
+    for name, value in self.last_match_first(): 
       if name.startswith('CLIP') or name.startswith('FIBS'):
         if name not in self.regexp_cache:
           self.regexp_cache.update({name: [re.compile(regexp) for regexp in value]})
@@ -44,15 +54,21 @@ class State(object):
     return self
 
   def make_cookie(self, message):
-    cookie = self.default()
-    for name, regexp in self:
+    for name, regexp in self.candidates():
       try:
         if regexp.match(message):
-          cookie = name
-          break
+          self.bring_to_top(name)
+          return name
       except re.error:
         logging.exception("%s can't match with %s"%(regexp, message))
-    return cookie
+    return self.default()
+
+  def bring_to_top(self, name):
+    try:
+      self.order.remove(name)
+    except:
+      pass
+    self.order.insert(0, name)
 
 
 class RunState(State):
@@ -64,15 +80,14 @@ class RunState(State):
   def make_cookie(self, message):
     if len(message) == 0:
       return 'FIBS_Empty'
-    cookie = 'FIBS_Unknown'
-    for name, regexp in self:
+    for name, regexp in self.candidates():
       try:
         if re.match(regexp, message):
-          cookie = name
-          break
+          self.bring_to_top(name)
+          return name
       except re.error:
         logging.exception("%s can't match with %s"%(regexp, message))
-    return cookie
+    return 'FIBS_Unknown'
 
   FIBS_Board = ["^board:[a-zA-Z_<>]+:[a-zA-Z_<>]+:[0-9:\\-]+$"]
   FIBS_BAD_Board = ["^board:"]
@@ -439,11 +454,11 @@ class LoginState(State):
     return 'FIBS_PreLogin'
 
 class MOTDState(State):
+  CLIP_MOTD_END = ["^4$"]
   def next_state(self, name):
     if name == 'CLIP_MOTD_END':
       return RunState()
     return self
-  CLIP_MOTD_END = ["^4$"]
   def default(self):
     return 'FIBS_MOTD'
 
