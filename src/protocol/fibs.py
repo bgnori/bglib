@@ -445,6 +445,7 @@ class LoginState(State):
   CLIP_OWN_INFO = ["^2 [a-zA-Z_<>]+ [01] [01]"]
   CLIP_MOTD_BEGIN = ["^3$"]
   FIBS_FailedLogin = ["^> [0-9]+"]
+  FIBS_PreLogin = ["^[^123>l]"]
   # bogus CLIP messages sent after a failed login
   def next_state(self, name):
     if name == 'CLIP_MOTD_BEGIN':
@@ -455,6 +456,7 @@ class LoginState(State):
 
 class MOTDState(State):
   CLIP_MOTD_END = ["^4$"]
+  FIBS_MOTD = ["^[^4]"]
   def next_state(self, name):
     if name == 'CLIP_MOTD_END':
       return RunState()
