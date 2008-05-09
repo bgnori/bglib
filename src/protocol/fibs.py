@@ -73,6 +73,8 @@ class State(object):
 
 class RunState(State):
   ''' =  AlphaBatch + NumericBatch + StarsBatch'''
+  def __init__(self):
+    self.order = ['CLIP_WHO_INFO']
   def next_state(self, name):
     if name == 'FIBS_Goodbye':
       return LoginState()
@@ -447,6 +449,8 @@ class LoginState(State):
   FIBS_FailedLogin = ["^> [0-9]+"]
   FIBS_PreLogin = ["^[^123>l]"]
   # bogus CLIP messages sent after a failed login
+  def __init__(self):
+    self.order = ['CLIP_WELCOME']
   def next_state(self, name):
     if name == 'CLIP_MOTD_BEGIN':
       return MOTDState()
@@ -457,6 +461,8 @@ class LoginState(State):
 class MOTDState(State):
   CLIP_MOTD_END = ["^4$"]
   FIBS_MOTD = ["^[^4]"]
+  def __init__(self):
+    self.order = ['FIBS_MOTD']
   def next_state(self, name):
     if name == 'CLIP_MOTD_END':
       return RunState()
