@@ -32,10 +32,10 @@ class State(object):
   regexp_cache = dict()
 
   def __init__(self):
-    self.order = list()
+    self.last_match = list()
     
   def last_match_first(self):
-    for name in list():
+    for name in self.last_match:
       yield name, getattr(self, name)
     for name, value in self.__class__.__dict__.items():
       yield name, value
@@ -65,16 +65,16 @@ class State(object):
 
   def bring_to_top(self, name):
     try:
-      self.order.remove(name)
+      self.last_match.remove(name)
     except:
       pass
-    self.order.insert(0, name)
+    self.last_match.insert(0, name)
 
 
 class RunState(State):
   ''' =  AlphaBatch + NumericBatch + StarsBatch'''
   def __init__(self):
-    self.order = ['CLIP_WHO_INFO']
+    self.last_match = ['CLIP_WHO_INFO']
   def next_state(self, name):
     if name == 'FIBS_Goodbye':
       return LoginState()
@@ -450,7 +450,7 @@ class LoginState(State):
   FIBS_PreLogin = ["^[^123>l]"]
   # bogus CLIP messages sent after a failed login
   def __init__(self):
-    self.order = ['CLIP_WELCOME']
+    self.last_match = ['CLIP_WELCOME']
   def next_state(self, name):
     if name == 'CLIP_MOTD_BEGIN':
       return MOTDState()
@@ -462,7 +462,7 @@ class MOTDState(State):
   CLIP_MOTD_END = ["^4$"]
   FIBS_MOTD = ["^[^4]"]
   def __init__(self):
-    self.order = ['FIBS_MOTD']
+    self.last_match = ['FIBS_MOTD']
   def next_state(self, name):
     if name == 'CLIP_MOTD_END':
       return RunState()
