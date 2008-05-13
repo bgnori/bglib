@@ -6,10 +6,15 @@
 #
 import ConfigParser
 
-import bglib.depot.base
+if __name__ == "__main__":
+  # for module test
+  import base
+  baseclass = base.Proxy
+else:
+  import bglib.depot.base
+  baseclass = bglib.depot.base.Proxy
 
-
-class Proxy(bglib.depot.base.Proxy):
+class Proxy(baseclass):
   def __repr__(self):
     return "<cfg.Proxy for %s of  %s>"%(self._apth, str(self._impl))
 
@@ -29,13 +34,26 @@ class Proxy(bglib.depot.base.Proxy):
   def _set_by_x_(self, x, value):
     self._impl.set(self._apth[0], x, value)
 
+  def __iter__(self):
+    if not self._apth:
+      for section in self._impl.sections():
+        yield self[section]
+    elif len(self._apth) == 1:
+      section = self._apth[0]
+      for option in self._impl.options(section):
+        yield self._impl.get(section, option)
+      #for item in self._impl.items(section):
+      #  yield item
+    else:
+      raise
+
 def CFGProxy(filenames):
   config = ConfigParser.SafeConfigParser()
   config.read(filenames)
   return  Proxy(Proxy, config, [])
 
 if __name__ == '__main__':
-  proxy = CFGProxy('fibs.cfg')
+  proxy = CFGProxy('connection.cfg')
   print proxy.a
   x = proxy.a
   print x
@@ -43,4 +61,7 @@ if __name__ == '__main__':
   print proxy.a.port
   proxy.a.port = '100'
   print proxy.a.port
+  for section in proxy:
+    for option in section:
+      print option
 
