@@ -53,7 +53,7 @@ def CFGProxy(filenames):
   return  Proxy(Proxy, config, [])
 
 if __name__ == '__main__':
-  proxy = CFGProxy('connection.cfg')
+  proxy = CFGProxy(['./connection.cfg'])
   print proxy.a
   x = proxy.a
   print x
