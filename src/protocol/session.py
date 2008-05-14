@@ -94,6 +94,8 @@ class Session(Transport):
     logging.debug('started listener')
     try:
       while True:
+        if not self.is_active():
+          break
         nth, matchobj, s = self.expect([CRLF, 'login: '])
         if not nth:
           s = s[:-2] # remove CRLF
