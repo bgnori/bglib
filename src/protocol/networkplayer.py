@@ -6,28 +6,6 @@ import time
 import os
 import wx
 
-def get_addr():
-  return '127.0.0.1', 4321
-  #return 'localhost', 20000
-
-f = file('session.log')
-
-
-'''
-sock = socket.socket()
-addr = get_addr()
-sock.bind(addr)
-sock.listen(1)
-conn, address = sock.accept()
-while True:
-  line = f.readline()
-  print line 
-
-  conn.send(line)
-  #time.sleep(1)
-'''
-sock = socket.socket()
-
 class StreamWindow(wx.TextCtrl):
   def __init__(self, parent, **kw):
     wx.TextCtrl.__init__(self, parent, -1, '*** stream window ***', 
@@ -42,7 +20,7 @@ class FileSelectionForm(wx.Panel):
     sizer = wx.BoxSizer(wx.HORIZONTAL)
     path = wx.TextCtrl(self, -1, initial_value, size=(600, 20))
     sizer.Add(path, 1, wx.EXPAND)
-    start_selection = wx.Button(self, -1, '...')
+    start_selection = wx.Button(self, wx.ID_OPEN, '&Open')
     sizer.Add(start_selection)
 
     self.path = path
@@ -66,17 +44,37 @@ class ScenarioWindow(wx.Panel):
   def __init__(self, parent, **kw):
     wx.Panel.__init__(self, parent, -1)
     sizer = wx.BoxSizer(wx.HORIZONTAL)
-    stop = wx.Button(self, -1, 'stop')
+
+    stop = wx.Button(self, wx.ID_STOP, '&Stop')
+    self.stop = stop
+    self.Bind(wx.EVT_BUTTON, self.OnStop, stop)
     sizer.Add(stop)
-    step = wx.Button(self, -1, 'step')
-    sizer.Add(step)
-    auto = wx.CheckBox(self, -1, 'auto')
+
+    auto = wx.Button(self, wx.ID_FORWARD, '&Auto')
+    self.auto = auto
+    self.Bind(wx.EVT_BUTTON, self.OnAuto, auto)
     sizer.Add(auto)
+
+    single = wx.Button(self, -1, 'Single')
+    self.single = single
+    self.Bind(wx.EVT_BUTTON, self.OnSingle, single)
+    sizer.Add(single)
+
+
     fileselection = FileSelectionForm(self,  '')
     sizer.Add(fileselection, 1, wx.EXPAND)
 
     self.SetSizer(sizer)
     self.Fit()
+
+  def OnStop(self, evt):
+    print 'OnStop'
+
+  def OnAuto(self, evt):
+    print 'OnAuto'
+
+  def OnSingle(self, evt):
+    print 'OnSingle'
   
 
 class AppFrame(wx.Frame):
@@ -87,6 +85,10 @@ class AppFrame(wx.Frame):
     stream = StreamWindow(self)
     sizer.Add(stream, 1, wx.EXPAND)
     self.stream = stream
+
+    start = wx.Button(self, -1, 'start')
+    self.Bind(wx.EVT_BUTTON, self.OnStart, start)
+    sizer.Add(start)
 
     sw = ScenarioWindow(self)
     sizer.Add(sw, 0, wx.EXPAND)
@@ -100,6 +102,46 @@ class AppFrame(wx.Frame):
     self.SetSizer(sizer)
     self.Fit()
     self.Show()
+
+    self.ssock = None
+    self.poll = select.poll()
+
+    self.timer = wx.Timer(self)
+    self.timer.Start(100)
+    self.Bind(wx.EVT_TIMER, self.poller)
+
+  def OnStart(self, evt):
+    print 'OnStart'
+    ssock = socket.socket()
+    addr = ('127.0.0.1', 4321)
+    ssock.bind(addr)
+    ssock.listen(1)
+    self.ssock = ssock
+    self.poll.register(ssock)
+    print self.ssock
+    print self.ssock.fileno()
+
+  def poller(self, evt):
+    for r in self.poll.poll(0):
+      print r
+      sock, event = r
+      print self.ssock
+      print type(sock)
+      print type(event)
+      if sock == self.ssock:
+        conn, address = sock.accept()
+        print 'got connection from', address
+        self.poll.register(conn)
+      else:
+        if event & select.POLLIN:
+          line = sock.recv() 
+          print line
+        elif event & select.POLLOUT:
+          line = f.readline()
+          sock.send(line) 
+          print line
+        else:
+          pass
 
 class MyApp(wx.App):
   """
