@@ -6,6 +6,20 @@ import time
 import os
 import wx
 
+
+'''
+sock = socket.socket()
+addr = get_addr()
+sock.bind(addr)
+sock.listen(1)
+conn, address = sock.accept()
+while True:
+  line = f.readline()
+  print line 
+
+  conn.send(line)
+  #time.sleep(1)
+'''
 class StreamWindow(wx.TextCtrl):
   def __init__(self, parent, **kw):
     wx.TextCtrl.__init__(self, parent, -1, '*** stream window ***', 
@@ -168,13 +182,30 @@ class MyApp(wx.App):
 
   def add(self, filename):
     s = Scenario(filename)
-    self.scenarios.update({filename:s})
+    self.scenarios.update({filename:s})	
+
+  def start_polling(self):
+    self.polling_timer = wx.Timer(self)
+    self.polling_timer.start(50)
+
+  def OnPoll(self, evt):
+    rfile = self.rfile
+    wfile = self.wfile
+    line = rfile.readline()
+    for s in self.scenarios:
+      pattern = s.trigger()
+      if pattern.match(line):
+        self.activate(s)
+    for a in self.actives:
+      line = a.get_line()
+      if line:
+        rfile.write(line)
 
 
 class Scenario(object):
   def __init__(self, filename):
     self.f = file(filename)
-    self.trigger = None
+    self._trigger = None
     self.is_fired = False
     self.auto_step = False
     self.interval = 0.0
@@ -186,6 +217,9 @@ class Scenario(object):
 
   def stop(self):
     self.auto_step = False
+
+  def trigger(self):
+    return re.compile(self._trigger)
 
   def is_expired(self):
     if self.auto_step:
