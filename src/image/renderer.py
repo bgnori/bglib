@@ -42,9 +42,14 @@ class Renderer(object):
     context.draw_you_to_play()
     context.draw_he_offered_double(0)
     context.draw_you_offered_double(0)
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
+    if board.cube_owner == bglib.model.you:
+      context.draw_your_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.him:
+      context.draw_his_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.center:
+      context.draw_center_cube(board.cube_in_logarithm)
+    else:
+      assert(False)
 
   def draw_you_doubled_he_is_on_take_or_pass(self, board):
     context = self.context()
@@ -53,7 +58,6 @@ class Renderer(object):
     context.draw_he_offered_double(0)
     context.draw_your_cube(0)
     context.draw_his_cube(0)
-    context.draw_center_cube(0)
 
   def draw_you_doubled_he_took_you_are_on_roll(self, board):
     context = self.context()
@@ -62,26 +66,34 @@ class Renderer(object):
     context.draw_he_offered_double(0)
     context.draw_your_cube(0)
     context.draw_his_cube(board.cube_in_logarithm)
-    context.draw_center_cube(0)
 
   def draw_you_rolled(self, board):
     context = self.context()
     context.draw_you_to_play()
     context.draw_your_dice_in_field(board.rolled)
     context.draw_his_dice_in_field((0, 0))
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
+    if board.cube_owner == bglib.model.you:
+      context.draw_your_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.him:
+      context.draw_his_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.center:
+      context.draw_center_cube(board.cube_in_logarithm)
+    else:
+      assert(False)
 
   def draw_he_is_on_roll_cube_action(self, board):
     context = self.context()
     context.draw_him_to_play()
     context.draw_he_offered_double(0)
     context.draw_you_offered_double(0)
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
-
+    if board.cube_owner == bglib.model.you:
+      context.draw_your_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.him:
+      context.draw_his_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.center:
+      context.draw_center_cube(board.cube_in_logarithm)
+    else:
+      assert(False)
 
   def draw_he_doubled_you_are_on_take_or_pass(self, board):
     context = self.context()
@@ -90,7 +102,6 @@ class Renderer(object):
     context.draw_he_offered_double(board.cube_in_logarithm)
     context.draw_your_cube(0)
     context.draw_his_cube(0)
-    context.draw_center_cube(0)
 
   def draw_he_doubled_you_took_he_is_on_roll(self, board):
     context = self.context()
@@ -99,49 +110,73 @@ class Renderer(object):
     context.draw_he_offered_double(0)
     context.draw_your_cube(board.cube_in_logarithm)
     context.draw_his_cube(0)
-    context.draw_center_cube(0)
 
   def draw_he_rolled(self, board):
     context = self.context()
     context.draw_him_to_play()
     context.draw_your_dice_in_field((0,0))
     context.draw_his_dice_in_field(board.rolled)
-    context.draw_your_cube(board.cube_owner == bglib.model.you and board.cube_in_logarithm or 0)
-    context.draw_his_cube(board.cube_owner == bglib.model.him and board.cube_in_logarithm or 0)
-    context.draw_center_cube(board.cube_owner == bglib.model.center and board.cube_in_logarithm or 0)
+    if board.cube_owner == bglib.model.you:
+      context.draw_your_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.him:
+      context.draw_his_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.center:
+      context.draw_center_cube(board.cube_in_logarithm)
+    else:
+      assert(False)
 
   def draw_field(self, board):
     '''Following Cases with 
       - board.on_action
       - board.on_inner_action
     '''
-    context = self.context()
-
     if board.on_action == bglib.model.you and not board.rolled:
       if not board.doubled and board.on_inner_action == bglib.model.you:
         self.draw_you_are_on_roll_cube_action(board)
+        return
 
       if board.doubled and board.on_inner_action == bglib.model.him:
         self.draw_you_doubled_he_is_on_take_or_pass(board)
+        return
 
       if board.doubled and board.on_inner_action == bglib.model.you:
         self.draw_you_doubled_he_took_you_are_on_roll(board)
+        return
 
     if board.on_action == bglib.model.you and  board.rolled:
       self.draw_you_rolled(board)
+      return
 
     if board.on_action == bglib.model.him and not board.rolled:
       if not board.doubled and board.on_inner_action == bglib.model.him:
         self.draw_he_is_on_roll_cube_action(board)
+        return
 
       if board.doubled and board.on_inner_action == bglib.model.you:
         self.draw_he_doubled_you_are_on_take_or_pass(board)
+        return
 
       if board.doubled and board.on_inner_action == bglib.model.him:
         self.draw_he_doubled_you_took_he_is_on_roll(board)
+        return
 
     if board.on_action == bglib.model.him and  board.rolled:
       self.draw_he_rolled(board)
+      return
+
+    raise AssertionError("""
+    Bad field draw with
+    board.rolled = %i
+    board.on_action = %i
+    board.doubled = %i
+    board.on_inner_action = %i
+    """%(
+    board.rolled,
+    board.on_action,
+    board.doubled,
+    board.on_inner_action
+    )
+    )
 
   def draw_frame(self):
     context = self.context()

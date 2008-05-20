@@ -129,9 +129,14 @@ class Context(bglib.image.PIL.Context):
   def draw_his_home(self, checker_count):pass
 
   # cube holder
-  def draw_your_cube(self, cube_in_logarithm):pass
-  def draw_his_cube(self, cube_in_logarithm):pass
-  def draw_center_cube(self, cube_in_logarithm):pass
+  def draw_your_cube(self, cube_in_logarithm):
+    bglib.image.PIL.Context.draw_your_cube(self, cube_in_logarithm)
+
+  def draw_his_cube(self, cube_in_logarithm):
+    bglib.image.PIL.Context.draw_his_cube(self, cube_in_logarithm)
+
+  def draw_center_cube(self, cube_in_logarithm):
+    bglib.image.PIL.Context.draw_center_cube(self, cube_in_logarithm)
 
   # field
   def draw_you_offered_double(self, cube_in_logarithm):

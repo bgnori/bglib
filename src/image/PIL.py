@@ -129,8 +129,8 @@ class Context(bglib.image.context.Context):
 
   # cube holder
   def draw_your_cube(self, cube_in_logarithm):
+    print 'draw_your_cube', cube_in_logarithm
     if cube_in_logarithm > 0:
-      print 'draw_your_cube'
       size = self.apply_mag(self.style().size.cube)
       image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
                               size
@@ -139,6 +139,7 @@ class Context(bglib.image.context.Context):
       self.paste_image(image, (x, y))
 
   def draw_his_cube(self, cube_in_logarithm):
+    print 'draw_his_cube', cube_in_logarithm
     if cube_in_logarithm > 0:
       size = self.apply_mag(self.style().size.cube)
       image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
@@ -148,13 +149,14 @@ class Context(bglib.image.context.Context):
       self.paste_image(image, (x, y))
 
   def draw_center_cube(self, cube_in_logarithm):
-    assert(cube_in_logarithm == 0)
-    size = self.apply_mag(self.style().size.cube)
-    image = self.open_image("cube_0.jpg",
+    print 'draw_center_cube', cube_in_logarithm
+    if cube_in_logarithm == 0:
+      size = self.apply_mag(self.style().size.cube)
+      image = self.open_image("cube_0.jpg",
                             size
                            )
-    x, y = self.apply_mag(self.style().cube.center)
-    self.paste_image(image, (x, y))
+      x, y = self.apply_mag(self.style().cube.center)
+      self.paste_image(image, (x, y))
 
   # field
   def draw_you_offered_double(self, cube_in_logarithm):

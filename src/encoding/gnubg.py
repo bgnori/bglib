@@ -115,6 +115,7 @@ def decode(model, pid, mid):
   mp = decode_match(mid)
   model.cube_in_logarithm = mp.cube_in_logarithm
   model.cube_owner = mp.cube_owner
+  print 'decode model.cube_owner', model.cube_owner
   model.on_action = mp.on_action
   model.crawford = mp.crawford
   model.game_state = mp.game_state
