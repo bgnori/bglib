@@ -58,7 +58,16 @@ class InteractiveTester(wx.Frame):
     print 'fail:', self.tests[self.nth]
     self.next()
 
-  def start(self, targets, tests):
+  def start(self, targets, tests=None):
+    if tests is None:
+      tests = [
+           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+           ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
+           ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
+           ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
+           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+           ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
+          ]
     self.tests = tests
     self.sync()
 

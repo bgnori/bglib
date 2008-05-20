@@ -73,14 +73,6 @@ if __name__ == '__main__':
 
   v = bglib.gui.viewer.Viewer(f, f.get_proxy())
   ie = IDEditor(f, f.get_proxy())
-  test_items = [
-           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
-           ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
-           ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
-           ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
-           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
-           ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
-          ]
-  f.start([v, ie], test_items)
+  f.start([v, ie])
   app.MainLoop()
 

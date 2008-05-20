@@ -83,14 +83,7 @@ if __name__ == '__main__':
   app = wx.PySimpleApp()
   f = testframe.InteractiveTester(None)
   p = Player(f, f.get_proxy())
-  test_items = [
-           ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
-           ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
-           ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
-           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
-           ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
-          ]
-  f.start([p], test_items)
+  f.start([p])
   app.MainLoop()
 
 
