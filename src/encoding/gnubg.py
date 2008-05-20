@@ -112,7 +112,6 @@ def encode(model):
   return pid, mid
 
 def decode(model, pid, mid):
-  model.position = decode_position(pid)
   mp = decode_match(mid)
   model.cube_in_logarithm = mp.cube_in_logarithm
   model.cube_owner = mp.cube_owner
@@ -125,6 +124,18 @@ def decode(model, pid, mid):
   model.rolled = mp.rolled
   model.match_length = mp.match_length
   model.score = mp.score
+
+  on_action, opp = decode_position(pid)
+  # this is the difference between gnubg and bglib
+  # gnubg's view from on_action 
+  # bglib's view from you
+  if mp.on_action == bglib.model.you:
+    you = opp
+    him = on_action
+  else:
+    you = on_action
+    him = opp
+  model.position = you, him
 
 def convert_to_urlsafe(s):
   return s.replace('+', '-').replace('/', '_')

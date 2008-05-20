@@ -216,8 +216,7 @@ def twoside_encode(xs):
 
 def twoside_decode(s):
   xs = list(decode(s))
-  return tuple(xs[:25]), tuple(xs[25:50])
-
+  return tuple(xs[:25]), tuple(xs[25:50]) # (on_action, opp)
 
 
 bits_in_byte = 8 # 1 byte == 8 bits

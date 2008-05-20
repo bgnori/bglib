@@ -256,7 +256,6 @@ Endians
 >>> b.binary
 '\x01\x00'
 
-
 Casting to int
 
 >>> b.int()
@@ -269,5 +268,23 @@ Casting to int
 
 >>> b.int()
 2048
+
+
+
+>>> b = BitArray(20, endian='<')
+>>> b.binary
+'\x00\x00\x00'
+>>> b[0] = 1
+>>> b.binary
+'\x01\x00\x00'
+>>> b[8] = 1
+>>> b.binary
+'\x01\x01\x00'
+>>> b[15] = 1
+>>> b.binary
+'\x01\x81\x00'
+>>> b[14] = 1
+>>> b.binary
+'\x01\xc1\x00'
 
 

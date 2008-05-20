@@ -19,7 +19,7 @@ not_started = 0
 on_going = 1
 finished = 2
 resigned = 3
-
+doubled_out = 4
 
 
 #resing type
