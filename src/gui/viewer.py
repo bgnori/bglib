@@ -9,7 +9,6 @@ import wx
 import wx.lib.intctrl
 
 import bglib.model
-import bglib.encoding.gnubg
 import bglib.depot.dict
 import bglib.depot.lines
 import bglib.image.context
@@ -188,21 +187,20 @@ class Viewer(wx.Panel):
 
 
 if __name__ == '__main__':
-  import bglib.pubsubproxy
+  import testframe
   app = wx.PySimpleApp()
-  frame = wx.Frame(None)
-  model = bglib.model.board()
-  proxy = bglib.pubsubproxy.Proxy(model)
-  sizer = wx.BoxSizer(wx.VERTICAL)
-
-  #b = bglib.gui.viewer.Viewer(frame, proxy)
-  b = Viewer(frame, proxy)
-  proxy.register(b.Notify)
-  sizer.Add(b, proportion=1, flag=wx.SHAPED)
-  
-  frame.SetSizer(sizer)
-
-  frame.Fit()
-  frame.Show()
+  f = testframe.InteractiveTester(None)
+  b = Viewer(f, f.get_proxy())
+  test_items = [
+           ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
+           ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
+           ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
+           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+           ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
+          ]
+  f.start(b, test_items)
   app.MainLoop()
+
+
+
 
