@@ -5,6 +5,7 @@ size bar 25  88
 size center 25 46
 size dice 16 16
 size cube 25 25
+size action 25 25
 color you white 0
 color him green 0
 point   1  248  139
@@ -35,6 +36,8 @@ die_a him 43 95
 die_b him 61 95
 die_a you 176 95
 die_b you 194 95
+action you 0 93
+action him 0 93
 bar   him  133  139
 bar   you  133   5
 center null 133 93 

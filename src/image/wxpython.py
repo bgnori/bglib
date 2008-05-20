@@ -168,8 +168,11 @@ class Context(bglib.image.PIL.Context):
     bglib.image.PIL.Context.draw_his_dice_in_field(self, dice)
 
   # who is on action
-  def draw_you_to_play(self):pass
-  def draw_him_to_play(self):pass
+  def draw_you_to_play(self):
+    bglib.image.PIL.Context.draw_you_to_play(self)
+
+  def draw_him_to_play(self):
+    bglib.image.PIL.Context.draw_him_to_play(self)
 
   def draw_frame(self):
     w, h  = self.apply_mag(self.style().size.board)

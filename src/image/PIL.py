@@ -237,8 +237,21 @@ class Context(bglib.image.context.Context):
       self.paste_image(image, (x, y))
 
   # who is on action
-  def draw_you_to_play(self):pass
-  def draw_him_to_play(self):pass
+  def draw_you_to_play(self):
+    size = self.apply_mag(self.style().size.action)
+    image = self.open_image("action_white.jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().action.you)
+    self.paste_image(image, (x, y))
+
+  def draw_him_to_play(self):
+    size = self.apply_mag(self.style().size.action)
+    image = self.open_image("action_green.jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().action.him)
+    self.paste_image(image, (x, y))
 
   def draw_frame(self):
     size = self.apply_mag(self.style().size.edge)
