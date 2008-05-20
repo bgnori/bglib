@@ -72,9 +72,15 @@ class InteractiveTester(wx.Frame):
     self.sync()
 
     sizer = wx.BoxSizer(wx.VERTICAL)
-    for target in targets:
+
+    target = targets[0]
+    self.proxy.register(target.Notify)
+    sizer.Add(target, proportion=1, flag=wx.SHAPED)
+
+    for target in targets[1:]:
       self.proxy.register(target.Notify)
-      sizer.Add(target, proportion=0, flag=wx.SHAPED)
+      sizer.Add(target, proportion=0, flag=wx.EXPAND)
+
     sizer.Add(self.buttons, proportion=0, flag=wx.EXPAND)
     self.SetSizer(sizer)
     self.Fit()
