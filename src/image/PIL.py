@@ -129,7 +129,6 @@ class Context(bglib.image.context.Context):
 
   # cube holder
   def draw_your_cube(self, cube_in_logarithm):
-    print 'draw_your_cube', cube_in_logarithm
     if cube_in_logarithm > 0:
       size = self.apply_mag(self.style().size.cube)
       image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
@@ -139,7 +138,6 @@ class Context(bglib.image.context.Context):
       self.paste_image(image, (x, y))
 
   def draw_his_cube(self, cube_in_logarithm):
-    print 'draw_his_cube', cube_in_logarithm
     if cube_in_logarithm > 0:
       size = self.apply_mag(self.style().size.cube)
       image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
@@ -149,7 +147,6 @@ class Context(bglib.image.context.Context):
       self.paste_image(image, (x, y))
 
   def draw_center_cube(self, cube_in_logarithm):
-    print 'draw_center_cube', cube_in_logarithm
     if cube_in_logarithm == 0:
       size = self.apply_mag(self.style().size.cube)
       image = self.open_image("cube_0.jpg",

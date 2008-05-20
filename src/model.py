@@ -11,7 +11,7 @@
 # constants
 you = 0
 him = 1
-center = 3
+center = 3 # in gnubg 11
 
 #game state
 not_started = 0
