@@ -58,16 +58,18 @@ class InteractiveTester(wx.Frame):
     print 'fail:', self.tests[self.nth]
     self.next()
 
-  def start(self, target, tests):
+  def start(self, targets, tests):
     self.tests = tests
     self.sync()
 
     sizer = wx.BoxSizer(wx.VERTICAL)
-    self.proxy.register(target.Notify)
-    sizer.Add(target, proportion=1, flag=wx.SHAPED)
+    for target in targets:
+      self.proxy.register(target.Notify)
+      sizer.Add(target, proportion=0, flag=wx.SHAPED)
     sizer.Add(self.buttons, proportion=0, flag=wx.EXPAND)
     self.SetSizer(sizer)
     self.Fit()
     self.Show()
+
 
 

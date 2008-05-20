@@ -18,7 +18,7 @@ class Player(bglib.gui.viewer.Viewer):
     - emitting board change event envoked by user action.
   '''
   def __init__(self, parent, model):
-    BaseBoard.__init__(self, parent, model)
+    bglib.gui.viewer.Viewer.__init__(self, parent, model)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
     self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
@@ -72,28 +72,25 @@ class Player(bglib.gui.viewer.Viewer):
     dest = bglib.model.position_pton(region.name)
     print mf.guess_your_making_point(dest)
       
-  def SetModel(self, model):
-    View.SetModel(self, model)
+  #def SetModel(self, model):
+  #  self.SetModel(self, model)
 
 
 
 
 if __name__ == '__main__':
-  import bglib.pubsubproxy
+  import testframe
   app = wx.PySimpleApp()
-  frame = wx.Frame(None)
-  model = bglib.model.board()
-  proxy = bglib.pubsubproxy.Proxy(model)
-  sizer = wx.BoxSizer(wx.VERTICAL)
-
-  b = bglib.gui.viewer.Viewer(frame, proxy)
-  proxy.register(b.Notify)
-  sizer.Add(b, proportion=1, flag=wx.SHAPED)
-  
-  frame.SetSizer(sizer)
-
-  frame.Fit()
-  frame.Show()
+  f = testframe.InteractiveTester(None)
+  p = Player(f, f.get_proxy())
+  test_items = [
+           ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
+           ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
+           ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
+           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+           ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
+          ]
+  f.start([p], test_items)
   app.MainLoop()
 
 

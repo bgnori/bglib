@@ -190,7 +190,7 @@ if __name__ == '__main__':
   import testframe
   app = wx.PySimpleApp()
   f = testframe.InteractiveTester(None)
-  b = Viewer(f, f.get_proxy())
+  v = Viewer(f, f.get_proxy())
   test_items = [
            ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
            ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
@@ -198,7 +198,7 @@ if __name__ == '__main__':
            ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
            ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
           ]
-  f.start(b, test_items)
+  f.start([v], test_items)
   app.MainLoop()
 
 

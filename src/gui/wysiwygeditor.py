@@ -79,22 +79,17 @@ class WYSIWYGEditor(wx.Panel):
 
 
 if __name__ == '__main__':
-  import bglib.model
-  import bglib.pubsubproxy
+  import testframe
   app = wx.PySimpleApp()
-  frame = wx.Frame(None)
-  model = bglib.model.board()
-  proxy = bglib.pubsubproxy.Proxy(model)
-
-  sizer = wx.BoxSizer(wx.VERTICAL)
-
-  be = WYSIWYGEditor(frame, proxy)
-  proxy.register(be.Notify)
-  sizer.Add(be, proportion=0, flag=wx.EXPAND)
-
-  frame.SetSizer(sizer)
-
-  frame.Fit()
-  frame.Show()
+  f = testframe.InteractiveTester(None)
+  w = WYSIWYGEditor(f, f.get_proxy())
+  test_items = [
+           ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
+           ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
+           ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
+           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+           ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
+          ]
+  f.start([w], test_items)
   app.MainLoop()
 

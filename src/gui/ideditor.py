@@ -67,30 +67,20 @@ class IDEditor(wx.Panel):
     self.model.score = m.score
 
 if __name__ == '__main__':
-  import bglib.model
-  import bglib.pubsubproxy
+  import testframe
   app = wx.PySimpleApp()
-  frame = wx.Frame(None)
-  model = bglib.model.board()
+  f = testframe.InteractiveTester(None)
 
-  proxy = bglib.pubsubproxy.Proxy(model)
-  sizer = wx.BoxSizer(wx.VERTICAL)
-
-  b = bglib.gui.viewer.Viewer(frame, proxy)
-  proxy.register(b.Notify)
-  sizer.Add(b, proportion=1, flag=wx.SHAPED)
-  
-  ie = IDEditor(frame, proxy)
-  proxy.register(ie.Notify)
-  sizer.Add(ie, proportion=0, flag=wx.EXPAND)
-  frame.SetSizer(sizer)
-
-  bglib.encoding.gnubg.decode(model, '4HPiASHgc/ABMA','UQn1AAAAAAAA')
-  #bglib.encoding.gnubg.decode(model, '4HPiASHgc/ABMA','Qgn1AAAAAAAA')
-
-  proxy.set_model(model)
-
-  frame.Fit()
-  frame.Show()
+  v = bglib.gui.viewer.Viewer(f, f.get_proxy())
+  ie = IDEditor(f, f.get_proxy())
+  test_items = [
+           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+           ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
+           ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
+           ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
+           ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+           ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
+          ]
+  f.start([v, ie], test_items)
   app.MainLoop()
 
