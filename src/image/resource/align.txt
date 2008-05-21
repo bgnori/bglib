@@ -47,13 +47,13 @@ center null 133 93
 field him 25 93
 cube him 50 100
 cube his 133 5
-score you 291 139
-score his 291 0
+score his 291 139
+score yours 291 0
 matchlength null 316 93
 matchcrawford null 291 93
 field you  158 93
 cube you  180 100
-cube you  130 139
+cube yours  130 139
 cube center 133 105
 table null 0 0
 size edge 25  232

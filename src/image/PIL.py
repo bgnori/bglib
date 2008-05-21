@@ -134,7 +134,7 @@ class Context(bglib.image.context.Context):
       image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
                               size
                              )
-      x, y = self.apply_mag(self.style().cube.you)
+      x, y = self.apply_mag(self.style().cube.yours)
       self.paste_image(image, (x, y))
 
   def draw_his_cube(self, cube_in_logarithm):
@@ -282,7 +282,7 @@ class Context(bglib.image.context.Context):
     image = self.open_image("score_" + str(score)  + ".jpg",
                             size
                             )
-    x, y = self.apply_mag(self.style().score.you)
+    x, y = self.apply_mag(self.style().score.yours)
     self.paste_image(image, (x, y))
 
   def draw_his_score(self, score):
