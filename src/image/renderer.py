@@ -185,7 +185,7 @@ class Renderer(object):
   def draw_session_state(self, board):
     context = self.context()
     context.draw_your_score(board.score[0])
-    context.draw_his_score(board.score[0])
+    context.draw_his_score(board.score[1])
     context.draw_match_length(board.match_length)
     context.draw_crawford_flag(board.crawford)
 
