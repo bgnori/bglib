@@ -67,6 +67,9 @@ class InteractiveTester(wx.Frame):
            ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
            ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
            ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
+           ('4PPIQRCYc4sBMA', '8Am1AEAAAAAA'),
+           ('284lIADf7QAAYA', '8Im1AEAAAAAA'),
+           ('AAAAgAAAAAAAAA', 'cAqgAFAAAAAA'),
           ]
     self.tests = tests
     self.sync()
