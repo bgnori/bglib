@@ -29,15 +29,19 @@ resign_backgammon=3
 
 initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
-def position_pton(p):
-  if p == 'your home' and p == 'his home':
+def position_pton(p, you_to_move):
+  if p == 'your home' or p == 'his home':
     return -1
-  elif p == 'your bar' and p == 'his bar':
+  elif p == 'your bar' or p == 'his bar':
     return 24
   else:
     i = int(p)
-    if 0 < i and i < 25:
-      return i-1
+    if you_to_move:
+      if 0 < i and i < 25:
+        return i-1
+    else:
+      if 0 < i and i < 25:
+        return 24 - i
   assert(false)
 
 def position_ntop(n):
@@ -395,9 +399,6 @@ class ViewerInputHelperMixin(object):
 
 
 class PlayInputHelperMixin(object):
-
-
-
   def guess_input(self):pass
 
   def put_chequier_movement(self):
