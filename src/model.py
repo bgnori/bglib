@@ -29,18 +29,17 @@ resign_backgammon=3
 
 initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
-def position_pton(p, you_to_move):
+def position_pton(p, on_action):
   if p == 'your home' or p == 'his home':
     return -1
   elif p == 'your bar' or p == 'his bar':
     return 24
   else:
     i = int(p)
-    if you_to_move:
-      if 0 < i and i < 25:
+    if 0 < i and i < 25:
+      if on_action == you:
         return i-1
-    else:
-      if 0 < i and i < 25:
+      else:
         return 24 - i
   assert(false)
 

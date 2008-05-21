@@ -28,8 +28,8 @@ class Player(bglib.gui.viewer.Viewer):
     up = evt.GetUp()
     board = self.model
     print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
-    down = bglib.model.position_pton(down.name, board.on_action==bglib.model.you)
-    up = bglib.model.position_pton(up.name, board.on_action==bglib.model.you)
+    down = bglib.model.position_pton(down.name, board.on_action)
+    up = bglib.model.position_pton(up.name, board.on_action)
     mf = bglib.model.MoveFactory(self.model)
     if down > up:
       pms = mf.guess_your_multiple_partial_moves(down, up)
@@ -61,7 +61,7 @@ class Player(bglib.gui.viewer.Viewer):
         print 'not allowed to double'
     elif region.name in points or region.name == 'your bar':
       print 'moving from ', region.name
-      src = bglib.model.position_pton(region.name, board.on_action==bglib.model.you)
+      src = bglib.model.position_pton(region.name, board.on_action)
       print mf.guess_your_single_pm_from_source(src)
     else:
       pass
@@ -71,7 +71,7 @@ class Player(bglib.gui.viewer.Viewer):
     board = self.model
     print 'Board::OnRegionRightClick:', region
     mf = bglib.model.MoveFactory(self.model)
-    dest = bglib.model.position_pton(region.name, board.on_action==bglib.model.you)
+    dest = bglib.model.position_pton(region.name, board.on_action)
     print mf.guess_your_making_point(dest)
       
 
