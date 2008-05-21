@@ -74,7 +74,7 @@ class Viewer(wx.Panel):
                                    image=bglib.depot.lines.CRLFProxy(
                                      './bglib/image/resource/align.txt'),
                                   )
-    self.SetSize(style.image.size.board) # MINIMUM SIZE
+    self.SetSize(style.image.size.table) # MINIMUM SIZE
     context_factory = bglib.image.context.context_factory
     self.context = context_factory.new_context('wx', style)
 

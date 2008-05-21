@@ -182,10 +182,18 @@ class Renderer(object):
     context = self.context()
     context.draw_frame()
 
+  def draw_session_state(self, board):
+    context = self.context()
+    context.draw_your_score(board.score[0])
+    context.draw_his_score(board.score[0])
+    context.draw_match_length(board.match_length)
+    context.draw_crawford_flag(board.crawford)
+
   def render(self, context, board):
     self._context = context
 
     self.draw_frame()
+    self.draw_session_state(board)
     self.draw_points(board)
     self.draw_bar(board)
     self.draw_home(board)
@@ -198,5 +206,4 @@ if __name__ == '__main__':
   context = bglib.image.context.context_factory.new_context('Null', style)
   board = bglib.model.board()
   image = renderer.render(context, board)
-
 

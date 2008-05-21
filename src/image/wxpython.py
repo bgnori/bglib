@@ -52,9 +52,9 @@ class Context(bglib.image.PIL.Context):
     self.window = style.window
 
   def apply_mag(self, t):
-    board_size = self.style().size.board[0]
+    table_size = self.style().size.table[0]
     window_size = self.window.GetSizeTuple()[0]
-    return (t[0] *window_size/board_size, t[1] *window_size/board_size)
+    return (t[0] *window_size/table_size, t[1] *window_size/table_size)
 
   def open_image(self, fn, size, upside_down=None):
     assert(len(size)==2)
@@ -175,7 +175,7 @@ class Context(bglib.image.PIL.Context):
     bglib.image.PIL.Context.draw_him_to_play(self)
 
   def draw_frame(self):
-    w, h  = self.apply_mag(self.style().size.board)
+    w, h  = self.apply_mag(self.style().size.table)
     self.window.set_bgimage(wx.EmptyImage(w, h))
     bglib.image.PIL.Context.draw_frame(self)
 

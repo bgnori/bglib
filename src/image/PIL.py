@@ -19,7 +19,7 @@ class Context(bglib.image.context.Context):
   name = 'PIL'
   def __init__(self, style):
     bglib.image.context.Context.__init__(self, style)
-    x, y = style.size.board
+    x, y = style.size.table
     self.image = Image.new("RGB", (x, y), debug_color)
     self.cache = dict()
 
@@ -134,7 +134,7 @@ class Context(bglib.image.context.Context):
       image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
                               size
                              )
-      x, y = self.apply_mag(self.style().cube.yours)
+      x, y = self.apply_mag(self.style().cube.you)
       self.paste_image(image, (x, y))
 
   def draw_his_cube(self, cube_in_logarithm):
@@ -275,6 +275,40 @@ class Context(bglib.image.context.Context):
     x, y = self.apply_mag(self.style().frame.top)
     self.paste_image(image, (x, y))
     x, y = self.apply_mag(self.style().frame.bottom)
+    self.paste_image(image, (x, y))
+
+  def draw_your_score(self, score):
+    print 'draw_your_score'
+    size = self.apply_mag(self.style().size.score)
+    image = self.open_image("score_" + str(score)  + ".jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().score.you)
+    self.paste_image(image, (x, y))
+
+  def draw_his_score(self, score):
+    print 'draw_his_score'
+    size = self.apply_mag(self.style().size.score)
+    image = self.open_image("score_" + str(score)  + ".jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().score.his)
+    self.paste_image(image, (x, y))
+
+  def draw_match_length(self, length):
+    size = self.apply_mag(self.style().size.matchlength)
+    image = self.open_image("score_" + str(length)  + ".jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().matchlength.null)
+    self.paste_image(image, (x, y))
+
+  def draw_crawford_flag(self, flag):
+    size = self.apply_mag(self.style().size.matchcrawford)
+    image = self.open_image("empty-edge.jpg",
+                            size
+                            )
+    x, y = self.apply_mag(self.style().matchcrawford.null)
     self.paste_image(image, (x, y))
 
   def result(self):

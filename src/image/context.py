@@ -57,6 +57,12 @@ class Context(object):
 
   def draw_frame(self):raise NotImplemented('')
 
+  def draw_your_score(self, score):raise NotImplemented('')
+  def draw_his_score(self, score):raise NotImplemented('')
+  def draw_match_length(self, length):raise NotImplemented('')
+  def draw_crawford_flag(self, flag):raise NotImplemented('')
+
+
 class NullContext(Context):
   name = 'Null'
 
@@ -86,6 +92,11 @@ class NullContext(Context):
   def draw_him_to_play(self):pass
 
   def draw_frame(self):pass
+
+  def draw_your_score(self, score):pass
+  def draw_his_score(self, score):pass
+  def draw_match_length(self, length):pass
+  def draw_crawford_flag(self, flag):pass
 
 context_factory.register(NullContext)
 
