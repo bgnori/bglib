@@ -278,7 +278,6 @@ class Context(bglib.image.context.Context):
     self.paste_image(image, (x, y))
 
   def draw_your_score(self, score):
-    print 'draw_your_score'
     size = self.apply_mag(self.style().size.score)
     image = self.open_image("score_" + str(score)  + ".jpg",
                             size
@@ -287,7 +286,6 @@ class Context(bglib.image.context.Context):
     self.paste_image(image, (x, y))
 
   def draw_his_score(self, score):
-    print 'draw_his_score'
     size = self.apply_mag(self.style().size.score)
     image = self.open_image("score_" + str(score)  + ".jpg",
                             size
