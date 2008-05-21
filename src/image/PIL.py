@@ -303,9 +303,11 @@ class Context(bglib.image.context.Context):
 
   def draw_crawford_flag(self, flag):
     size = self.apply_mag(self.style().size.matchcrawford)
-    image = self.open_image("empty-edge.jpg",
-                            size
-                            )
+    if flag:
+      image = self.open_image("crawford.jpg", size)
+    else:
+      image = self.open_image("non-crawford.jpg", size)
+
     x, y = self.apply_mag(self.style().matchcrawford.null)
     self.paste_image(image, (x, y))
 

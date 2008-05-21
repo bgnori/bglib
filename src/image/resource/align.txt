@@ -7,8 +7,8 @@ size dice 16 16
 size cube 25 25
 size action 25 25
 size score 50 93
-size matchlength 35 46
-size matchcrawford 15 46
+size matchlength 25 46
+size matchcrawford 25 46
 color you white 0
 color him green 0
 point   1  248  139
@@ -49,7 +49,7 @@ cube him 50 100
 cube his 133 5
 score you 291 139
 score his 291 0
-matchlength null 306 93
+matchlength null 316 93
 matchcrawford null 291 93
 field you  158 93
 cube you  180 100
