@@ -80,16 +80,17 @@ class _FIBSBoardState(object):
     return tuple(you), tuple(him)
 
 
-def decode(s):
+def decode(m, s):
   def log(power_of_two):
     r = 0
     while power_of_two > 1:
       power_of_two = power_of_two >> 1
       r+=1
     return r
+
+  assert isinstance(m, bglib.model.board)
       
   fibs = _FIBSBoardState(s)
-  m = bglib.model.board()
   m.position = fibs.position()
   m.cube_in_logarithm = log(fibs.doubling_cube)
 
@@ -131,7 +132,6 @@ def decode(s):
 
   m.match_length = fibs.matchlength
   m.score = (fibs.your_score, fibs.his_score)
-  return m
 
 def encode(s):
   '''currently no use.'''
