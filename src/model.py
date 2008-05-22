@@ -75,10 +75,10 @@ class board(object):
     if src is not None:
       if not isinstance(src, board):
         raise TypeError('expected bglib.model.board but got %s'%type(src))
-      x.update(src.__dict__)
+      x.update(src._data)
     else:
       x.update(self.defaults)
-      x.update(kw)
+    x.update(kw)
     self.__dict__["_data"] = x
 
   def __getattr__(self, name):
