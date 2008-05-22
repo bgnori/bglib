@@ -18,7 +18,8 @@ class Player(bglib.gui.viewer.Viewer):
     - emitting board change event envoked by user action.
   '''
   def __init__(self, parent, model):
-    bglib.gui.viewer.Viewer.__init__(self, parent, model)
+    self.temp = bglib.model.board(src=model)
+    bglib.gui.viewer.Viewer.__init__(self, parent, self.temp)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
     self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
@@ -80,7 +81,7 @@ if __name__ == '__main__':
   import testframe
   app = wx.PySimpleApp()
   f = testframe.InteractiveTester(None)
-  p = Player(f, f.get_proxy())
+  p = Player(f, f.get_model())
   f.start([p])
   app.MainLoop()
 

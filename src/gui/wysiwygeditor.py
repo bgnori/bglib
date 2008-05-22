@@ -82,7 +82,7 @@ if __name__ == '__main__':
   import testframe
   app = wx.PySimpleApp()
   f = testframe.InteractiveTester(None)
-  w = WYSIWYGEditor(f, f.get_proxy())
+  w = WYSIWYGEditor(f, f.get_model())
   f.start([w])
   app.MainLoop()
 

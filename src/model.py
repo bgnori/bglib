@@ -70,16 +70,15 @@ class board(object):
                   score=(0, 0),
                   )
 
-  def __init__(self, **kw):
+  def __init__(self, src=None, **kw):
     x = dict()
-    for key in self.defaults:
-      if key in kw:
-        x.update({key:kw[key]})
-        del kw[key]
-      else:
-        x.update({key:self.defaults[key]})
-    if kw:
-      raise
+    if src is not None:
+      if not isinstance(src, board):
+        raise TypeError('expected bglib.model.board but got %s'%type(src))
+      x.update(src.__dict__)
+    else:
+      x.update(self.defaults)
+      x.update(kw)
     self.__dict__["_data"] = x
 
   def __getattr__(self, name):
@@ -89,6 +88,7 @@ class board(object):
     if name not in self._data:
       raise AttributeError
     self._data[name]=value
+
 
 
 class PartialMove(object):

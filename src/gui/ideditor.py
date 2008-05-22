@@ -71,8 +71,8 @@ if __name__ == '__main__':
   app = wx.PySimpleApp()
   f = testframe.InteractiveTester(None)
 
-  v = bglib.gui.viewer.Viewer(f, f.get_proxy())
-  ie = IDEditor(f, f.get_proxy())
+  v = bglib.gui.viewer.Viewer(f, f.get_model())
+  ie = IDEditor(f, f.get_model())
   f.start([v, ie])
   app.MainLoop()
 

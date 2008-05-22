@@ -190,10 +190,8 @@ if __name__ == '__main__':
   import testframe
   app = wx.PySimpleApp()
   f = testframe.InteractiveTester(None)
-  v = Viewer(f, f.get_proxy())
+  v = Viewer(f, f.get_model())
   f.start([v])
   app.MainLoop()
-
-
 
 

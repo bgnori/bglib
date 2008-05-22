@@ -9,14 +9,13 @@ import sys
 import wx
 
 import bglib.model
-import bglib.pubsubproxy
 import bglib.encoding.gnubg
 
 class InteractiveTester(wx.Frame):
   def __init__(self, parent):
     wx.Frame.__init__(self, parent)
     self.model = bglib.model.board()
-    self.proxy = bglib.pubsubproxy.Proxy(self.model)
+    self.targets = list()
     self.tests = list()
     self.nth = 0
     self.results = list()
@@ -33,8 +32,8 @@ class InteractiveTester(wx.Frame):
     sizer.Add(self.info, proportion=1, flag=wx.EXPAND)
     self.buttons = sizer
 
-  def get_proxy(self):
-    return self.proxy
+  def get_model(self):
+    return self.model
 
   def next(self):
     if len(self.tests) <= self.nth + 1:
@@ -43,12 +42,14 @@ class InteractiveTester(wx.Frame):
     self.sync()
 
   def sync(self):
-    proxy = self.get_proxy()
     test = self.tests[self.nth]
     model = bglib.model.board()
     bglib.encoding.gnubg.decode(model, test[0], test[1])
-    proxy.set_model(model)
     self.info.SetValue("pid=%s,  mid=%s"%(test[0], test[1]))
+
+    for target in self.targets:
+      target.SetModel(model)
+      target.Notify()
 
   def OnOK(self, evt):
     print 'ok :', self.tests[self.nth]
@@ -72,21 +73,17 @@ class InteractiveTester(wx.Frame):
            ('AAAAgAAAAAAAAA', 'cAqgAFAAAAAA'),
           ]
     self.tests = tests
-    self.sync()
+    self.targets = targets
 
     sizer = wx.BoxSizer(wx.VERTICAL)
-
-    target = targets[0]
-    self.proxy.register(target.Notify)
-    sizer.Add(target, proportion=1, flag=wx.SHAPED)
-
+    sizer.Add(targets[0], proportion=1, flag=wx.SHAPED)
     for target in targets[1:]:
-      self.proxy.register(target.Notify)
       sizer.Add(target, proportion=0, flag=wx.EXPAND)
-
     sizer.Add(self.buttons, proportion=0, flag=wx.EXPAND)
     self.SetSizer(sizer)
     self.Fit()
+
+    self.sync()
     self.Show()
 
 
