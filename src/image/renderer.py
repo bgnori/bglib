@@ -42,11 +42,11 @@ class Renderer(object):
     context.draw_you_to_play()
     context.draw_he_offered_double(0)
     context.draw_you_offered_double(0)
-    if board.cube_owner == bglib.model.you:
+    if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.him:
+    elif board.cube_owner == bglib.model.constants.him:
       context.draw_his_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.center:
+    elif board.cube_owner == bglib.model.constants.center:
       context.draw_center_cube(board.cube_in_logarithm)
     else:
       assert(False)
@@ -72,11 +72,11 @@ class Renderer(object):
     context.draw_you_to_play()
     context.draw_your_dice_in_field(board.rolled)
     context.draw_his_dice_in_field((0, 0))
-    if board.cube_owner == bglib.model.you:
+    if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.him:
+    elif board.cube_owner == bglib.model.constants.him:
       context.draw_his_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.center:
+    elif board.cube_owner == bglib.model.constants.center:
       context.draw_center_cube(board.cube_in_logarithm)
     else:
       assert(False)
@@ -86,11 +86,11 @@ class Renderer(object):
     context.draw_him_to_play()
     context.draw_he_offered_double(0)
     context.draw_you_offered_double(0)
-    if board.cube_owner == bglib.model.you:
+    if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.him:
+    elif board.cube_owner == bglib.model.constants.him:
       context.draw_his_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.center:
+    elif board.cube_owner == bglib.model.constants.center:
       context.draw_center_cube(board.cube_in_logarithm)
     else:
       assert(False)
@@ -116,11 +116,11 @@ class Renderer(object):
     context.draw_him_to_play()
     context.draw_your_dice_in_field((0,0))
     context.draw_his_dice_in_field(board.rolled)
-    if board.cube_owner == bglib.model.you:
+    if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.him:
+    elif board.cube_owner == bglib.model.constants.him:
       context.draw_his_cube(board.cube_in_logarithm)
-    elif board.cube_owner == bglib.model.center:
+    elif board.cube_owner == bglib.model.constants.center:
       context.draw_center_cube(board.cube_in_logarithm)
     else:
       assert(False)
@@ -130,37 +130,37 @@ class Renderer(object):
       - board.on_action
       - board.on_inner_action
     '''
-    if board.on_action == bglib.model.you and not board.rolled:
-      if not board.doubled and board.on_inner_action == bglib.model.you:
+    if board.on_action == bglib.model.constants.you and not board.rolled:
+      if not board.doubled and board.on_inner_action == bglib.model.constants.you:
         self.draw_you_are_on_roll_cube_action(board)
         return
 
-      if board.doubled and board.on_inner_action == bglib.model.him:
+      if board.doubled and board.on_inner_action == bglib.model.constants.him:
         self.draw_you_doubled_he_is_on_take_or_pass(board)
         return
 
-      if board.doubled and board.on_inner_action == bglib.model.you:
+      if board.doubled and board.on_inner_action == bglib.model.constants.you:
         self.draw_you_doubled_he_took_you_are_on_roll(board)
         return
 
-    if board.on_action == bglib.model.you and  board.rolled:
+    if board.on_action == bglib.model.constants.you and  board.rolled:
       self.draw_you_rolled(board)
       return
 
-    if board.on_action == bglib.model.him and not board.rolled:
-      if not board.doubled and board.on_inner_action == bglib.model.him:
+    if board.on_action == bglib.model.constants.him and not board.rolled:
+      if not board.doubled and board.on_inner_action == bglib.model.constants.him:
         self.draw_he_is_on_roll_cube_action(board)
         return
 
-      if board.doubled and board.on_inner_action == bglib.model.you:
+      if board.doubled and board.on_inner_action == bglib.model.constants.you:
         self.draw_he_doubled_you_are_on_take_or_pass(board)
         return
 
-      if board.doubled and board.on_inner_action == bglib.model.him:
+      if board.doubled and board.on_inner_action == bglib.model.constants.him:
         self.draw_he_doubled_you_took_he_is_on_roll(board)
         return
 
-    if board.on_action == bglib.model.him and  board.rolled:
+    if board.on_action == bglib.model.constants.him and  board.rolled:
       self.draw_he_rolled(board)
       return
 
@@ -204,6 +204,6 @@ renderer = Renderer()
 if __name__ == '__main__':
   style = bglib.image.style.Style(hoge='piyo')
   context = bglib.image.context.context_factory.new_context('Null', style)
-  board = bglib.model.board()
+  board = bglib.model.constants.board()
   image = renderer.render(context, board)
 

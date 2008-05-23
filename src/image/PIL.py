@@ -318,7 +318,8 @@ bglib.image.context.context_factory.register(Context)
 
 
 if __name__ == '__main__':
-  board = bglib.model.board()
+  import bglib.model.board
+  board = bglib.model.board.board()
   style = bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt')
   renderer = bglib.image.renderer.renderer
   context_factory = bglib.image.context.context_factory
