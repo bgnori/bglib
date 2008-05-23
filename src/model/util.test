@@ -53,10 +53,16 @@
 
 >>> util.move_ntop(24)
 'bar'
+>>> util.move_pton('bar')
+24
 
 >>> util.move_ntop(0)
 '1'
+>>> util.move_pton('1')
+0
 
 >>> util.move_ntop(-1)
 'off'
+>>> util.move_pton('off')
+-1
 

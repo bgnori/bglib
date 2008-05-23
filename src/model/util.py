@@ -47,7 +47,20 @@ def move_ntop(n):
   else:
     assert False
 
+def move_pton(p):
+  if p == 'bar':
+    return 24
+  elif p == 'off':
+    return -1
+  else:
+    i = int(p)
+    if 0 < i and i < 25:
+      return i-1
+  assert False
+
 if __name__ == '__main__':
   import doctest
   doctest.testfile('util.test')
+
+
 
