@@ -12,6 +12,10 @@ center = 3 # in gnubg 11
 player_string = ('you', 'him')
 owner_string = ('your', 'his')
 
+off = -1
+bar = 24
+points = range(0, 24)
+
 #game state
 not_started = 0
 on_going = 1

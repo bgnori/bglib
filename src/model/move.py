@@ -7,6 +7,57 @@
 
 import constants
 import util
+import board
+
+
+
+class AvailableToPlay(object):
+  def __init__(self, rolled=None, copy_src=None):
+    assert rolled is not None or copy_src is not None
+    if rolled is not None:
+      assert isinstance(rolled, tuple)
+      assert len(rolled) == 2
+      self._imp = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0}
+      if rolled[0]==rolled[1]:
+        self._imp[rolled[0]] = 4
+      else:
+        self._imp[rolled[0]] = 1
+        self._imp[rolled[1]] = 1
+    if copy_src is not None:
+      # copy constructor
+      assert isinstance(copy_src, AvailableToPlay)
+      self._imp = dict(copy_src._imp)
+
+  def __getitem__(self, key):
+    assert(key in [1, 2, 3, 4, 5, 6])
+    return self._imp[key]
+  def __contains__(self, key):
+    assert(key in [1, 2, 3, 4, 5, 6])
+    return self._imp[key] > 0
+  def __setitem__(self, key, value):
+    assert(key in [1, 2, 3, 4, 5, 6])
+    self._imp[key] = value
+  def consume(self, die):
+    if die in self:
+      assert self[die] > 0
+      self[die] -= 1
+    else:
+      raise
+  def items(self):
+    return self._imp.items()
+  def is_doubles(self):
+    for value in self._imp:
+      if value > 1:
+        return True
+    return False
+  def get_max(self):
+    for i in range(1, 7):
+      if i in self:
+        return i
+    return None
+  def __repr__(self):
+    return '<AvailableToPlay: ' + str(self.items()) + '>'
+  __str__ = __repr__
 
 class PartialMove(object):
   def __init__(self, die, src, dest, is_hitting):
@@ -17,8 +68,8 @@ class PartialMove(object):
   def __repr__(self):
     s = "%s/%s"%(util.move_ntop(self.src), util.move_ntop(self.dest))
     if self.is_hitting:
-      return s + '*'
-    return s
+      s += '*'
+    return "<PartialMove: " + s + ">"
   def is_dance(self):
     return self.src == self.dest
   def is_undo(self):
@@ -46,101 +97,62 @@ class Move(object):
         self._pms.remove(p)
         return
     self._pms.append(pm)
-  def add(self, pms):
-    self._pms = self._pms + pms
-  def undo(self, pm):
-    self._pms,remove(pm)
   def find(self, dest):
     for pm in reversed(self._pms):
       if pm.dest == dest:
         yield pm
 
 
-class AvailableToPlay(object):
-  def __init__(self, rolled):
-    self._imp = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0}
-    if rolled[0]==rolled[1]:
-      self._imp[rolled[0]] = 4
-    else:
-      self._imp[rolled[0]] = 1
-      self._imp[rolled[1]] = 1
-  def __getitem__(self, key):
-    assert(key in [1, 2, 3, 4, 5, 6])
-    return self._imp[key]
-  def __contains__(self, key):
-    assert(key in [1, 2, 3, 4, 5, 6])
-    return self._imp[key] > 0
-  def __setitem__(self, key, value):
-    assert(key in [1, 2, 3, 4, 5, 6])
-    self._imp[key] = value
-  def consume(self, die):
-    if die in self:
-      self[die] -= 1
-    else:
-      raise
-  def items(self):
-    return self._imp.items()
-  def is_doubles(self):
-    for value in self._imp:
-      if value > 1:
-        return True
-    return False
-  def get_max(self):
-    for i in range(1, 7):
-      if i in self:
-        return i
-    return None
-  def __repr__(self):
-    return '<AvailableToPlay: ' + str(self.items()) + '>'
-  __str__ = __repr__
 
 
 class MoveFactory(object):
-  def __init__(self, board):
-    self.board = board
+  def __init__(self, b):
+    #if not isinstance(b, board):
+    #  raise TypeError('expected bglib.model.board.board but got %s'%type(b))
+    self.board = b
     self.move = Move()
     self.available = AvailableToPlay(self.board.rolled)
 
   def append(self, pm):
     assert(isinstance(pm, PartialMove))
     self.move.append(pm)
+    self.available.consume(pm.die)
+    self.board.make_partial_move(pm)
     
-  def guess_your_single_pm_from_source(self, src, position, available):
+  def guess_your_single_pm_from_source(self, src, b=None, available=None):
     '''
     returns
     - acceptable: partial move
     - not acceptable: None
     '''
-    if not isinstance(position, tuple):
-      raise TypeError('expected tuple but got %s'%str(type(position)))
+    assert isinstance(src, int)
+    if b is None:
+      b = board.board(src=self.board)
+    #assert isinstance(b, board.board)
+
+    if available is None:
+      available = AvailableToPlay(rolled=None, copy_src=self.available)
     assert isinstance(available, AvailableToPlay)
 
     die = available.get_max()
     if not die:
       return None
-    if position[you][src] == 0:
-      # no chequer to go!!
+    if not b.has_chequer_to_move(src):
       return None
 
     dest = src - die
-    if dest < -1: # bear off by using die bigger than to go.
-      for i in range(src + 1, 25):
-        if position[you][i] != 0:
-          return None # illeagal, no valid chequer movement corresponds.
-      return PartialMove(die, src, -1, False) 
-    elif dest  == -1: 
-      for i in range(6, 25): # check all chequers are beared in 
-        if position[you][i] != 0:
-          return None # illeagal, no valid chequer movement corresponds.
-      return PartialMove(die, src, -1, False)
-    elif dest in range(0, 24):
-      if position[him][23 - dest] > 1: # is blocked?
+    if dest <= constants.off:
+      if b.is_ok_to_bearoff_from(src):
+        return None # illeagal, no valid chequer movement corresponds.
+      return PartialMove(die, src, constants.off, False) 
+    elif dest in constants.points:
+      if b.is_open_to_land(dest):
+        # some one is there, hit it
+        return PartialMove(die, src, dest, b.is_hitting_to_land(dest))
+      else:
         # then try another die.
         available.consume(die)
-        return self.guess_your_single_pm_from_source(src, position=position, available=available)
-      else:
-        # some one is there, hit it
-        return PartialMove(die, src, dest, position[him][23 - dest] == 1)
+        return self.guess_your_single_pm_from_source(src, b, available)
     else:
       return None
 
@@ -271,8 +283,6 @@ class MoveFactory(object):
 
 
 class ViewerInputHelperMixin(object):
-  pass
-
   # dice / roll related actions
   def roll(self):
     '''

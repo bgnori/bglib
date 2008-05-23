@@ -27,8 +27,8 @@ class board(object):
   def __init__(self, src=None, **kw):
     x = dict()
     if src is not None:
-      if not isinstance(src, board):
-        raise TypeError('expected bglib.model.board but got %s'%type(src))
+      #if not isinstance(src, board):
+      #  raise TypeError('expected bglib.model.board.board but got %s'%type(src))
       x.update(src._data)
     else:
       x.update(self.defaults)
@@ -42,6 +42,42 @@ class board(object):
     if name not in self._data:
       raise AttributeError
     self._data[name]=value
+
+  def has_chequer_to_move(self, n):
+    if self.on_action == constants.you:
+      to_move, to_hit = self.position
+    elif self.on_action == constants.him:
+      to_hit, to_move = self.position
+    return to_move[n]
+
+  def is_ok_to_bearoff(self, n, die):
+    if n < die:
+      for i in range(n + 1, constants.bar + 1):
+        if self.has_chequer_to_move(i):
+          return False
+      return True
+    elif n == die:
+      for i in range(6, constants.bar + 1): # check all chequers are beared in 
+        if b.has_chequer_to_move(i):
+          return False
+      return True
+    else:
+      assert die > n
+      assert False
+
+  def is_open_to_land(self, n):
+    if self.on_action == constants.you:
+      to_move, to_hit = self.position
+    elif self.on_action == constants.him:
+      to_hit, to_move = self.position
+    return to_hit[n] < 2
+
+  def is_hitting_to_land(self, n):
+    if self.on_action == constants.you:
+      to_move, to_hit = self.position
+    elif self.on_action == constants.him:
+      to_hit, to_move = self.position
+    return to_hit[n] == 1
 
   def make_partial_move(self, pm):
     if self.on_action == constants.you:
