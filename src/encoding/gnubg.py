@@ -129,7 +129,7 @@ def decode(model, pid, mid):
   # this is the difference between gnubg and bglib
   # gnubg's view from on_action 
   # bglib's view from you
-  if mp.on_action == bglib.model.you:
+  if mp.on_action == bglib.model.constants.you:
     you = opp
     him = on_action
   else:

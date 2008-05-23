@@ -5,7 +5,8 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-import bglib.model
+import bglib.model.constants
+import bglib.model.board
 
 class _FIBSBoardState(object):
   '''
@@ -88,46 +89,46 @@ def decode(m, s):
       r+=1
     return r
 
-  assert isinstance(m, bglib.model.board)
-      
+  assert isinstance(m, bglib.model.board.board)
+     
   fibs = _FIBSBoardState(s)
   m.position = fibs.position()
   m.cube_in_logarithm = log(fibs.doubling_cube)
 
   if fibs.you_may_double and fibs.he_may_double:
-    m.cube_owner = bglib.model.center
+    m.cube_owner = bglib.model.constants.center
     m.crawford = False
   elif fibs.you_may_double and not fibs.he_may_double:
-    m.cube_owner = bglib.model.you
+    m.cube_owner = bglib.model.constants.you
     m.crawford = False
   elif not fibs.you_may_double and fibs.he_may_double:
-    m.cube_owner = bglib.model.him
+    m.cube_owner = bglib.model.constants.him
     m.crawford = False
   else:
-    m.cube_owner = bglib.model.center
+    m.cube_owner = bglib.model.constants.center
     m.crawford = True
 
   if fibs.turn == fibs.your_colour:
-    m.on_action = bglib.model.you
+    m.on_action = bglib.model.constants.you
     m.rolled = fibs.your_dice
-    m.game_state = bglib.model.on_going
+    m.game_state = bglib.model.constants.on_going
   elif fibs.turn == fibs.your_colour * -1: #opposite colour
     m.rolled = fibs.his_dice
-    m.on_action = bglib.model.him
-    m.game_state = bglib.model.on_going
+    m.on_action = bglib.model.constants.him
+    m.game_state = bglib.model.constants.on_going
   else:
     m.rolled=(0, 0)
-    m.on_action = bglib.model.invalid
-    m.game_state = bglib.model.finished
-    #m.game_state = bglib.model.resigned
+    m.on_action = bglib.model.constants.invalid
+    m.game_state = bglib.model.constants.finished
+    #m.game_state = bglib.model.constants.resigned
     #ugh! There is no way to define it
     #may be we need to add some thing.
 
   if fibs.was_doubled:
-    m.on_inner_action=bglib.model.you
+    m.on_inner_action=bglib.model.constants.you
     m.doubled = True
 
-  m.resign_offer = bglib.model.resign_none
+  m.resign_offer = bglib.model.constants.resign_none
   # can't define!
 
   m.match_length = fibs.matchlength

@@ -1,3 +1,5 @@
+
+
 >>> from FIBS import _FIBSBoardState
 >>> b = _FIBSBoardState('board:You:someplayer:3:0:0:0:-2:0:0:0:0:5:0:3:0:0:0:-5:5:0:0:0:-3:0:-5:0:0:0:0:2:0:1:6:2:0:0:1:1:1:0:1:-1:0:25:0:0:0:0:2:0:0:0')
 
@@ -83,8 +85,8 @@ redouble for unlimited games. we are talking about beaver!
 >>> b.position()
 ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
->>> import bglib.model
->>> b = bglib.model.board()
+>>> import bglib.model.board
+>>> b = bglib.model.board.board()
 >>> from FIBS import decode 
 >>> decode(b, 'board:You:MonteCarlo:1:0:0:0:3:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:-1:-2:0:1:2:2:0:0:1:1:1:0:1:-1:0:25:12:12:0:0:3:1:0:0')
 
