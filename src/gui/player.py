@@ -18,11 +18,19 @@ class Player(bglib.gui.viewer.Viewer):
     - emitting board change event envoked by user action.
   '''
   def __init__(self, parent, model):
-    self.temp = bglib.model.board(src=model)
-    bglib.gui.viewer.Viewer.__init__(self, parent, self.temp)
+    bglib.gui.viewer.Viewer.__init__(self, parent, model)
+    self.mf = bglib.model.MoveFactory(model)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
     self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
+
+  def GetValue(self):
+    return self.mf.xxx?
+
+  def Notify(self):
+    bglib.gui.viewer.Viewer.Notify(self)
+    self.mf = bglib.model.MoveFactory(self.model)
+
 
   def OnRegionLeftDrag(self, evt):
     down = evt.GetDown()
@@ -31,11 +39,14 @@ class Player(bglib.gui.viewer.Viewer):
     print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
     down = bglib.model.position_pton(down.name, board.on_action)
     up = bglib.model.position_pton(up.name, board.on_action)
-    mf = bglib.model.MoveFactory(self.model)
+    mf = self.mf
     if down > up:
-      pms = mf.guess_your_multiple_partial_moves(down, up)
+      print 'forward'
+      print mf.available
+      pms = mf.guess_your_multiple_partial_moves(down, up, None, mf.available, mf.move._pms)
     elif down < up:
-      pms = mf.guess_your_multiple_partial_undoes(down, up)
+      print 'backward'
+      pms = mf.guess_your_multiple_partial_undoes(down, up. None, mf.available, mf.move._pms)
     else:
       assert(up == donw)
 
@@ -43,6 +54,10 @@ class Player(bglib.gui.viewer.Viewer):
       for pm in pms:
         mf.append(pm)
       mv = mf.end()
+      self.model.make(mv)
+      self.Notify()
+      print mf.available
+      print mf.move
       print mv
     else:
       print 'illeagal input'
@@ -50,11 +65,12 @@ class Player(bglib.gui.viewer.Viewer):
   def OnRegionLeftClick(self, evt):
     region = evt.GetRegion()
     board = self.model
-    mf = bglib.model.MoveFactory(self.model)
+    mf = self.mf
 
     points = ['%i'%i for i in range(1, 25)]
 
     print 'Board::OnRegionLeftClick:', region
+    print mf.available
     if region.name == 'your field':
       if board.is_leagal_to_double():
         print 'double!'
@@ -63,7 +79,9 @@ class Player(bglib.gui.viewer.Viewer):
     elif region.name in points or region.name == 'your bar':
       print 'moving from ', region.name
       src = bglib.model.position_pton(region.name, board.on_action)
-      print mf.guess_your_single_pm_from_source(src)
+      pm = mf.guess_your_single_pm_from_source(src, board.position, mf.available)
+      print pm
+      self.model.make(mv)
     else:
       pass
 
@@ -71,7 +89,7 @@ class Player(bglib.gui.viewer.Viewer):
     region = evt.GetRegion()
     board = self.model
     print 'Board::OnRegionRightClick:', region
-    mf = bglib.model.MoveFactory(self.model)
+    mf = self.mf
     dest = bglib.model.position_pton(region.name, board.on_action)
     print mf.guess_your_making_point(dest)
       
