@@ -51,7 +51,7 @@ class AvailableToPlay(object):
         return True
     return False
   def get_max(self):
-    for i in range(1, 7):
+    for i in range(6, 0, -1):
       if i in self:
         return i
     return None

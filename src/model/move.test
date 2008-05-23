@@ -12,6 +12,15 @@
 >>> a2
 <AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 0), (5, 1), (6, 1)]>
 
+>>> a2.get_max()
+6
+
+>>> a2.consume(6)
+>>> a2
+<AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 0), (5, 1), (6, 0)]>
+>>> a2.get_max()
+5
+
 >>> pm = move.PartialMove(6, 12, 6, True)
 >>> pm
 <PartialMove: 13/7*>
