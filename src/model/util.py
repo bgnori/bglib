@@ -37,6 +37,15 @@ def position_ntop(n, on_action):
   else:
     assert False
 
+def move_ntop(n):
+  if n < 0:
+    return 'off'
+  elif 0 <= n and n < 24:
+    return str(n+1)
+  elif n == 24:
+    return 'bar'
+  else:
+    assert False
 
 if __name__ == '__main__':
   import doctest

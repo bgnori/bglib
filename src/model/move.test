@@ -1,6 +1,4 @@
 
-
-
 >>> import move
 >>> m = move.Move()
 >>> m
@@ -13,4 +11,38 @@
 >>> a = move.AvailableToPlay((5, 6))
 >>> a
 <AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 0), (5, 1), (6, 1)]>
+
+
+>>> pm = move.PartialMove(6, 12, 6, True)
+>>> pm
+13/7*
+
+>>> pm.is_hitting
+True
+
+>>> pm = move.PartialMove(1, 24, 23, False)
+>>> pm
+bar/24
+
+>>> pm = move.PartialMove(4, 3, -1, False)
+>>> pm
+4/off
+
+>>> pm.is_undo()
+False
+
+>>> pm = move.PartialMove(4, 3, 3, False)
+>>> pm.is_dance()
+True
+
+>>> pm = move.PartialMove(4, -1, 3, False)
+>>> pm
+off/4
+
+>>> pm.is_undo()
+True
+
+>>> pm2 = move.PartialMove(4, 3, -1, False)
+>>> pm2.are_invertible_element(pm)
+True
 

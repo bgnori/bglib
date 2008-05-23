@@ -5,6 +5,8 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
+import constants
+import util
 
 class PartialMove(object):
   def __init__(self, die, src, dest, is_hitting):
@@ -13,7 +15,7 @@ class PartialMove(object):
     self.dest = dest
     self.is_hitting = is_hitting
   def __repr__(self):
-    s = "%s/%s"%(position_ntop(self.src), position_ntop(self.dest))
+    s = "%s/%s"%(util.move_ntop(self.src), util.move_ntop(self.dest))
     if self.is_hitting:
       return s + '*'
     return s
@@ -21,9 +23,6 @@ class PartialMove(object):
     return self.src == self.dest
   def is_undo(self):
     return self.dest > self.src
-  def apply_to(self, position):
-    position[you] #ugh!
-    return position
   def are_invertible_element(self, pm):
     assert(isinstance(pm, PartialMove))
     return ( self.die == pm.die 
