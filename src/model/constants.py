@@ -9,6 +9,8 @@
 you = 0
 him = 1
 center = 3 # in gnubg 11
+player_string = ('you', 'him')
+owner_string = ('your', 'his')
 
 #game state
 not_started = 0

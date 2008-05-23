@@ -1,0 +1,16 @@
+
+
+
+>>> import move
+>>> m = move.Move()
+>>> m
+<Move: []>
+
+>>> a = move.AvailableToPlay((1, 1))
+>>> a
+<AvailableToPlay: [(1, 4), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0)]>
+
+>>> a = move.AvailableToPlay((5, 6))
+>>> a
+<AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 0), (5, 1), (6, 1)]>
+

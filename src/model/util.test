@@ -1,0 +1,54 @@
+>>> import constants
+>>> import util
+
+
+>>> util.position_pton('1', constants.you)
+0
+>>> util.position_ntop(0, constants.you)
+'1'
+
+
+>>> util.position_pton('24', constants.you)
+23
+
+>>> util.position_ntop(23, constants.you)
+'24'
+
+
+>>> util.position_pton('your home', constants.you)
+-1
+
+>>> util.position_ntop(-1, constants.you)
+'your home'
+
+>>> util.position_pton('your bar', constants.you)
+24
+
+>>> util.position_ntop(24, constants.you)
+'your bar'
+
+>>> util.position_pton('1', constants.him)
+23
+
+>>> util.position_ntop(23, constants.him)
+'1'
+
+>>> util.position_pton('24', constants.him)
+0
+
+>>> util.position_ntop(0, constants.him)
+'24'
+
+>>> util.position_pton('his home', constants.him)
+-1
+
+>>> util.position_ntop(-1, constants.him)
+'his home'
+
+>>> util.position_pton('his bar', constants.him)
+24
+
+>>> util.position_ntop(24, constants.him)
+'his bar'
+
+

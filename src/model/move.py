@@ -40,7 +40,7 @@ class Move(object):
   def __init__(self):
     self._pms = list()
   def __repr__(self):
-    return "<Move:%s>"%str(self._pms)
+    return "<Move: %s>"%str(self._pms)
   def append(self, pm):
     for p in reversed(self._pms):
       if p.are_invertible_element(pm):
@@ -91,8 +91,9 @@ class AvailableToPlay(object):
       if i in self:
         return i
     return None
-  def __str__(self):
-    return '<AvailableToPlay: ' + str([n for n in self.items()]) + '>'
+  def __repr__(self):
+    return '<AvailableToPlay: ' + str(self.items()) + '>'
+  __str__ = __repr__
 
 
 class MoveFactory(object):
@@ -357,4 +358,9 @@ class PlayInputHelperMixin(object):
 
   def who_to_play(self):
     pass
+
+
+if __name__ == '__main__':
+  import doctest
+  doctest.testfile('move.test')
 
