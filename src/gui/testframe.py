@@ -8,13 +8,13 @@
 import sys
 import wx
 
-import bglib.model
+import bglib.model.board
 import bglib.encoding.gnubg
 
 class InteractiveTester(wx.Frame):
   def __init__(self, parent):
     wx.Frame.__init__(self, parent)
-    self.model = bglib.model.board()
+    self.model = bglib.model.board.board()
     self.targets = list()
     self.tests = list()
     self.nth = 0
@@ -43,7 +43,7 @@ class InteractiveTester(wx.Frame):
 
   def sync(self):
     test = self.tests[self.nth]
-    model = bglib.model.board()
+    model = bglib.model.board.board()
     bglib.encoding.gnubg.decode(model, test[0], test[1])
     self.info.SetValue("pid=%s,  mid=%s"%(test[0], test[1]))
 

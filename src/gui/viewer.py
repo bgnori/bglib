@@ -176,7 +176,7 @@ class Viewer(wx.Panel):
     self.Notify()
 
   def SetModel(self, model):
-    assert isinstance(model, bglib.model.board)
+    assert isinstance(model, bglib.model.board.board)
     self.model = model 
     self.Notify()
   
