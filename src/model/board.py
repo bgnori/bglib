@@ -50,7 +50,7 @@ class board(object):
       to_hit, to_move = self.position
     return to_move[n]
 
-  def is_ok_to_bearoff(self, n, die):
+  def is_ok_to_bearoff_from(self, n, die):
     if n < die:
       for i in range(n + 1, constants.bar + 1):
         if self.has_chequer_to_move(i):
@@ -65,12 +65,27 @@ class board(object):
       assert die > n
       assert False
 
+  def find_src_of_bearoff_with(self, die):
+    for i in range(6, constants.bar + 1): # check all chequers are beared in 
+      if b.has_chequer_to_move(i):
+        return None
+    if b.has_chequer_to_move(die - 1):
+      return die - 1
+    for i in range(5, die - 1):
+      if self.has_chequer_to_move(i):
+        return None
+    for i in range(die):
+      if self.has_chequer_to_move(i):
+        return i
+    return None# no chequer on board!
+
+
   def is_open_to_land(self, n):
     if self.on_action == constants.you:
       to_move, to_hit = self.position
     elif self.on_action == constants.him:
       to_hit, to_move = self.position
-    return to_hit[n] < 2
+    return to_hit[23-n] < 2
 
   def is_hitting_to_land(self, n):
     if self.on_action == constants.you:

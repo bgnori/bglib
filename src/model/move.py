@@ -103,8 +103,6 @@ class Move(object):
         yield pm
 
 
-
-
 class MoveFactory(object):
   def __init__(self, b):
     #if not isinstance(b, board):
@@ -126,13 +124,13 @@ class MoveFactory(object):
     - not acceptable: None
     '''
     assert isinstance(src, int)
-    if b is None:
-      b = board.board(src=self.board)
-    #assert isinstance(b, board.board)
 
     if available is None:
       available = AvailableToPlay(rolled=None, copy_src=self.available)
     assert isinstance(available, AvailableToPlay)
+    if b is None:
+      b = board.board(src=self.board)
+    #assert isinstance(b, board.board)
 
     die = available.get_max()
     if not die:
@@ -156,56 +154,43 @@ class MoveFactory(object):
     else:
       return None
 
-  def guess_your_single_pm_from_dest(self, dest, position=None, available=None):
+  def guess_your_single_pm_from_dest(self, dest, b=None, available=None):
     '''
     returns
     - acceptable: partial move
     - not acceptable: None
     '''
+    assert isinstance(dest, int)
+
     if available is None:
-      available = AvailableToPlay(self.board.rolled)
-    if position is None:
-      position = self.board.position
+      available = AvailableToPlay(rolled=None, copy_src=self.available)
+    assert isinstance(available, AvailableToPlay)
+    if b is None:
+      b = board.board(src=self.board)
 
     die = available.get_max()
     if not die:
       return None
 
     if dest  == -1: 
-      for i in range(6, 25): # check all chequers are beared in 
-        if position[you][i] != 0:
-          return None 
-      src = dest + die
-      if position[you][src] > 0:
+      src = b.find_src_of_bearoff_with(die)
+      if src is not None: # src== 0 is valid,as ace point
         return PartialMove(die, src, dest, -1, False)
       else:
-        # no chequer to bearoff behind
-        for i in range(src, 6):
-          if position[you][i] > 0:
-            available.consume(die)
-            return self.guess_your_single_pm_from_dest(dest, position, available)
-        assert(position[you][src] == 0)
-        for i in range(src, -1, -1):
-          if position[you][i] > 0:
-            return PartialMove(die, i, dest, -1, False)
-        # all chequer are beared off
-        assert(reduce(lambda x,y : x and y == 0, position[you], True))
-        return None 
-
-    elif dest in range(0, 24):
-      if position[him][23 - dest] > 1: # is blocked?
-        return None #can't go there!
-      else:
-        src = dest + die
-        if position[you][src] > 0:
-          # there is source chequer
-          return PartialMove(die, src, dest, position[him][23 - dest] == 1) # some one is there, hit it
+        available.consume(die)
+        return self.guess_your_single_pm_from_dest(dest, b, available)
+    elif dest in constants.points:
+      if b.is_open_to_land(dest):
+        if b.has_chequer_to_move(dest + die):
+          return PartialMove(die, dest+die, dest, b.is_hitting_to_land(dest))
         else:
           # no source chequer, try another die.
           available.consume(die)
-          return self.guess_your_single_pm_from_dest(self, dest, position, available)
+          return self.guess_your_single_pm_from_dest(dest, b, available)
+      else:
+        return None #can't go there!
     else:
-      return None
+      assert False
 
   def guess_your_multiple_partial_moves(self, src, dest, position=None, available=None, pms=None):
     '''
