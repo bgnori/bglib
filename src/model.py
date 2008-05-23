@@ -89,6 +89,30 @@ class board(object):
       raise AttributeError
     self._data[name]=value
 
+  def make_partial_move(self, pm):
+    if self.on_action == you:
+      to_move, to_hit = self.position
+    elif self.on_action == him:
+      to_hit, to_move = self.position
+    else:
+      assert False
+    assert not pm.is_undo()
+    to_move = list(to_move)
+    to_hit = list(to_hit)
+    to_move[pm.src] -=1
+    to_move[pm.dest] +=1
+    if pm.is_hitting:
+      to_hit[23 - pm.dest] -=1
+      to_hit[25] += 1
+    if self.on_action == you:
+      self.position = (tuple(to_move), tuple(to_hit))
+    elif self.on_action == him:
+      self.position = (tuple(to_hit), tuple(to_move))
+    else:
+      assert False
+  def make(self, mv):
+    for pm in mv._pms:
+      self.make_partial_move(pm)
 
 
 class PartialMove(object):
@@ -119,7 +143,7 @@ class PartialMove(object):
              and
              self.is_hitting == pm.is_hitting
            )
-  
+
 
 class Move(object):
   def __init__(self):
@@ -164,6 +188,8 @@ class AvailableToPlay(object):
       self[die] -= 1
     else:
       raise
+  def items(self):
+    return self._imp.items()
   def is_doubles(self):
     for value in self._imp:
       if value > 1:
@@ -174,33 +200,29 @@ class AvailableToPlay(object):
       if i in self:
         return i
     return None
+  def __str__(self):
+    return '<AvailableToPlay: ' + str([n for n in self.items()]) + '>'
 
 
 class MoveFactory(object):
   def __init__(self, board):
-    self.begin(board)
-
-  def begin(self, board):
     self.board = board
     self.move = Move()
-
-  def end(self):
-    return self.move
+    self.available = AvailableToPlay(self.board.rolled)
 
   def append(self, pm):
     assert(isinstance(pm, PartialMove))
     self.move.append(pm)
     
-  def guess_your_single_pm_from_source(self, src, position=None, available=None):
+  def guess_your_single_pm_from_source(self, src, position, available):
     '''
     returns
     - acceptable: partial move
     - not acceptable: None
     '''
-    if available is None:
-      available = AvailableToPlay(self.board.rolled)
-    if position is None:
-      position = self.board.position
+    if not isinstance(position, tuple):
+      raise TypeError('expected tuple but got %s'%str(type(position)))
+    assert isinstance(available, AvailableToPlay)
 
     die = available.get_max()
     if not die:
@@ -224,7 +246,7 @@ class MoveFactory(object):
       if position[him][23 - dest] > 1: # is blocked?
         # then try another die.
         available.consume(die)
-        return self.guess_your_single_pm_from_source(src, position, available)
+        return self.guess_your_single_pm_from_source(src, position=position, available=available)
       else:
         # some one is there, hit it
         return PartialMove(die, src, dest, position[him][23 - dest] == 1)
@@ -295,8 +317,12 @@ class MoveFactory(object):
     if pms is None:
       pms = []
 
+    if not isinstance(position, tuple):
+      raise TypeError('expected tuple but got %s'%str(type(position)))
+    assert isinstance(available, AvailableToPlay)
+
     assert(src > dest)
-    pm = self.guess_your_single_pm_from_source(src, position, available)
+    pm = self.guess_your_single_pm_from_source(src, position=position, available=available)
     if pm is None:
       return pm
     print pm
