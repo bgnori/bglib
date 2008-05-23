@@ -6,17 +6,19 @@
 #
 
 
+import constants
+
 class board(object):
   defaults = dict(
-                  position=initial_position,
+                  position=constants.initial_position,
                   cube_in_logarithm=0,
-                  cube_owner=center,
-                  on_action=you,
+                  cube_owner=constants.center,
+                  on_action=constants.you,
                   crawford=False,
-                  game_state=not_started,
-                  on_inner_action=you,
+                  game_state=constants.not_started,
+                  on_inner_action=constants.you,
                   doubled=False,
-                  resign_offer=resign_none,
+                  resign_offer=constants.resign_none,
                   rolled=(0, 0),
                   match_length=0,
                   score=(0, 0),
@@ -42,9 +44,9 @@ class board(object):
     self._data[name]=value
 
   def make_partial_move(self, pm):
-    if self.on_action == you:
+    if self.on_action == constants.you:
       to_move, to_hit = self.position
-    elif self.on_action == him:
+    elif self.on_action == constants.him:
       to_hit, to_move = self.position
     else:
       assert False
@@ -56,9 +58,9 @@ class board(object):
     if pm.is_hitting:
       to_hit[23 - pm.dest] -=1
       to_hit[25] += 1
-    if self.on_action == you:
+    if self.on_action == constants.you:
       self.position = (tuple(to_move), tuple(to_hit))
-    elif self.on_action == him:
+    elif self.on_action == constants.him:
       self.position = (tuple(to_hit), tuple(to_move))
     else:
       assert False
@@ -70,6 +72,4 @@ class board(object):
 if __name__ == '__main__':
   import doctest
   doctest.testfile('board.test')
-
-
 

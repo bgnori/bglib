@@ -1,14 +1,16 @@
 
->>> import model
->>> b = model.board()
+>>> import board
+>>> b = board.board()
 >>> b.position
 ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
->>> b.cube_value
+>>> b.cube_in_logarithm
 0
 
->>> b.cube_value = 1024
->>> b.cube_value
-1024
+>>> b.cube_in_logarithm = 3
+>>> b.cube_in_logarithm
+3
 
+>>> b.score
+(0, 0)
 
