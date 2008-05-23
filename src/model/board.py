@@ -7,6 +7,7 @@
 
 
 import constants
+import util
 
 class board(object):
   defaults = dict(
@@ -85,14 +86,14 @@ class board(object):
       to_move, to_hit = self.position
     elif self.on_action == constants.him:
       to_hit, to_move = self.position
-    return to_hit[23-n] < 2
+    return to_hit[util.flip_point(n)] < 2
 
   def is_hitting_to_land(self, n):
     if self.on_action == constants.you:
       to_move, to_hit = self.position
     elif self.on_action == constants.him:
       to_hit, to_move = self.position
-    return to_hit[n] == 1
+    return to_hit[util.flip_point(n)] == 1
 
   def make_partial_move(self, pm):
     if self.on_action == constants.you:
@@ -107,14 +108,15 @@ class board(object):
     to_move[pm.src] -=1
     to_move[pm.dest] +=1
     if pm.is_hitting:
-      to_hit[23 - pm.dest] -=1
-      to_hit[25] += 1
+      to_hit[util.flip_point(pm.dest)] -=1
+      to_hit[constants.bar] += 1
     if self.on_action == constants.you:
       self.position = (tuple(to_move), tuple(to_hit))
     elif self.on_action == constants.him:
       self.position = (tuple(to_hit), tuple(to_move))
     else:
       assert False
+
   def make(self, mv):
     for pm in mv._pms:
       self.make_partial_move(pm)

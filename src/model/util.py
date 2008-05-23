@@ -8,6 +8,9 @@
 
 import constants
 
+def flip_point(n):
+  return 23 - n
+
 def position_pton(p, on_action):
   if p == 'your home' or p == 'his home':
     return -1

@@ -97,6 +97,12 @@ class Move(object):
         self._pms.remove(p)
         return
     self._pms.append(pm)
+
+  def add(self, mv):
+    assert isinstance(mv, Move)
+    for pm in mv._pms:
+      self.append(pm)
+
   def find(self, dest):
     for pm in reversed(self._pms):
       if pm.dest == dest:
@@ -125,15 +131,15 @@ class MoveFactory(object):
     '''
     assert isinstance(src, int)
 
-    if available is None:
-      available = AvailableToPlay(rolled=None, copy_src=self.available)
-    assert isinstance(available, AvailableToPlay)
     if b is None:
       b = board.board(src=self.board)
     #assert isinstance(b, board.board)
+    if available is None:
+      available = AvailableToPlay(rolled=None, copy_src=self.available)
+    assert isinstance(available, AvailableToPlay)
 
     die = available.get_max()
-    if not die:
+    if die is None:
       return None
     if not b.has_chequer_to_move(src):
       return None
@@ -149,6 +155,7 @@ class MoveFactory(object):
         return PartialMove(die, src, dest, b.is_hitting_to_land(dest))
       else:
         # then try another die.
+        available = AvailableToPlay(rolled=None, copy_src=available)
         available.consume(die)
         return self.guess_your_single_pm_from_source(src, b, available)
     else:
@@ -162,11 +169,12 @@ class MoveFactory(object):
     '''
     assert isinstance(dest, int)
 
+    if b is None:
+      b = board.board(src=self.board)
+    #assert isinstance(b, board.board)
     if available is None:
       available = AvailableToPlay(rolled=None, copy_src=self.available)
     assert isinstance(available, AvailableToPlay)
-    if b is None:
-      b = board.board(src=self.board)
 
     die = available.get_max()
     if not die:
@@ -185,6 +193,7 @@ class MoveFactory(object):
           return PartialMove(die, dest+die, dest, b.is_hitting_to_land(dest))
         else:
           # no source chequer, try another die.
+          available = AvailableToPlay(rolled=None, copy_src=available)
           available.consume(die)
           return self.guess_your_single_pm_from_dest(dest, b, available)
       else:
@@ -192,40 +201,47 @@ class MoveFactory(object):
     else:
       assert False
 
-  def guess_your_multiple_partial_moves(self, src, dest, position=None, available=None, pms=None):
+  def guess_your_multiple_pms(self, src, dest, b=None, available=None, mv=None):
     '''
     returns
     - accepted: list of partial move
     - not acceptable: None
     '''
+
+    if b is None:
+      b = board.board(src=self.board)
     if available is None:
-      available = AvailableToPlay(self.board.rolled)
-    if position is None:
-      position = self.board.position
-    if pms is None:
-      pms = []
+      available = AvailableToPlay(rolled=None, copy_src=self.available)
+    if mv is None:
+      mv = Move()
 
-    if not isinstance(position, tuple):
-      raise TypeError('expected tuple but got %s'%str(type(position)))
-    assert isinstance(available, AvailableToPlay)
-
+    assert isinstance(src, int)
+    assert isinstance(dest, int)
     assert(src > dest)
-    pm = self.guess_your_single_pm_from_source(src, position=position, available=available)
-    if pm is None:
-      return pm
-    print pm
+    #if not isinstance(b, board):
+    #  raise TypeError('expected bglib.model.board.board but got %s'%type(b))
+    assert isinstance(available, AvailableToPlay)
+    assert isinstance(mv, Move)
 
-    if pm.dest == dest:
-      pms.append(pm)
-      return pms
-    elif pm.dest > dest:
-      available.consume(pm.die)
-      pms.append(pm)
-      return self.guess_your_multiple_partial_moves(pm.dest, dest, 
-                    pm.apply_to(position), available, pms)
-    else:
-      assert(pm,dest < dest)
+    pm = self.guess_your_single_pm_from_source(src, b, available)
+    if pm is None:
       return None
+
+    assert pm.src == src
+    if pm.dest == dest:
+      mv.append(pm)
+      return mv
+    elif pm.dest > dest:
+      # need to go further
+      mv.append(pm)
+      available.consume(pm.die)
+      b.make_partial_move(pm)
+      return self.guess_your_multiple_pms(pm.dest, dest, b, available, mv)
+    else:
+      # over run
+      assert pm,dest < dest
+      return None
+    assert False
 
   def guess_your_multiple_partial_undoes(self, src, dest, position=None, pms=None):
     assert(src < dest)
