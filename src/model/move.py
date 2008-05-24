@@ -43,6 +43,10 @@ class AvailableToPlay(object):
       self[die] -= 1
     else:
       raise
+  def add(self, die):
+    assert(die in [1, 2, 3, 4, 5, 6])
+    self._imp[die] += 1
+
   def items(self):
     return self._imp.items()
   def is_doubles(self):
@@ -87,8 +91,13 @@ class PartialMove(object):
 
 
 class Move(object):
-  def __init__(self):
-    self._pms = list()
+  def __init__(self, src=None):
+    if src is None:
+      self._pms = list()
+    else:
+      assert isinstance(src, Move)
+      self._pms = list(src._pms)
+
   def __repr__(self):
     return "<Move: %s>"%str(self._pms)
   def append(self, pm):
@@ -120,8 +129,15 @@ class MoveFactory(object):
   def append(self, pm):
     assert(isinstance(pm, PartialMove))
     self.move.append(pm)
-    self.available.consume(pm.die)
+    if pm.is_undo():
+      self.available.add(pm.die)
+    else:
+      self.available.consume(pm.die)
     self.board.make_partial_move(pm)
+
+  def add(self, mv):
+    for pm in mv._pms:
+      self.append(pm)
     
   def guess_your_single_pm_from_source(self, src, b=None, available=None):
     '''
@@ -243,24 +259,29 @@ class MoveFactory(object):
       return None
     assert False
 
-  def guess_your_multiple_partial_undoes(self, src, dest, position=None, pms=None):
+  def guess_your_multiple_partial_undoes(self, src, dest, b=None, available=None, mv=None):
+    if b is None:
+      b = board.board(src=self.board)
+    if available is None:
+      available = AvailableToPlay(rolled=None, copy_src=self.available)
+    if mv is None:
+      mv = Move()
+
+    assert isinstance(src, int)
+    assert isinstance(dest, int)
     assert(src < dest)
-    if position is None:
-      position = self.board.position
-    if pms is None:
-      pms = []
+
     for pm in self.move.find(src):
       inverse = PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting)
-      if inverse is None:
-        return None
-      pms.append(inverse)
-      if pm.src == dest:
-        return pms
-      elif pm.src < dest:
-        pms.append(pm)
-        return self.guess_your_multiple_partial_undoes(self, pm.src, dest, inverse.apply_to(position), pms=pms)
+      mv.append(inverse)
+      if inverse.dest == dest:
+        return mv
+      elif inverse.dest < dest:
+        b.make_partial_move(inverse)
+        available.add(inverse.die)
+        return self.guess_your_multiple_partial_undoes(inverse.dest, dest, b, available, mv)
       else:
-        assert(pm.src > dest)
+        assert(inverse.dest > dest)
         return None
     return None
 

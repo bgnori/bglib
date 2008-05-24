@@ -102,14 +102,17 @@ class board(object):
       to_hit, to_move = self.position
     else:
       assert False
-    assert not pm.is_undo()
     to_move = list(to_move)
     to_hit = list(to_hit)
     to_move[pm.src] -=1
     to_move[pm.dest] +=1
     if pm.is_hitting:
-      to_hit[util.flip_point(pm.dest)] -=1
-      to_hit[constants.bar] += 1
+      if pm.is_undo():
+        to_hit[util.flip_point(pm.src)] +=1
+        to_hit[constants.bar] -= 1
+      else:
+        to_hit[util.flip_point(pm.dest)] -=1
+        to_hit[constants.bar] += 1
     if self.on_action == constants.you:
       self.position = (tuple(to_move), tuple(to_hit))
     elif self.on_action == constants.him:
