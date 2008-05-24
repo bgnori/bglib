@@ -109,8 +109,6 @@ True
 
 >>> b = bglib.model.board.board(position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
 >>> b.rolled = (4, 1)
->>> b.position
-((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
 >>> mf = move.MoveFactory(b)
 >>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('24'))
@@ -127,7 +125,6 @@ True
 
 >>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('24'))
 >>> found
-
 
 
 >>> b = bglib.model.board.board()
