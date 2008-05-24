@@ -67,12 +67,12 @@ class board(object):
       assert False
 
   def find_src_of_bearoff_with(self, die):
-    for i in range(6, constants.bar + 1): # check all chequers are beared in 
-      if b.has_chequer_to_move(i):
+    for i in constants.none_bearoff_points:
+      if self.has_chequer_to_move(i):
         return None
-    if b.has_chequer_to_move(die - 1):
+    if self.has_chequer_to_move(die - 1):
       return die - 1
-    for i in range(5, die - 1):
+    for i in range(die - 1, 5):
       if self.has_chequer_to_move(i):
         return None
     for i in range(die):

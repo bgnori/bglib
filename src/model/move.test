@@ -79,6 +79,7 @@ True
 >>> mf = move.MoveFactory(b)
 >>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('bar'))
 >>> found
+<MoveFactory.Error: No chequer to move>
 
 >>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('6'))
 >>> found
@@ -105,6 +106,32 @@ True
 <AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0)]>
 >>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('6')) 
 >>> found
+<MoveFactory.Error: No die is available>
+
+>>> found = None
+>>> b = bglib.model.board.board(position=((0, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)), rolled = (6, 1))
+>>> mf = move.MoveFactory(b)
+>>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('6')) 
+>>> found
+<PartialMove: 6/off>
+
+>>> found = None
+>>> b = bglib.model.board.board(position=((0, 5, 4, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
+>>> b.rolled = (6, 1)
+>>> mf = move.MoveFactory(b)
+>>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('5')) 
+
+>>> found
+<PartialMove: 5/off>
+
+
+>>> found = None
+>>> b = bglib.model.board.board(position=((0, 5, 4, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
+>>> b.rolled = (4, 1)
+>>> mf = move.MoveFactory(b)
+>>> found = mf.guess_your_single_pm_from_dest(bglib.model.util.move_pton('off')) 
+>>> found
+<MoveFactory.Error: No die is available>
 
 
 >>> b = bglib.model.board.board(position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
@@ -125,6 +152,7 @@ True
 
 >>> found = mf.guess_your_single_pm_from_source(bglib.model.util.move_pton('24'))
 >>> found
+<MoveFactory.Error: No die is available>
 
 
 >>> b = bglib.model.board.board()
@@ -132,6 +160,7 @@ True
 >>> mf = move.MoveFactory(b)
 >>> found = mf.guess_your_single_pm_from_dest(bglib.model.util.move_pton('6'))
 >>> found
+<MoveFactory.Error: No die is available>
 
 >>> found = mf.guess_your_single_pm_from_dest(bglib.model.util.move_pton('5'))
 >>> found
@@ -158,7 +187,7 @@ True
 <AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0)]>
 >>> found = mf.guess_your_single_pm_from_dest(bglib.model.util.move_pton('5'))
 >>> found
-
+<MoveFactory.Error: No die is available>
 
 >>> b = bglib.model.board.board(position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
 >>> b.rolled = (4, 1)
@@ -169,7 +198,7 @@ True
 >>> found = mf.guess_your_single_pm_from_dest(bglib.model.util.move_pton('20'))
 
 >>> found
-
+<MoveFactory.Error: Can't land there>
 
 >>> b = bglib.model.board.board(position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
 >>> b.rolled = (6, 4)
@@ -177,6 +206,7 @@ True
 >>> mf = move.MoveFactory(b)
 >>> found = mf.guess_your_multiple_pms(bglib.model.util.move_pton('24'), bglib.model.util.move_pton('15'))
 >>> found
+<MoveFactory.Error: Overrun, bad (src, dest)=(17, 14)>
 
 >>> found = mf.guess_your_multiple_pms(bglib.model.util.move_pton('24'), bglib.model.util.move_pton('14'))
 >>> found
@@ -234,6 +264,9 @@ True
 >>> found = mf.guess_your_multiple_pms(bglib.model.util.move_pton('13'), bglib.model.util.move_pton('1'))
 >>> found
 <Move: [<PartialMove: 13/9>, <PartialMove: 9/5>, <PartialMove: 5/1*>]>
+
+>>> mf.move
+<Move: [<PartialMove: 13/9>]>
 
 >>> mf.add(found)
 >>> mf.move

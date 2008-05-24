@@ -63,6 +63,7 @@ class AvailableToPlay(object):
     return '<AvailableToPlay: ' + str(self.items()) + '>'
   __str__ = __repr__
 
+
 class PartialMove(object):
   def __init__(self, die, src, dest, is_hitting):
     self.die = die
@@ -101,6 +102,7 @@ class Move(object):
   def __repr__(self):
     return "<Move: %s>"%str(self._pms)
   def append(self, pm):
+    assert isinstance(pm, PartialMove)
     for p in reversed(self._pms):
       if p.are_invertible_element(pm):
         self._pms.remove(p)
@@ -117,14 +119,36 @@ class Move(object):
       if pm.dest == dest:
         yield pm
 
+  def __iter__(self):
+    for pm in self._pms:
+      yield pm
+
+  def __len__(self):
+    return len(self._pms)
 
 class MoveFactory(object):
-  def __init__(self, b):
+  class Error(object):
+    def __init__(self, s):
+      self.s = s
+    def __nonzero__(self):
+      return False
+    def __repr__(self):
+      return "<MoveFactory.Error: %s>"%self.s
+    __str__ = __repr__
+
+  def __init__(self, b, move=None, available=None):
     #if not isinstance(b, board):
     #  raise TypeError('expected bglib.model.board.board but got %s'%type(b))
     self.board = b
-    self.move = Move()
-    self.available = AvailableToPlay(self.board.rolled)
+    if move:
+      assert isinstance(move, Move)
+      self.move = Move(src=move)
+    else:
+      self.move = Move()
+    if available:
+      self.available = AvailableToPlay(copy_src=available)
+    else:
+      self.available = AvailableToPlay(self.board.rolled)
 
   def append(self, pm):
     assert(isinstance(pm, PartialMove))
@@ -136,7 +160,7 @@ class MoveFactory(object):
     self.board.make_partial_move(pm)
 
   def add(self, mv):
-    for pm in mv._pms:
+    for pm in mv:
       self.append(pm)
     
   def guess_your_single_pm_from_source(self, src, b=None, available=None):
@@ -156,14 +180,14 @@ class MoveFactory(object):
 
     die = available.get_max()
     if die is None:
-      return None
+      return self.Error('No die is available')
     if not b.has_chequer_to_move(src):
-      return None
+      return self.Error('No chequer to move')
 
     dest = src - die
-    if dest <= constants.off:
+    if dest < 0: #= constants.off:
       if not b.is_ok_to_bearoff_from(src, die):
-        return None # illeagal, no valid chequer movement corresponds.
+        return self.Error('Not allowed to bear off from %i'%src)
       return PartialMove(die, src, constants.off, False) 
     elif dest in constants.points:
       if b.is_open_to_land(dest):
@@ -175,7 +199,8 @@ class MoveFactory(object):
         available.consume(die)
         return self.guess_your_single_pm_from_source(src, b, available)
     else:
-      return None
+      return self.Error('bad destination: %i'%dest)
+    assert False
 
   def guess_your_single_pm_from_dest(self, dest, b=None, available=None):
     '''
@@ -194,12 +219,12 @@ class MoveFactory(object):
 
     die = available.get_max()
     if not die:
-      return None
+      return self.Error('No die is available')
 
     if dest  == -1: 
       src = b.find_src_of_bearoff_with(die)
       if src is not None: # src== 0 is valid,as ace point
-        return PartialMove(die, src, dest, -1, False)
+        return PartialMove(die, src, dest, False)
       else:
         available.consume(die)
         return self.guess_your_single_pm_from_dest(dest, b, available)
@@ -213,7 +238,7 @@ class MoveFactory(object):
           available.consume(die)
           return self.guess_your_single_pm_from_dest(dest, b, available)
       else:
-        return None #can't go there!
+        return self.Error("Can't land there")
     else:
       assert False
 
@@ -240,8 +265,8 @@ class MoveFactory(object):
     assert isinstance(mv, Move)
 
     pm = self.guess_your_single_pm_from_source(src, b, available)
-    if pm is None:
-      return None
+    if not pm :
+      return pm 
 
     assert pm.src == src
     if pm.dest == dest:
@@ -256,7 +281,7 @@ class MoveFactory(object):
     else:
       # over run
       assert pm,dest < dest
-      return None
+      return self.Error('Overrun, bad (src, dest)=(%i, %i)'%(src, dest))
     assert False
 
   def guess_your_multiple_partial_undoes(self, src, dest, b=None, available=None, mv=None):
@@ -282,8 +307,8 @@ class MoveFactory(object):
         return self.guess_your_multiple_partial_undoes(inverse.dest, dest, b, available, mv)
       else:
         assert(inverse.dest > dest)
-        return None
-    return None
+        return self.Error('Overrun, bad (src, dest)=(%i, %i)'%(src, dest))
+    return self.Error('Overrun, bad (src, dest)=(%i, %i)'%(src, dest))
 
   def guess_your_making_point(self, dest, position=None, available=None, pms=None):
     if available is None:

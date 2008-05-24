@@ -15,6 +15,7 @@ owner_string = ('your', 'his')
 off = -1
 bar = 24
 points = range(0, 24)
+none_bearoff_points =range(6, 25)
 
 #game state
 not_started = 0
@@ -31,4 +32,5 @@ resign_gammon=2
 resign_backgammon=3
 
 initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+
 
