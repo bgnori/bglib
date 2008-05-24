@@ -162,7 +162,7 @@ class MoveFactory(object):
 
     dest = src - die
     if dest <= constants.off:
-      if b.is_ok_to_bearoff_from(src):
+      if not b.is_ok_to_bearoff_from(src, die):
         return None # illeagal, no valid chequer movement corresponds.
       return PartialMove(die, src, constants.off, False) 
     elif dest in constants.points:
