@@ -124,6 +124,59 @@ class board(object):
     for pm in mv._pms:
       self.make_partial_move(pm)
 
+  def is_leagal_to_roll(self):
+    return \
+       self.game_state == bglib.model.on_going and \
+       self.on_action == bglib.model.you and \
+       self.on_inner_action == bglib.model.you and \
+       self.resign_offer == bglib.model.resign_none and \
+       self.doubled == False and \
+       self.rolled == (0, 0) # already rolled nothing.
+
+  def is_leagal_to_move(self):
+    '''
+    verify leagality of the situation.
+    i.e. you cant move on opponent turn, etc.
+    '''
+    return \
+       self.game_state == bglib.model.on_going and \
+       self.on_action == bglib.model.you and \
+       self.on_inner_action == bglib.model.you and \
+       self.resign_offer == bglib.model.resign_none and \
+       self.doubled == False and \
+       self.rolled != (0, 0) # already rolled something.
+
+  def is_leagal_to_pickup_dice(self):
+    pass
+
+  def is_cube_take_or_pass(self):
+    return self.doubled and self.on_inner_action == bglib.model.you
+  
+  def double(self):
+    pass
+
+  def is_leagal_to_redouble(self):
+    return self.is_cube_take_or_pass() and False # is allowed to beaver?
+
+  def redouble(self):
+    pass
+  def take(self):
+    pass
+  def drop(self):
+    pass
+  def is_leagal_to_resign(self):
+    return self.on_action == bglib.model.you
+  def offer_resign(self):
+    pass
+  def accept_resign(self):
+    pass
+  def is_to_accept_resign(self):
+    #  and self.on_inner_action == bglib.model.you
+    return self.resign_offer in (bglib.model.resign_single, 
+                                 bglib.model.resign_gammon,
+                                 bglib.model.resign_backgammon
+                                 ) 
+
 
 if __name__ == '__main__':
   import doctest
