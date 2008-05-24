@@ -8,6 +8,8 @@ import logging
 import wx
 import wx.lib.intctrl
 
+import bglib.model.move
+import bglib.model.util
 import bglib.gui.viewer
 
 class Player(bglib.gui.viewer.Viewer):
@@ -19,52 +21,49 @@ class Player(bglib.gui.viewer.Viewer):
   '''
   def __init__(self, parent, model):
     bglib.gui.viewer.Viewer.__init__(self, parent, model)
-    self.mf = bglib.model.MoveFactory(model)
+    self.mf = bglib.model.move.MoveFactory(model)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
     self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
 
   def GetValue(self):
-    return self.mf.xxx?
+    return self.mf.move
 
   def Notify(self):
     bglib.gui.viewer.Viewer.Notify(self)
-    self.mf = bglib.model.MoveFactory(self.model)
+    self.mf = bglib.model.move.MoveFactory(self.model)
 
+  def MoveInputNotify(self):
+    bglib.gui.viewer.Viewer.Notify(self)
 
   def OnRegionLeftDrag(self, evt):
     down = evt.GetDown()
     up = evt.GetUp()
     board = self.model
+    down = bglib.model.util.position_pton(down.name, board.on_action)
+    up = bglib.model.util.position_pton(up.name, board.on_action)
     print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
-    down = bglib.model.position_pton(down.name, board.on_action)
-    up = bglib.model.position_pton(up.name, board.on_action)
     mf = self.mf
     if down > up:
       print 'forward'
       print mf.available
-      pms = mf.guess_your_multiple_partial_moves(down, up, None, mf.available, mf.move._pms)
+      print mf.move
+      mv = mf.guess_your_multiple_pms(down, up)
     elif down < up:
       print 'backward'
-      pms = mf.guess_your_multiple_partial_undoes(down, up. None, mf.available, mf.move._pms)
+      mv = mf.guess_your_multiple_partial_undoes(down, up)
     else:
       assert(up == donw)
 
-    if pms:
-      for pm in pms:
-        mf.append(pm)
-      mv = mf.end()
-      self.model.make(mv)
-      self.Notify()
-      print mf.available
-      print mf.move
-      print mv
+    if mv:
+      mf.add(mv)
+      self.MoveInputNotify()
     else:
       print 'illeagal input'
 
   def OnRegionLeftClick(self, evt):
     region = evt.GetRegion()
-    board = self.model
+    b= self.model
     mf = self.mf
 
     points = ['%i'%i for i in range(1, 25)]
@@ -72,16 +71,20 @@ class Player(bglib.gui.viewer.Viewer):
     print 'Board::OnRegionLeftClick:', region
     print mf.available
     if region.name == 'your field':
-      if board.is_leagal_to_double():
+      if b.is_leagal_to_double():
         print 'double!'
       else:
         print 'not allowed to double'
     elif region.name in points or region.name == 'your bar':
-      print 'moving from ', region.name
-      src = bglib.model.position_pton(region.name, board.on_action)
-      pm = mf.guess_your_single_pm_from_source(src, board.position, mf.available)
-      print pm
-      self.model.make(mv)
+      src = bglib.model.util.position_pton(region.name, b.on_action)
+      print 'moving from %s(%i)'%(region.name, src)
+      pm = mf.guess_your_single_pm_from_source(src)
+      if pm:
+        print pm
+        mf.append(pm)
+        self.MoveInputNotify()
+      else:
+        print 'illeagal input'
     else:
       pass
 
