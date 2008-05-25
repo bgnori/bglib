@@ -250,6 +250,21 @@ True
 <Move: [<PartialMove: 13/9>, <PartialMove: 9/5>, <PartialMove: 5/1*>]>
 
 
+>>> b = bglib.model.board.board(position=((1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(8, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)), rolled=(4, 2))
+>>> mf = move.MoveFactory(b)
+>>> found = mf.guess_your_multiple_pms(bglib.model.util.move_pton('5'), bglib.model.util.move_pton('3'))
+>>> found
+<Move: [<PartialMove: 5/3>]>
+>>> mf.add(found)
+>>> b.position
+((1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), (8, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+>>> b.has_chequer_to_move(bglib.model.util.move_pton('3'))
+2
+
+>>> found = mf.guess_your_multiple_pms(bglib.model.util.move_pton('3'), bglib.model.util.move_pton('off'))
+>>> found
+<Move: [<PartialMove: 3/off>]>
+
 
 >>> b = bglib.model.board.board(position=((0, 0, 0, 0, 1, 4, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)))
 >>> b.rolled = (4, 4)

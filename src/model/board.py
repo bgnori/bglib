@@ -109,7 +109,8 @@ class board(object):
     to_move = list(to_move)
     to_hit = list(to_hit)
     to_move[pm.src] -=1
-    to_move[pm.dest] +=1
+    if pm.dest > constants.off:
+      to_move[pm.dest] +=1
     if pm.is_hitting:
       if pm.is_undo():
         to_hit[util.flip_point(pm.src)] +=1
