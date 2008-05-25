@@ -315,7 +315,9 @@ class MoveFactory(object):
     else:
       # over run
       assert pm,dest < dest
-      return self.Error('Overrun, bad (src, dest)=(%i, %i)'%(src, dest))
+      available.consume(pm.die)
+      # retry with other die
+      return self.guess_your_multiple_pms(src, dest, b, available, mv)
     assert False
 
   def guess_your_multiple_partial_undoes(self, src, dest, b=None, available=None, mv=None):

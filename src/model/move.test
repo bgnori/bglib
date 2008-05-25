@@ -206,7 +206,7 @@ True
 >>> mf = move.MoveFactory(b)
 >>> found = mf.guess_your_multiple_pms(bglib.model.util.move_pton('24'), bglib.model.util.move_pton('15'))
 >>> found
-<MoveFactory.Error: Overrun, bad (src, dest)=(17, 14)>
+<MoveFactory.Error: No die is available>
 
 >>> found = mf.guess_your_multiple_pms(bglib.model.util.move_pton('24'), bglib.model.util.move_pton('14'))
 >>> found

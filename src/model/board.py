@@ -49,7 +49,11 @@ class board(object):
       to_move, to_hit = self.position
     elif self.on_action == constants.him:
       to_hit, to_move = self.position
-    return to_move[n]
+    if to_move[constants.bar] == 0:
+      return to_move[n]
+    elif n == constants.bar:
+      return to_move[n]
+    return False
 
   def is_ok_to_bearoff_from(self, n, die):
     if n < die:
