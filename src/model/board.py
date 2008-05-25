@@ -140,10 +140,10 @@ class board(object):
 
   def is_leagal_to_roll(self):
     return \
-       self.game_state == bglib.model.on_going and \
-       self.on_action == bglib.model.you and \
-       self.on_inner_action == bglib.model.you and \
-       self.resign_offer == bglib.model.resign_none and \
+       self.game_state == constants.on_going and \
+       self.on_action == constants.you and \
+       self.on_inner_action == constants.you and \
+       self.resign_offer == constants.resign_none and \
        self.doubled == False and \
        self.rolled == (0, 0) # already rolled nothing.
 
@@ -153,16 +153,16 @@ class board(object):
     i.e. you cant move on opponent turn, etc.
     '''
     return \
-       self.game_state == bglib.model.on_going and \
-       self.on_action == bglib.model.you and \
-       self.on_inner_action == bglib.model.you and \
-       self.resign_offer == bglib.model.resign_none and \
+       self.game_state == constants.on_going and \
+       self.on_action == constants.you and \
+       self.on_inner_action == constants.you and \
+       self.resign_offer == constants.resign_none and \
        self.doubled == False and \
        self.rolled != (0, 0) # already rolled something.
 
 
   def is_cube_take_or_pass(self):
-    return self.doubled and self.on_inner_action == bglib.model.you
+    return self.doubled and self.on_inner_action == constants.you
   
   def double(self):
     pass
@@ -195,16 +195,16 @@ class board(object):
   def drop(self):
     pass
   def is_leagal_to_resign(self):
-    return self.on_action == bglib.model.you
+    return self.on_action == constants.you
   def offer_resign(self):
     pass
   def accept_resign(self):
     pass
   def is_to_accept_resign(self):
-    #  and self.on_inner_action == bglib.model.you
-    return self.resign_offer in (bglib.model.resign_single, 
-                                 bglib.model.resign_gammon,
-                                 bglib.model.resign_backgammon
+    #  and self.on_inner_action == constants.you
+    return self.resign_offer in (constants.resign_single, 
+                                 constants.resign_gammon,
+                                 constants.resign_backgammon
                                  ) 
 
 
