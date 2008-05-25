@@ -30,6 +30,9 @@ class LeftDrag(wx.PyCommandEvent):
     return self.down
   def SetDown(self, down):
     self.down = down
+EVT_REGION_LEFT_DRAG_TYPE = wx.NewEventType()
+EVT_REGION_LEFT_DRAG = wx.PyEventBinder(EVT_REGION_LEFT_DRAG_TYPE, 1)
+
 
 class RegionClick(wx.PyCommandEvent):
   def __init__(self, evtType, id):
@@ -42,17 +45,15 @@ class RegionClick(wx.PyCommandEvent):
 
 class LeftClick(RegionClick):
   pass
-class RightClick(RegionClick):
-  pass
-
-EVT_REGION_LEFT_DRAG_TYPE = wx.NewEventType()
-EVT_REGION_LEFT_DRAG = wx.PyEventBinder(EVT_REGION_LEFT_DRAG_TYPE, 1)
-
 EVT_REGION_LEFT_CLICK_TYPE = wx.NewEventType()
 EVT_REGION_LEFT_CLICK = wx.PyEventBinder(EVT_REGION_LEFT_CLICK_TYPE, 1)
 
+
+class RightClick(RegionClick):
+  pass
 EVT_REGION_RIGHT_CLICK_TYPE = wx.NewEventType()
 EVT_REGION_RIGHT_CLICK = wx.PyEventBinder(EVT_REGION_RIGHT_CLICK_TYPE, 1)
+
 
 
 class Viewer(wx.Panel):
