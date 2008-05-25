@@ -124,6 +124,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
       else:
         print 'illeagal input'
     else:
+      print region.name
       pass
 
   def OnRegionRightClick(self, evt):

@@ -39,7 +39,7 @@ class AvailableToPlay(object):
     self._imp[key] = value
   def __len__(self):
     count = 0
-    for v in self._imp.value():
+    for v in self._imp.values():
       count += v
     return count
 
@@ -187,7 +187,7 @@ class MoveFactory(object):
   def is_leagal_to_pickup_dice(self):
     if not self.available:
       return True
-    bar = bglib.model.util.position_pton('bar')
+    bar = util.move_pton('bar')
     if self.board.has_chequer_to_move(bar):
       if not self.guess_your_single_pm_from_source(bar):
         return True #dance
