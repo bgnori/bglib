@@ -15,13 +15,13 @@ import bglib.gui.viewer
 class PlayerStatusBar(wx.StatusBar):
   def __init__(self, player):
     wx.StatusBar.__init__(self, player.GetParent(), -1)
-    self.SetFieldsCount(1)
+    self.SetFieldsCount(2)
     self.player = player
 
-  def SetModel(self, mode):
-    pass
-  def Notify(self):
-    pass
+  def Update(self):
+    mf = self.player.mf
+    self.SetStatusText(str(mf.available), 0)
+    self.SetStatusText(str(mf.move), 1)
 
 
 class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
@@ -51,7 +51,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
   def UpdateStatusBar(self):
     statusbar = self.GetStatusBar()
     if statusbar:
-      statusbar.SetStatusText(str(self.mf.available), 0)
+      statusbar.Update()
 
   def GetValue(self):
     return self.mf.move

@@ -59,7 +59,6 @@ class AvailableToPlay(object):
     for value in self._imp:
       if value > 1:
         return True
-    return False
   def get_max(self):
     for i in range(6, 0, -1):
       if i in self:
@@ -83,10 +82,13 @@ class PartialMove(object):
     self.dest = dest
     self.is_hitting = is_hitting
   def __repr__(self):
+    return "<PartialMove: " + str(self) + ">"
+  def __str__(self):
     s = "%s/%s"%(util.move_ntop(self.src), util.move_ntop(self.dest))
     if self.is_hitting:
       s += '*'
-    return "<PartialMove: " + s + ">"
+    return s
+    
   def is_dance(self):
     return self.src == self.dest
   def is_undo(self):
@@ -113,6 +115,13 @@ class Move(object):
 
   def __repr__(self):
     return "<Move: %s>"%str(self._pms)
+
+  def __str__(self):
+    s = ''
+    for pm in self:
+      s += '%s, '%str(pm)
+    return s
+
   def append(self, pm):
     assert isinstance(pm, PartialMove)
     for p in reversed(self._pms):
