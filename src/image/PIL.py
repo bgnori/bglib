@@ -124,8 +124,23 @@ class Context(bglib.image.context.Context):
     x, y = self.apply_mag(self.style().center.null)
     self.paste_image(image, (x, y))
 
-  def draw_your_home(self, checker_count):pass
-  def draw_his_home(self, checker_count):pass
+  def draw_your_home(self, checker_count):
+    size = self.apply_mag(self.style().size.home)
+    image = self.open_image("your-home.jpg", size)
+    x, y = self.apply_mag(self.style().home.you)
+    self.paste_image(image, (x, y))
+
+  def draw_his_home(self, checker_count):
+    size = self.apply_mag(self.style().size.home)
+    image = self.open_image("his-home.jpg", size)
+    x, y = self.apply_mag(self.style().home.him)
+    self.paste_image(image, (x, y))
+
+  def draw_cubeholder(self):
+    size = self.apply_mag(self.style().size.cubeholder)
+    image = self.open_image("cubeholder.jpg", size)
+    x, y = self.apply_mag(self.style().cubeholder.null)
+    self.paste_image(image, (x, y))
 
   # cube holder
   def draw_your_cube(self, cube_in_logarithm):
@@ -261,12 +276,6 @@ class Context(bglib.image.context.Context):
     x, y = self.apply_mag(self.style().edge.null)
     self.paste_image(image, (x, y))
 
-    size = self.apply_mag(self.style().size.home)
-    image = self.open_image("empty-home.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().home.null)
-    self.paste_image(image, (x, y))
 
     size = self.apply_mag(self.style().size.frame)
     image = self.open_image("frame.jpg",

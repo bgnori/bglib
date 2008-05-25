@@ -125,8 +125,26 @@ class Context(bglib.image.PIL.Context):
     self.window.append(r)
     bglib.image.PIL.Context.draw_center_bar(self)
 
-  def draw_your_home(self, checker_count):pass
-  def draw_his_home(self, checker_count):pass
+  def draw_your_home(self, checker_count):
+    x, y = self.apply_mag(self.style().home.you)
+    w, h = self.apply_mag(self.style().size.home)
+    r = Region(x, y, w, h, str('your home'))
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_your_home(self, checker_count)
+
+  def draw_his_home(self, checker_count):
+    x, y = self.apply_mag(self.style().home.him)
+    w, h = self.apply_mag(self.style().size.home)
+    r = Region(x, y, w, h, str('his home'))
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_his_home(self, checker_count)
+
+  def draw_cubeholder(self):
+    x, y = self.apply_mag(self.style().cubeholder.null)
+    w, h = self.apply_mag(self.style().size.cubeholder)
+    r = Region(x, y, w, h, str('cubeholder'))
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_cubeholder(self)
 
   # cube holder
   def draw_your_cube(self, cube_in_logarithm):

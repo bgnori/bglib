@@ -3,6 +3,8 @@ size point 18 88
 size field 108 46
 size bar 25  88
 size center 25 46
+size cubeholder 25 30
+size home 25  101
 size dice 16 16
 size cube 25 25
 size action 25 25
@@ -58,8 +60,9 @@ cube center 133 105
 table null 0 0
 size edge 25  232
 edge null  0    0
-size home 25  232
-home null  266  0
+cubeholder null 266 101
+home you 266  131
+home him 266  0
 size  frame  241 5
 frame top     25 0
 frame bottom  25 227

@@ -36,6 +36,7 @@ class Renderer(object):
     you, him = board.position
     context.draw_your_home(15 - reduce(lambda x, y: x+y, you))
     context.draw_his_home(15 - reduce(lambda x, y: x+y, him))
+    context.draw_cubeholder()
 
   def draw_you_are_on_roll_cube_action(self, board):
     context = self.context()
