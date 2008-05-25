@@ -167,6 +167,24 @@ class board(object):
   def double(self):
     pass
 
+  def is_leagal_to_double(self):
+    your_score, his_score = self.score
+    if self.game_state != constants.on_going:
+      return False
+    if self.crawford:
+      return False
+    if self.rolled != (0, 0):
+      return False
+    if self.on_action == constants.you:
+      if your_score <= self.match_length - pow(2, self.cube_in_logarithm):
+        return True
+      return False
+    if self.on_action == constants.him:
+      if his_score < self.match_length - pow(2, self.cube_in_logarithm):
+        return True
+      return False
+    assert False
+
   def is_leagal_to_redouble(self):
     return self.is_cube_take_or_pass() and False # is allowed to beaver?
 
