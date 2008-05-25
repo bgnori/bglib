@@ -146,8 +146,6 @@ class board(object):
        self.doubled == False and \
        self.rolled != (0, 0) # already rolled something.
 
-  def is_leagal_to_pickup_dice(self):
-    pass
 
   def is_cube_take_or_pass(self):
     return self.doubled and self.on_inner_action == bglib.model.you

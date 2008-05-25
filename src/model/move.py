@@ -37,6 +37,12 @@ class AvailableToPlay(object):
   def __setitem__(self, key, value):
     assert(key in [1, 2, 3, 4, 5, 6])
     self._imp[key] = value
+  def __len__(self):
+    count = 0
+    for v in self._imp.value():
+      count += v
+    return count
+
   def consume(self, die):
     if die in self:
       assert self[die] > 0
@@ -61,7 +67,13 @@ class AvailableToPlay(object):
     return None
   def __repr__(self):
     return '<AvailableToPlay: ' + str(self.items()) + '>'
-  __str__ = __repr__
+
+  def __str__(self):
+    s = 'Available to play:'
+    for die, count in self.items():
+      for i in range(count):
+        s +='%i, '%die
+    return s
 
 
 class PartialMove(object):
@@ -163,6 +175,19 @@ class MoveFactory(object):
     for pm in mv:
       self.append(pm)
     
+  def is_leagal_to_pickup_dice(self):
+    if not self.available:
+      return True
+    bar = bglib.model.util.position_pton('bar')
+    if self.board.has_chequer_to_move(bar):
+      if not self.guess_your_single_pm_from_source(bar):
+        return True #dance
+    for pt in constants.points:
+      if self.board.has_chequer_to_move(pt):
+        if self.guess_your_single_pm_from_source(pt):
+          return False
+    return True
+
   def guess_your_single_pm_from_source(self, src, b=None, available=None):
     '''
     returns

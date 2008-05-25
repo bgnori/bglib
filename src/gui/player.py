@@ -12,7 +12,19 @@ import bglib.model.move
 import bglib.model.util
 import bglib.gui.viewer
 
-class Player(bglib.gui.viewer.Viewer):
+class PlayerStatusBar(wx.StatusBar):
+  def __init__(self, player):
+    wx.StatusBar.__init__(self, player.GetParent(), -1)
+    self.SetFieldsCount(1)
+    self.player = player
+
+  def SetModel(self, mode):
+    pass
+  def Notify(self):
+    pass
+
+
+class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
   '''
     It does high level works.
     such as:
@@ -20,11 +32,26 @@ class Player(bglib.gui.viewer.Viewer):
     - emitting board change event envoked by user action.
   '''
   def __init__(self, parent, model):
-    bglib.gui.viewer.Viewer.__init__(self, parent, model)
+    self._statusbar = None
     self.mf = bglib.model.move.MoveFactory(model)
+    bglib.gui.viewer.Viewer.__init__(self, parent, model)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
     self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
     self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
+    self.MoveInputNotify()
+
+  def MakeStatusBar(self):
+    statusbar = PlayerStatusBar(self)
+    self._statusbar = statusbar
+    return statusbar
+
+  def GetStatusBar(self):
+    return self._statusbar
+
+  def UpdateStatusBar(self):
+    statusbar = self.GetStatusBar()
+    if statusbar:
+      statusbar.SetStatusText(str(self.mf.available), 0)
 
   def GetValue(self):
     return self.mf.move
@@ -32,13 +59,26 @@ class Player(bglib.gui.viewer.Viewer):
   def Notify(self):
     bglib.gui.viewer.Viewer.Notify(self)
     self.mf = bglib.model.move.MoveFactory(self.model)
+    self.UpdateStatusBar()
 
   def MoveInputNotify(self):
     bglib.gui.viewer.Viewer.Notify(self)
+    self.UpdateStatusBar()
 
   def OnRegionLeftDrag(self, evt):
     down = evt.GetDown()
     up = evt.GetUp()
+    if down.name == 'your field':
+      print 'undefined action'
+      return
+    if up.name == 'your field':
+      if down.name == 'your home' or down.name == 'center':
+        print 'double!'
+        return
+      else:
+        print 'undefined action'
+        return 
+
     board = self.model
     down = bglib.model.util.position_pton(down.name, board.on_action)
     up = bglib.model.util.position_pton(up.name, board.on_action)
@@ -63,13 +103,11 @@ class Player(bglib.gui.viewer.Viewer):
 
   def OnRegionLeftClick(self, evt):
     region = evt.GetRegion()
-    b= self.model
+    b = self.model
     mf = self.mf
 
     points = ['%i'%i for i in range(1, 25)]
 
-    print 'Board::OnRegionLeftClick:', region
-    print mf.available
     if region.name == 'your field':
       if b.is_leagal_to_double():
         print 'double!'
@@ -103,7 +141,8 @@ if __name__ == '__main__':
   app = wx.PySimpleApp()
   f = testframe.InteractiveTester(None)
   p = Player(f, f.get_model())
+  st = p.MakeStatusBar()
+  f.SetStatusBar(st)
   f.start([p])
   app.MainLoop()
-
 
