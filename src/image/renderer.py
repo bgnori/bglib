@@ -27,6 +27,8 @@ class Renderer(object):
   def draw_bar(self, board):
     context = self.context()
     you, him = board.position
+    assert you[24] > -1
+    assert him[24] > -1
     context.draw_your_bar(you[24])
     context.draw_his_bar(him[24])
     context.draw_center_bar()

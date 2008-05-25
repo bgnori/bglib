@@ -90,14 +90,22 @@ class board(object):
       to_move, to_hit = self.position
     elif self.on_action == constants.him:
       to_hit, to_move = self.position
-    return to_hit[util.flip_point(n)] < 2
+    if n in constants.points:
+      return to_hit[util.flip_point(n)] < 2
+    else:
+      assert n == -1
+      return True
 
   def is_hitting_to_land(self, n):
     if self.on_action == constants.you:
       to_move, to_hit = self.position
     elif self.on_action == constants.him:
       to_hit, to_move = self.position
-    return to_hit[util.flip_point(n)] == 1
+    if n in constants.points:
+      return to_hit[util.flip_point(n)] == 1
+    else:
+      assert n == -1
+      return False
 
   def make_partial_move(self, pm):
     if self.on_action == constants.you:
@@ -108,7 +116,8 @@ class board(object):
       assert False
     to_move = list(to_move)
     to_hit = list(to_hit)
-    to_move[pm.src] -=1
+    if pm.src > constants.off:
+      to_move[pm.src] -=1
     if pm.dest > constants.off:
       to_move[pm.dest] +=1
     if pm.is_hitting:

@@ -118,7 +118,6 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
       print 'moving from %s(%i)'%(region.name, src)
       pm = mf.guess_your_single_pm_from_source(src)
       if pm:
-        print pm
         mf.append(pm)
         self.MoveInputNotify()
       else:
