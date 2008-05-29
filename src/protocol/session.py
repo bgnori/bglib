@@ -1,4 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: us-ascii -*-
+# vim: syntax=python
+#
+# Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
+#
 import socket
 import os
 import time
@@ -86,9 +91,6 @@ class Session(Transport):
     Transport.__init__(self, timeout=timeout, debug=debug)
     self.monster = bglib.protocol.fibs.CookieMonster()
     self.subscribers = list()
-    if self.debuglevel:
-      from fibs.debugging import Debug
-      Debug()
 
   def _listener(self):
     logging.debug('started listener')

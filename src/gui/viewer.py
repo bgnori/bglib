@@ -16,44 +16,39 @@ import bglib.image.renderer
 import bglib.image.wxpython
 
 
-class LeftDrag(wx.PyCommandEvent):
-  def __init__(self, evtType, id):
-    wx.PyCommandEvent.__init__(self, evtType, id)
-    self.up = None
-    self.down= None
-
-  def GetUp(self):
-    return self.up
-  def SetUp(self, up):
-    self.up = up
-  def GetDown(self):
-    return self.down
-  def SetDown(self, down):
-    self.down = down
 EVT_REGION_LEFT_DRAG_TYPE = wx.NewEventType()
 EVT_REGION_LEFT_DRAG = wx.PyEventBinder(EVT_REGION_LEFT_DRAG_TYPE, 1)
+class LeftDrag(wx.PyCommandEvent):
+  def __init__(self, id, up, down):
+    wx.PyCommandEvent.__init__(self, EVT_REGION_LEFT_DRAG_TYPE, id)
+    self.up = up
+    self.down= down
+  def GetUp(self):
+    return self.up
+  def GetDown(self):
+    return self.down
 
 
 class RegionClick(wx.PyCommandEvent):
-  def __init__(self, evtType, id):
+  def __init__(self, evtType, id, region):
     wx.PyCommandEvent.__init__(self, evtType, id)
-    self.region = None
+    self.region = region
   def GetRegion(self):
     return self.region
-  def SetRegion(self, r):
-    self.region = r
 
-class LeftClick(RegionClick):
-  pass
+
 EVT_REGION_LEFT_CLICK_TYPE = wx.NewEventType()
 EVT_REGION_LEFT_CLICK = wx.PyEventBinder(EVT_REGION_LEFT_CLICK_TYPE, 1)
+class LeftClick(RegionClick):
+  def __init__(self, id, region):
+    RegionClick.__init__(self, EVT_REGION_LEFT_CLICK_TYPE, id, region)
 
 
-class RightClick(RegionClick):
-  pass
 EVT_REGION_RIGHT_CLICK_TYPE = wx.NewEventType()
 EVT_REGION_RIGHT_CLICK = wx.PyEventBinder(EVT_REGION_RIGHT_CLICK_TYPE, 1)
-
+class RightClick(RegionClick):
+  def __init__(self, id, region):
+    RegionClick.__init__(self, EVT_REGION_RIGHT_CLICK_TYPE, id, region)
 
 
 class Viewer(wx.Panel):
@@ -132,8 +127,7 @@ class Viewer(wx.Panel):
   def OnRightClick(self, evt):
     region = self.which(evt.GetPosition())
     if region:
-      evt = RightClick(EVT_REGION_RIGHT_CLICK_TYPE, self.GetId())
-      evt.SetRegion(region)
+      evt = RightClick(self.GetId(), region)
       self.GetEventHandler().ProcessEvent(evt)
 
   def OnLeftDown(self, evt):
@@ -164,12 +158,9 @@ class Viewer(wx.Panel):
       return
 
     if down == up:
-      evt = LeftClick(EVT_REGION_LEFT_CLICK_TYPE, self.GetId())
-      evt.SetRegion(up)
+      evt = LeftClick(self.GetId(), up)
     else:
-      evt = LeftDrag(EVT_REGION_LEFT_DRAG_TYPE, self.GetId())
-      evt.SetUp(up)
-      evt.SetDown(down)
+      evt = LeftDrag(self.GetId(), up, down)
     self.GetEventHandler().ProcessEvent(evt)
 
   def OnSize(self, evt):

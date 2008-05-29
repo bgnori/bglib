@@ -11,6 +11,10 @@ import wx
 import bglib.model.board
 import bglib.encoding.gnubg
 
+import viewer
+import player
+
+
 class InteractiveTester(wx.Frame):
   def __init__(self, parent):
     wx.Frame.__init__(self, parent)
@@ -31,6 +35,40 @@ class InteractiveTester(wx.Frame):
     sizer.Add(fail)
     sizer.Add(self.info, proportion=1, flag=wx.EXPAND)
     self.buttons = sizer
+
+    self.Bind(viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
+    self.Bind(viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
+    self.Bind(viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
+    self.Bind(player.EVT_ROLL_REQUESTED, self.OnRollRequested)
+    self.Bind(player.EVT_DOUBLE_REQUESTED, self.OnDoubleRequested)
+    self.Bind(player.EVT_CUBE_TAKE, self.OnCubeTake)
+    self.Bind(player.EVT_CUBE_PASS, self.OnCubePass)
+    self.Bind(player.EVT_MOVE_DONE, self.OnMoveDone)
+
+    evt = viewer.LeftClick(self.GetId(), None)
+    self.GetEventHandler().ProcessEvent(evt)
+
+    evt = player.RollRequest(self.GetId())
+    self.GetEventHandler().ProcessEvent(evt)
+
+  def OnRegionLeftDrag(self ,evt):
+    down = evt.GetDown()
+    up = evt.GetUp()
+    print 'OnRegionLeftDrag:  from ', down, 'to', up
+  def OnRegionLeftClick(self, evt):
+    print 'OnRegionLeftClick:', evt.GetRegion()
+  def OnRegionRightClick(self, evt):
+    print 'OnRegionRightClick:', evt.GetRegion()
+  def OnRollRequested(self, evt):
+    print 'RollRequested'
+  def OnDoubleRequested(self, evt):
+    print 'DoubleRequested'
+  def OnCubeTake(self, evt):
+    print 'CubeTake'
+  def OnCubePass(self, evt):
+    print 'CubePass'
+  def OnMoveDone(self, evt):
+    print 'MoveDone', evt.move
 
   def get_model(self):
     return self.model

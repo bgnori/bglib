@@ -12,35 +12,40 @@ import bglib.model.move
 import bglib.model.util
 import bglib.gui.viewer
 
+
 EVT_ROLL_REQUESTED_TYPE = wx.NewEventType()
 EVT_ROLL_REQUESTED = wx.PyEventBinder(EVT_ROLL_REQUESTED_TYPE, 1)
-def RollRequest(id):
-  return wx.PyCommandEvent(EVT_ROLL_REQUESTED_TYPE, id)
+class RollRequest(wx.PyCommandEvent):
+  def __init__(self, id):
+    wx.PyCommandEvent.__init__(self, EVT_ROLL_REQUESTED_TYPE, id)
 
 EVT_DOUBLE_REQUESTED_TYPE = wx.NewEventType()
 EVT_DOUBLE_REQUESTED = wx.PyEventBinder(EVT_DOUBLE_REQUESTED_TYPE, 1)
-def DoubleRequest(id):
-  return wx.PyCommandEvent(EVT_DOUBLE_REQUESTED_TYPE, id)
+class DoubleRequest(wx.PyCommandEvent):
+  def __init__(self, id):
+    wx.PyCommandEvent.__init__(self, EVT_DOUBLE_REQUESTED_TYPE, id)
 
 EVT_CUBE_TAKE_TYPE = wx.NewEventType()
 EVT_CUBE_TAKE = wx.PyEventBinder(EVT_CUBE_TAKE_TYPE, 1)
-def CubeTake(id):
-  return wx.PyCommandEvent(EVT_CUBE_TAKE_TYPE, id)
+class CubeTake(wx.PyCommandEvent):
+  def __init__(self, id):
+    wx.PyCommandEvent.__init__(self, EVT_CUBE_TAKE_TYPE, id)
 
 EVT_CUBE_PASS_TYPE = wx.NewEventType()
 EVT_CUBE_PASS = wx.PyEventBinder(EVT_CUBE_PASS_TYPE, 1)
-def CubePass(id):
-  return wx.PyCommandEvent(EVT_CUBE_PASS_TYPE, id)
+class CubePass(wx.PyCommandEvent):
+  def __init__(self, id):
+    wx.PyCommandEvent.__init__(self, EVT_CUBE_PASS_TYPE, id)
 
+EVT_MOVE_DONE_TYPE = wx.NewEventType()
+EVT_MOVE_DONE = wx.PyEventBinder(EVT_MOVE_DONE_TYPE, 1)
 class MoveDone(wx.PyCommandEvent):
-  def __init__(self, evtType, id):
-    wx.PyCommandEvent.__init__(self, evtType, id, move)
+  def __init__(self, id, move):
+    wx.PyCommandEvent.__init__(self, EVT_MOVE_DONE_TYPE, id)
     self.move = bglib.model.move.Move(src=move)
 
   def GetMove(self):
     return self.move
-EVT_MOVE_DONE_TYPE = wx.NewEventType()
-EVT_MOVE_DONE = wx.PyEventBinder(EVT_MOVE_DONE_TYPE, 1)
 
 class PlayerStatusBar(wx.StatusBar):
   def __init__(self, player):
@@ -88,9 +93,9 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
   def GetValue(self):
     return self.mf.move
 
-  def Notify(self):
-    bglib.gui.viewer.Viewer.Notify(self)
-    self.mf = bglib.model.move.MoveFactory(self.model)
+  def SetModel(self, model):
+    bglib.gui.viewer.Viewer.SetModel(self, model)
+    self.mf = bglib.model.move.MoveFactory(model)
     self.UpdateStatusBar()
 
   def MoveInputNotify(self):
@@ -102,7 +107,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     up = evt.GetUp()
     board = self.model
     mf = self.mf
-    print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
+    #print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
 
     if down.name == 'your field':
       if up.name == 'your home':

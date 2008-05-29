@@ -100,7 +100,6 @@ class RunState(State):
                       ]
   FIBS_AcceptRejectDouble = ["doubles\\. Type 'accept' or 'reject'\\."]
   FIBS_Doubles = ["^[a-zA-Z_<>]+ doubles\\."]
-  FIBS_PlayerAcceptsDouble = ["accepts the double\\."]
   FIBS_PleaseMove = ["^Please move [1-4] pieces?\\."]
   FIBS_PlayerMoves = ["^[a-zA-Z_<>]+ moves"]
   FIBS_BearingOff = ["^Bearing off:"]
@@ -169,7 +168,8 @@ class RunState(State):
   FIBS_YouAcceptDouble = ["^You accept the double\\. The cube shows"]
   FIBS_PlayerAcceptsDouble = ["^[a-zA-Z_<>]+ accepts the double\\. The cube shows ", 
                               "^[a-zA-Z_<>]+ accepts the double\\.", # while watching
-                              ]
+                              "accepts the double\\."
+                             ]
 
   FIBS_ResumeMatchRequest = ["^[a-zA-Z_<>]+ wants to resume a saved match with you\\."]
   FIBS_ResumeMatchAck0 = ["has joined you\\. Your running match was loaded"]
