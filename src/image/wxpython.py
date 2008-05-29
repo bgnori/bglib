@@ -196,6 +196,19 @@ class Context(bglib.image.PIL.Context):
     w, h  = self.apply_mag(self.style().size.table)
     self.window.set_bgimage(wx.EmptyImage(w, h))
     bglib.image.PIL.Context.draw_frame(self)
+  def draw_your_score(self, score):
+    x, y = self.apply_mag(self.style().score.yours)
+    w, h = self.apply_mag(self.style().size.score)
+    r = Region(x, y, w, h, 'your score')
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_your_score(self, score)
+
+  def draw_his_score(self, score):
+    x, y = self.apply_mag(self.style().score.his)
+    w, h = self.apply_mag(self.style().size.score)
+    r = Region(x, y, w, h, 'his score')
+    self.window.append(r)
+    bglib.image.PIL.Context.draw_his_score(self, score)
 
 bglib.image.context.context_factory.register(Context)
 
