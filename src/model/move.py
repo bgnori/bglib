@@ -18,7 +18,9 @@ class AvailableToPlay(object):
       assert isinstance(rolled, tuple)
       assert len(rolled) == 2
       self._imp = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0}
-      if rolled[0]==rolled[1]:
+      if rolled[0] == 0:
+        pass
+      elif rolled[0]==rolled[1]:
         self._imp[rolled[0]] = 4
       else:
         self._imp[rolled[0]] = 1
@@ -31,12 +33,15 @@ class AvailableToPlay(object):
   def __getitem__(self, key):
     assert(key in [1, 2, 3, 4, 5, 6])
     return self._imp[key]
+
   def __contains__(self, key):
     assert(key in [1, 2, 3, 4, 5, 6])
     return self._imp[key] > 0
+
   def __setitem__(self, key, value):
     assert(key in [1, 2, 3, 4, 5, 6])
     self._imp[key] = value
+
   def __len__(self):
     count = 0
     for v in self._imp.values():
@@ -49,12 +54,14 @@ class AvailableToPlay(object):
       self[die] -= 1
     else:
       raise
+
   def add(self, die):
     assert(die in [1, 2, 3, 4, 5, 6])
     self._imp[die] += 1
 
   def items(self):
     return self._imp.items()
+
   def is_doubles(self):
     for value in self._imp:
       if value > 1:
@@ -64,6 +71,7 @@ class AvailableToPlay(object):
       if i in self:
         return i
     return None
+
   def __repr__(self):
     return '<AvailableToPlay: ' + str(self.items()) + '>'
 

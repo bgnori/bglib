@@ -100,6 +100,7 @@ class InteractiveTester(wx.Frame):
   def start(self, targets, tests=None):
     if tests is None:
       tests = [
+           ('22wqECCw8+ABYA', 'UQmgAAAAAAAA'),
            ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
            ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
            ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
