@@ -127,8 +127,8 @@ class Viewer(wx.Panel):
   def OnRightClick(self, evt):
     region = self.which(evt.GetPosition())
     if region:
-      evt = RightClick(self.GetId(), region)
-      self.GetEventHandler().ProcessEvent(evt)
+      new_evt = RightClick(self.GetId(), region)
+      self.GetEventHandler().ProcessEvent(new_evt)
 
   def OnLeftDown(self, evt):
     down = self.which(evt.GetPosition())
@@ -158,10 +158,10 @@ class Viewer(wx.Panel):
       return
 
     if down == up:
-      evt = LeftClick(self.GetId(), up)
+      new_evt = LeftClick(self.GetId(), up)
     else:
-      evt = LeftDrag(self.GetId(), up, down)
-    self.GetEventHandler().ProcessEvent(evt)
+      new_evt = LeftDrag(self.GetId(), up, down)
+    self.GetEventHandler().ProcessEvent(new_evt)
 
   def OnSize(self, evt):
     logging.debug('resized %s', str(self.GetClientSize()))

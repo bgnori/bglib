@@ -85,6 +85,10 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
   def GetStatusBar(self):
     return self._statusbar
 
+  def StatusBarMessage(self, message):
+    self.message = message
+    self.UpdateStatusBar()
+
   def UpdateStatusBar(self):
     statusbar = self.GetStatusBar()
     if statusbar:
@@ -103,11 +107,11 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     self.UpdateStatusBar()
 
   def OnRegionLeftDrag(self, evt):
+    evt.Skip()
     down = evt.GetDown()
     up = evt.GetUp()
     board = self.model
     mf = self.mf
-    #print 'Board::OnRegionLeftDrag:  from ', down, 'to', up
 
     if down.name == 'your field':
       if up.name == 'your home':
@@ -117,21 +121,20 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
             self.GetEventHandler().ProcessEvent(evt)
             return 
           else:
-            self.message = 'Need to move more'
-            self.UpdateStatusBar()
+            self.StatusBarMessage('Need to move more')
             return 
         elif board.on_inner_action == bglib.model.constants.you and board.doubled:
           evt = CubeTake(self.GetId())
           self.GetEventHandler().ProcessEvent(evt)
           return
         else:
-          print 'undefined action'
+          self.StatusBarMessage('undefined action')
       elif up.name == 'cubeholder':
         evt = CubePass(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
         return
       else:
-        print 'undefined action'
+        self.StatusBarMessage('undefined action')
         return
 
     if up.name == 'your field':
@@ -141,23 +144,18 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
           self.GetEventHandler().ProcessEvent(evt)
           return 
         else:
-          self.message = 'Need to move more'
-          self.UpdateStatusBar()
+          self.StatusBarMessage('Need to move more')
           return 
       else:
-        print 'undefined action'
+        self.StatusBarMessage('undefined action')
         return 
 
     down = bglib.model.util.position_pton(down.name, board.on_action)
     up = bglib.model.util.position_pton(up.name, board.on_action)
 
     if down > up:
-      print 'forward'
-      print mf.available
-      print mf.move
       mv = mf.guess_your_multiple_pms(down, up)
     elif down < up:
-      print 'backward'
       mv = mf.guess_your_multiple_partial_undoes(down, up)
     else:
       assert(up == donw)
@@ -166,9 +164,10 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
       mf.add(mv)
       self.MoveInputNotify()
     else:
-      print 'illeagal input'
+      self.StatusBarMessage('illeagal input')
 
   def OnRegionLeftClick(self, evt):
+    evt.Skip()
     region = evt.GetRegion()
     b = self.model
     mf = self.mf
@@ -177,8 +176,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
 
     if region.name == 'your field':
       if b.on_action != bglib.model.constants.you:
-        self.message = 'not your turn'
-        self.UpdateStatusBar()
+        self.StatusBarMessage('not your turn')
       elif b.is_leagal_to_roll():
         if b.is_leagal_to_double():
           evt = DoubleRequest(self.GetId())
@@ -193,27 +191,24 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
         self.GetEventHandler().ProcessEvent(evt)
         return
       else:
-        self.message = 'move your checker'
-        self.UpdateStatusBar()
+        self.StatusBarMessage('move your checker')
         return
 
     elif region.name in points or region.name == 'your bar':
       src = bglib.model.util.position_pton(region.name, b.on_action)
-      print 'moving from %s(%i)'%(region.name, src)
       pm = mf.guess_your_single_pm_from_source(src)
       if pm:
         mf.append(pm)
         self.MoveInputNotify()
       else:
-        self.message = 'illeagal move'
-        self.UpdateStatusBar()
+        self.StatusBarMessage('illeagal move')
     else:
-      print region.name
+      pass
 
   def OnRegionRightClick(self, evt):
+    evt.Skip()
     region = evt.GetRegion()
     board = self.model
-    print 'Board::OnRegionRightClick:', region
     mf = self.mf
 
     if region == 'your field':
@@ -223,6 +218,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
 
     dest = bglib.model.position_pton(region.name, board.on_action)
     print mf.guess_your_making_point(dest)
+    self.StatusBarMessage('illeagal move')
       
 
 

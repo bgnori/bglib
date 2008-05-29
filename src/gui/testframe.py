@@ -11,8 +11,8 @@ import wx
 import bglib.model.board
 import bglib.encoding.gnubg
 
-import viewer
-import player
+import bglib.gui.viewer
+import bglib.gui.player
 
 
 class InteractiveTester(wx.Frame):
@@ -36,19 +36,19 @@ class InteractiveTester(wx.Frame):
     sizer.Add(self.info, proportion=1, flag=wx.EXPAND)
     self.buttons = sizer
 
-    self.Bind(viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
-    self.Bind(viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
-    self.Bind(viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
-    self.Bind(player.EVT_ROLL_REQUESTED, self.OnRollRequested)
-    self.Bind(player.EVT_DOUBLE_REQUESTED, self.OnDoubleRequested)
-    self.Bind(player.EVT_CUBE_TAKE, self.OnCubeTake)
-    self.Bind(player.EVT_CUBE_PASS, self.OnCubePass)
-    self.Bind(player.EVT_MOVE_DONE, self.OnMoveDone)
+    self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_DRAG, self.OnRegionLeftDrag)
+    self.Bind(bglib.gui.viewer.EVT_REGION_LEFT_CLICK, self.OnRegionLeftClick)
+    self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
+    self.Bind(bglib.gui.player.EVT_ROLL_REQUESTED, self.OnRollRequested)
+    self.Bind(bglib.gui.player.EVT_DOUBLE_REQUESTED, self.OnDoubleRequested)
+    self.Bind(bglib.gui.player.EVT_CUBE_TAKE, self.OnCubeTake)
+    self.Bind(bglib.gui.player.EVT_CUBE_PASS, self.OnCubePass)
+    self.Bind(bglib.gui.player.EVT_MOVE_DONE, self.OnMoveDone)
 
-    evt = viewer.LeftClick(self.GetId(), None)
+    evt = bglib.gui.viewer.LeftClick(self.GetId(), None)
     self.GetEventHandler().ProcessEvent(evt)
 
-    evt = player.RollRequest(self.GetId())
+    evt = bglib.gui.player.RollRequest(self.GetId())
     self.GetEventHandler().ProcessEvent(evt)
 
   def OnRegionLeftDrag(self ,evt):
