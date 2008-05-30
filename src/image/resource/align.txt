@@ -55,7 +55,7 @@ matchlength null 316 93
 matchcrawford null 291 93
 field you  158 93
 cube you  180 100
-cube yours  266 139
+cube yours  266 197
 cube center 266 105
 table null 0 0
 size edge 25  232
