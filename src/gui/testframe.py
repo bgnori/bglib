@@ -41,6 +41,7 @@ class InteractiveTester(wx.Frame):
     self.Bind(bglib.gui.viewer.EVT_REGION_RIGHT_CLICK, self.OnRegionRightClick)
     self.Bind(bglib.gui.player.EVT_ROLL_REQUESTED, self.OnRollRequested)
     self.Bind(bglib.gui.player.EVT_DOUBLE_REQUESTED, self.OnDoubleRequested)
+    self.Bind(bglib.gui.player.EVT_RESIGN_REQUESTED, self.OnResignRequested)
     self.Bind(bglib.gui.player.EVT_CUBE_TAKE, self.OnCubeTake)
     self.Bind(bglib.gui.player.EVT_CUBE_PASS, self.OnCubePass)
     self.Bind(bglib.gui.player.EVT_MOVE_DONE, self.OnMoveDone)
@@ -63,6 +64,8 @@ class InteractiveTester(wx.Frame):
     print 'RollRequested'
   def OnDoubleRequested(self, evt):
     print 'DoubleRequested'
+  def OnResignRequested(self, evt):
+    print 'ResignRequested', evt.GetResignType()
   def OnCubeTake(self, evt):
     print 'CubeTake'
   def OnCubePass(self, evt):
@@ -100,6 +103,7 @@ class InteractiveTester(wx.Frame):
   def start(self, targets, tests=None):
     if tests is None:
       tests = [
+           ('4Dl4ADqwt4MDIA', 'AQGgAAAAAAAA'),
            ('22wqECCw8+ABYA', 'UQmgAAAAAAAA'),
            ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
            ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
