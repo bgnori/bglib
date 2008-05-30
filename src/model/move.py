@@ -193,6 +193,7 @@ class MoveFactory(object):
       self.append(pm)
     
   def is_leagal_to_pickup_dice(self):
+    assert self.board.rolled != (0, 0)
     if not self.available:
       return True
     bar = util.move_pton('bar')

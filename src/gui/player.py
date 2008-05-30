@@ -15,20 +15,20 @@ import bglib.gui.viewer
 def acitons_whose(board):
   if board.on_action==bglib.model.constants.you:
     if board.on_inner_action == bglib.model.constants.you:
-      return 'your '
+      return 'your ', 'his '
     elif board.on_inner_action == bglib.model.constants.him:
-      return 'his '
+      return 'his ', 'your '
     else:
       assert False
   elif board.on_action==bglib.model.constants.him:
     if board.on_inner_action == bglib.model.constants.you:
-      return 'your '
+      return 'your ', 'his '
     elif board.on_inner_action == bglib.model.constants.him:
-      return 'his '
+      return 'his ', 'your '
     else:
       assert False
   else:
-    return 'xxxx '
+    return 'xxxx ', 'yyyy '
 
 EVT_ROLL_REQUESTED_TYPE = wx.NewEventType()
 EVT_ROLL_REQUESTED = wx.PyEventBinder(EVT_ROLL_REQUESTED_TYPE, 1)
@@ -143,7 +143,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     board = self.model
     mf = self.mf
 
-    on_action_plyars = acitons_whose(board)
+    on_action_plyars, opps = acitons_whose(board)
 
     if down.name == on_action_plyars+'field':
       if up.name == on_action_plyars+'home':
@@ -221,33 +221,67 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
 
     points = ['%i'%i for i in range(1, 25)]
 
-    on_action_plyars = acitons_whose(b)
+    on_action_plyars, opps = acitons_whose(b)
 
+    if region.name == opps + 'field':
+      self.StatusBarMessage('not your field!')
+      return
+    print 'is_leagal_to_roll:', b.is_leagal_to_roll()
+      
     if region.name == on_action_plyars + 'field':
-      if mf.is_leagal_to_pickup_dice():
-        evt = RollRequest(self.GetId())
-        self.GetEventHandler().ProcessEvent(evt)
-        return
-      elif mf.available:
-        self.StatusBarMessage('move your checker')
-        return
+      if b.has_rolled():
+        if mf.available:
+          self.StatusBarMessage('move your checker')
+          return
+        elif mf.is_leagal_to_pickup_dice():
+          evt = MoveDone(self.GetId(), mf.move)
+          self.GetEventHandler().ProcessEvent(evt)
+          self.StatusBarMessage('picking up dice ... ')
+          return
+        else:
+          assert False
       elif b.is_leagal_to_roll():
         evt = RollRequest(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
-      elif b.is_leagal_to_double():
-        evt = DoubleRequest(self.GetId())
-        self.GetEventHandler().ProcessEvent(evt)
+        self.StatusBarMessage('rolling ...')
+        return
       elif b.is_cube_take_or_pass():
         evt = CubeTake(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
+        self.StatusBarMessage('take!')
+        return
       else:
         self.StatusBarMessage('undefined action')
         return
+
+    elif region.name == on_action_plyars + 'home':
+      if b.is_leagal_to_double():
+        evt = DoubleRequest(self.GetId())
+        self.GetEventHandler().ProcessEvent(evt)
+        self.StatusBarMessage('doubling ...')
+        return
+      else:
+        self.StatusBarMessage("can't double.")
+        return
+
     elif region.name == 'cubeholder':
       if b.is_cube_take_or_pass():
         evt = CubePass(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
         return
+      elif b.is_leagal_to_double():
+        evt = DoubleRequest(self.GetId())
+        self.GetEventHandler().ProcessEvent(evt)
+        self.StatusBarMessage('doubling ...')
+        return
+      else:
+        self.StatusBarMessage("It's not time for cube action.")
+        return
+
+    elif region.name == 'score':
+      evt = ResignRequest(self.GetId(), 1)
+      self.GetEventHandler().ProcessEvent(evt)
+      self.StatusBarMessage('resign ...')
 
     elif region.name in points or region.name == on_action_plyars + 'bar':
       src = bglib.model.util.position_pton(region.name, b.on_action)

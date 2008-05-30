@@ -141,11 +141,11 @@ class board(object):
   def is_leagal_to_roll(self):
     return \
        self.game_state == constants.on_going and \
-       self.on_action == constants.you and \
-       self.on_inner_action == constants.you and \
        self.resign_offer == constants.resign_none and \
        self.doubled == False and \
-       self.rolled == (0, 0) # already rolled nothing.
+       self.rolled == (0, 0)
+       #self.on_action == constants.you and \
+       #self.on_inner_action == constants.you and \
 
   def is_leagal_to_move(self):
     '''
@@ -167,21 +167,27 @@ class board(object):
   def double(self):
     pass
 
+  def has_rolled(self):
+    if self.rolled == (0, 0):
+      return False
+    return True
+
   def is_leagal_to_double(self):
+    assert self.rolled == (0, 0)
     your_score, his_score = self.score
     if self.game_state != constants.on_going:
       return False
     if self.crawford:
       return False
-    if self.rolled != (0, 0):
-      return False
     if self.on_action == constants.you:
-      if your_score <= self.match_length - pow(2, self.cube_in_logarithm):
-        return True
+      if self.on_inner_action == constants.you:
+        if your_score <= self.match_length - pow(2, self.cube_in_logarithm):
+          return True
       return False
-    if self.on_action == constants.him:
-      if his_score < self.match_length - pow(2, self.cube_in_logarithm):
-        return True
+    elif self.on_action == constants.him:
+      if self.on_inner_action == constants.him:
+        if his_score < self.match_length - pow(2, self.cube_in_logarithm):
+          return True
       return False
     assert False
 
