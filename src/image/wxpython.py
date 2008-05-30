@@ -157,19 +157,19 @@ class Context(bglib.image.PIL.Context):
     bglib.image.PIL.Context.draw_center_cube(self, cube_in_logarithm)
 
   # field
-  def draw_you_offered_double(self, cube_in_logarithm):
+  def draw_your_empty_field(self):
     x, y = self.apply_mag(self.style().field.you)
     w, h = self.apply_mag(self.style().size.field)
     r = Region(x, y, w, h, 'your field')
     self.window.append(r)
-    bglib.image.PIL.Context.draw_you_offered_double(self)
+    bglib.image.PIL.Context.draw_your_empty_field(self)
 
-  def draw_he_offered_double(self, cube_in_logarithm):
+  def draw_his_empty_field(self):
     x, y = self.apply_mag(self.style().field.him)
     w, h = self.apply_mag(self.style().size.field)
     r = Region(x, y, w, h, 'his field')
     self.window.append(r)
-    bglib.image.PIL.Context.draw_he_offered_double(self)
+    bglib.image.PIL.Context.draw_his_empty_field(self)
 
   def draw_your_dice_in_field(self, dice):
     x, y = self.apply_mag(self.style().field.you)

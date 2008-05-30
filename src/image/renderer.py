@@ -43,8 +43,8 @@ class Renderer(object):
   def draw_you_are_on_roll_cube_action(self, board):
     context = self.context()
     context.draw_you_to_play()
-    context.draw_he_offered_double(0)
-    context.draw_you_offered_double(0)
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
     if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
     elif board.cube_owner == bglib.model.constants.him:
@@ -57,16 +57,17 @@ class Renderer(object):
   def draw_you_doubled_he_is_on_take_or_pass(self, board):
     context = self.context()
     context.draw_him_to_play()
+    context.draw_your_empty_field()
     context.draw_you_offered_double(board.cube_in_logarithm)
-    context.draw_he_offered_double(0)
+    context.draw_his_empty_field()
     context.draw_your_cube(0)
     context.draw_his_cube(0)
 
   def draw_you_doubled_he_took_you_are_on_roll(self, board):
     context = self.context()
     context.draw_you_to_play()
-    context.draw_you_offered_double(0)
-    context.draw_he_offered_double(0)
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
     context.draw_your_cube(0)
     context.draw_his_cube(board.cube_in_logarithm)
 
@@ -87,8 +88,8 @@ class Renderer(object):
   def draw_he_is_on_roll_cube_action(self, board):
     context = self.context()
     context.draw_him_to_play()
-    context.draw_he_offered_double(0)
-    context.draw_you_offered_double(0)
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
     if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
     elif board.cube_owner == bglib.model.constants.him:
@@ -101,7 +102,8 @@ class Renderer(object):
   def draw_he_doubled_you_are_on_take_or_pass(self, board):
     context = self.context()
     context.draw_you_to_play()
-    context.draw_you_offered_double(0)
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
     context.draw_he_offered_double(board.cube_in_logarithm)
     context.draw_your_cube(0)
     context.draw_his_cube(0)
@@ -109,8 +111,8 @@ class Renderer(object):
   def draw_he_doubled_you_took_he_is_on_roll(self, board):
     context = self.context()
     context.draw_him_to_play()
-    context.draw_you_offered_double(0)
-    context.draw_he_offered_double(0)
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
     context.draw_your_cube(board.cube_in_logarithm)
     context.draw_his_cube(0)
 
@@ -133,7 +135,7 @@ class Renderer(object):
       - board.on_action
       - board.on_inner_action
     '''
-    if board.on_action == bglib.model.constants.you and not board.rolled:
+    if board.on_action == bglib.model.constants.you and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == bglib.model.constants.you:
         self.draw_you_are_on_roll_cube_action(board)
         return
@@ -146,11 +148,11 @@ class Renderer(object):
         self.draw_you_doubled_he_took_you_are_on_roll(board)
         return
 
-    if board.on_action == bglib.model.constants.you and  board.rolled:
+    if board.on_action == bglib.model.constants.you and  board.rolled != (0, 0):
       self.draw_you_rolled(board)
       return
 
-    if board.on_action == bglib.model.constants.him and not board.rolled:
+    if board.on_action == bglib.model.constants.him and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == bglib.model.constants.him:
         self.draw_he_is_on_roll_cube_action(board)
         return
@@ -163,7 +165,7 @@ class Renderer(object):
         self.draw_he_doubled_you_took_he_is_on_roll(board)
         return
 
-    if board.on_action == bglib.model.constants.him and  board.rolled:
+    if board.on_action == bglib.model.constants.him and  board.rolled !=(0, 0):
       self.draw_he_rolled(board)
       return
 
@@ -178,8 +180,7 @@ class Renderer(object):
     board.on_action,
     board.doubled,
     board.on_inner_action
-    )
-    )
+    ))
 
   def draw_frame(self):
     context = self.context()

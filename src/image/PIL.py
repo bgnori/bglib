@@ -171,37 +171,30 @@ class Context(bglib.image.context.Context):
       self.paste_image(image, (x, y))
 
   # field
-  def draw_you_offered_double(self, cube_in_logarithm):
+  def draw_your_empty_field(self):
     size = self.apply_mag(self.style().size.field)
-    image = self.open_image("field.jpg",
-                            size
-                            )
+    image = self.open_image("field.jpg",size)
     x, y = self.apply_mag(self.style().field.you)
     self.paste_image(image, (x, y))
 
-    if cube_in_logarithm > 0:
-      size = self.apply_mag(self.style().size.cube)
-      image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
-                              size
-                              )
-      x, y = self.apply_mag(self.style().cube.you)
-      self.paste_image(image, (x, y))
+  def draw_you_offered_double(self, cube_in_logarithm):
+    print 'draw_you_offered_double', cube_in_logarithm
+    size = self.apply_mag(self.style().size.cube)
+    image = self.open_image("cube_"+str(cube_in_logarithm+1)+".jpg",size)
+    x, y = self.apply_mag(self.style().cube.you)
+    self.paste_image(image, (x, y))
 
-  def draw_he_offered_double(self, cube_in_logarithm):
+  def draw_his_empty_field(self):
     size = self.apply_mag(self.style().size.field)
-    image = self.open_image("field.jpg",
-                            size
-                            )
+    image = self.open_image("field.jpg",size)
     x, y = self.apply_mag(self.style().field.him)
     self.paste_image(image, (x, y))
 
-    if cube_in_logarithm > 0:
-      size = self.apply_mag(self.style().size.cube)
-      image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
-                              size
-                              )
-      x, y = self.apply_mag(self.style().cube.him)
-      self.paste_image(image, (x, y))
+  def draw_he_offered_double(self, cube_in_logarithm):
+    size = self.apply_mag(self.style().size.cube)
+    image = self.open_image("cube_"+str(cube_in_logarithm+1)+".jpg", size)
+    x, y = self.apply_mag(self.style().cube.him)
+    self.paste_image(image, (x, y))
 
   def draw_your_dice_in_field(self, dice):
     size = self.apply_mag(self.style().size.field)

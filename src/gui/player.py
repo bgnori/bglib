@@ -147,13 +147,14 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
 
     if down.name == on_action_plyars+'field':
       if up.name == on_action_plyars+'home':
-        if mf.is_leagal_to_pickup_dice():
-          evt = MoveDone(self.GetId(), mf.move)
-          self.GetEventHandler().ProcessEvent(evt)
-          return 
-        elif mf.available:
-          self.StatusBarMessage('Need to move more')
-          return 
+        if board.has_rolled():
+          if mf.is_leagal_to_pickup_dice():
+            evt = MoveDone(self.GetId(), mf.move)
+            self.GetEventHandler().ProcessEvent(evt)
+            return 
+          elif mf.available:
+            self.StatusBarMessage('Need to move more')
+            return 
         elif board.doubled:
           evt = CubeTake(self.GetId())
           self.GetEventHandler().ProcessEvent(evt)
@@ -162,9 +163,13 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
           self.StatusBarMessage('undefined action')
           return
       elif up.name == 'cubeholder':
-        evt = CubePass(self.GetId())
-        self.GetEventHandler().ProcessEvent(evt)
-        return
+        if not board.has_rolled():
+          evt = CubePass(self.GetId())
+          self.GetEventHandler().ProcessEvent(evt)
+          return
+        else:
+          self.StatusBarMessage('undefined action')
+          return
       else:
         self.StatusBarMessage('undefined action')
         return
