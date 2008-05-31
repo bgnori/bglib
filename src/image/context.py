@@ -39,6 +39,7 @@ class Context(object):
   def draw_center_bar(self):raise NotImplemented('')
   def draw_your_home(self, checker_count):raise NotImplemented('')
   def draw_his_home(self, checker_count):raise NotImplemented('')
+  def draw_cubeholder(self):raise NotImplemented('')
 
   # cube holder
   def draw_your_cube(self, cube_in_logarithm):raise NotImplemented('')
@@ -46,8 +47,12 @@ class Context(object):
   def draw_center_cube(self, cube_in_logarithm):raise NotImplemented('')
 
   # field
+  def draw_your_empty_field(self): raise NotImplemented('')
+  def draw_his_empty_field(self): raise NotImplemented('')
   def draw_you_offered_double(self, cube_in_logarithm):raise NotImplemented('')
   def draw_he_offered_double(self, cube_in_logarithm):raise NotImplemented('')
+  def draw_you_offered_resign(sefl, rtype): raise NotImplemented('')
+  def draw_he_offered_resign(self, rtype): raise NotImplemented('')
   def draw_your_dice_in_field(self, dice):raise NotImplemented('')
   def draw_his_dice_in_field(self, dice):raise NotImplemented('')
 
@@ -75,6 +80,7 @@ class NullContext(Context):
   def draw_center_bar(self):pass
   def draw_your_home(self, checker_count):pass
   def draw_his_home(self, checker_count):pass
+  def draw_cubeholder(self):pass
 
   # cube holder
   def draw_your_cube(self, cube_in_logarithm):pass
@@ -82,8 +88,12 @@ class NullContext(Context):
   def draw_center_cube(self, cube_in_logarithm):pass
 
   # field
+  def draw_your_empty_field(self):pass
+  def draw_his_empty_field(self):pass
   def draw_you_offered_double(self, cube_in_logarithm):pass
   def draw_he_offered_double(self, cube_in_logarithm):pass
+  def draw_you_offered_resign(sefl, rtype):pass
+  def draw_he_offered_resign(self, rtype):pass
   def draw_your_dice_in_field(self, dice):pass
   def draw_his_dice_in_field(self, dice):pass
 

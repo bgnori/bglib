@@ -54,6 +54,21 @@ class Renderer(object):
     else:
       assert(False)
 
+  def draw_you_offered_resign(self, board):
+    context = self.context()
+    context.draw_him_to_play()
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
+    assert board.offer_resign in bglib.model.constants.resign_types
+    context.draw_you_offered_resign(board.offer_resign)
+    if board.cube_owner == bglib.model.constants.you:
+      context.draw_your_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.constants.him:
+      context.draw_his_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.constants.center:
+      context.draw_center_cube(board.cube_in_logarithm)
+    pass
+
   def draw_you_doubled_he_is_on_take_or_pass(self, board):
     context = self.context()
     context.draw_him_to_play()
@@ -99,6 +114,23 @@ class Renderer(object):
     else:
       assert(False)
 
+  def draw_he_offered_resign(self, board):
+    context = self.context()
+    context.draw_you_to_play()
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
+    assert board.offer_resign in bglib.model.constants.resign_types
+    context.draw_he_offered_resign(board.offer_resign)
+    if board.cube_owner == bglib.model.constants.you:
+      context.draw_your_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.constants.him:
+      context.draw_his_cube(board.cube_in_logarithm)
+    elif board.cube_owner == bglib.model.constants.center:
+      context.draw_center_cube(board.cube_in_logarithm)
+    else:
+      assert(False)
+    pass
+
   def draw_he_doubled_you_are_on_take_or_pass(self, board):
     context = self.context()
     context.draw_you_to_play()
@@ -140,6 +172,10 @@ class Renderer(object):
         self.draw_you_are_on_roll_cube_action(board)
         return
 
+      if not board.doubled and board.on_inner_action == bglib.model.constants.him:
+        self.draw_you_offered_resign(board)
+        return
+
       if board.doubled and board.on_inner_action == bglib.model.constants.him:
         self.draw_you_doubled_he_is_on_take_or_pass(board)
         return
@@ -155,6 +191,9 @@ class Renderer(object):
     if board.on_action == bglib.model.constants.him and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == bglib.model.constants.him:
         self.draw_he_is_on_roll_cube_action(board)
+        return
+      if not board.doubled and board.on_inner_action == bglib.model.constants.you:
+        self.draw_he_offered_resign(board)
         return
 
       if board.doubled and board.on_inner_action == bglib.model.constants.you:

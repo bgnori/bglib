@@ -188,7 +188,7 @@ def get_match_scores(got):
   return int(you), int(him), int(matchlength)
 
 def get_resign_score(got):
-  score = score_expr.findall(got)
+  score = score_expr.findall(got)[0]
   return int(score)
 
 

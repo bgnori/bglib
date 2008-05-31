@@ -164,9 +164,7 @@ class Context(bglib.image.context.Context):
   def draw_center_cube(self, cube_in_logarithm):
     if cube_in_logarithm == 0:
       size = self.apply_mag(self.style().size.cube)
-      image = self.open_image("cube_0.jpg",
-                            size
-                           )
+      image = self.open_image("cube_0.jpg", size)
       x, y = self.apply_mag(self.style().cube.center)
       self.paste_image(image, (x, y))
 
@@ -194,6 +192,12 @@ class Context(bglib.image.context.Context):
     image = self.open_image("cube_"+str(cube_in_logarithm+1)+".jpg", size)
     x, y = self.apply_mag(self.style().cube.him)
     self.paste_image(image, (x, y))
+
+  def draw_you_offered_resign(sefl, rtype):
+    pass
+
+  def draw_he_offered_resign(self, rtype):
+    pass
 
   def draw_your_dice_in_field(self, dice):
     size = self.apply_mag(self.style().size.field)
