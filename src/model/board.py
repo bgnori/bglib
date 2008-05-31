@@ -162,7 +162,7 @@ class board(object):
 
 
   def is_cube_take_or_pass(self):
-    return self.doubled and self.on_inner_action == constants.you
+    return self.doubled and self.on_inner_action != self.on_action
   
   def double(self):
     pass

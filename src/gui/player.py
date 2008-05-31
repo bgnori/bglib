@@ -151,51 +151,51 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
           if mf.is_leagal_to_pickup_dice():
             evt = MoveDone(self.GetId(), mf.move)
             self.GetEventHandler().ProcessEvent(evt)
+            self.StatusBarMessage('picking up dice ... ')
             return 
           elif mf.available:
             self.StatusBarMessage('Need to move more')
             return 
-        elif board.doubled:
+        elif board.is_cube_take_or_pass():
           evt = CubeTake(self.GetId())
           self.GetEventHandler().ProcessEvent(evt)
+          self.StatusBarMessage('take!')
           return
         else:
-          self.StatusBarMessage('undefined action')
+          self.StatusBarMessage('undefined action 1')
           return
       elif up.name == 'cubeholder':
-        if not board.has_rolled():
+        if board.is_cube_take_or_pass():
           evt = CubePass(self.GetId())
           self.GetEventHandler().ProcessEvent(evt)
+          self.StatusBarMessage('pass!')
           return
         else:
-          self.StatusBarMessage('undefined action')
+          self.StatusBarMessage('undefined action 2')
           return
       else:
-        self.StatusBarMessage('undefined action')
+        self.StatusBarMessage('undefined action 3')
         return
 
+    if up.name == [on_action_plyars +'field', opps +'field']:
+      if down.name in ['cubeholder',  on_action_plyars + 'home']:
+        if board.is_leagal_to_double():
+          evt = DoubleRequest(self.GetId())
+          self.GetEventHandler().ProcessEvent(evt)
+          self.StatusBarMessage('double!')
+          return 
+        else:
+          self.StatusBarMessage('doubling is not allowed here')
+          return 
+
     if up.name == on_action_plyars +'field':
-      if down.name == 'cubeholder':
-        if board.is_leagal_to_double():
-          evt = DoubleRequest(self.GetId())
-          self.GetEventHandler().ProcessEvent(evt)
-        else:
-          self.StatusBarMessage('doubling is not allowed here')
-          return 
-      elif down.name == on_action_plyars + 'home':
-        if board.is_leagal_to_double():
-          evt = DoubleRequest(self.GetId())
-          self.GetEventHandler().ProcessEvent(evt)
-          return 
-        else:
-          self.StatusBarMessage('doubling is not allowed here')
-          return 
-      elif down.name == on_action_plyars + 'score':
+      if down.name == on_action_plyars + 'score':
         evt = ResignRequest(self.GetId(), 1)
         self.GetEventHandler().ProcessEvent(evt)
+        self.StatusBarMessage('resign ;(')
         return
       else:
-        self.StatusBarMessage('undefined action')
+        self.StatusBarMessage('undefined action 4')
         return 
 
     try:
@@ -215,6 +215,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     if mv:
       mf.add(mv)
       self.MoveInputNotify()
+      self.StatusBarMessage('moved %s'%str(pm)) 
     else:
       self.StatusBarMessage('illeagal input')
 
@@ -231,20 +232,17 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     if region.name == opps + 'field':
       self.StatusBarMessage('not your field!')
       return
-    print 'is_leagal_to_roll:', b.is_leagal_to_roll()
       
     if region.name == on_action_plyars + 'field':
       if b.has_rolled():
-        if mf.available:
-          self.StatusBarMessage('move your checker')
-          return
-        elif mf.is_leagal_to_pickup_dice():
+        if mf.is_leagal_to_pickup_dice():
           evt = MoveDone(self.GetId(), mf.move)
           self.GetEventHandler().ProcessEvent(evt)
           self.StatusBarMessage('picking up dice ... ')
           return
         else:
-          assert False
+          self.StatusBarMessage('move your checker')
+          return
       elif b.is_leagal_to_roll():
         evt = RollRequest(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
@@ -256,7 +254,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
         self.StatusBarMessage('take!')
         return
       else:
-        self.StatusBarMessage('undefined action')
+        self.StatusBarMessage('undefined action 5')
         return
 
     elif region.name == on_action_plyars + 'home':
@@ -270,9 +268,13 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
         return
 
     elif region.name == 'cubeholder':
-      if b.is_cube_take_or_pass():
+      if b.rolled != (0, 0):
+        self.StatusBarMessage('you have rolled something...')
+        return
+      elif b.is_cube_take_or_pass():
         evt = CubePass(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
+        self.StatusBarMessage('pass ...')
         return
       elif b.is_leagal_to_double():
         evt = DoubleRequest(self.GetId())
@@ -286,7 +288,8 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     elif region.name == 'score':
       evt = ResignRequest(self.GetId(), 1)
       self.GetEventHandler().ProcessEvent(evt)
-      self.StatusBarMessage('resign ...')
+      self.StatusBarMessage('resign ... ')
+      return
 
     elif region.name in points or region.name == on_action_plyars + 'bar':
       src = bglib.model.util.position_pton(region.name, b.on_action)
@@ -294,10 +297,15 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
       if pm:
         mf.append(pm)
         self.MoveInputNotify()
+        self.StatusBarMessage('moved %s'%str(pm)) 
+        return
       else:
         self.StatusBarMessage('illeagal move')
+        return
     else:
-      pass
+      self.StatusBarMessage('undefined action 6')
+      return
+    assert False
 
   def OnRegionRightClick(self, evt):
     evt.Skip()
@@ -308,6 +316,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     if region == 'your field':
       evt = CubePass(self.GetId())
       self.GetEventHandler().ProcessEvent(evt)
+      self.StatusBarMessage('pass.')
       return
 
     dest = bglib.model.position_pton(region.name, board.on_action)
