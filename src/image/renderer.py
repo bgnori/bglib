@@ -172,7 +172,7 @@ class Renderer(object):
         self.draw_you_are_on_roll_cube_action(board)
         return
 
-      if not board.doubled and board.on_inner_action == bglib.model.constants.him:
+      if not board.doubled and board.on_inner_action == bglib.model.constants.him and board.resign_offer in bglib.model.constants.resign_types:
         self.draw_you_offered_resign(board)
         return
 
@@ -192,7 +192,7 @@ class Renderer(object):
       if not board.doubled and board.on_inner_action == bglib.model.constants.him:
         self.draw_he_is_on_roll_cube_action(board)
         return
-      if not board.doubled and board.on_inner_action == bglib.model.constants.you:
+      if not board.doubled and board.on_inner_action == bglib.model.constants.you and board.resign_offer in bglib.model.constants.resign_types:
         self.draw_he_offered_resign(board)
         return
 
@@ -207,6 +207,8 @@ class Renderer(object):
     if board.on_action == bglib.model.constants.him and  board.rolled !=(0, 0):
       self.draw_he_rolled(board)
       return
+
+    #assert not board.doubled and board.on_inner_action == bglib.model.constants.him and board.resign_offer not in bglib.model.constants.resign_types
 
     raise AssertionError("""
     Bad field draw with
