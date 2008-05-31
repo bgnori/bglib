@@ -58,8 +58,8 @@ class Renderer(object):
     context = self.context()
     context.draw_him_to_play()
     context.draw_your_empty_field()
-    context.draw_you_offered_double(board.cube_in_logarithm)
     context.draw_his_empty_field()
+    context.draw_you_offered_double(board.cube_in_logarithm)
     context.draw_your_cube(0)
     context.draw_his_cube(0)
 
@@ -171,15 +171,19 @@ class Renderer(object):
 
     raise AssertionError("""
     Bad field draw with
-    board.rolled = %i
+    board.rolled = %s
     board.on_action = %i
     board.doubled = %i
     board.on_inner_action = %i
+    board.cube_in_logarithm = %i
+    board.resign_offer = %i
     """%(
-    board.rolled,
+    str(board.rolled),
     board.on_action,
     board.doubled,
-    board.on_inner_action
+    board.on_inner_action,
+    board.cube_in_logarithm,
+    board.resign_offer
     ))
 
   def draw_frame(self):

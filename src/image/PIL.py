@@ -178,7 +178,6 @@ class Context(bglib.image.context.Context):
     self.paste_image(image, (x, y))
 
   def draw_you_offered_double(self, cube_in_logarithm):
-    print 'draw_you_offered_double', cube_in_logarithm
     size = self.apply_mag(self.style().size.cube)
     image = self.open_image("cube_"+str(cube_in_logarithm+1)+".jpg",size)
     x, y = self.apply_mag(self.style().cube.you)
