@@ -111,11 +111,13 @@ def decode(m, s):
 
   if fibs.turn == fibs.your_colour:
     m.on_action = bglib.model.constants.you
+    m.on_inner_action = bglib.model.constants.you
     m.rolled = fibs.your_dice
     m.game_state = bglib.model.constants.on_going
   elif fibs.turn == fibs.your_colour * -1: #opposite colour
     m.rolled = fibs.his_dice
     m.on_action = bglib.model.constants.him
+    m.on_inner_action = bglib.model.constants.him
     m.game_state = bglib.model.constants.on_going
   else:
     m.rolled=(0, 0)
@@ -126,8 +128,11 @@ def decode(m, s):
     #may be we need to add some thing.
 
   if fibs.was_doubled:
-    m.on_inner_action=bglib.model.constants.you
     m.doubled = True
+    if m.on_action == bglib.model.constants.you:
+      m.on_inner_action=bglib.model.constants.him
+    elif m.on_action == bglib.model.constants.him:
+      m.on_inner_action=bglib.model.constants.you
 
   m.resign_offer = bglib.model.constants.resign_none
   # can't define!
