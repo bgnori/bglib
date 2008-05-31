@@ -30,6 +30,8 @@ resign_none = 0
 resign_single=1
 resign_gammon=2
 resign_backgammon=3
+resign_types = (resign_single, resign_gammon, resign_backgammon)
+resign_strings = ('none', 'single', 'gammon', 'backgammon')
 
 initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 

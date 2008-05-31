@@ -4,6 +4,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import re
 
 import bglib.model.constants
 import bglib.model.board
@@ -137,6 +138,54 @@ def decode(m, s):
 def encode(s):
   '''currently no use.'''
   raise NotImplemented
+
+die_expr = re.compile("[1-6]")
+def get_dice(got):
+  die_a, die_b = die_expr.findall(got)
+  return int(die_a), int(die_b)
+
+name_expr = re.compile("^[a-zA-Z_<>]+")
+def get_name(got):
+  m = name_expr.search(got)
+  if m is None:
+    return None
+  return got[m.start():m.end()]
+
+def get_move(got, who):
+  '''got = gBOTworldclass moves 22-off 24-off .'''
+  mv = bglib.model.move.Move()
+  for m in got.split(' ')[2:-1]:
+    src, dest = m.split('-')
+    is_hitting = dest.endswith('*')
+    if is_hitting:
+      dest = dest[:-1]
+    if who == bglib.model.constants.you:
+      src = bglib.model.util.move_pton(src)
+      dest = bglib.model.util.move_pton(dest)
+      pm = bglib.model.move.PartialMove(src-dest, src, dest, is_hitting)
+    elif who == bglib.model.constants.him:
+      src = bglib.model.util.move_pton(src)
+      dest = bglib.model.util.move_pton(dest)
+      pm = bglib.model.move.PartialMove(dest-src, src, dest, is_hitting)
+    else:
+      continue
+    mv.append(pm)
+  return mv
+
+score_expr = re.compile("[0-9]+")
+def get_score(got):
+  score = score_expr.findall(got)
+  return int(score)
+
+match_score_expr = re.compile("[0-9]+")
+def get_match_scores(got):
+  you, him, matchlength = match_score_expr.findall(got)
+  return int(you), int(him), int(matchlength)
+
+def get_resign_score(got):
+  score = score_expr.findall(got)
+  return int(score)
+
 
 if __name__ == '__main__':
   import doctest
