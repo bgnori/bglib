@@ -62,8 +62,6 @@ class Viewer(wx.Panel):
     wx.Panel.__init__(self, parent, style=wx.FULL_REPAINT_ON_RESIZE)
     self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
 
-    self.reset_regions()
-    self.left_q = list()
 
     style = bglib.depot.dict.Proxy(
                                    window = self,
@@ -71,6 +69,8 @@ class Viewer(wx.Panel):
                                      './bglib/image/resource/align.txt'),
                                   )
     self.SetSize(style.image.size.table) # MINIMUM SIZE
+    self.reset_regions()
+    self.left_q = list()
     context_factory = bglib.image.context.context_factory
     self.context = context_factory.new_context('wx', style)
 
@@ -86,7 +86,13 @@ class Viewer(wx.Panel):
 
   def reset_regions(self):
     self.regions = list()
-    self.bgimage = None
+    w, h = self.GetSize()
+    self.wxbmp = wx.EmptyBitmap(w, h)
+    dc = wx.MemoryDC()
+    dc.SelectObject(self.wxbmp)
+    dc.SetBackground(wx.Brush('sky blue'))
+    dc.Clear()
+    self.dc = dc
 
   def which(self, pt):
     for region in self.regions:
@@ -104,11 +110,12 @@ class Viewer(wx.Panel):
     assert(isinstance(region, bglib.image.wxpython.Region))
     self.regions.append(region)
 
-  def set_bgimage(self, image):
-    self.bgimage = image
+  def set_wxbmp(self, wximage):
+    assert isinstance(wximage, wx.Image)
+    self.dc.DrawBitmap(wximage.ConvertToBitmap(), 0, 0)
 
-  def paste_image(self, image, x, y):
-    self.bgimage.Paste(image, x, y)
+  def paste_image(self, wximage, x, y):
+    self.dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
 
   def OnEraseBackground(self, evt):
     pass
@@ -119,8 +126,7 @@ class Viewer(wx.Panel):
     dc.SetBackground(wx.Brush('sky blue'))
     dc.Clear()
 
-    bgbmp = wx.BitmapFromImage(self.bgimage)
-    dc.DrawBitmap(bgbmp, 0, 0)
+    dc.DrawBitmap(self.wxbmp, 0, 0)
     for region in self.regions:
       region.Draw(dc)
 

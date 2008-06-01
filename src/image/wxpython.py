@@ -14,13 +14,17 @@ class Region(object):
       name = str(id(self))
     self.name = name
     self.rect = wx.Rect(x, y ,w, h)
-    self.wxbmp = wx.EmptyImage(w, h)
+    self.wxbmp = wx.EmptyBitmap(w, h)
+    dc = wx.MemoryDC()
+    dc.SelectObject(self.wxbmp)
+    self.dc = dc
 
   def window_to_region(self, x, y):
     return x - self.GetX(), y - self.GetY()
 
-  def paste_image(self, image, x, y):
-    self.wxbmp.Paste(image, x, y)
+  def paste_image(self, wximage, x, y):
+    assert isinstance(wximage, wx.Image)
+    self.dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
 
   def __hash__(self):
     return hash(self.name)
@@ -38,8 +42,7 @@ class Region(object):
     return self.rect.InsideXY(x, y)
 
   def Draw(self, dc):
-    bmp = self.wxbmp.ConvertToBitmap()
-    dc.DrawBitmap(bmp, self.GetX(), self.GetY())
+    dc.DrawBitmap(self.wxbmp, self.GetX(), self.GetY())
 
   def __repr__(self):
     return  self.name + ' @ ' + str(self.rect)
@@ -71,14 +74,14 @@ class Context(bglib.image.PIL.Context):
       j = self.cache[(fn, size, upside_down)]
     return j
 
-  def paste_image(self, image, position):
+  def paste_image(self, wximage, position):
     x, y = position
     r = self.window.which_by_xy(x, y)
     if r:
       x, y = r.window_to_region(x, y)
-      r.paste_image(image, x, y)
+      r.paste_image(wximage, x, y)
     else:
-      self.window.paste_image(image, x, y)
+      self.window.paste_image(wximage, x, y)
 
   def result(self):
     return self.window
@@ -196,7 +199,7 @@ class Context(bglib.image.PIL.Context):
 
   def draw_frame(self):
     w, h  = self.apply_mag(self.style().size.table)
-    self.window.set_bgimage(wx.EmptyImage(w, h))
+    self.window.set_wxbmp(wx.EmptyImage(w, h))
     bglib.image.PIL.Context.draw_frame(self)
   def draw_your_score(self, score):
     x, y = self.apply_mag(self.style().score.yours)
