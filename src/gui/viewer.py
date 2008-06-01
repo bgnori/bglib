@@ -88,11 +88,6 @@ class Viewer(wx.Panel):
     self.regions = list()
     w, h = self.GetSize()
     self.wxbmp = wx.EmptyBitmap(w, h)
-    dc = wx.MemoryDC()
-    dc.SelectObject(self.wxbmp)
-    dc.SetBackground(wx.Brush('sky blue'))
-    dc.Clear()
-    self.dc = dc
 
   def which(self, pt):
     for region in self.regions:
@@ -112,10 +107,14 @@ class Viewer(wx.Panel):
 
   def set_wxbmp(self, wximage):
     assert isinstance(wximage, wx.Image)
-    self.dc.DrawBitmap(wximage.ConvertToBitmap(), 0, 0)
+    dc = wx.MemoryDC()
+    dc.SelectObject(self.wxbmp)
+    dc.DrawBitmap(wximage.ConvertToBitmap(), 0, 0)
 
   def paste_image(self, wximage, x, y):
-    self.dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
+    dc = wx.MemoryDC()
+    dc.SelectObject(self.wxbmp)
+    dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
 
   def OnEraseBackground(self, evt):
     pass

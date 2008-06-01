@@ -15,16 +15,15 @@ class Region(object):
     self.name = name
     self.rect = wx.Rect(x, y ,w, h)
     self.wxbmp = wx.EmptyBitmap(w, h)
-    dc = wx.MemoryDC()
-    dc.SelectObject(self.wxbmp)
-    self.dc = dc
 
   def window_to_region(self, x, y):
     return x - self.GetX(), y - self.GetY()
 
   def paste_image(self, wximage, x, y):
     assert isinstance(wximage, wx.Image)
-    self.dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
+    dc = wx.MemoryDC()
+    dc.SelectObject(self.wxbmp)
+    dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
 
   def __hash__(self):
     return hash(self.name)
