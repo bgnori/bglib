@@ -156,6 +156,16 @@ def get_name(got):
     return None
   return got[m.start():m.end()]
 
+taker_name_expr = re.compile("(?P<name>^[a-zA-Z_<>]+) accpets")
+def get_taker_name(got):
+  m = name_expr.search(got)
+  if m is None:
+    return None
+  try:
+    return got[m.start('name'):m.end('name')]
+  except IndexError:
+    return None
+
 def get_move(got, who):
   '''got = gBOTworldclass moves 22-off 24-off .'''
   mv = bglib.model.move.Move()
