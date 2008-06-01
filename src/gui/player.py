@@ -215,7 +215,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     if mv:
       mf.add(mv)
       self.MoveInputNotify()
-      self.StatusBarMessage('moved %s'%str(pm)) 
+      self.StatusBarMessage('moved %s'%str(mv)) 
     else:
       self.StatusBarMessage('illeagal input')
 
@@ -225,8 +225,6 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
     b = self.model
     mf = self.mf
 
-    points = ['%i'%i for i in range(1, 25)]
-
     on_action_plyars, opps = acitons_whose(b)
 
     if region.name == opps + 'field':
@@ -235,6 +233,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
       
     if region.name == on_action_plyars + 'field':
       if b.has_rolled():
+        print 'rolled'
         if mf.is_leagal_to_pickup_dice():
           evt = MoveDone(self.GetId(), mf.move)
           self.GetEventHandler().ProcessEvent(evt)
@@ -258,6 +257,9 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
         return
 
     elif region.name == on_action_plyars + 'home':
+      if b.has_rolled():
+        self.StatusBarMessage("It's not time for cube action.")
+        return
       if b.is_leagal_to_double():
         evt = DoubleRequest(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
@@ -291,7 +293,8 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
       self.StatusBarMessage('resign ... ')
       return
 
-    elif region.name in points or region.name == on_action_plyars + 'bar':
+    elif region.name in bglib.model.constants.points_strings \
+    or region.name == on_action_plyars + 'bar':
       src = bglib.model.util.position_pton(region.name, b.on_action)
       pm = mf.guess_your_single_pm_from_source(src)
       if pm:

@@ -8,6 +8,7 @@ size home 25  101
 size dice 16 16
 size cube 25 25
 size action 25 25
+size chip 25 25
 size score 50 93
 size matchlength 25 46
 size matchcrawford 25 46
@@ -47,6 +48,9 @@ bar   you 133  139
 bar   him 133   5
 center null 133 93 
 field him 25 93
+chip1 him 170 100
+chip2 him 190 100
+chip3 him 210 100
 cube him 180 100
 cube his 266 5
 score his 291 0
@@ -54,6 +58,9 @@ score yours 291 139
 matchlength null 316 93
 matchcrawford null 291 93
 field you  158 93
+chip1 you  60 100
+chip2 you  80 100
+chip3 you  100 100
 cube you  50 100
 cube yours  266 197
 cube center 266 105

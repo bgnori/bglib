@@ -194,9 +194,29 @@ class Context(bglib.image.context.Context):
     self.paste_image(image, (x, y))
 
   def draw_you_offered_resign(sefl, rtype):
+    size = self.apply_mag(self.style().size.chip)
+    image = self.open_image("chip.png", size)
+    x, y = self.apply_mag(self.style().chip1.you)
+    self.paste_image(image, (x, y))
+    if rtype > bglib.model.constants.resign_single:
+      x, y = self.apply_mag(self.style().chip2.you)
+      self.paste_image(image, (x, y))
+    if rtype > bglib.model.constants.resign_gammon:
+      x, y = self.apply_mag(self.style().chip3.you)
+      self.paste_image(image, (x, y))
     pass
 
   def draw_he_offered_resign(self, rtype):
+    size = self.apply_mag(self.style().size.chip)
+    image = self.open_image("chip.png", size)
+    x, y = self.apply_mag(self.style().chip1.him)
+    self.paste_image(image, (x, y))
+    if rtype > bglib.model.constants.resign_single:
+      x, y = self.apply_mag(self.style().chip2.him)
+      self.paste_image(image, (x, y))
+    if rtype > bglib.model.constants.resign_gammon:
+      x, y = self.apply_mag(self.style().chip3.him)
+      self.paste_image(image, (x, y))
     pass
 
   def draw_your_dice_in_field(self, dice):

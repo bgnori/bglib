@@ -109,6 +109,9 @@ class InteractiveTester(wx.Frame):
            ('22wqECCw8+ABYA', 'UQmgAAAAAAAA'),
            ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
            ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
+           ('mGfwATDgc/ABMA', 'cCOgAAAAAAAA'),
+           ('mGfwATDgc/ABMA', 'cEOgAAAAAAAA'),
+           ('mGfwATDgc/ABMA', 'cGOgAAAAAAAA'),
 
            ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
            ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),

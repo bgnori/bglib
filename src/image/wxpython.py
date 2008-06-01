@@ -64,8 +64,13 @@ class Context(bglib.image.PIL.Context):
     if upside_down is None:
       upside_down = False
 
+    if fn.endswith(".jpg"):
+      bitmap_type = wx.BITMAP_TYPE_JPEG
+    else:
+      bitmap_type = wx.BITMAP_TYPE_PNG
+
     if (fn, size, upside_down) not in self.cache:
-      i = wx.Image('./bglib/image/resource/'+fn, wx.BITMAP_TYPE_JPEG)
+      i = wx.Image('./bglib/image/resource/'+fn, bitmap_type)
       j = i.Scale(size[0], size[1])
       if upside_down:
         j = j.Mirror(False)

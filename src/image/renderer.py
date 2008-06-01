@@ -59,8 +59,8 @@ class Renderer(object):
     context.draw_him_to_play()
     context.draw_your_empty_field()
     context.draw_his_empty_field()
-    assert board.offer_resign in bglib.model.constants.resign_types
-    context.draw_you_offered_resign(board.offer_resign)
+    assert board.resign_offer in bglib.model.constants.resign_types
+    context.draw_you_offered_resign(board.resign_offer)
     if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
     elif board.cube_owner == bglib.model.constants.him:
@@ -121,8 +121,8 @@ class Renderer(object):
     context.draw_you_to_play()
     context.draw_your_empty_field()
     context.draw_his_empty_field()
-    assert board.offer_resign in bglib.model.constants.resign_types
-    context.draw_he_offered_resign(board.offer_resign)
+    assert board.resign_offer in bglib.model.constants.resign_types
+    context.draw_he_offered_resign(board.resign_offer)
     if board.cube_owner == bglib.model.constants.you:
       context.draw_your_cube(board.cube_in_logarithm)
     elif board.cube_owner == bglib.model.constants.him:

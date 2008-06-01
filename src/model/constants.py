@@ -16,6 +16,7 @@ off = -1
 bar = 24
 points = range(0, 24)
 none_bearoff_points =range(6, 25)
+points_strings = ['%i'%i for i in range(1, 25)]
 
 #game state
 not_started = 0
