@@ -174,22 +174,6 @@ class Context(bglib.image.PIL.Context):
     self.window.append(r)
     bglib.image.PIL.Context.draw_his_empty_field(self)
 
-  '''
-  def draw_your_dice_in_field(self, dice):
-    x, y = self.apply_mag(self.style().field.you)
-    w, h = self.apply_mag(self.style().size.field)
-    r = Region(x, y, w, h, 'your field')
-    self.window.append(r)
-    bglib.image.PIL.Context.draw_your_dice_in_field(self, dice)
-
-  def draw_his_dice_in_field(self, dice):
-    x, y = self.apply_mag(self.style().field.him)
-    w, h = self.apply_mag(self.style().size.field)
-    r = Region(x, y, w, h, 'his field')
-    self.window.append(r)
-    bglib.image.PIL.Context.draw_his_dice_in_field(self, dice)
-  '''
-
   # who is on action
   def draw_you_to_play(self):
     bglib.image.PIL.Context.draw_you_to_play(self)

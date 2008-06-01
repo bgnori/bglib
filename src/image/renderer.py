@@ -89,6 +89,8 @@ class Renderer(object):
   def draw_you_rolled(self, board):
     context = self.context()
     context.draw_you_to_play()
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
     context.draw_your_dice_in_field(board.rolled)
     context.draw_his_dice_in_field((0, 0))
     if board.cube_owner == bglib.model.constants.you:
@@ -151,6 +153,8 @@ class Renderer(object):
   def draw_he_rolled(self, board):
     context = self.context()
     context.draw_him_to_play()
+    context.draw_your_empty_field()
+    context.draw_his_empty_field()
     context.draw_your_dice_in_field((0,0))
     context.draw_his_dice_in_field(board.rolled)
     if board.cube_owner == bglib.model.constants.you:
