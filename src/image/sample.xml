@@ -11,16 +11,16 @@ point.odd {image, color}
 point.even {image, color}
 
 home {size, image, color }
-home.yours {position, image, color}
-home.his {position, image, color}
+home.you {position, image, color}
+home.him {position, image, color}
 
 chequer {size}
-chequer.yours {image, color} classセレクタ。
-chequer.his {image, color}
+chequer.you {image, color} classセレクタ。
+chequer.him {image, color}
 
 field {size: image }
-field.yours { position, } classセレクタ
-field.his { position, }
+field.you { position, } classセレクタ
+field.him { position, }
 
 cube {size, color, bgcolor}
 die.value#0{image}
@@ -36,37 +36,37 @@ die.value#3{image}
 die.value#4{image}
 die.value#5{image}
 die.value#6{image}
+field.you die
 
 
 <board>
-<home class='yours'>
+<field player='you'>
+  <die>4</die>
+  <die>2</die>
+</field>
+<home player='you'>
   <cube>2</cube>
-  <chequer class='yours'>2</chequer>
+  <chequer player='you'>2</chequer>
 </home>
-<bar class='his'>
+<bar player='him'>
 </bar>
-<point  class='odd'>
+<point  parity='odd'>
   1
-  <chequer class='his'>3</chequer>
+  <chequer player='him'>3</chequer>
 </point>
-<point  class='even'>
+<point parity='even'>
   2
-  <chequer class='yours'>2</chequer>
+  <chequer player='you'>2</chequer>
 </point>
-<point  class='odd'>
+<point parity='odd'>
   3
 </point>
 ...
 
-<bar class='your-bar'>
+<bar player='you'>
 </bar>
-<home class='his-home'>
+<home player='him'>
 </home>
-
-<field class='your-field'>
-  <your_die>4</your_die>
-  <your_die>2</your_die>
-</field>
-<field class='his-field'></field>
+<field player='him'></field>
 </board>
 

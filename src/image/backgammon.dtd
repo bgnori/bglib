@@ -1,0 +1,63 @@
+#
+# -*- coding: us-ascii -*-
+# vim: syntax=dtd
+#
+# Copyright 2006-2008 Noriyuki Hosaka bgnori@gmail.com
+#
+<!DOCTYPE backgammon
+
+
+  <!ELEMENT board  (field, home, bar, points, bar, home, field)>
+  <!ELEMENT field (EMPTY | (die, die) | cube | chip )>
+  <!ELEMENT home (EMPTY |  cube | chequer )>
+  <!ELEMENT bar (EMPTY | chequer)>
+  <!ELEMENT point (EMPTY | chequer)>
+  <!ELEMENT die (#PCDATA)>
+  <!ELEMENT cube (#PCDATA)>
+  <!ELEMENT chequer (#PCDATA)>
+
+
+  <!ATTLIST board basic>
+
+  <!ATTLIST field basic
+                  player (you|him) #REQUIRED
+
+  >
+
+  <!ATTLIST home basic
+                 player (you|him) #REQUIRED
+  >
+
+  <!ATTLIST bar basic
+                player (you|him) #REQUIRED
+  >
+
+
+  <!ATTLIST point basic
+                  parity (even|odd) #REQUIRED
+  >
+
+  <!ATTLIST die basic
+  >
+
+  <!ATTLIST cube basic
+  >
+
+  <!ATTLIST chip basic
+                offest CDATA #REQUIRED
+  >
+
+  <!ATTLIST chequer basic
+                player (you|him) #REQUIRED
+                offest CDATA #REQUIRED
+                stacking CDATA #REQUIRED
+  >
+
+  <!ENTITY % points "point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point">
+  <!ENTITY % basic 'size   CDATA #REQUIRED
+                position CDATA #REQUIRED
+                color CDATA "#FFFFFF"
+                background-color CDATA "#000000"
+                image  CDATA #IMPLIED'
+   >
+]>
