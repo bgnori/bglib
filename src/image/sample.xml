@@ -1,41 +1,41 @@
-
 valueは特殊クラス。elementの囲っているバリューを見て適用が決まる。
 
-
+cursorはどうするのか？
+http://www.nextindex.net/web/CSS/ui.html
 
 point {size: color, bgcolor}
-point.value#1{position:}
-point.value#2{position;}
-point.value#3{position;}
-point.odd {image: color}
-point.even {image: color}
+point.value#1{position}
+point.value#2{position}
+point.value#3{position}
+point.odd {image, color}
+point.even {image, color}
 
 home {size, image, color }
-home.yours {position:  ; image: ; color }
-home.his {position:  ; image: ; color}
+home.yours {position, image, color}
+home.his {position, image, color}
 
-chequer {size:}
-chequer.yours {image: color} classセレクタ。
-chequer.his { image: color}
+chequer {size}
+chequer.yours {image, color} classセレクタ。
+chequer.his {image, color}
 
 field {size: image }
-field.yours { position: } classセレクタ
-field.his { position: }
+field.yours { position, } classセレクタ
+field.his { position, }
 
-cube {size: color, bgcolor}
-die.value#0{image:;}
-die.value#1{image:;}
-die.value#2{image:;}
-home cube.yours {position:;} 文脈セレクタ + classセレクタ
-home cube.his {position:;} 文脈セレクタ + classセレクタ
+cube {size, color, bgcolor}
+die.value#0{image}
+die.value#1{image}
+die.value#2{image}
+home cube.yours {position} 文脈セレクタ + classセレクタ
+home cube.his {position} 文脈セレクタ + classセレクタ
 
 die {size: color, bgcolor}
-die.value#1{image:;}
-die.value#2{image:;}
-die.value#3{image:;}
-die.value#4{image:;}
-die.value#5{image:;}
-die.value#6{image:;}
+die.value#1{image}
+die.value#2{image}
+die.value#3{image}
+die.value#4{image}
+die.value#5{image}
+die.value#6{image}
 
 
 <board>
