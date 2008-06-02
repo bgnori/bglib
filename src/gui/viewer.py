@@ -110,13 +110,11 @@ class Viewer(wx.Panel):
     dc = wx.MemoryDC()
     dc.SelectObject(self.wxbmp)
     dc.DrawBitmap(wximage.ConvertToBitmap(), 0, 0)
-    #del dc
 
   def paste_image(self, wximage, x, y):
     dc = wx.MemoryDC()
     dc.SelectObject(self.wxbmp)
     dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
-    #del dc
 
   def OnEraseBackground(self, evt):
     pass

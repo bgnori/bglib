@@ -24,7 +24,6 @@ class Region(object):
     dc = wx.MemoryDC()
     dc.SelectObject(self.wxbmp)
     dc.DrawBitmap(wximage.ConvertToBitmap(), x, y)
-    #del dc
 
   def __hash__(self):
     return hash(self.name)
