@@ -5,13 +5,73 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
+import bglib.model.constants
 import bglib.image.context
+
+
+
+class Element(object):
+  def __init__(self, name, **kw):
+    self.name = name
+    self.children = list()
+    self.attributes = dict(kw)
+
+  def append(self, e):
+    self.children.append(e)
+  
+
+  def format(self, indent):
+    s = ' '*indent + "<%s"%(self.name)
+    for n, v in self.attributes.items():
+      s+= '%s=%s'%(n, str(v))
+    s+=">\n"
+    for c in self.children:
+      if isinstance(c, Element):
+        s += c.format(indent+2)
+      else:
+        s += ' '*(indent +2) + str(c) + '\n'
+    s+= ' '*indent + "</%s>\n"%(self.name)
+    return s
+
+you = "'"+bglib.model.constants.player_string[bglib.model.constants.you]+"'"
+him = "'"+bglib.model.constants.player_string[bglib.model.constants.him]+"'"
+
+def make_empty_tree():
+  b = Element('board')
+  b.append(Element('field', player=you))
+  b.append(Element('home', player=you))
+  b.append(Element('bar', player=him))
+  for i in range(1, 25):
+    if i%2:
+      pt = Element('point', parity='odd')
+    else:
+      pt = Element('point', parity='even')
+    pt.append(i)
+    b.append(pt)
+  b.append(Element('bar', player=you))
+  b.append(Element('home', player=him))
+  b.append(Element('field', player=him))
+  return b
+
 
 class Context(bglib.image.context.Context):
   name = 'XML'
   def __init__(self, style):
     bglib.image.context.Context.__init__(self, style)
-  def draw_your_point_at(self, point, checker_count):pass
+    self.stack = list()
+    self.xml = make_empty_tree()
+
+  def draw_your_point_at(self, point, checker_count):
+    chequer = Element('chequer', player=you)
+    chequer.append(str(checker_count))
+    for c in self.xml.children:
+      for pt in c.children:
+        if isinstance(pt, int):
+          if pt == point:
+            c.append(chequer)
+            return
+    return
+
   def draw_his_point_at(self, point, checker_count):pass
   def draw_empty_point_at(self, point):pass
   def draw_your_bar(self, checker_count):pass
@@ -46,7 +106,8 @@ class Context(bglib.image.context.Context):
   def draw_his_score(self, score):pass
   def draw_match_length(self, length):pass
   def draw_crawford_flag(self, flag):pass
-
+  def result(self):
+    return self.xml.format(0)
 
 bglib.image.context.context_factory.register(Context)
 
