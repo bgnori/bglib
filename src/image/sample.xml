@@ -1,0 +1,72 @@
+
+valueは特殊クラス。elementの囲っているバリューを見て適用が決まる。
+
+
+
+point {size: color, bgcolor}
+point.value#1{position:}
+point.value#2{position;}
+point.value#3{position;}
+point.odd {image: color}
+point.even {image: color}
+
+home {size, image, color }
+home.yours {position:  ; image: ; color }
+home.his {position:  ; image: ; color}
+
+chequer {size:}
+chequer.yours {image: color} classセレクタ。
+chequer.his { image: color}
+
+field {size: image }
+field.yours { position: } classセレクタ
+field.his { position: }
+
+cube {size: color, bgcolor}
+die.value#0{image:;}
+die.value#1{image:;}
+die.value#2{image:;}
+home cube.yours {position:;} 文脈セレクタ + classセレクタ
+home cube.his {position:;} 文脈セレクタ + classセレクタ
+
+die {size: color, bgcolor}
+die.value#1{image:;}
+die.value#2{image:;}
+die.value#3{image:;}
+die.value#4{image:;}
+die.value#5{image:;}
+die.value#6{image:;}
+
+
+<board>
+<home class='yours'>
+  <cube>2</cube>
+  <chequer class='yours'>2</chequer>
+</home>
+<bar class='his'>
+</bar>
+<point  class='odd'>
+  1
+  <chequer class='his'>3</chequer>
+</point>
+<point  class='even'>
+  2
+  <chequer class='yours'>2</chequer>
+</point>
+<point  class='odd'>
+  3
+</point>
+...
+
+<bar class='your-bar'>
+</bar>
+<home class='his-home'>
+</home>
+
+<field class='your-field'>
+  <your_die>4</your_die>
+  <your_die>2</your_die>
+</field>
+<field class='his-field'></field>
+</board>
+
