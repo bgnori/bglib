@@ -7,7 +7,15 @@
 <!DOCTYPE backgammon
 
 
-  <!ELEMENT board  (field, home, bar, points, bar, home, field)>
+  <!ELEMENT board (match, position)>
+
+  <!ELEMENT match (length, crawford, score, score)>
+  <!ELEMENT crawford (#PCDATA)>
+  <!ELEMENT score (#PCDATA)>
+  <!ELEMENT player (#PCDATA)>
+  <!ELEMENT action (#PCDATA)>
+
+  <!ELEMENT position  (field, home, bar, points, bar, home, field)>
   <!ELEMENT field (EMPTY | (die, die) | cube | chip )>
   <!ELEMENT home (EMPTY |  cube | chequer )>
   <!ELEMENT bar (EMPTY | chequer)>
@@ -19,6 +27,19 @@
 
   <!ATTLIST board basic>
 
+  <!ATTLIST match basic>
+  <!ATTLIST length basic>
+  <!ATTLIST crawford basic>
+  <!ATTLIST score basic
+                  player (you|him) #REQUIRED
+  >
+  <!ATTLIST player basic
+                  player (you|him) #REQUIRED
+  >
+  <!ATTLIST action basic>
+
+
+  <!ATTLIST position basic>
   <!ATTLIST field basic
                   player (you|him) #REQUIRED
 
@@ -38,24 +59,34 @@
   >
 
   <!ATTLIST die basic
+                x-offset CDATA #REQUIRED
+                y-offset CDATA #REQUIRED
   >
 
   <!ATTLIST cube basic
   >
 
   <!ATTLIST chip basic
-                offest CDATA #REQUIRED
+                x-offset CDATA #REQUIRED
+                y-offset CDATA #REQUIRED
+  >
+
+  <!ATTLIST cubeholder basic
   >
 
   <!ATTLIST chequer basic
                 player (you|him) #REQUIRED
-                offest CDATA #REQUIRED
-                stacking CDATA #REQUIRED
+                x-offset CDATA #REQUIRED
+                y-offset CDATA #REQUIRED
+                x-stacking-offeset CDATA #REQUIRED
+                y-stacking-offeset CDATA #REQUIRED
   >
 
   <!ENTITY % points "point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point">
-  <!ENTITY % basic 'size   CDATA #REQUIRED
-                position CDATA #REQUIRED
+  <!ENTITY % basic 'widht CDATA #REQUIRED
+                height CDATA #REQUIRED
+                x CDATA #REQUIRED
+                y CDATA #REQUIRED
                 color CDATA "#FFFFFF"
                 background-color CDATA "#000000"
                 image  CDATA #IMPLIED'
