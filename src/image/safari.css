@@ -1,29 +1,4 @@
 
-chequer {width: 15; height: 15}
-chequer[player="you"] {color: red} 
-chequer[player="him"] {color: blue}
-
-
-
-die {width: 0; height: 0}
-die:value("1") {image: uri("die_1.jpg")}
-die:value("2") {image: uri("die_2.jpg")}
-die:value("3") {image: uri("die_3.jpg")}
-die:value("4") {image: uri("die_4.jpg")}
-die:value("5") {image: uri("die_5.jpg")}
-die:value("6") {image: uri("die_6.jpg")}
-
-cubeholder cube {x: 266 ; y: 105}
-home[player='you'] cube {x: 266; y: 197} 
-home[player='him'] cube {x: 266; y: 5}
-field[player="you"] cube {x: 50; y: 100}
-field[player="him"] cube {x: 180; y: 100}
-cube {width: 25; height: 25}
-
-field[player="you"] chip {x: 158;y: 93; x-offset: 20; y-offset: 0}
-field[player="him"] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
-chip {width: 25; height: 25; color: black}
-
 
 board {x: 0; y: 0; width: 341; height: 232}
 
@@ -100,8 +75,7 @@ player[player='him']{x:0; y:0}
 
 
 
-
-position {x: 0; y: 0; width: 241; height: 232}
+position {x: 0; y: 0; width: 241; height: 232; image: uri("board.jpg")}
 point        {width: 18; height:88}
 point.[parity='odd']    {color: pink}
 point.[parity='even']   {color: skyblue}
@@ -129,11 +103,16 @@ point:value("21") {x: 194 ; y:   5 }
 point:value("22") {x: 212 ; y:   5 }
 point:value("23") {x: 230 ; y:   5 }
 point:value("24") {x: 248 ; y:   5 }
+point[parity='odd']  { image: url("odd-none.jpg") } 
+point[parity='even'] { image: url("even-none.jpg") } 
 
+
+bar[player="him"] { image: url("bar-nonejpg")} 
+bar[player="you"] { image: url("bar-nonejpg")} 
 bar[player='you'] {x:133; y:139}
 bar[player='him'] {x:133; y: 5}
 
-cubeholder {width: 25 ;height: 101; image:uri("cubeholder.jpg")}
+cubeholder {width: 25 ;height: 101; image:uri("cubeholder.jpg"); x: 266; y: 101}
 
 home {width: 25 ;height: 101}
 home[player='you'] {x: 266; y: 131}
@@ -143,13 +122,33 @@ home[player='him'] {x: 266; y: 0}
 field {width: 108; height: 46} 
 field[player="you"] {x: 158;y: 93}
 field[player="him"] {x: 25 ;y: 93}
+
+cubeholder cube {x: 266 ; y: 105}
+
+
 field[player="you"] die {x: 176; y: 95; x-offset: 28; y-offset: 0}
 field[player="him"] die {x: 43; y:95 ; x-offset: 28 ; y-offset: 0}
+die:value("1") {image: uri("die_1.jpg")}
+die:value("2") {image: uri("die_2.jpg")}
+die:value("3") {image: uri("die_3.jpg")}
+die:value("4") {image: uri("die_4.jpg")}
+die:value("5") {image: uri("die_5.jpg")}
+die:value("6") {image: uri("die_6.jpg")}
+die {width: 16; height: 16}
+
+home[player='you'] cube {x: 266; y: 197} 
+home[player='him'] cube {x: 266; y: 5}
+field[player="you"] cube {x: 50; y: 100}
+field[player="him"] cube {x: 180; y: 100}
+cube {width: 25; height: 25}
+
+field[player="you"] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
+field[player="him"] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
+chip {width: 25; height: 25; image: uri("chip.jpg"})
 
 
 
-point[parity='odd']  { image: url("odd-none.jpg") } 
-point[parity='even'] { image: url("even-none.jpg") } 
+
 
 point[parity='odd'] chequer[player="you"]:value("1")   {image: url("odd-white-1.jpg")} 
 point[parity='odd'] chequer[player="you"]:value("2")   {image: url("odd-white-2.jpg")} 
@@ -218,7 +217,6 @@ point[parity='even'] chequer[player="him"]:value("15") {image: url("even-green-1
 
 
 
-bar[player="him"] { image: url("bar-none-1.jpg")} 
 bar[player="him"] chequer[player="him"]:value("1")   {image: url("odd-green-1.jpg")} 
 bar[player="him"] chequer[player="him"]:value("2")   {image: url("odd-green-2.jpg")} 
 bar[player="him"] chequer[player="him"]:value("3")   {image: url("odd-green-3.jpg")} 
@@ -236,7 +234,6 @@ bar[player="him"] chequer[player="him"]:value("14")  {image: url("odd-green-14.j
 bar[player="him"] chequer[player="him"]:value("15")  {image: url("odd-green-15.jpg")} 
 
 
-bar[player="you"] { image: url("bar-none-1.jpg")} 
 bar[player="you"] chequer[player="you"]:value("1")   {image: url("odd-white-1.jpg")} 
 bar[player="you"] chequer[player="you"]:value("2")   {image: url("odd-white-2.jpg")} 
 bar[player="you"] chequer[player="you"]:value("3")   {image: url("odd-white-3.jpg")} 
