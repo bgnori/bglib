@@ -77,8 +77,8 @@ player[player='him']{x:0; y:0}
 
 position {x: 0; y: 0; width: 241; height: 232; image: uri("board.jpg")}
 point        {width: 18; height:88}
-point.[parity='odd']    {color: pink}
-point.[parity='even']   {color: skyblue}
+point[parity='odd']    {color: pink}
+point[parity='even']   {color: skyblue}
 point:data("1") { x: 249 ; y: 139 }
 point:data("2") { x: 230 ; y: 139 }
 point:data("3") { x: 212 ; y: 139 }
