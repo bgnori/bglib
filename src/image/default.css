@@ -24,7 +24,8 @@ crawford {x: 291; y: 93; width: 25; height: 46}
 score {width: 50; height: 93}
 score[player='you']{x: 291; y:139}
 score[player='him']{x: 291: y: 0 }
-player {width:0; height: 0}
+action{width: 25; height: 25; x:0; y:93}
+player {width:0; height: 0; }
 player[player='you']{x:0; y:0}
 player[player='him']{x:0; y:0}
 
