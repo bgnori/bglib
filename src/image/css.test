@@ -61,16 +61,19 @@ True
 0
 >>> r.add(s)
 >>> r
+in line: 0
 pattern: <board x="42">2</board>
 block: {}
 
 >>> r.update({'image': 'uri("board.jpg")'})
 >>> r
+in line: 0
 pattern: <board x="42">2</board>
 block: {'image': 'uri("board.jpg")'}
 
 >>> r.update({'image': 'uri("backgammon.jpg")'})
 >>> r
+in line: 0
 pattern: <board x="42">2</board>
 block: {'image': 'uri("backgammon.jpg")'}
 
@@ -94,6 +97,28 @@ True
 >>> e
 <board x="42" image=uri("backgammon.jpg")>2</board>
 
+>>> e = xml.Element('board',  x='"42"')
+>>> e
+<board x="42"></board>
+>>> r.apply([e])
+>>> e
+<board x="42"></board>
+
+
+>>> p = css.CSSParser()
+>>> r = p.rule(0, """point:data("1") { x: 249 ; y: 139 }""")
+>>> r
+in line: 0
+pattern: <point>1</point>
+block: {'y': '139', 'x': '249'}
+
+
+>>> p = css.CSSParser()
+>>> r = p.rule(0, """point:data("1") { x: 249}""")
+>>> r
+in line: 0
+pattern: <point>1</point>
+block: {'x': '249'}
 
 
 

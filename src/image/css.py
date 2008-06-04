@@ -108,16 +108,16 @@ class Rule(object):
     self.block.update(d)
 
   def is_match(self, path):
+    ''' match last item first. '''
     pattern = self.pattern[:]
     assert pattern
-    q = list()
     for element in reversed(path):
       if pattern[-1].is_match(element):
         pattern.pop(-1)
-        q.append(element)
-    if pattern:
-      return False
-    return True
+        if not pattern:
+          return True
+    assert pattern
+    return False
     
   def apply(self, path):
     assert path
@@ -125,7 +125,8 @@ class Rule(object):
       path[-1].update(self.block)
   
   def __str__(self):
-    r = "pattern: "+ ' '.join([str(s) for s in self.pattern]) + '\n'
+    r = "in line: %i\n"%self.lineno
+    r += "pattern: "+ ' '.join([str(s) for s in self.pattern]) + '\n'
     r += "block: %s"%str(self.block)
     return r
   __repr__ = __str__
@@ -174,7 +175,7 @@ class CSSParser(object):
     r = re.compile(""" *(?P<name>[a-zA-Z]+) *: *(?P<value>[^ ]+) *""")
     m = r.search(s)
     if m:
-      rule.update(m.group('name'), m.group('value'))
+      rule.update({m.group('name'): m.group('value')})
 
 
 
