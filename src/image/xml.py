@@ -16,9 +16,22 @@ class Element(object):
     self.children = list()
     self.attributes = dict(kw)
 
+  def __str__(self):
+    s = "<%s"%self.name
+    for name, value in self.attributes.items():
+      s += " %s=%s"%(name, value)
+    s += ">"
+    for c in self.children:
+      s += "%s"%str(c)
+    s += "</%s>"%self.name
+    return s
+  __repr__ = __str__
+
   def append(self, e):
     self.children.append(e)
-  
+
+  def update(self, d):
+    self.attributes.update(d)
 
   def format(self, indent):
     s = ' '*indent + "<%s"%(self.name)

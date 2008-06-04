@@ -56,3 +56,45 @@ False
 >>> s.is_match(e)
 True
 
+>>> r = css.Rule(0)
+>>> r.lineno
+0
+>>> r.add(s)
+>>> r
+pattern: <board x="42">2</board>
+block: {}
+
+>>> r.update({'image': 'uri("board.jpg")'})
+>>> r
+pattern: <board x="42">2</board>
+block: {'image': 'uri("board.jpg")'}
+
+>>> r.update({'image': 'uri("backgammon.jpg")'})
+>>> r
+pattern: <board x="42">2</board>
+block: {'image': 'uri("backgammon.jpg")'}
+
+>>> e = xml.Element('board',  x='"42"')
+>>> e
+<board x="42"></board>
+
+
+>>> e = xml.Element('board',  x='"42"')
+>>> e.append(2)
+>>> e
+<board x="42">2</board>
+
+>>> s.is_match(e)
+True
+
+>>> r.is_match([e])
+True
+
+>>> r.apply([e])
+>>> e
+<board x="42" image=uri("backgammon.jpg")>2</board>
+
+
+
+
+

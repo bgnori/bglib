@@ -98,22 +98,37 @@ class Selector(object):
 class Rule(object):
   def __init__(self, lineno):
     self.lineno = lineno
-    self.selectors = list()
+    self.pattern = list()
     self.block = dict()
 
   def add(self, selector):
-    self.selectors.append(selector)
+    self.pattern.append(selector)
 
-  def update(self, name, value):
-    self.block.update({name: value})
+  def update(self, d):
+    self.block.update(d)
 
-  def apply(self, e):
-    pass
+  def is_match(self, path):
+    pattern = self.pattern[:]
+    assert pattern
+    q = list()
+    for element in reversed(path):
+      if pattern[-1].is_match(element):
+        pattern.pop(-1)
+        q.append(element)
+    if pattern:
+      return False
+    return True
+    
+  def apply(self, path):
+    assert path
+    if self.is_match(path):
+      path[-1].update(self.block)
   
   def __str__(self):
-    r = "selectors: "+ ' '.join([str(s) for s in self.selectors]) + '\n'
+    r = "pattern: "+ ' '.join([str(s) for s in self.pattern]) + '\n'
     r += "block: %s"%str(self.block)
     return r
+  __repr__ = __str__
 
 
 class CSSParser(object):
