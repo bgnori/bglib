@@ -119,7 +119,6 @@ class Rule(object):
     return False
     
   def apply(self, path):
-    assert path
     if self.is_match(path):
       path[-1].update(self.block)
   
