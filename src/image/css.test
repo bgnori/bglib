@@ -1,0 +1,58 @@
+>>> import css
+>>> import xml
+
+
+.CSSParser
+.Selector
+.Rule
+
+>>> s = css.Selector('board')
+>>> print s
+<board></board>
+
+>>> s = css.Selector('board', 'x', '"42"')
+>>> print s
+<board x="42"></board>
+
+>>> s = css.Selector('board', 'x', '"42"', 2)
+>>> print s
+<board x="42">2</board>
+
+
+>>> s = css.Selector('board', 'x', '"42"', 2)
+>>> print s
+<board x="42">2</board>
+
+>>> s = css.Selector('board', 'x', '"42"', 2)
+>>> print s
+<board x="42">2</board>
+
+>>> e = xml.Element('board',  x='"42"')
+>>> e.append(2)
+>>> s.is_match(e)
+True
+
+>>> e = xml.Element('board',  x='"43"')
+>>> e.append(2)
+>>> s.is_match(e)
+False
+
+>>> e = xml.Element('position',  x='"42"')
+>>> e.append(2)
+>>> s.is_match(e)
+False
+
+>>> e = xml.Element('board',  x='"42"')
+>>> s.is_match(e)
+False
+
+>>> e = xml.Element('board',  x='"42"')
+>>> e.append(3)
+>>> s.is_match(e)
+False
+
+>>> e = xml.Element('board',  x='"42"', y='"22"')
+>>> e.append(2)
+>>> s.is_match(e)
+True
+

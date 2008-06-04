@@ -71,17 +71,18 @@ class Selector(object):
     self.data = data
 
   def is_match(self, element):
-    if element.name() != self.element:
+    if element.name != self.element:
       return False
-    if self.attribute is None:
+    if self.name is None:
       return True
     if self.value is not None:
-      assert self.attributes is not None
-      v = element.attributes,get(self.attribute, None)
+      assert self.name is not None
+      v = element.attributes.get(self.name, None)
       if not v or v != self.value:
         return False
     if self.data is not None:
-      return self.data == data
+      return self.data in element.children
+ 
     return True
   def __str__(self):
     s = "<%s"%self.element
@@ -110,7 +111,7 @@ class Rule(object):
     pass
   
   def __str__(self):
-    r = "selectors: "+ ''.join([str(s) for s in self.selectors]) + '\n'
+    r = "selectors: "+ ' '.join([str(s) for s in self.selectors]) + '\n'
     r += "block: %s"%str(self.block)
     return r
 
@@ -161,13 +162,8 @@ class CSSParser(object):
       rule.update(m.group('name'), m.group('value'))
 
 
+
 if __name__ == '__main__':
-  p = CSSParser()
-  css = file('./bglib/image/safari.css')
-  for lineno, line in enumerate(css.readlines()):
-    r = p.rule(lineno, line)
-    if r:
-      print r
-
-
+  import doctest
+  doctest.testfile('css.test', )
 
