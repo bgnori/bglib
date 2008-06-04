@@ -28,6 +28,7 @@ class Element(object):
   __repr__ = __str__
 
   def append(self, e):
+    assert isinstance(e, (Element, str))
     self.children.append(e)
 
   def update(self, d):

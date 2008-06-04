@@ -71,19 +71,17 @@ class Selector(object):
     self.data = data
 
   def is_match(self, element):
-    if element.name != self.element:
-      return False
-    if self.name is None:
-      return True
-    if self.value is not None:
-      assert self.name is not None
-      v = element.attributes.get(self.name, None)
-      if not v or v != self.value:
-        return False
-    if self.data is not None:
-      return self.data in element.children
+    ret = True
+    assert self.element is not None
+    ret &= (element.name == self.element)
+    if ret and self.name is not None:
+      ret &= (self.name in element.attributes)
+    if ret and self.value is not None:
+      ret &= (element.attributes[self.name] == self.value)
+    if ret and self.data is not None:
+      ret &= (self.data in element.children)
+    return ret
  
-    return True
   def __str__(self):
     s = "<%s"%self.element
     if self.name:
@@ -93,6 +91,7 @@ class Selector(object):
       s += "%s"%self.data
     s += "</%s>"%self.element
     return s
+  __repr__ = __str__
 
 
 class Rule(object):

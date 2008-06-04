@@ -14,31 +14,31 @@
 >>> print s
 <board x="42"></board>
 
->>> s = css.Selector('board', 'x', '"42"', 2)
+>>> s = css.Selector('board', 'x', '"42"', "2")
 >>> print s
 <board x="42">2</board>
 
 
->>> s = css.Selector('board', 'x', '"42"', 2)
+>>> s = css.Selector('board', 'x', '"42"', "2")
 >>> print s
 <board x="42">2</board>
 
->>> s = css.Selector('board', 'x', '"42"', 2)
+>>> s = css.Selector('board', 'x', '"42"', "2")
 >>> print s
 <board x="42">2</board>
 
 >>> e = xml.Element('board',  x='"42"')
->>> e.append(2)
+>>> e.append("2")
 >>> s.is_match(e)
 True
 
 >>> e = xml.Element('board',  x='"43"')
->>> e.append(2)
+>>> e.append("2")
 >>> s.is_match(e)
 False
 
 >>> e = xml.Element('position',  x='"42"')
->>> e.append(2)
+>>> e.append("2")
 >>> s.is_match(e)
 False
 
@@ -47,12 +47,12 @@ False
 False
 
 >>> e = xml.Element('board',  x='"42"')
->>> e.append(3)
+>>> e.append("3")
 >>> s.is_match(e)
 False
 
 >>> e = xml.Element('board',  x='"42"', y='"22"')
->>> e.append(2)
+>>> e.append("2")
 >>> s.is_match(e)
 True
 
@@ -83,7 +83,7 @@ block: {'image': 'uri("backgammon.jpg")'}
 
 
 >>> e = xml.Element('board',  x='"42"')
->>> e.append(2)
+>>> e.append("2")
 >>> e
 <board x="42">2</board>
 
@@ -104,7 +104,6 @@ True
 >>> e
 <board x="42"></board>
 
-
 >>> p = css.CSSParser()
 >>> r = p.rule(0, """point:data("1") { x: 249 ; y: 139 }""")
 >>> r
@@ -112,14 +111,57 @@ in line: 0
 pattern: <point>1</point>
 block: {'y': '139', 'x': '249'}
 
-
->>> p = css.CSSParser()
 >>> r = p.rule(0, """point:data("1") { x: 249}""")
 >>> r
 in line: 0
 pattern: <point>1</point>
 block: {'x': '249'}
 
+>>> r = p.rule(0, """board {x: 0; y: 0; width: 341; height: 232}""")
+>>> r
+in line: 0
+pattern: <board></board>
+block: {'y': '0', 'x': '0', 'height': '232', 'width': '341'}
+
+
+>>> r = p.rule(0, """die:data("1") {image}""")
+>>> r
+in line: 0
+pattern: <die>1</die>
+block: {}
+
+>>> r = p.rule(0, """home[player='you'] cube{x: 266; y: 197;}""")
+>>> r
+in line: 0
+pattern: <home player='you'></home> <cube></cube>
+block: {'y': '197', 'x': '266'}
+
+
+>>> r = p.rule(0, """point[parity='even'] chequer[player="him"]:data("1")  {image: uri("even-green-1.jpg")} """)
+>>> r
+in line: 0
+pattern: <point parity='even'></point> <chequer player="him">1</chequer>
+block: {'image': 'uri("even-green-1.jpg")'}
+
+>>> b = xml.Element('board')
+>>> p = xml.Element('point', parity="'even'")
+>>> c = xml.Element('chequer', player='"him"')
+>>> c.append('1')
+>>> c
+<chequer player="him">1</chequer>
+
+>>> r.pattern[-1]
+<chequer player="him">1</chequer>
+
+>>> r.pattern[-1].is_match(c)
+True
+
+>>> r.is_match([b, p, c])
+True
+
+>>> r.apply([b, p, c])
+>>> c
+<chequer player="him" image=uri("even-green-1.jpg")>1</chequer>
 
 
 
