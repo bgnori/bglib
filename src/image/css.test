@@ -1,6 +1,5 @@
+>>> import base
 >>> import css
->>> import xml
-
 
 .CSSParser
 .Selector
@@ -27,31 +26,31 @@
 >>> print s
 <board x="42">2</board>
 
->>> e = xml.Element('board',  x='"42"')
+>>> e = base.Element('board',  x='"42"')
 >>> e.append("2")
 >>> s.is_match(e)
 True
 
->>> e = xml.Element('board',  x='"43"')
+>>> e = base.Element('board',  x='"43"')
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = xml.Element('position',  x='"42"')
+>>> e = base.Element('position',  x='"42"')
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = xml.Element('board',  x='"42"')
+>>> e = base.Element('board',  x='"42"')
 >>> s.is_match(e)
 False
 
->>> e = xml.Element('board',  x='"42"')
+>>> e = base.Element('board',  x='"42"')
 >>> e.append("3")
 >>> s.is_match(e)
 False
 
->>> e = xml.Element('board',  x='"42"', y='"22"')
+>>> e = base.Element('board',  x='"42"', y='"22"')
 >>> e.append("2")
 >>> s.is_match(e)
 True
@@ -77,12 +76,12 @@ in line: 0
 pattern: <board x="42">2</board>
 block: {'image': 'uri("backgammon.jpg")'}
 
->>> e = xml.Element('board',  x='"42"')
+>>> e = base.Element('board',  x='"42"')
 >>> e
 <board x="42"></board>
 
 
->>> e = xml.Element('board',  x='"42"')
+>>> e = base.Element('board',  x='"42"')
 >>> e.append("2")
 >>> e
 <board x="42">2</board>
@@ -97,7 +96,7 @@ True
 >>> e
 <board x="42" image=uri("backgammon.jpg")>2</board>
 
->>> e = xml.Element('board',  x='"42"')
+>>> e = base.Element('board',  x='"42"')
 >>> e
 <board x="42"></board>
 >>> r.apply([e])
@@ -143,9 +142,9 @@ in line: 0
 pattern: <point parity='even'></point> <chequer player="him">1</chequer>
 block: {'image': 'uri("even-green-1.jpg")'}
 
->>> b = xml.Element('board')
->>> p = xml.Element('point', parity="'even'")
->>> c = xml.Element('chequer', player='"him"')
+>>> b = base.Element('board')
+>>> p = base.Element('point', parity="'even'")
+>>> c = base.Element('chequer', player='"him"')
 >>> c.append('1')
 >>> c
 <chequer player="him">1</chequer>
