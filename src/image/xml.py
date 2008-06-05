@@ -13,9 +13,10 @@ import bglib.image.css
 
 class Element(object):
   def __init__(self, name, **kw):
-    self.name = name
-    self.children = list()
-    self.attributes = dict(kw)
+    self.__dict__['name'] = name
+    self.__dict__['children'] = list()
+    self.__dict__['attributes'] = dict(kw)
+    self.__dict__['parent'] = None
 
   def __str__(self):
     s = "<%s"%self.name
@@ -47,6 +48,12 @@ class Element(object):
         s += ' '*(indent +2) + str(c) + '\n'
     s+= ' '*indent + "</%s>\n"%(self.name)
     return s
+
+  def __getattr__(self, name):
+    if name in self.attributes:
+      return self.attributes[name]
+    return getattr(self.parent, name) #inherit
+
 
 you = bglib.model.constants.player_string[bglib.model.constants.you]
 him = bglib.model.constants.player_string[bglib.model.constants.him]
@@ -228,7 +235,7 @@ class Context(bglib.image.context.Context):
         rules.append(r)
     self.apply([self.tree_root], rules)
 
-    return self.tree_root.format(0)
+    return self.tree_root
 
 bglib.image.context.context_factory.register(Context)
 
@@ -249,6 +256,6 @@ if __name__ == '__main__':
   context_factory = bglib.image.context.context_factory
   context = context_factory.new_context('XML', style)
   xml = renderer.render(context, board)
-  print xml
+  print xml.format(0)
 
 

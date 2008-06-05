@@ -1,0 +1,123 @@
+<board y=0 x=0 width=341 height=232>
+  <field player=you width=108 y=93 x=25 height=46>
+  </field>
+  <home player=you width=25 y=0 x=266 height=101>
+    <chequer player=you>
+      0
+    </chequer>
+  </home>
+  <bar player=him y=5 x=133 image=uri("bar-none.jpg")>
+    <chequer player=him image=uri("odd-white-15.jpg")>
+      0
+    </chequer>
+  </bar>
+  <point parity=odd y=139 width=18 color=skyblue x=249 image=uri("even-none.jpg) height=88>
+    1
+    <chequer player=him image=uri("even-green-15.jpg")>
+      2
+    </chequer>
+  </point>
+  <point parity=even y=139 width=18 color=skyblue x=230 image=uri("even-none.jpg) height=88>
+    2
+  </point>
+  <point parity=odd y=139 width=18 color=skyblue x=212 image=uri("even-none.jpg) height=88>
+    3
+  </point>
+  <point parity=even y=139 width=18 color=skyblue x=194 image=uri("even-none.jpg) height=88>
+    4
+  </point>
+  <point parity=odd y=139 width=18 color=skyblue x=176 image=uri("even-none.jpg) height=88>
+    5
+  </point>
+  <point parity=even y=139 width=18 color=skyblue x=158 image=uri("even-none.jpg) height=88>
+    6
+    <chequer player=you image=uri("even-green-15.jpg")>
+      5
+    </chequer>
+  </point>
+  <point parity=odd y=139 width=18 color=skyblue x=115 image=uri("even-none.jpg) height=88>
+    7
+  </point>
+  <point parity=even y=139 width=18 color=skyblue x=97 image=uri("even-none.jpg) height=88>
+    8
+    <chequer player=you image=uri("even-green-15.jpg")>
+      3
+    </chequer>
+  </point>
+  <point parity=odd y=139 width=18 color=skyblue x=79 image=uri("even-none.jpg) height=88>
+    9
+  </point>
+  <point parity=even y=139 width=18 color=skyblue x=61 image=uri("even-none.jpg) height=88>
+    10
+  </point>
+  <point parity=odd y=139 width=18 color=skyblue x=43 image=uri("even-none.jpg) height=88>
+    11
+  </point>
+  <point parity=even y=139 width=18 color=skyblue x=25 image=uri("even-none.jpg) height=88>
+    12
+    <chequer player=him image=uri("even-green-15.jpg")>
+      5
+    </chequer>
+  </point>
+  <point parity=odd y=5 width=18 color=skyblue x=25 image=uri("even-none.jpg) height=88>
+    13
+    <chequer player=you image=uri("even-green-15.jpg")>
+      5
+    </chequer>
+  </point>
+  <point parity=even y=5 width=18 color=skyblue x=43 image=uri("even-none.jpg) height=88>
+    14
+  </point>
+  <point parity=odd y=5 width=18 color=skyblue x=61 image=uri("even-none.jpg) height=88>
+    15
+  </point>
+  <point parity=even y=5 width=18 color=skyblue x=79 image=uri("even-none.jpg) height=88>
+    16
+  </point>
+  <point parity=odd y=5 width=18 color=skyblue x=97 image=uri("even-none.jpg) height=88>
+    17
+    <chequer player=him image=uri("even-green-15.jpg")>
+      3
+    </chequer>
+  </point>
+  <point parity=even y=5 width=18 color=skyblue x=115 image=uri("even-none.jpg) height=88>
+    18
+  </point>
+  <point parity=odd y=5 width=18 color=skyblue x=158 image=uri("even-none.jpg) height=88>
+    19
+    <chequer player=him image=uri("even-green-15.jpg")>
+      5
+    </chequer>
+  </point>
+  <point parity=even y=5 width=18 color=skyblue x=176 image=uri("even-none.jpg) height=88>
+    20
+  </point>
+  <point parity=odd y=5 width=18 color=skyblue x=194 image=uri("even-none.jpg) height=88>
+    21
+  </point>
+  <point parity=even y=5 width=18 color=skyblue x=212 image=uri("even-none.jpg) height=88>
+    22
+  </point>
+  <point parity=odd y=5 width=18 color=skyblue x=230 image=uri("even-none.jpg) height=88>
+    23
+  </point>
+  <point parity=even y=5 width=18 color=skyblue x=248 image=uri("even-none.jpg) height=88>
+    24
+    <chequer player=you image=uri("even-green-15.jpg")>
+      2
+    </chequer>
+  </point>
+  <bar player=you y=5 x=133 image=uri("bar-none.jpg")>
+    <chequer player=you image=uri("odd-white-15.jpg")>
+      0
+    </chequer>
+  </bar>
+  <home player=him width=25 y=0 x=266 height=101>
+    <chequer player=him>
+      0
+    </chequer>
+  </home>
+  <field player=him width=108 y=93 x=25 height=46>
+  </field>
+</board>
+
