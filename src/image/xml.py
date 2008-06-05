@@ -48,8 +48,8 @@ class Element(object):
     s+= ' '*indent + "</%s>\n"%(self.name)
     return s
 
-you = "'"+bglib.model.constants.player_string[bglib.model.constants.you]+"'"
-him = "'"+bglib.model.constants.player_string[bglib.model.constants.him]+"'"
+you = bglib.model.constants.player_string[bglib.model.constants.you]
+him = bglib.model.constants.player_string[bglib.model.constants.him]
 
 def make_empty_tree():
   points = list()
@@ -70,9 +70,9 @@ def make_empty_tree():
   b.append(bar[bglib.model.constants.him])
   for i in range(1, 25):
     if i%2:
-      pt = Element('point', parity="'odd'")
+      pt = Element('point', parity="odd")
     else:
-      pt = Element('point', parity="'even'")
+      pt = Element('point', parity="even")
     pt.append(str(i))
     b.append(pt)
     points.append(pt)
@@ -226,7 +226,7 @@ class Context(bglib.image.context.Context):
       r = p.rule(no, line)
       if r:
         rules.append(r)
-    #self.apply([self.tree_root], rules)
+    self.apply([self.tree_root], rules)
 
     return self.tree_root.format(0)
 

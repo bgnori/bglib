@@ -4,62 +4,62 @@ board {x: 0; y: 0; width: 341; height: 232}
 
 match {x: 241; y: 0; width: 100; height: 232}
 length {x: 316; y: 93; width: 25; height: 46}
-length:data("0") {image: uri("score_0.jpg")}
-length:data("1") {image: uri("score_1.jpg")}
-length:data("2") {image: uri("score_2.jpg")}
-length:data("3") {image: uri("score_3.jpg")}
-length:data("4") {image: uri("score_4.jpg")}
-length:data("5") {image: uri("score_5.jpg")}
-length:data("6") {image: uri("score_6.jpg")}
-length:data("7") {image: uri("score_7.jpg")}
-length:data("8") {image: uri("score_8.jpg")}
-length:data("9") {image: uri("score_9.jpg")}
-length:data("10") {image: uri("score_10.jpg")}
-length:data("11") {image: uri("score_11.jpg")}
-length:data("12") {image: uri("score_12.jpg")}
-length:data("13") {image: uri("score_13.jpg")}
-length:data("14") {image: uri("score_14.jpg")}
-length:data("15") {image: uri("score_15.jpg")}
-length:data("16") {image: uri("score_16.jpg")}
-length:data("17") {image: uri("score_17.jpg")}
-length:data("18") {image: uri("score_18.jpg")}
-length:data("19") {image: uri("score_19.jpg")}
-length:data("20") {image: uri("score_20.jpg")}
-length:data("21") {image: uri("score_21.jpg")}
-length:data("22") {image: uri("score_22.jpg")}
-length:data("23") {image: uri("score_23.jpg")}
-length:data("24") {image: uri("score_24.jpg")}
-length:data("25") {image: uri("score_25.jpg")}
+length:data(0) {image: uri("score_0.jpg")}
+length:data(1) {image: uri("score_1.jpg")}
+length:data(2) {image: uri("score_2.jpg")}
+length:data(3) {image: uri("score_3.jpg")}
+length:data(4) {image: uri("score_4.jpg")}
+length:data(5) {image: uri("score_5.jpg")}
+length:data(6) {image: uri("score_6.jpg")}
+length:data(7) {image: uri("score_7.jpg")}
+length:data(8) {image: uri("score_8.jpg")}
+length:data(9) {image: uri("score_9.jpg")}
+length:data(10) {image: uri("score_10.jpg")}
+length:data(11) {image: uri("score_11.jpg")}
+length:data(12) {image: uri("score_12.jpg")}
+length:data(13) {image: uri("score_13.jpg")}
+length:data(14) {image: uri("score_14.jpg")}
+length:data(15) {image: uri("score_15.jpg")}
+length:data(16) {image: uri("score_16.jpg")}
+length:data(17) {image: uri("score_17.jpg")}
+length:data(18) {image: uri("score_18.jpg")}
+length:data(19) {image: uri("score_19.jpg")}
+length:data(20) {image: uri("score_20.jpg")}
+length:data(21) {image: uri("score_21.jpg")}
+length:data(22) {image: uri("score_22.jpg")}
+length:data(23) {image: uri("score_23.jpg")}
+length:data(24) {image: uri("score_24.jpg")}
+length:data(25) {image: uri("score_25.jpg")}
 crawford {x: 291; y: 93; width: 25; height: 46}
 score {width: 50; height: 93}
-score[player='you'] {x: 291; y:139}
-score[player='him'] {x: 291; y: 0 }
-score:data("0") {image: uri("score_0.jpg")}
-score:data("1") {image: uri("score_1.jpg")}
-score:data("2") {image: uri("score_2.jpg")}
-score:data("3") {image: uri("score_3.jpg")}
-score:data("4") {image: uri("score_4.jpg")}
-score:data("5") {image: uri("score_5.jpg")}
-score:data("6") {image: uri("score_6.jpg")}
-score:data("7") {image: uri("score_7.jpg")}
-score:data("8") {image: uri("score_8.jpg")}
-score:data("9") {image: uri("score_9.jpg")}
-score:data("10") {image: uri("score_10.jpg")}
-score:data("11") {image: uri("score_11.jpg")}
-score:data("12") {image: uri("score_12.jpg")}
-score:data("13") {image: uri("score_13.jpg")}
-score:data("14") {image: uri("score_14.jpg")}
-score:data("15") {image: uri("score_15.jpg")}
-score:data("16") {image: uri("score_16.jpg")}
-score:data("17") {image: uri("score_17.jpg")}
-score:data("18") {image: uri("score_18.jpg")}
-score:data("19") {image: uri("score_19.jpg")}
-score:data("20") {image: uri("score_20.jpg")}
-score:data("21") {image: uri("score_21.jpg")}
-score:data("22") {image: uri("score_22.jpg")}
-score:data("23") {image: uri("score_23.jpg")}
-score:data("24") {image: uri("score_24.jpg")}
-score:data("25") {image: uri("score_25.jpg")}
+score[player=you] {x: 291; y:139}
+score[player=him] {x: 291; y: 0 }
+score:data(0) {image: uri("score_0.jpg")}
+score:data(1) {image: uri("score_1.jpg")}
+score:data(2) {image: uri("score_2.jpg")}
+score:data(3) {image: uri("score_3.jpg")}
+score:data(4) {image: uri("score_4.jpg")}
+score:data(5) {image: uri("score_5.jpg")}
+score:data(6) {image: uri("score_6.jpg")}
+score:data(7) {image: uri("score_7.jpg")}
+score:data(8) {image: uri("score_8.jpg")}
+score:data(9) {image: uri("score_9.jpg")}
+score:data(10) {image: uri("score_10.jpg")}
+score:data(11) {image: uri("score_11.jpg")}
+score:data(12) {image: uri("score_12.jpg")}
+score:data(13) {image: uri("score_13.jpg")}
+score:data(14) {image: uri("score_14.jpg")}
+score:data(15) {image: uri("score_15.jpg")}
+score:data(16) {image: uri("score_16.jpg")}
+score:data(17) {image: uri("score_17.jpg")}
+score:data(18) {image: uri("score_18.jpg")}
+score:data(19) {image: uri("score_19.jpg")}
+score:data(20) {image: uri("score_20.jpg")}
+score:data(21) {image: uri("score_21.jpg")}
+score:data(22) {image: uri("score_22.jpg")}
+score:data(23) {image: uri("score_23.jpg")}
+score:data(24) {image: uri("score_24.jpg")}
+score:data(25) {image: uri("score_25.jpg")}
 
 
 
@@ -67,188 +67,188 @@ score:data("25") {image: uri("score_25.jpg")}
 
 
 action{width: 25; height: 25; x:0; y:93}
-action[player='you'] {image: uri("action_white.jpg") }
-action[player='him'] {image: uri("action_green.jpg") }
+action[player=you] {image: uri("action_white.jpg) }
+action[player=him] {image: uri("action_green.jpg) }
 player {width:0; height: 0}
-player[player='you']{x:0; y:0}
-player[player='him']{x:0; y:0}
+player[player=you]{x:0; y:0}
+player[player=him]{x:0; y:0}
 
 
 
 position {x: 0; y: 0; width: 241; height: 232; image: uri("board.jpg")}
 point        {width: 18; height:88}
-point[parity='odd']    {color: pink}
-point[parity='even']   {color: skyblue}
-point:data("1") { x: 249 ; y: 139 }
-point:data("2") { x: 230 ; y: 139 }
-point:data("3") { x: 212 ; y: 139 }
-point:data("4") { x: 194 ; y: 139 }
-point:data("5") { x: 176 ; y: 139 }
-point:data("6") { x: 158 ; y: 139 }
-point:data("7") { x: 115 ; y: 139 }
-point:data("8") { x:  97 ; y: 139 }
-point:data("9") { x:  79 ; y: 139 }
-point:data("10") {x:  61 ; y: 139 }
-point:data("11") {x:  43 ; y: 139 }
-point:data("12") {x:  25 ; y: 139 }
-point:data("13") {x:  25 ; y:   5 }
-point:data("14") {x:  43 ; y:   5 }
-point:data("15") {x:  61 ; y:   5 }
-point:data("16") {x:  79 ; y:   5 }
-point:data("17") {x:  97 ; y:   5 }
-point:data("18") {x: 115 ; y:   5 }
-point:data("19") {x: 158 ; y:   5 }
-point:data("20") {x: 176 ; y:   5 }
-point:data("21") {x: 194 ; y:   5 }
-point:data("22") {x: 212 ; y:   5 }
-point:data("23") {x: 230 ; y:   5 }
-point:data("24") {x: 248 ; y:   5 }
-point[parity='odd']  { image: uri("odd-none.jpg") } 
-point[parity='even'] { image: uri("even-none.jpg") } 
+point[parity=odd]    {color: pink}
+point[parity=even]   {color: skyblue}
+point:data(1) { x: 249 ; y: 139 }
+point:data(2) { x: 230 ; y: 139 }
+point:data(3) { x: 212 ; y: 139 }
+point:data(4) { x: 194 ; y: 139 }
+point:data(5) { x: 176 ; y: 139 }
+point:data(6) { x: 158 ; y: 139 }
+point:data(7) { x: 115 ; y: 139 }
+point:data(8) { x:  97 ; y: 139 }
+point:data(9) { x:  79 ; y: 139 }
+point:data(10) {x:  61 ; y: 139 }
+point:data(11) {x:  43 ; y: 139 }
+point:data(12) {x:  25 ; y: 139 }
+point:data(13) {x:  25 ; y:   5 }
+point:data(14) {x:  43 ; y:   5 }
+point:data(15) {x:  61 ; y:   5 }
+point:data(16) {x:  79 ; y:   5 }
+point:data(17) {x:  97 ; y:   5 }
+point:data(18) {x: 115 ; y:   5 }
+point:data(19) {x: 158 ; y:   5 }
+point:data(20) {x: 176 ; y:   5 }
+point:data(21) {x: 194 ; y:   5 }
+point:data(22) {x: 212 ; y:   5 }
+point:data(23) {x: 230 ; y:   5 }
+point:data(24) {x: 248 ; y:   5 }
+point[parity=odd]  { image: uri("odd-none.jpg) } 
+point[parity=even] { image: uri("even-none.jpg) } 
 
 
-bar[player='him'] { image: uri("bar-none.jpg")} 
-bar[player='you'] { image: uri("bar-none.jpg")} 
-bar[player='you'] {x:133; y:139}
-bar[player='him'] {x:133; y: 5}
+bar[player=him] { image: uri("bar-none.jpg")} 
+bar[player=you] { image: uri("bar-none.jpg")} 
+bar[player=you] {x:133; y:139}
+bar[player=him] {x:133; y: 5}
 
 cubeholder {width: 25 ;height: 101; image:uri("cubeholder.jpg"); x: 266; y: 101}
 
 home {width: 25 ;height: 101}
-home[player='you'] {x: 266; y: 131}
-home[player='him'] {x: 266; y: 0}
+home[player=you] {x: 266; y: 131}
+home[player=him] {x: 266; y: 0}
 
 
 field {width: 108; height: 46} 
-field[player='you'] {x: 158;y: 93}
-field[player='him'] {x: 25 ;y: 93}
+field[player=you] {x: 158;y: 93}
+field[player=him] {x: 25 ;y: 93}
 
 cubeholder cube {x: 266 ; y: 105}
 
 
-field[player='you'] die {x: 176; y: 95; x-offset: 28; y-offset: 0}
-field[player='him'] die {x: 43; y:95 ; x-offset: 28 ; y-offset: 0}
-die:data("1") {image: uri("die_1.jpg")}
-die:data("2") {image: uri("die_2.jpg")}
-die:data("3") {image: uri("die_3.jpg")}
-die:data("4") {image: uri("die_4.jpg")}
-die:data("5") {image: uri("die_5.jpg")}
-die:data("6") {image: uri("die_6.jpg")}
+field[player=you] die {x: 176; y: 95; x-offset: 28; y-offset: 0}
+field[player=him] die {x: 43; y:95 ; x-offset: 28 ; y-offset: 0}
+die:data(1) {image: uri("die_1.jpg")}
+die:data(2) {image: uri("die_2.jpg")}
+die:data(3) {image: uri("die_3.jpg")}
+die:data(4) {image: uri("die_4.jpg")}
+die:data(5) {image: uri("die_5.jpg")}
+die:data(6) {image: uri("die_6.jpg")}
 die {width: 16; height: 16}
 
-home[player='you'] cube {x: 266; y: 197} 
-home[player='him'] cube {x: 266; y: 5}
-field[player='you'] cube {x: 50; y: 100}
-field[player='him'] cube {x: 180; y: 100}
+home[player=you] cube {x: 266; y: 197} 
+home[player=him] cube {x: 266; y: 5}
+field[player=you] cube {x: 50; y: 100}
+field[player=him] cube {x: 180; y: 100}
 cube {width: 25; height: 25}
 
-field[player='you'] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
-field[player='him'] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
+field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
+field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
 chip {width: 25; height: 25; image: uri("chip.jpg"})
 
 
 
 
 
-point[parity='odd'] chequer[player='you']:data("1")   {image: uri("odd-white-1.jpg")} 
-point[parity='odd'] chequer[player='you']:data("2")   {image: uri("odd-white-2.jpg")} 
-point[parity='odd'] chequer[player='you']:data("3")   {image: uri("odd-white-3.jpg")} 
-point[parity='odd'] chequer[player='you']:data("4")   {image: uri("odd-white-4.jpg")} 
-point[parity='odd'] chequer[player='you']:data("5")   {image: uri("odd-white-5.jpg")} 
-point[parity='odd'] chequer[player='you']:data("6")   {image: uri("odd-white-6.jpg")} 
-point[parity='odd'] chequer[player='you']:data("7")   {image: uri("odd-white-7.jpg")} 
-point[parity='odd'] chequer[player='you']:data("8")   {image: uri("odd-white-8.jpg")} 
-point[parity='odd'] chequer[player='you']:data("9")   {image: uri("odd-white-9.jpg")} 
-point[parity='odd'] chequer[player='you']:data("10")  {image: uri("odd-white-10.jpg")} 
-point[parity='odd'] chequer[player='you']:data("11")  {image: uri("odd-white-11.jpg")} 
-point[parity='odd'] chequer[player='you']:data("12")  {image: uri("odd-white-12.jpg")} 
-point[parity='odd'] chequer[player='you']:data("13")  {image: uri("odd-white-13.jpg")} 
-point[parity='odd'] chequer[player='you']:data("14")  {image: uri("odd-white-14.jpg")} 
-point[parity='odd'] chequer[player='you']:data("15")  {image: uri("odd-white-15.jpg")} 
+point[parity=odd] chequer[player=you]:data(1)   {image: uri("odd-white-1.jpg")} 
+point[parity=odd] chequer[player=you]:data(2)   {image: uri("odd-white-2.jpg")} 
+point[parity=odd] chequer[player=you]:data(3)   {image: uri("odd-white-3.jpg")} 
+point[parity=odd] chequer[player=you]:data(4)   {image: uri("odd-white-4.jpg")} 
+point[parity=odd] chequer[player=you]:data(5)   {image: uri("odd-white-5.jpg")} 
+point[parity=odd] chequer[player=you]:data(6)   {image: uri("odd-white-6.jpg")} 
+point[parity=odd] chequer[player=you]:data(7)   {image: uri("odd-white-7.jpg")} 
+point[parity=odd] chequer[player=you]:data(8)   {image: uri("odd-white-8.jpg")} 
+point[parity=odd] chequer[player=you]:data(9)   {image: uri("odd-white-9.jpg")} 
+point[parity=odd] chequer[player=you]:data(10)  {image: uri("odd-white-10.jpg")} 
+point[parity=odd] chequer[player=you]:data(11)  {image: uri("odd-white-11.jpg")} 
+point[parity=odd] chequer[player=you]:data(12)  {image: uri("odd-white-12.jpg")} 
+point[parity=odd] chequer[player=you]:data(13)  {image: uri("odd-white-13.jpg")} 
+point[parity=odd] chequer[player=you]:data(14)  {image: uri("odd-white-14.jpg")} 
+point[parity=odd] chequer[player=you]:data(15)  {image: uri("odd-white-15.jpg")} 
 
-point[parity='even'] chequer[player='you']:data("1")  {image: uri("even-white-1.jpg")} 
-point[parity='even'] chequer[player='you']:data("2")  {image: uri("even-white-2.jpg")} 
-point[parity='even'] chequer[player='you']:data("3")  {image: uri("even-white-3.jpg")} 
-point[parity='even'] chequer[player='you']:data("4")  {image: uri("even-white-4.jpg")} 
-point[parity='even'] chequer[player='you']:data("5")  {image: uri("even-white-5.jpg")} 
-point[parity='even'] chequer[player='you']:data("6")  {image: uri("even-white-6.jpg")} 
-point[parity='even'] chequer[player='you']:data("7")  {image: uri("even-white-7.jpg")} 
-point[parity='even'] chequer[player='you']:data("8")  {image: uri("even-white-8.jpg")} 
-point[parity='even'] chequer[player='you']:data("9")  {image: uri("even-white-9.jpg")} 
-point[parity='even'] chequer[player='you']:data("10") {image: uri("even-white-10.jpg")} 
-point[parity='even'] chequer[player='you']:data("11") {image: uri("even-white-11.jpg")} 
-point[parity='even'] chequer[player='you']:data("12") {image: uri("even-white-12.jpg")} 
-point[parity='even'] chequer[player='you']:data("13") {image: uri("even-white-13.jpg")} 
-point[parity='even'] chequer[player='you']:data("14") {image: uri("even-white-14.jpg")} 
-point[parity='even'] chequer[player='you']:data("15") {image: uri("even-white-15.jpg")} 
+point[parity=even] chequer[player=you]:data(1)  {image: uri("even-white-1.jpg")} 
+point[parity=even] chequer[player=you]:data(2)  {image: uri("even-white-2.jpg")} 
+point[parity=even] chequer[player=you]:data(3)  {image: uri("even-white-3.jpg")} 
+point[parity=even] chequer[player=you]:data(4)  {image: uri("even-white-4.jpg")} 
+point[parity=even] chequer[player=you]:data(5)  {image: uri("even-white-5.jpg")} 
+point[parity=even] chequer[player=you]:data(6)  {image: uri("even-white-6.jpg")} 
+point[parity=even] chequer[player=you]:data(7)  {image: uri("even-white-7.jpg")} 
+point[parity=even] chequer[player=you]:data(8)  {image: uri("even-white-8.jpg")} 
+point[parity=even] chequer[player=you]:data(9)  {image: uri("even-white-9.jpg")} 
+point[parity=even] chequer[player=you]:data(10) {image: uri("even-white-10.jpg")} 
+point[parity=even] chequer[player=you]:data(11) {image: uri("even-white-11.jpg")} 
+point[parity=even] chequer[player=you]:data(12) {image: uri("even-white-12.jpg")} 
+point[parity=even] chequer[player=you]:data(13) {image: uri("even-white-13.jpg")} 
+point[parity=even] chequer[player=you]:data(14) {image: uri("even-white-14.jpg")} 
+point[parity=even] chequer[player=you]:data(15) {image: uri("even-white-15.jpg")} 
 
-point[parity='odd'] chequer[player='him']:data("1")   {image: uri("odd-green-1.jpg")} 
-point[parity='odd'] chequer[player='him']:data("2")   {image: uri("odd-green-2.jpg")} 
-point[parity='odd'] chequer[player='him']:data("3")   {image: uri("odd-green-3.jpg")} 
-point[parity='odd'] chequer[player='him']:data("4")   {image: uri("odd-green-4.jpg")} 
-point[parity='odd'] chequer[player='him']:data("5")   {image: uri("odd-green-5.jpg")} 
-point[parity='odd'] chequer[player='him']:data("6")   {image: uri("odd-green-6.jpg")} 
-point[parity='odd'] chequer[player='him']:data("7")   {image: uri("odd-green-7.jpg")} 
-point[parity='odd'] chequer[player='him']:data("8")   {image: uri("odd-green-8.jpg")} 
-point[parity='odd'] chequer[player='him']:data("9")   {image: uri("odd-green-9.jpg")} 
-point[parity='odd'] chequer[player='him']:data("10")  {image: uri("odd-green-10.jpg")} 
-point[parity='odd'] chequer[player='him']:data("11")  {image: uri("odd-green-11.jpg")} 
-point[parity='odd'] chequer[player='him']:data("12")  {image: uri("odd-green-12.jpg")} 
-point[parity='odd'] chequer[player='him']:data("13")  {image: uri("odd-green-13.jpg")} 
-point[parity='odd'] chequer[player='him']:data("14")  {image: uri("odd-green-14.jpg")} 
-point[parity='odd'] chequer[player='him']:data("15")  {image: uri("odd-green-15.jpg")} 
+point[parity=odd] chequer[player=him]:data(1)   {image: uri("odd-green-1.jpg")} 
+point[parity=odd] chequer[player=him]:data(2)   {image: uri("odd-green-2.jpg")} 
+point[parity=odd] chequer[player=him]:data(3)   {image: uri("odd-green-3.jpg")} 
+point[parity=odd] chequer[player=him]:data(4)   {image: uri("odd-green-4.jpg")} 
+point[parity=odd] chequer[player=him]:data(5)   {image: uri("odd-green-5.jpg")} 
+point[parity=odd] chequer[player=him]:data(6)   {image: uri("odd-green-6.jpg")} 
+point[parity=odd] chequer[player=him]:data(7)   {image: uri("odd-green-7.jpg")} 
+point[parity=odd] chequer[player=him]:data(8)   {image: uri("odd-green-8.jpg")} 
+point[parity=odd] chequer[player=him]:data(9)   {image: uri("odd-green-9.jpg")} 
+point[parity=odd] chequer[player=him]:data(10)  {image: uri("odd-green-10.jpg")} 
+point[parity=odd] chequer[player=him]:data(11)  {image: uri("odd-green-11.jpg")} 
+point[parity=odd] chequer[player=him]:data(12)  {image: uri("odd-green-12.jpg")} 
+point[parity=odd] chequer[player=him]:data(13)  {image: uri("odd-green-13.jpg")} 
+point[parity=odd] chequer[player=him]:data(14)  {image: uri("odd-green-14.jpg")} 
+point[parity=odd] chequer[player=him]:data(15)  {image: uri("odd-green-15.jpg")} 
 
-point[parity='even'] chequer[player='him']:data("1")  {image: uri("even-green-1.jpg")} 
-point[parity='even'] chequer[player='him']:data("2")  {image: uri("even-green-2.jpg")} 
-point[parity='even'] chequer[player='him']:data("3")  {image: uri("even-green-3.jpg")} 
-point[parity='even'] chequer[player='him']:data("4")  {image: uri("even-green-4.jpg")} 
-point[parity='even'] chequer[player='him']:data("5")  {image: uri("even-green-5.jpg")} 
-point[parity='even'] chequer[player='him']:data("6")  {image: uri("even-green-6.jpg")} 
-point[parity='even'] chequer[player='him']:data("7")  {image: uri("even-green-7.jpg")} 
-point[parity='even'] chequer[player='him']:data("8")  {image: uri("even-green-8.jpg")} 
-point[parity='even'] chequer[player='him']:data("9")  {image: uri("even-green-9.jpg")} 
-point[parity='even'] chequer[player='him']:data("10") {image: uri("even-green-10.jpg")} 
-point[parity='even'] chequer[player='him']:data("11") {image: uri("even-green-11.jpg")} 
-point[parity='even'] chequer[player='him']:data("12") {image: uri("even-green-12.jpg")} 
-point[parity='even'] chequer[player='him']:data("13") {image: uri("even-green-13.jpg")} 
-point[parity='even'] chequer[player='him']:data("14") {image: uri("even-green-14.jpg")} 
-point[parity='even'] chequer[player='him']:data("15") {image: uri("even-green-15.jpg")} 
-
-
+point[parity=even] chequer[player=him]:data(1)  {image: uri("even-green-1.jpg")} 
+point[parity=even] chequer[player=him]:data(2)  {image: uri("even-green-2.jpg")} 
+point[parity=even] chequer[player=him]:data(3)  {image: uri("even-green-3.jpg")} 
+point[parity=even] chequer[player=him]:data(4)  {image: uri("even-green-4.jpg")} 
+point[parity=even] chequer[player=him]:data(5)  {image: uri("even-green-5.jpg")} 
+point[parity=even] chequer[player=him]:data(6)  {image: uri("even-green-6.jpg")} 
+point[parity=even] chequer[player=him]:data(7)  {image: uri("even-green-7.jpg")} 
+point[parity=even] chequer[player=him]:data(8)  {image: uri("even-green-8.jpg")} 
+point[parity=even] chequer[player=him]:data(9)  {image: uri("even-green-9.jpg")} 
+point[parity=even] chequer[player=him]:data(10) {image: uri("even-green-10.jpg")} 
+point[parity=even] chequer[player=him]:data(11) {image: uri("even-green-11.jpg")} 
+point[parity=even] chequer[player=him]:data(12) {image: uri("even-green-12.jpg")} 
+point[parity=even] chequer[player=him]:data(13) {image: uri("even-green-13.jpg")} 
+point[parity=even] chequer[player=him]:data(14) {image: uri("even-green-14.jpg")} 
+point[parity=even] chequer[player=him]:data(15) {image: uri("even-green-15.jpg")} 
 
 
-bar[player='him'] chequer[player='him']:data("1")   {image: uri("odd-green-1.jpg")} 
-bar[player='him'] chequer[player='him']:data("2")   {image: uri("odd-green-2.jpg")} 
-bar[player='him'] chequer[player='him']:data("3")   {image: uri("odd-green-3.jpg")} 
-bar[player='him'] chequer[player='him']:data("4")   {image: uri("odd-green-4.jpg")} 
-bar[player='him'] chequer[player='him']:data("5")   {image: uri("odd-green-5.jpg")} 
-bar[player='him'] chequer[player='him']:data("6")   {image: uri("odd-green-6.jpg")} 
-bar[player='him'] chequer[player='him']:data("7")   {image: uri("odd-green-7.jpg")} 
-bar[player='him'] chequer[player='him']:data("8")   {image: uri("odd-green-8.jpg")} 
-bar[player='him'] chequer[player='him']:data("9")   {image: uri("odd-green-9.jpg")} 
-bar[player='him'] chequer[player='him']:data("10")  {image: uri("odd-green-10.jpg")} 
-bar[player='him'] chequer[player='him']:data("11")  {image: uri("odd-green-11.jpg")} 
-bar[player='him'] chequer[player='him']:data("12")  {image: uri("odd-green-12.jpg")} 
-bar[player='him'] chequer[player='him']:data("13")  {image: uri("odd-green-13.jpg")} 
-bar[player='him'] chequer[player='him']:data("14")  {image: uri("odd-green-14.jpg")} 
-bar[player='him'] chequer[player='him']:data("15")  {image: uri("odd-green-15.jpg")} 
 
 
-bar[player='you'] chequer[player='you']:data("1")   {image: uri("odd-white-1.jpg")} 
-bar[player='you'] chequer[player='you']:data("2")   {image: uri("odd-white-2.jpg")} 
-bar[player='you'] chequer[player='you']:data("3")   {image: uri("odd-white-3.jpg")} 
-bar[player='you'] chequer[player='you']:data("4")   {image: uri("odd-white-4.jpg")} 
-bar[player='you'] chequer[player='you']:data("5")   {image: uri("odd-white-5.jpg")} 
-bar[player='you'] chequer[player='you']:data("6")   {image: uri("odd-white-6.jpg")} 
-bar[player='you'] chequer[player='you']:data("7")   {image: uri("odd-white-7.jpg")} 
-bar[player='you'] chequer[player='you']:data("8")   {image: uri("odd-white-8.jpg")} 
-bar[player='you'] chequer[player='you']:data("9")   {image: uri("odd-white-9.jpg")} 
-bar[player='you'] chequer[player='you']:data("10")  {image: uri("odd-white-10.jpg")} 
-bar[player='you'] chequer[player='you']:data("11")  {image: uri("odd-white-11.jpg")} 
-bar[player='you'] chequer[player='you']:data("12")  {image: uri("odd-white-12.jpg")} 
-bar[player='you'] chequer[player='you']:data("13")  {image: uri("odd-white-13.jpg")} 
-bar[player='you'] chequer[player='you']:data("14")  {image: uri("odd-white-14.jpg")} 
-bar[player='you'] chequer[player='you']:data("15")  {image: uri("odd-white-15.jpg")} 
+bar[player=him] chequer[player=him]:data(1)   {image: uri("odd-green-1.jpg")} 
+bar[player=him] chequer[player=him]:data(2)   {image: uri("odd-green-2.jpg")} 
+bar[player=him] chequer[player=him]:data(3)   {image: uri("odd-green-3.jpg")} 
+bar[player=him] chequer[player=him]:data(4)   {image: uri("odd-green-4.jpg")} 
+bar[player=him] chequer[player=him]:data(5)   {image: uri("odd-green-5.jpg")} 
+bar[player=him] chequer[player=him]:data(6)   {image: uri("odd-green-6.jpg")} 
+bar[player=him] chequer[player=him]:data(7)   {image: uri("odd-green-7.jpg")} 
+bar[player=him] chequer[player=him]:data(8)   {image: uri("odd-green-8.jpg")} 
+bar[player=him] chequer[player=him]:data(9)   {image: uri("odd-green-9.jpg")} 
+bar[player=him] chequer[player=him]:data(10)  {image: uri("odd-green-10.jpg")} 
+bar[player=him] chequer[player=him]:data(11)  {image: uri("odd-green-11.jpg")} 
+bar[player=him] chequer[player=him]:data(12)  {image: uri("odd-green-12.jpg")} 
+bar[player=him] chequer[player=him]:data(13)  {image: uri("odd-green-13.jpg")} 
+bar[player=him] chequer[player=him]:data(14)  {image: uri("odd-green-14.jpg")} 
+bar[player=him] chequer[player=him]:data(15)  {image: uri("odd-green-15.jpg")} 
+
+
+bar[player=you] chequer[player=you]:data(1)   {image: uri("odd-white-1.jpg")} 
+bar[player=you] chequer[player=you]:data(2)   {image: uri("odd-white-2.jpg")} 
+bar[player=you] chequer[player=you]:data(3)   {image: uri("odd-white-3.jpg")} 
+bar[player=you] chequer[player=you]:data(4)   {image: uri("odd-white-4.jpg")} 
+bar[player=you] chequer[player=you]:data(5)   {image: uri("odd-white-5.jpg")} 
+bar[player=you] chequer[player=you]:data(6)   {image: uri("odd-white-6.jpg")} 
+bar[player=you] chequer[player=you]:data(7)   {image: uri("odd-white-7.jpg")} 
+bar[player=you] chequer[player=you]:data(8)   {image: uri("odd-white-8.jpg")} 
+bar[player=you] chequer[player=you]:data(9)   {image: uri("odd-white-9.jpg")} 
+bar[player=you] chequer[player=you]:data(10)  {image: uri("odd-white-10.jpg")} 
+bar[player=you] chequer[player=you]:data(11)  {image: uri("odd-white-11.jpg")} 
+bar[player=you] chequer[player=you]:data(12)  {image: uri("odd-white-12.jpg")} 
+bar[player=you] chequer[player=you]:data(13)  {image: uri("odd-white-13.jpg")} 
+bar[player=you] chequer[player=you]:data(14)  {image: uri("odd-white-14.jpg")} 
+bar[player=you] chequer[player=you]:data(15)  {image: uri("odd-white-15.jpg")} 
 
 
 

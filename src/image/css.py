@@ -167,7 +167,7 @@ class CSSParser(object):
     r = re.compile("""
         (?P<element>[a-zA-Z]+)
         (?P<attribute>\[(?P<name>[a-zA-Z]+)=(?P<value>['"][a-zA-Z0-9]+['"])\])?
-        (:data\(["'](?P<data>[^'"]+)['"]\))?
+        (:data\((?P<data>[^)]+)\))?
       """, re.VERBOSE)
     m = r.search(s)
     if m:
