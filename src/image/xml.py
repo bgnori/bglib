@@ -156,7 +156,11 @@ class Context(bglib.image.context.Context):
       r = p.rule(no, line)
       if r:
         rules.append(r)
-    self.apply([self.tree_root], rules)
+    def apply(path):
+      for r in rules:
+        r.apply(path)
+    v = bglib.image.base.Visit(apply)
+    v.visit([self.tree_root])
 
     return self.tree_root
 

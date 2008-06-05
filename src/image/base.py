@@ -56,12 +56,18 @@ class Element(object):
     return getattr(self.parent, name) #inherit
 
 class Visit(object):
-  def visit(self, start=None):
-    pass
+  def __init__(self, callback, *args, **kw):
+    self.callback = callback
+    self.args = args
+    self.kw = kw
 
-  def on_element(self, path):
-    pass
-
+  def visit(self, path=None):
+    self.callback(path, *self.args, **self.kw)
+    for c in path[-1].children:
+      if isinstance(c, bglib.image.base.Element):
+        path.append(c)
+        self.visit(path)
+        path.pop(-1)
 
 
 def make_empty_tree():
@@ -93,6 +99,13 @@ def make_empty_tree():
   b.append(home[bglib.model.constants.him])
   b.append(field[bglib.model.constants.him])
   return b, points, home, bar, field
+
+
+if __name__ == '__main__':
+  b, p, home, bar, field = make_empty_tree()
+  print b.format(0)
+
+
 
 
 
