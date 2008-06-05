@@ -70,9 +70,9 @@ def make_empty_tree():
   b.append(bar[bglib.model.constants.him])
   for i in range(1, 25):
     if i%2:
-      pt = Element('point', parity='odd')
+      pt = Element('point', parity="'odd'")
     else:
-      pt = Element('point', parity='even')
+      pt = Element('point', parity="'even'")
     pt.append(str(i))
     b.append(pt)
     points.append(pt)
@@ -209,13 +209,14 @@ class Context(bglib.image.context.Context):
     pass
 
 
-  def apply(self, element, path, css_rules):
+  def apply(self, path, css_rules):
     for r in css_rules:
       r.apply(path)
-    for c in element.children:
+    for c in path[-1].children:
       if isinstance(c, Element):
-        path.append(element)
-        self.apply(c, path, css_rules)
+        path.append(c)
+        self.apply(path, css_rules)
+        path.pop(-1)
     
   def result(self):
     p = bglib.image.css.CSSParser()
@@ -225,7 +226,7 @@ class Context(bglib.image.context.Context):
       r = p.rule(no, line)
       if r:
         rules.append(r)
-    self.apply(self.tree_root, list(), rules)
+    #self.apply([self.tree_root], rules)
 
     return self.tree_root.format(0)
 
@@ -233,9 +234,15 @@ bglib.image.context.context_factory.register(Context)
 
 
 if __name__ == '__main__':
+  import logging
   import bglib.model.board
   import bglib.image.renderer
   import bglib.depot.lines
+  logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s %(message)s',
+                    filename="xml.log",
+                    filemode="w"
+                    )
   board = bglib.model.board.board()
   renderer = bglib.image.renderer.renderer
   style = bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt')
