@@ -138,22 +138,12 @@ class Context(bglib.image.context.Context):
   def draw_crawford_flag(self, flag):
     pass
 
-
-  def apply(self, path, css_rules):
-    for r in css_rules:
-      r.apply(path)
-    for c in path[-1].children:
-      if isinstance(c, bglib.image.base.Element):
-        path.append(c)
-        self.apply(path, css_rules)
-        path.pop(-1)
-    
   def result(self):
     p = bglib.image.css.CSSParser()
     rules = list()
     f = file("./bglib/image/safari.css")
     for no, line in enumerate(f.readlines()):
-      r = p.rule(no, line)
+      r = p.rule(no + 1, line)
       if r:
         rules.append(r)
     def apply(path):
@@ -163,6 +153,11 @@ class Context(bglib.image.context.Context):
     v.visit([self.tree_root])
 
     return self.tree_root
+
+def TextRender(path):
+  e = path[-1]
+  print e.name, e.width, e.height, '@', e.x, e.y, 'with', e.image, 'by', e.css_lineno
+
 
 bglib.image.context.context_factory.register(Context)
 
@@ -184,4 +179,6 @@ if __name__ == '__main__':
   context = context_factory.new_context('XML', style)
   xml = renderer.render(context, board)
   print xml.format(0)
+  v = bglib.image.base.Visit(TextRender)
+  v.visit([xml])
 

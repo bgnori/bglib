@@ -18,6 +18,7 @@ class Element(object):
     self.__dict__['children'] = list()
     self.__dict__['attributes'] = dict(kw)
     self.__dict__['parent'] = None
+    self.__dict__['css_lineno'] = list()
 
   def __str__(self):
     s = "<%s"%self.name
@@ -33,6 +34,8 @@ class Element(object):
   def append(self, e):
     assert isinstance(e, (Element, str))
     self.children.append(e)
+    if isinstance(e, Element):
+      e.parent = self
 
   def update(self, d):
     self.attributes.update(d)
@@ -104,8 +107,5 @@ def make_empty_tree():
 if __name__ == '__main__':
   b, p, home, bar, field = make_empty_tree()
   print b.format(0)
-
-
-
 
 

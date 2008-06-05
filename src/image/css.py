@@ -110,31 +110,33 @@ class Rule(object):
   def is_match(self, path):
     ''' match last item first. '''
     pattern = self.pattern[:]
-    if not path:
-      return False
+    assert path
     assert pattern
     for i, element in enumerate(reversed(path)):
       if i == 0:
-        if not pattern[-1].is_match(element):
-          return False
-        else:
+        if pattern[-1].is_match(element):
           pattern.pop(-1)
+          if not pattern:
+            return True
+        else:
+          return False
       else:
         if pattern[-1].is_match(element):
           pattern.pop(-1)
-
-      if not pattern:
-        return True
-      else:
-        pass
+          if not pattern:
+            return True
+        else:
+          pass
     assert pattern
     return False
     
   def apply(self,  path):
     if self.is_match(path):
+      e = path[-1]
       logging.debug('applying rule in line %i to %s found in %s',
-                     self.lineno, path[-1].name,  str([e.name for e in path]))
-      path[-1].update(self.block)
+                     self.lineno, e.name,  str([e.name for e in path]))
+      e.update(self.block)
+      e.css_lineno.append(self.lineno)
   
   def __str__(self):
     r = "in line: %i\n"%self.lineno
@@ -166,7 +168,7 @@ class CSSParser(object):
     assert s
     r = re.compile("""
         (?P<element>[a-zA-Z]+)
-        (?P<attribute>\[(?P<name>[a-zA-Z]+)=(?P<value>['"][a-zA-Z0-9]+['"])\])?
+        (?P<attribute>\[(?P<name>[a-zA-Z]+)=(?P<value>[a-zA-Z0-9]+)\])?
         (:data\((?P<data>[^)]+)\))?
       """, re.VERBOSE)
     m = r.search(s)

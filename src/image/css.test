@@ -1,61 +1,58 @@
->>> import base
->>> import css
+>>> import bglib.image.base
+>>> import bglib.image.css
 
-.CSSParser
-.Selector
-.Rule
 
->>> s = css.Selector('board')
+>>> s = bglib.image.css.Selector('board')
 >>> print s
 <board></board>
 
->>> s = css.Selector('board', 'x', '"42"')
+>>> s = bglib.image.css.Selector('board', 'x', '"42"')
 >>> print s
 <board x="42"></board>
 
->>> s = css.Selector('board', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('board', 'x', '"42"', "2")
 >>> print s
 <board x="42">2</board>
 
 
->>> s = css.Selector('board', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('board', 'x', '"42"', "2")
 >>> print s
 <board x="42">2</board>
 
->>> s = css.Selector('board', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('board', 'x', '"42"', "2")
 >>> print s
 <board x="42">2</board>
 
->>> e = base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('board',  x='"42"')
 >>> e.append("2")
 >>> s.is_match(e)
 True
 
->>> e = base.Element('board',  x='"43"')
+>>> e = bglib.image.base.Element('board',  x='"43"')
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = base.Element('position',  x='"42"')
+>>> e = bglib.image.base.Element('position',  x='"42"')
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('board',  x='"42"')
 >>> s.is_match(e)
 False
 
->>> e = base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('board',  x='"42"')
 >>> e.append("3")
 >>> s.is_match(e)
 False
 
->>> e = base.Element('board',  x='"42"', y='"22"')
+>>> e = bglib.image.base.Element('board',  x='"42"', y='"22"')
 >>> e.append("2")
 >>> s.is_match(e)
 True
 
->>> r = css.Rule(0)
+>>> r = bglib.image.css.Rule(0)
 >>> r.lineno
 0
 >>> r.add(s)
@@ -76,12 +73,12 @@ in line: 0
 pattern: <board x="42">2</board>
 block: {'image': 'uri("backgammon.jpg")'}
 
->>> e = base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('board',  x='"42"')
 >>> e
 <board x="42"></board>
 
 
->>> e = base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('board',  x='"42"')
 >>> e.append("2")
 >>> e
 <board x="42">2</board>
@@ -96,61 +93,85 @@ True
 >>> e
 <board x="42" image=uri("backgammon.jpg")>2</board>
 
->>> e = base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('board',  x='"42"')
 >>> e
 <board x="42"></board>
 >>> r.apply([e])
 >>> e
 <board x="42"></board>
 
->>> p = css.CSSParser()
->>> r = p.rule(0, """point:data(1) { x: 249 ; y: 139 }""")
+>>> parser = bglib.image.css.CSSParser()
+>>> r = parser.rule(0, """point:data(1) { x: 249 ; y: 139 }""")
 >>> r
 in line: 0
 pattern: <point>1</point>
 block: {'y': '139', 'x': '249'}
 
->>> r = p.rule(0, """point:data(1) { x: 249}""")
+>>> r = parser.rule(0, """point:data(1) { x: 249}""")
 >>> r
 in line: 0
 pattern: <point>1</point>
 block: {'x': '249'}
 
->>> r = p.rule(0, """board {x: 0; y: 0; width: 341; height: 232}""")
+>>> r = parser.rule(0, """board {x: 0; y: 0; width: 341; height: 232}""")
 >>> r
 in line: 0
 pattern: <board></board>
 block: {'y': '0', 'x': '0', 'height': '232', 'width': '341'}
 
 
->>> r = p.rule(0, """die:data(1) {image}""")
+>>> r = parser.rule(0, """die:data(1) {image}""")
 >>> r
 in line: 0
 pattern: <die>1</die>
 block: {}
 
->>> r = p.rule(0, """home[player='you'] cube{x: 266; y: 197;}""")
+>>> r = parser.rule(0, """home[player=you] cube{x: 266; y: 197;}""")
 >>> r
 in line: 0
-pattern: <home player='you'></home> <cube></cube>
+pattern: <home player=you></home> <cube></cube>
 block: {'y': '197', 'x': '266'}
 
 
->>> r = p.rule(0, """point[parity='even'] chequer[player="him"]:data(1)  {image: uri("even-green-1.jpg")} """)
->>> r
-in line: 0
-pattern: <point parity='even'></point> <chequer player="him">1</chequer>
-block: {'image': 'uri("even-green-1.jpg")'}
 
->>> b = base.Element('board')
->>> p = base.Element('point', parity="'even'")
->>> c = base.Element('chequer', player='"him"')
+>>> b = bglib.image.base.Element('board')
+>>> p = bglib.image.base.Element('point', parity="even")
+>>> c = bglib.image.base.Element('chequer', player="him")
 >>> c.append('1')
 >>> c
-<chequer player="him">1</chequer>
+<chequer player=him>1</chequer>
+
+>>> r = parser.rule(0, """point[parity=even] chequer[player=him]:data(2)  {image: uri("even-green-2.jpg")} """)
+
+>>> r
+in line: 0
+pattern: <point parity=even></point> <chequer player=him>2</chequer>
+block: {'image': 'uri("even-green-2.jpg")'}
 
 >>> r.pattern[-1]
-<chequer player="him">1</chequer>
+<chequer player=him>2</chequer>
+
+>>> r.pattern[-1].is_match(c)
+False
+
+>>> r.is_match([b, p, c])
+False
+
+>>> r.apply([b, p, c])
+>>> c
+<chequer player=him>1</chequer>
+
+
+
+>>> r = parser.rule(0, """point[parity=even] chequer[player=him]:data(1)  {image: uri("even-green-1.jpg")} """)
+
+>>> r
+in line: 0
+pattern: <point parity=even></point> <chequer player=him>1</chequer>
+block: {'image': 'uri("even-green-1.jpg")'}
+
+>>> r.pattern[-1]
+<chequer player=him>1</chequer>
 
 >>> r.pattern[-1].is_match(c)
 True
@@ -160,7 +181,7 @@ True
 
 >>> r.apply([b, p, c])
 >>> c
-<chequer player="him" image=uri("even-green-1.jpg")>1</chequer>
+<chequer player=him image=uri("even-green-1.jpg")>1</chequer>
 
 
 
