@@ -105,13 +105,13 @@ True
 <board x="42"></board>
 
 >>> p = css.CSSParser()
->>> r = p.rule(0, """point:data("1") { x: 249 ; y: 139 }""")
+>>> r = p.rule(0, """point:data(1) { x: 249 ; y: 139 }""")
 >>> r
 in line: 0
 pattern: <point>1</point>
 block: {'y': '139', 'x': '249'}
 
->>> r = p.rule(0, """point:data("1") { x: 249}""")
+>>> r = p.rule(0, """point:data(1) { x: 249}""")
 >>> r
 in line: 0
 pattern: <point>1</point>
@@ -124,7 +124,7 @@ pattern: <board></board>
 block: {'y': '0', 'x': '0', 'height': '232', 'width': '341'}
 
 
->>> r = p.rule(0, """die:data("1") {image}""")
+>>> r = p.rule(0, """die:data(1) {image}""")
 >>> r
 in line: 0
 pattern: <die>1</die>
@@ -137,7 +137,7 @@ pattern: <home player='you'></home> <cube></cube>
 block: {'y': '197', 'x': '266'}
 
 
->>> r = p.rule(0, """point[parity='even'] chequer[player="him"]:data("1")  {image: uri("even-green-1.jpg")} """)
+>>> r = p.rule(0, """point[parity='even'] chequer[player="him"]:data(1)  {image: uri("even-green-1.jpg")} """)
 >>> r
 in line: 0
 pattern: <point parity='even'></point> <chequer player="him">1</chequer>
