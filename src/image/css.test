@@ -2,52 +2,52 @@
 >>> import bglib.image.css
 
 
->>> s = bglib.image.css.Selector('board')
+>>> s = bglib.image.css.Selector('point')
 >>> print s
-<board></board>
+<point></point>
 
->>> s = bglib.image.css.Selector('board', 'x', '"42"')
+>>> s = bglib.image.css.Selector('point', 'x', '"42"')
 >>> print s
-<board x="42"></board>
+<point x="42"></point>
 
->>> s = bglib.image.css.Selector('board', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('point', 'x', '"42"', "2")
 >>> print s
-<board x="42">2</board>
+<point x="42">2</point>
 
 
->>> s = bglib.image.css.Selector('board', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('point', 'x', '"42"', "2")
 >>> print s
-<board x="42">2</board>
+<point x="42">2</point>
 
->>> s = bglib.image.css.Selector('board', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('point', 'x', '"42"', "2")
 >>> print s
-<board x="42">2</board>
+<point x="42">2</point>
 
->>> e = bglib.image.base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('point',  x='"42"')
 >>> e.append("2")
 >>> s.is_match(e)
 True
 
->>> e = bglib.image.base.Element('board',  x='"43"')
+>>> e = bglib.image.base.Element('point',  x='"43"')
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('position',  x='"42"')
+>>> e = bglib.image.base.Element('die',  x='"42"')
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('point',  x='"42"')
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('point',  x='"42"')
 >>> e.append("3")
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('board',  x='"42"', y='"22"')
+>>> e = bglib.image.base.Element('point',  x='"42"', y='"22"')
 >>> e.append("2")
 >>> s.is_match(e)
 True
@@ -58,30 +58,30 @@ True
 >>> r.add(s)
 >>> r
 in line: 0
-pattern: <board x="42">2</board>
+pattern: <point x="42">2</point>
 block: {}
 
 >>> r.update({'image': 'uri("board.jpg")'})
 >>> r
 in line: 0
-pattern: <board x="42">2</board>
+pattern: <point x="42">2</point>
 block: {'image': 'uri("board.jpg")'}
 
 >>> r.update({'image': 'uri("backgammon.jpg")'})
 >>> r
 in line: 0
-pattern: <board x="42">2</board>
+pattern: <point x="42">2</point>
 block: {'image': 'uri("backgammon.jpg")'}
 
->>> e = bglib.image.base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('point',  x='"42"')
 >>> e
-<board x="42"></board>
+<point x="42"></point>
 
 
->>> e = bglib.image.base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('point',  x='"42"')
 >>> e.append("2")
 >>> e
-<board x="42">2</board>
+<point x="42">2</point>
 
 >>> s.is_match(e)
 True
@@ -91,14 +91,14 @@ True
 
 >>> r.apply([e])
 >>> e
-<board x="42" image=uri("backgammon.jpg")>2</board>
+<point x="42" image=uri("backgammon.jpg")>2</point>
 
->>> e = bglib.image.base.Element('board',  x='"42"')
+>>> e = bglib.image.base.Element('point',  x='"42"')
 >>> e
-<board x="42"></board>
+<point x="42"></point>
 >>> r.apply([e])
 >>> e
-<board x="42"></board>
+<point x="42"></point>
 
 >>> parser = bglib.image.css.CSSParser()
 >>> r = parser.rule(0, """point:data(1) { x: 249 ; y: 139 }""")
@@ -113,10 +113,10 @@ in line: 0
 pattern: <point>1</point>
 block: {'x': '249'}
 
->>> r = parser.rule(0, """board {x: 0; y: 0; width: 341; height: 232}""")
+>>> r = parser.rule(0, """point {x: 0; y: 0; width: 341; height: 232}""")
 >>> r
 in line: 0
-pattern: <board></board>
+pattern: <point></point>
 block: {'y': '0', 'x': '0', 'height': '232', 'width': '341'}
 
 
@@ -134,7 +134,7 @@ block: {'y': '197', 'x': '266'}
 
 
 
->>> b = bglib.image.base.Element('board')
+>>> b = bglib.image.base.Element('point')
 >>> p = bglib.image.base.Element('point', parity="even")
 >>> c = bglib.image.base.Element('chequer', player="him")
 >>> c.append('1')
