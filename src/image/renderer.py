@@ -225,6 +225,7 @@ class Renderer(object):
     context.draw_crawford_flag(board.crawford)
 
   def render(self, context, board):
+    self.draw_frame(context)
     self.draw_session_state(context, board)
     self.draw_points(context, board)
     self.draw_bar(context, board)
