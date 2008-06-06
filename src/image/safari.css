@@ -103,8 +103,8 @@ point:data(21) {x: 194 ; y:   5 }
 point:data(22) {x: 212 ; y:   5 }
 point:data(23) {x: 230 ; y:   5 }
 point:data(24) {x: 248 ; y:   5 }
-point[parity=odd]  { image: uri("odd-none.jpg) } 
-point[parity=even] { image: uri("even-none.jpg) } 
+point[parity=odd]  { image: uri("odd-none.jpg") } 
+point[parity=even] { image: uri("even-none.jpg") } 
 
 bar {width: 25; height: 88}
 bar[player=him] { image: uri("bar-none.jpg")} 

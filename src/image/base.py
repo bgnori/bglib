@@ -222,6 +222,18 @@ class ElementTree(object):
         path.append(c)
         self.visit(callback, path, *args, **kw)
         path.pop(-1)
+  def css(self, fname):
+    p = bglib.image.css.CSSParser()
+    rules = list()
+    f = file(fname)
+    for no, line in enumerate(f.readlines()):
+      r = p.rule(no + 1, line)
+      if r:
+        rules.append(r)
+    def apply(path):
+      for r in rules:
+        r.apply(path)
+    self.visit(apply, [self.board])
 
   def create_tree(self):
     score = list()

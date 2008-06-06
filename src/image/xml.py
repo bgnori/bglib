@@ -139,18 +139,6 @@ class Context(bglib.image.context.Context):
     pass
 
   def result(self):
-    p = bglib.image.css.CSSParser()
-    rules = list()
-    f = file("./bglib/image/safari.css")
-    for no, line in enumerate(f.readlines()):
-      r = p.rule(no + 1, line)
-      if r:
-        rules.append(r)
-    def apply(path):
-      for r in rules:
-        r.apply(path)
-    self.tree.visit(apply,[self.tree.board])
-
     return self.tree
 
 def TextRender(path):
@@ -177,7 +165,7 @@ if __name__ == '__main__':
   context_factory = bglib.image.context.context_factory
   context = context_factory.new_context('XML', style)
   xml = renderer.render(context, board)
-  print xml.board.format(0)
+  xml.css("./bglib/image/safari.css")
   v = xml.visit(TextRender, [xml.board])
 
 

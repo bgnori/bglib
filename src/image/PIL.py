@@ -341,6 +341,24 @@ class Context(bglib.image.context.Context):
 
 bglib.image.context.context_factory.register(Context)
 
+import bglib.image.xml
+class Context(bglib.image.xml.Context):
+  name = 'xmlPIL'
+  def xmlrender(self, path, image):
+    e = path[-1]
+    fn = e.image.split('"')[1]
+    print fn
+    i = Image.open('./bglib/image/resource/'+fn)
+    image.paste(i, (int(e.x), int(e.y)))
+
+  def result(self):
+    x, y = style.size.table
+    image = Image.new("RGB", (x, y), debug_color)
+    self.tree.css("./bglib/image/safari.css")
+    self.tree.visit(self.xmlrender, [self.tree.board], image)
+    return image
+
+bglib.image.context.context_factory.register(Context)
 
 if __name__ == '__main__':
   import bglib.model.board
@@ -348,7 +366,7 @@ if __name__ == '__main__':
   style = bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt')
   renderer = bglib.image.renderer.renderer
   context_factory = bglib.image.context.context_factory
-  context = context_factory.new_context('PIL', style)
+  context = context_factory.new_context('xmlPIL', style)
   image = renderer.render(context, board)
   image.show()
   
