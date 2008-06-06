@@ -161,11 +161,11 @@ if __name__ == '__main__':
                     )
   board = bglib.model.board.board()
   renderer = bglib.image.renderer.renderer
-  style = bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt')
+  style = bglib.depot.lines.CRLFProxy('./bglib/image/resource/original/align.txt')
   context_factory = bglib.image.context.context_factory
   context = context_factory.new_context('XML', style)
   xml = renderer.render(context, board)
-  xml.css("./bglib/image/safari.css")
+  xml.css("./bglib/image/resource/safari/default.css")
   v = xml.visit(TextRender, [xml.board])
 
 

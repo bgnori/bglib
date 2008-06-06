@@ -38,7 +38,7 @@ class Context(bglib.image.context.Context):
       upside_down = False
 
     if (fn, size, upside_down) not in self.cache:
-      i = Image.open('./bglib/image/resource/'+fn)
+      i = Image.open('./bglib/image/resource/original/'+fn)
       j = i.resize(size, resample=1)
       if upside_down:
         j = j.rotate(180)
@@ -348,13 +348,13 @@ class Context(bglib.image.xml.Context):
     e = path[-1]
     fn = e.image.split('"')[1]
     print fn
-    i = Image.open('./bglib/image/resource/'+fn)
+    i = Image.open('./bglib/image/resource/safari/'+fn)
     image.paste(i, (int(e.x), int(e.y)))
 
   def result(self):
     x, y = style.size.table
     image = Image.new("RGB", (x, y), debug_color)
-    self.tree.css("./bglib/image/safari.css")
+    self.tree.css("./bglib/image/resource/safari/default.css")
     self.tree.visit(self.xmlrender, [self.tree.board], image)
     return image
 
@@ -363,7 +363,7 @@ bglib.image.context.context_factory.register(Context)
 if __name__ == '__main__':
   import bglib.model.board
   board = bglib.model.board.board()
-  style = bglib.depot.lines.CRLFProxy('./bglib/image/resource/align.txt')
+  style = bglib.depot.lines.CRLFProxy('./bglib/image/resource/original/align.txt')
   renderer = bglib.image.renderer.renderer
   context_factory = bglib.image.context.context_factory
   context = context_factory.new_context('xmlPIL', style)
