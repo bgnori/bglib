@@ -1,6 +1,6 @@
 
 
-board {x: 0; y: 0; width: 341; height: 232; image: uri("board.jpg")}
+board {x: 0; y: 0; width: 341; height: 232; background-color: blue;}
 
 match {x: 241; y: 0; width: 100; height: 232}
 length {x: 316; y: 93; width: 25; height: 46}
@@ -75,7 +75,7 @@ player[player=him]{x:0; y:0}
 
 
 
-position {x: 0; y: 0; width: 241; height: 232; image: uri("board.jpg")}
+position {x: 0; y: 0; width: 241; height: 232; image: uri("position.jpg")}
 point        {width: 18; height:88}
 point[parity=odd]    {color: pink}
 point[parity=even]   {color: skyblue}

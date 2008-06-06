@@ -344,12 +344,20 @@ bglib.image.context.context_factory.register(Context)
 import bglib.image.xml
 class Context(bglib.image.xml.Context):
   name = 'xmlPIL'
+
   def xmlrender(self, path, image):
     e = path[-1]
-    fn = e.image.split('"')[1]
-    print fn
-    i = Image.open('./bglib/image/resource/safari/'+fn)
-    image.paste(i, (int(e.x), int(e.y)))
+    size = (int(e.width), int(e.height))
+    if hasattr(e, 'image'):
+      fn = e.image.split('"')[1]
+      print fn
+      i = Image.open('./bglib/image/resource/safari/'+fn)
+      j = i.resize(size, resample=1)
+      image.paste(j, (int(e.x), int(e.y)))
+    elif hasattr(e, 'background-color'):
+      pass #fill rect here
+    else:
+      pass
 
   def result(self):
     x, y = style.size.table

@@ -143,7 +143,10 @@ class Context(bglib.image.context.Context):
 
 def TextRender(path):
   e = path[-1]
-  print e.name, e.width, e.height, '@', e.x, e.y, 'with', e.image, 'by', e.css_lineno
+  print e.name, e.width, e.height, '@', e.x, e.y, 
+  if hasattr(e, "image"):
+    print 'with', e.image, 
+  print 'by', e.css_lineno
 
 
 bglib.image.context.context_factory.register(Context)
