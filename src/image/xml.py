@@ -17,12 +17,12 @@ class Context(bglib.image.context.Context):
   def __init__(self, style):
     bglib.image.context.Context.__init__(self, style)
     self.stack = list()
-    root, points, home, bar, field = bglib.image.base.make_empty_tree()
-    self.tree_root = root
-    self.points = points
-    self.home = home
-    self.bar = bar
-    self.field = field
+    self.tree = bglib.image.base.ElementTree()
+    self.tree_root = self.tree.board
+    self.points = self.tree.points
+    self.home = self.tree.home
+    self.bar = self.tree.bar
+    self.field = self.tree.field
 
   def draw_your_point_at(self, point, chequer_count):
     chequer = bglib.image.base.Element('chequer', player=you)
@@ -149,10 +149,9 @@ class Context(bglib.image.context.Context):
     def apply(path):
       for r in rules:
         r.apply(path)
-    v = bglib.image.base.Visit(apply)
-    v.visit([self.tree_root])
+    self.tree.visit(apply,[self.tree.board])
 
-    return self.tree_root
+    return self.tree
 
 def TextRender(path):
   e = path[-1]
@@ -178,7 +177,6 @@ if __name__ == '__main__':
   context_factory = bglib.image.context.context_factory
   context = context_factory.new_context('XML', style)
   xml = renderer.render(context, board)
-  print xml.format(0)
-  v = bglib.image.base.Visit(TextRender)
-  v.visit([xml])
+  print xml.board.format(0)
+  v = xml.visit(TextRender, [xml.board])
 

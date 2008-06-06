@@ -211,77 +211,83 @@ Element.register(Point)
 
 
 
+class ElementTree(object):
+  def __init__(self):
+    self.create_tree()
+    pass
 
-
-class Visit(object):
-  def __init__(self, callback, *args, **kw):
-    self.callback = callback
-    self.args = args
-    self.kw = kw
-
-  def visit(self, path=None):
-    self.callback(path, *self.args, **self.kw)
+  def visit(self, callback, path, *args, **kw):
+    callback(path, *args, **kw)
     for c in path[-1].children:
       if isinstance(c, bglib.image.base.BaseElement):
         path.append(c)
-        self.visit(path)
+        self.visit(callback, path, *args, **kw)
         path.pop(-1)
 
+  def create_tree(self):
+    score = list()
+    score.append(Element('score', player=you))
+    score.append(Element('score',  player=him))
+    self.score = score
+    length = Element('length')
+    self.length = length
+    crawford = Element('crawford')
+    self.crawford = crawford
+    action = Element('action')
+    self.action = action
 
-def make_empty_tree():
-  score = list()
-  score.append(Element('score', player=you))
-  score.append(Element('score',  player=him))
-  length = Element('length')
-  crawford = Element('crawford')
-  action = Element('action')
+    match = Element('match')
+    match.append(action)
+    match.append(crawford)
+    match.append(length)
+    match.append(score[bglib.model.constants.you])
+    match.append(score[bglib.model.constants.him])
+    self.match = match
 
-  match = Element('match')
-  match.append(action)
-  match.append(crawford)
-  match.append(length)
-  match.append(score[bglib.model.constants.you])
-  match.append(score[bglib.model.constants.him])
+    points = list()
+    points.append(None)
+    self.points = points
+    home = list()
+    home.append(Element('home', player=you))
+    home.append(Element('home', player=him))
+    self.home = home
+    bar = list()
+    bar.append(Element('bar', player=you))
+    bar.append(Element('bar', player=him))
+    self.bar = bar
+    field = list()
+    field.append(Element('field', player=you))
+    field.append(Element('field', player=him))
+    self.field = field
+    cubeholder = CubeHolder()
+    self.cubeholder = cubeholder
 
+    position = Element('position')
+    position.append(cubeholder)
+    position.append(field[bglib.model.constants.you])
+    position.append(home[bglib.model.constants.you])
+    position.append(bar[bglib.model.constants.him])
+    for i in range(1, 25):
+      if i%2:
+        pt = Element('point', parity="odd")
+      else:
+        pt = Element('point', parity="even")
+      pt.append(str(i))
+      position.append(pt)
+      points.append(pt)
+      self.points = points
+    position.append(bar[bglib.model.constants.you])
+    position.append(home[bglib.model.constants.him])
+    position.append(field[bglib.model.constants.him])
+    self.position = position
 
-  points = list()
-  points.append(None)
-  home = list()
-  home.append(Element('home', player=you))
-  home.append(Element('home', player=him))
-  bar = list()
-  bar.append(Element('bar', player=you))
-  bar.append(Element('bar', player=him))
-  field = list()
-  field.append(Element('field', player=you))
-  field.append(Element('field', player=him))
-  cubeholder = CubeHolder()
-
-  position = Element('position')
-  position.append(cubeholder)
-  position.append(field[bglib.model.constants.you])
-  position.append(home[bglib.model.constants.you])
-  position.append(bar[bglib.model.constants.him])
-  for i in range(1, 25):
-    if i%2:
-      pt = Element('point', parity="odd")
-    else:
-      pt = Element('point', parity="even")
-    pt.append(str(i))
-    position.append(pt)
-    points.append(pt)
-  position.append(bar[bglib.model.constants.you])
-  position.append(home[bglib.model.constants.him])
-  position.append(field[bglib.model.constants.him])
-
-  board = Element('board')
-  board.append(position)
-  board.append(match)
-  return board, points, home, bar, field
-
+    board = Element('board')
+    board.append(position)
+    board.append(match)
+    self.board = board
 
 if __name__ == '__main__':
-  b, p, home, bar, field = make_empty_tree()
-  print b.format(0)
+  t = ElementTree()
+  print t.board.format(0)
 
 
