@@ -214,7 +214,6 @@ Element.register(Point)
 class ElementTree(object):
   def __init__(self):
     self.create_tree()
-    pass
 
   def visit(self, callback, path, *args, **kw):
     callback(path, *args, **kw)

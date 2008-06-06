@@ -180,3 +180,6 @@ if __name__ == '__main__':
   print xml.board.format(0)
   v = xml.visit(TextRender, [xml.board])
 
+
+
+
