@@ -1,8 +1,8 @@
 
 
-board {x: 0; y: 0; width: 341; height: 232; background-color: red;}
+board {x: 0; y: 0; width: 341; height: 232; background: red;}
 
-match {x: 241; y: 0; width: 100; height: 232}
+match {x: 291; y: 0; width: 100; height: 232}
 length {x: 316; y: 93; width: 25; height: 46}
 length:data(0) {image: uri("score_0.jpg")}
 length:data(1) {image: uri("score_1.jpg")}
@@ -62,17 +62,12 @@ score:data(24) {image: uri("score_24.jpg")}
 score:data(25) {image: uri("score_25.jpg")}
 
 
-
-
-
-
-action{width: 25; height: 25; x:0; y:93}
+action{width: 25; height: 26; x:0; y:103 ; background: white}
 action[player=you] {image: uri("action_white.jpg") }
 action[player=him] {image: uri("action_green.jpg") }
 player {width:0; height: 0}
 player[player=you]{x:0; y:0}
 player[player=him]{x:0; y:0}
-
 
 
 position {x: 0; y: 0; width: 291; height: 232; image: uri("position.jpg")}
@@ -145,8 +140,6 @@ cube {width: 25; height: 25}
 field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
 chip {width: 25; height: 25; image: uri("chip.jpg"})
-
-
 
 
 point[parity=odd] chequer[player=you]:data(1)   {image: uri("odd-white-1.jpg")} 

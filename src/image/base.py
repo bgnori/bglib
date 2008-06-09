@@ -30,7 +30,7 @@ class BaseElement(object):
   DTD_ELEMENT = None
   DTD_ATTLIST = {'x':'CDATA', 'y':'CDATA', 'width':'CDATA', 'height':'CDATA',
                  'image':'CDATA', 'flip':'CDATA',
-                 'background-color':'CDATA', 'color':'CDATA', 'font':'CDATA'}
+                 'background':'CDATA', 'color':'CDATA', 'font':'CDATA'}
 
   def __init__(self,  **kw):
     self.__dict__['children'] = list()

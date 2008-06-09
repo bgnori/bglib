@@ -32,334 +32,52 @@ class Context(bglib.image.context.Context):
             t[1] *self.mag_numer/ self.mag_denom
             )
 
-  def open_image(self, fn, size, upside_down=None):
-    assert(len(size)==2)
-    if upside_down is None:
-      upside_down = False
-
-    if (fn, size, upside_down) not in self.cache:
-      i = Image.open('./bglib/image/resource/original/'+fn)
-      j = i.resize(size, resample=1)
-      if upside_down:
-        j = j.flip(180)
-      self.cache.update({(fn, size, upside_down): j})
-    else:
-      j = self.cache[(fn, size, upside_down)]
-    return j
 
   def paste_image(self, image, position):
     self.image.paste(image, position)
 
-    
-  # points + home +  bar
-  def draw_your_point_at(self, point, checker_count):
-    if point  % 2:
-      fn = "odd-"
-    else:
-      fn = "even-"
-    fn += self.style().color.you + '-' + str(checker_count) + ".jpg"
-    size = self.apply_mag(self.style().size.point)
-
-    pt = self.open_image(fn, size, point > 12)
-
-    x, y = self.apply_mag(self.style().point[str(point)])
-    self.paste_image(pt, (x, y))
-    
-  def draw_his_point_at(self, point, checker_count):
-    if point % 2:
-      fn = "odd-"
-    else:
-      fn = "even-"
-    fn += self.style().color.him + '-' + str(checker_count) + ".jpg"
-
-    size = self.apply_mag(self.style().size.point)
-    pt = self.open_image(fn, size, point > 12)
-
-    x, y = self.apply_mag(self.style().point[str(point)])
-    self.paste_image(pt, (x, y))
-
-  def draw_empty_point_at(self, point):
-    if point % 2:
-      fn = "odd-"
-    else:
-      fn = "even-"
-    fn += "none.jpg"
-
-    size = self.apply_mag(self.style().size.point)
-    pt = self.open_image(fn, size, point > 12)
-
-    x, y = self.apply_mag(self.style().point[str(point)])
-    self.paste_image(pt, (x, y))
-  
-  def draw_your_bar(self, checker_count):
-    size = self.apply_mag(self.style().size.bar)
-    if checker_count:
-      res = self.open_image("bar-"+self.style().color.you + "-%i.jpg"%(checker_count),
-                            size)
-    else:
-      res = self.open_image("bar-none.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().bar.you)
-    self.paste_image(res, (x, y))
-
-  def draw_his_bar(self, checker_count):
-    size = self.apply_mag(self.style().size.bar)
-    if checker_count:
-      res = self.open_image("bar-"+self.style().color.him+"-%i.jpg"%(checker_count),
-                            size
-                            )
-    else:
-      res = self.open_image("bar-none.jpg",
-                            size
-                           )
-    x, y = self.apply_mag(self.style().bar.him)
-    self.paste_image(res, (x, y))
-
-  def draw_center_bar(self):
-    size = self.apply_mag(self.style().size.center)
-    image = self.open_image("center.jpg",
-                            size
-                           )
-    x, y = self.apply_mag(self.style().center.null)
-    self.paste_image(image, (x, y))
-
-  def draw_your_home(self, checker_count):
-    size = self.apply_mag(self.style().size.home)
-    image = self.open_image("your-home.jpg", size)
-    x, y = self.apply_mag(self.style().home.you)
-    self.paste_image(image, (x, y))
-
-  def draw_his_home(self, checker_count):
-    size = self.apply_mag(self.style().size.home)
-    image = self.open_image("his-home.jpg", size)
-    x, y = self.apply_mag(self.style().home.him)
-    self.paste_image(image, (x, y))
-
-  def draw_cubeholder(self):
-    size = self.apply_mag(self.style().size.cubeholder)
-    image = self.open_image("cubeholder.jpg", size)
-    x, y = self.apply_mag(self.style().cubeholder.null)
-    self.paste_image(image, (x, y))
-
-  # cube holder
-  def draw_your_cube(self, cube_in_logarithm):
-    if cube_in_logarithm > 0:
-      size = self.apply_mag(self.style().size.cube)
-      image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
-                              size
-                             )
-      x, y = self.apply_mag(self.style().cube.yours)
-      self.paste_image(image, (x, y))
-
-  def draw_his_cube(self, cube_in_logarithm):
-    if cube_in_logarithm > 0:
-      size = self.apply_mag(self.style().size.cube)
-      image = self.open_image("cube_"+str(cube_in_logarithm)+".jpg",
-                              size
-                             )
-      x, y = self.apply_mag(self.style().cube.his)
-      self.paste_image(image, (x, y))
-
-  def draw_center_cube(self, cube_in_logarithm):
-    if cube_in_logarithm == 0:
-      size = self.apply_mag(self.style().size.cube)
-      image = self.open_image("cube_0.jpg", size)
-      x, y = self.apply_mag(self.style().cube.center)
-      self.paste_image(image, (x, y))
-
-  # field
-  def draw_your_empty_field(self):
-    size = self.apply_mag(self.style().size.field)
-    image = self.open_image("field.jpg",size)
-    x, y = self.apply_mag(self.style().field.you)
-    self.paste_image(image, (x, y))
-
-  def draw_you_offered_double(self, cube_in_logarithm):
-    size = self.apply_mag(self.style().size.cube)
-    image = self.open_image("cube_"+str(cube_in_logarithm+1)+".jpg",size)
-    x, y = self.apply_mag(self.style().cube.you)
-    self.paste_image(image, (x, y))
-
-  def draw_his_empty_field(self):
-    size = self.apply_mag(self.style().size.field)
-    image = self.open_image("field.jpg",size)
-    x, y = self.apply_mag(self.style().field.him)
-    self.paste_image(image, (x, y))
-
-  def draw_he_offered_double(self, cube_in_logarithm):
-    size = self.apply_mag(self.style().size.cube)
-    image = self.open_image("cube_"+str(cube_in_logarithm+1)+".jpg", size)
-    x, y = self.apply_mag(self.style().cube.him)
-    self.paste_image(image, (x, y))
-
-  def draw_you_offered_resign(sefl, rtype):
-    size = self.apply_mag(self.style().size.chip)
-    image = self.open_image("chip.png", size)
-    x, y = self.apply_mag(self.style().chip1.you)
-    self.paste_image(image, (x, y))
-    if rtype > bglib.model.constants.resign_single:
-      x, y = self.apply_mag(self.style().chip2.you)
-      self.paste_image(image, (x, y))
-    if rtype > bglib.model.constants.resign_gammon:
-      x, y = self.apply_mag(self.style().chip3.you)
-      self.paste_image(image, (x, y))
-    pass
-
-  def draw_he_offered_resign(self, rtype):
-    size = self.apply_mag(self.style().size.chip)
-    image = self.open_image("chip.png", size)
-    x, y = self.apply_mag(self.style().chip1.him)
-    self.paste_image(image, (x, y))
-    if rtype > bglib.model.constants.resign_single:
-      x, y = self.apply_mag(self.style().chip2.him)
-      self.paste_image(image, (x, y))
-    if rtype > bglib.model.constants.resign_gammon:
-      x, y = self.apply_mag(self.style().chip3.him)
-      self.paste_image(image, (x, y))
-    pass
-
-  def draw_your_dice_in_field(self, dice):
-    size = self.apply_mag(self.style().size.field)
-    image = self.open_image("field.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().field.you)
-    self.paste_image(image, (x, y))
-
-    if dice[0]:
-      size = self.apply_mag(self.style().size.dice)
-      image = self.open_image('die_' + str(dice[0]) + '.jpg',
-                              size
-                              )
-      x, y = self.apply_mag(self.style().die_a.you)
-      self.paste_image(image, (x, y))
-
-    if dice[1]:
-      size = self.apply_mag(self.style().size.dice)
-      image = self.open_image('die_' + str(dice[1]) + '.jpg',
-                              size
-                              )
-      x, y = self.apply_mag(self.style().die_b.you)
-      self.paste_image(image, (x, y))
-
-  def draw_his_dice_in_field(self, dice):
-    size = self.apply_mag(self.style().size.field)
-    image = self.open_image("field.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().field.him)
-    self.paste_image(image, (x, y))
-
-    if dice[0]:
-      size = self.apply_mag(self.style().size.dice)
-      image = self.open_image('die_' + str(dice[0]) + '.jpg',
-                              size
-                              )
-      x, y = self.apply_mag(self.style().die_a.him)
-      self.paste_image(image, (x, y))
-
-    if dice[1]:
-      size = self.apply_mag(self.style().size.dice)
-      image = self.open_image('die_' + str(dice[1]) + '.jpg',
-                              size
-                              )
-      x, y = self.apply_mag(self.style().die_b.him)
-      self.paste_image(image, (x, y))
-
-  # who is on action
-  def draw_you_to_play(self):
-    size = self.apply_mag(self.style().size.action)
-    image = self.open_image("action_white.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().action.you)
-    self.paste_image(image, (x, y))
-
-  def draw_him_to_play(self):
-    size = self.apply_mag(self.style().size.action)
-    image = self.open_image("action_green.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().action.him)
-    self.paste_image(image, (x, y))
-
-  def draw_frame(self):
-    size = self.apply_mag(self.style().size.edge)
-    image = self.open_image("empty-edge.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().edge.null)
-    self.paste_image(image, (x, y))
-
-
-    size = self.apply_mag(self.style().size.frame)
-    image = self.open_image("frame.jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().frame.top)
-    self.paste_image(image, (x, y))
-    x, y = self.apply_mag(self.style().frame.bottom)
-    self.paste_image(image, (x, y))
-
-  def draw_your_score(self, score):
-    size = self.apply_mag(self.style().size.score)
-    image = self.open_image("score_" + str(score)  + ".jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().score.yours)
-    self.paste_image(image, (x, y))
-
-  def draw_his_score(self, score):
-    size = self.apply_mag(self.style().size.score)
-    image = self.open_image("score_" + str(score)  + ".jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().score.his)
-    self.paste_image(image, (x, y))
-
-  def draw_match_length(self, length):
-    size = self.apply_mag(self.style().size.matchlength)
-    image = self.open_image("score_" + str(length)  + ".jpg",
-                            size
-                            )
-    x, y = self.apply_mag(self.style().matchlength.null)
-    self.paste_image(image, (x, y))
-
-  def draw_crawford_flag(self, flag):
-    size = self.apply_mag(self.style().size.matchcrawford)
-    if flag:
-      image = self.open_image("crawford.jpg", size)
-    else:
-      image = self.open_image("non-crawford.jpg", size)
-
-    x, y = self.apply_mag(self.style().matchcrawford.null)
-    self.paste_image(image, (x, y))
-
-  def result(self):
-    return self.image
-
-bglib.image.context.context_factory.register(Context)
 
 import bglib.image.xml
 class Context(bglib.image.xml.Context):
   name = 'xmlPIL'
+  def __init__(self, style):
+    bglib.image.xml.Context.__init__(self, style)
+    self.cache = dict()
+
+  def load_image(self, uri, size, flip):
+    if (uri, size, flip) in self.cache:
+      return self.cache[(uri, size, flip)]
+    fn = uri.split('"')[1]
+    image = Image.open('./bglib/image/resource/safari/'+fn)
+    image = image.resize(size, resample=1)
+    if flip:
+      image = image.transpose(Image.FLIP_TOP_BOTTOM)
+    self.cache.update({(uri, size, flip): image})
+    return image
+
+  def paste_image(self, dest, src, position):
+    dest.paste(src, position)
+
+  def fill_rect(self, image, position, size, color):
+    draw = ImageDraw.Draw(image)
+    x2, y2 = position
+    x2 += size[0]
+    y2 += size[1]
+    draw.rectangle([position, (x2, y2)], fill=color)
 
   def xmlrender(self, path, image):
     e = path[-1]
+    position = (int(e.x), int(e.y))
     size = (int(e.width), int(e.height))
-    if hasattr(e, 'image'):
-      fn = e.image.split('"')[1]
-      print fn
-      i = Image.open('./bglib/image/resource/safari/'+fn)
-      j = i.resize(size, resample=1)
-      if hasattr(e, 'flip'):
-        j = j.transpose(Image.FLIP_TOP_BOTTOM)
-      image.paste(j, (int(e.x), int(e.y)))
-    elif hasattr(e, 'background-color'):
+    if hasattr(e, 'background'):
+      bg = getattr(e, 'background')
+      print bg
+      self.fill_rect(image, position, size, bg)
+    if hasattr(e, 'color'):
       pass #fill rect here
-    else:
-      pass
+    if hasattr(e, 'image'):
+      loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
+      self.paste_image(image, loaded, position)
 
   def result(self):
     x, y = style.size.table
