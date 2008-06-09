@@ -96,7 +96,8 @@ class Selector(object):
 
 
 class Rule(object):
-  def __init__(self, lineno):
+  def __init__(self, css_path, lineno):
+    self.css_path = css_path
     self.lineno = lineno
     self.pattern = list()
     self.block = dict()
@@ -135,7 +136,7 @@ class Rule(object):
       e = path[-1]
       logging.debug('applying rule in line %i to %s found in %s',
                      self.lineno, e.name,  str([e.name for e in path]))
-      e.update(self.block)
+      e.update(self.css_path, self.block)
       e.css_lineno.append(self.lineno)
   
   def __str__(self):
@@ -147,13 +148,13 @@ class Rule(object):
 
 
 class CSSParser(object):
-  def rule(self, lineno, s):
+  def rule(self, css_path, lineno, s):
     if not s:
       return 
     r = re.compile(r"^[ ]*(?P<pattern>[^{]*)[ ]*{(?P<block>[^]]*)}")
     m = r.search(s)
     if m:
-      rule = Rule(lineno)
+      rule = Rule(css_path, lineno)
       self.pattern(rule, m.group('pattern'))
       self.block(rule, m.group('block'))
       return rule

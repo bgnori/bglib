@@ -47,9 +47,7 @@ class Context(bglib.image.xml.Context):
   def load_image(self, uri, size, flip):
     if (uri, size, flip) in self.cache:
       return self.cache[(uri, size, flip)]
-    fn = uri.split('"')[1]
-    image = Image.open('./bglib/image/resource/safari/'+fn)
-    image = image.resize(size, resample=1)
+    image = Image.open(uri)
     if flip:
       image = image.transpose(Image.FLIP_TOP_BOTTOM)
     self.cache.update({(uri, size, flip): image})
@@ -71,12 +69,11 @@ class Context(bglib.image.xml.Context):
     size = (int(e.width), int(e.height))
     if hasattr(e, 'background'):
       bg = getattr(e, 'background')
-      print bg
       self.fill_rect(image, position, size, bg)
     if hasattr(e, 'color'):
       pass #fill rect here
     if hasattr(e, 'image'):
-      loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
+      loaded = self.load_image(e.image.get(), size, hasattr(e, 'flip'))
       self.paste_image(image, loaded, position)
 
   def result(self):

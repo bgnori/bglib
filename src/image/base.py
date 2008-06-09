@@ -5,6 +5,8 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
+import os.path
+
 import bglib.image.css
 import bglib.model.constants
 
@@ -25,12 +27,68 @@ class  ElementFactory(object):
 
 Element = ElementFactory()
 
+
+class BaseAttribute(object):
+  def __init__(self, defualt=None):
+    self._value = defualt
+    self.css_path = None
+ 
+  def parse(self, s):
+    pass
+
+  @classmethod
+  def is_inherit(cls):
+    return False
+  def set(self, value):
+    self._value = value
+  def get(self):
+    return self._value
+  def __hash__(self):
+    return hash(self.value)
+  def __str__(self):
+    return self.get()
+
+class InheritMixIn(object):
+  @classmethod
+  def is_inherit(cls):
+    return True
+
+class IntAttribute(InheritMixIn, BaseAttribute):
+  def parse(self, s):
+    self.set(int(s))
+
+class StringAttribute(BaseAttribute):
+  def parse(self, s):
+    self.set(s)
+
+class ColorAttribute(StringAttribute):
+  def parse(self, s):
+    #FIXME validation is needed
+    self.set(s)
+
+class URIAttribute(StringAttribute):
+  def parse(self, s):
+    dir = os.path.dirname(self.css_path)
+    fn = s.split('"')[1]
+    self.set(os.path.join(dir, fn))
+  
+class FlipAttribute(StringAttribute):
+  pass
+  
+class ParityAttribute(StringAttribute):
+  pass
+class PlayerAttribute(StringAttribute):
+  pass
+
+
 class BaseElement(object):
   name = None
   DTD_ELEMENT = None
-  DTD_ATTLIST = {'x':'CDATA', 'y':'CDATA', 'width':'CDATA', 'height':'CDATA',
-                 'image':'CDATA', 'flip':'CDATA',
-                 'background':'CDATA', 'color':'CDATA', 'font':'CDATA'}
+  DTD_ATTLIST = {'x':IntAttribute, 'y':IntAttribute,
+                  'width':IntAttribute, 'height':IntAttribute,
+                 'image':URIAttribute, 'flip': FlipAttribute,
+                 'background': ColorAttribute, 'color':ColorAttribute, 
+                 'font':StringAttribute}
 
   def __init__(self,  **kw):
     self.__dict__['children'] = list()
@@ -55,18 +113,19 @@ class BaseElement(object):
       e.parent = self
       self.children.append(e)
     elif isinstance(e, str):
-      assert '#CDATA' in self.DTD_ELEMENT
+      assert '#PCDATA' in self.DTD_ELEMENT
       self.children.append(e)
     else:
       assert False
 
-  def update(self, d):
+  def update(self, css_path, d):
     for key, value in d.items():
       if key not in self.DTD_ATTLIST:
         raise KeyError('no such attribute %s in %s'%(key, self.name))
-      #value
-      #self.DTD_ATTLIST[key]
-    self.attributes.update(d)
+      a = self.attributes.get(key, self.DTD_ATTLIST[key]())
+      a.css_path = css_path
+      a.parse(value)
+      self.attributes.update({key:a})
 
   def format(self, indent):
     s = ' '*indent + "<%s"%(self.name)
@@ -82,9 +141,13 @@ class BaseElement(object):
     return s
 
   def __getattr__(self, name):
-    if name in self.attributes:
-      return self.attributes[name]
-    return getattr(self.parent, name) #inherit
+    if name in self.DTD_ATTLIST:
+      a = self.attributes.get(name)
+      if a:
+        return a.get()
+      elif self.DTD_ATTLIST[name].is_inherit():
+        return getattr(self.parent, name)
+    raise AttributeError('Element %s does not have such attribute "%s".'%(self.name, name))
 
   def make_DTD_ELEMENT(self):
     return "<!ELEMENT %s (%s)>"%(self.name, ','.join(self.DTD_ELEMENT))
@@ -109,24 +172,24 @@ Element.register(Match)
 
 class Action(BaseElement):
   name = 'action'
-  DTD_ELEMENT = ('#CDATA')
+  DTD_ELEMENT = ('#PCDATA')
 Element.register(Action)
 
 class Length(BaseElement):
   name = 'length'
-  DTD_ELEMENT = ('#CDATA')
+  DTD_ELEMENT = ('#PCDATA')
 Element.register(Length)
 
 
 class Crawford(BaseElement):
   name = 'crawford'
-  DTD_ELEMENT = ('#CDATA')
+  DTD_ELEMENT = ('#PCDATA')
 Element.register(Crawford)
 
 
 class Score(BaseElement):
   name = 'score'
-  DTD_ELEMENT = ('#CDATA')
+  DTD_ELEMENT = ('#PCDATA')
 Element.register(Score)
 
 
@@ -146,7 +209,8 @@ class Field(BaseElement):
   name = 'field'
   DTD_ELEMENT = ('EMPTY', 'die', 'die', 'cube', 'chip' )
   #FIXME <!ELEMENT field (EMPTY | (die, die) | cube | chip )>
-  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST, player=('you', 'him'))
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     player=PlayerAttribute)
   #FIXME
   #<!ATTLIST field basic
   #                player (you|him) #REQUIRED
@@ -155,19 +219,23 @@ Element.register(Field)
 
 class Die(BaseElement):
   name = 'die'
-  DTD_ELEMENT = ('#CDATA')
-  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST, x_offset="#CDATA", y_offset="#CDATA")
+  DTD_ELEMENT = ('#PCDATA')
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     x_offset=IntAttribute,
+                     y_offset=IntAttribute)
 Element.register(Die)
 
 
 class Cube(BaseElement):
   name = 'cube'
-  DTD_ELEMENT = ('#CDATA')
+  DTD_ELEMENT = ('#PCDATA')
 Element.register(Cube)
 
 
 class Chip(BaseElement):
-  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST, x_offset="#CDATA", y_offset="#CDATA")
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     x_offset=IntAttribute,
+                     y_offset=IntAttribute)
 Element.register(Chip)
 
 
@@ -175,7 +243,8 @@ class Home(BaseElement):
   name = 'home'
   DTD_ELEMENT = ('EMPTY', 'cube', 'chequer')
   #FIXME <!ELEMENT home (EMPTY |  cube | chequer )>
-  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST, player=('you', 'him'))
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     player=PlayerAttribute)
   #FIXME
   #<!ATTLIST home basic
   #                player (you|him) #REQUIRED
@@ -184,8 +253,9 @@ Element.register(Home)
 
 class Chequer(BaseElement):
   name = 'chequer'
-  DTD_ELEMENT = ('#CDATA')
-  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST, player=('you', 'him'))
+  DTD_ELEMENT = ('#PCDATA')
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     player=PlayerAttribute)
   #FIXME
   #<!ATTLIST chequerbasic
   #                player (you|him) #REQUIRED
@@ -195,7 +265,8 @@ Element.register(Chequer)
 class Bar(BaseElement):
   name = 'bar'
   DTD_ELEMENT = ('EMPTY', 'chequer')
-  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST, player=('you', 'him'))
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     player=PlayerAttribute)
   #FIXME
   #<!ATTLIST bar basic
   #                player (you|him) #REQUIRED
@@ -204,8 +275,9 @@ Element.register(Bar)
 
 class Point(BaseElement):
   name = 'point'
-  DTD_ELEMENT = ('#CDATA', 'chequer')
-  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST, parity=('odd', 'even'))
+  DTD_ELEMENT = ('#PCDATA', 'chequer')
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     parity=ParityAttribute)
   #FIXME
   #<!ATTLIST point basic
   #                parity (odd|even) #REQUIRED
@@ -229,7 +301,7 @@ class ElementTree(object):
     rules = list()
     f = file(fname)
     for no, line in enumerate(f.readlines()):
-      r = p.rule(no + 1, line)
+      r = p.rule(fname, no + 1, line)
       if r:
         rules.append(r)
     def apply(path):

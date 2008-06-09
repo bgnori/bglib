@@ -52,7 +52,7 @@ False
 >>> s.is_match(e)
 True
 
->>> r = bglib.image.css.Rule(0)
+>>> r = bglib.image.css.Rule('~/defaule.css', 0)
 >>> r.lineno
 0
 >>> r.add(s)
@@ -91,7 +91,7 @@ True
 
 >>> r.apply([e])
 >>> e
-<point x="42" image=uri("backgammon.jpg")>2</point>
+<point x="42" image=~/backgammon.jpg>2</point>
 
 >>> e = bglib.image.base.Element('point',  x='"42"')
 >>> e
@@ -101,32 +101,32 @@ True
 <point x="42"></point>
 
 >>> parser = bglib.image.css.CSSParser()
->>> r = parser.rule(0, """point:data(1) { x: 249 ; y: 139 }""")
+>>> r = parser.rule('~/defaule.css', 0, """point:data(1) { x: 249 ; y: 139 }""")
 >>> r
 in line: 0
 pattern: <point>1</point>
 block: {'y': '139', 'x': '249'}
 
->>> r = parser.rule(0, """point:data(1) { x: 249}""")
+>>> r = parser.rule('~/defaule.css', 0, """point:data(1) { x: 249}""")
 >>> r
 in line: 0
 pattern: <point>1</point>
 block: {'x': '249'}
 
->>> r = parser.rule(0, """point {x: 0; y: 0; width: 341; height: 232}""")
+>>> r = parser.rule('~/defaule.css', 0, """point {x: 0; y: 0; width: 341; height: 232}""")
 >>> r
 in line: 0
 pattern: <point></point>
 block: {'y': '0', 'x': '0', 'height': '232', 'width': '341'}
 
 
->>> r = parser.rule(0, """die:data(1) {image}""")
+>>> r = parser.rule('~/defaule.css', 0, """die:data(1) {image}""")
 >>> r
 in line: 0
 pattern: <die>1</die>
 block: {}
 
->>> r = parser.rule(0, """home[player=you] cube{x: 266; y: 197;}""")
+>>> r = parser.rule('~/defaule.css', 0, """home[player=you] cube{x: 266; y: 197;}""")
 >>> r
 in line: 0
 pattern: <home player=you></home> <cube></cube>
@@ -141,7 +141,7 @@ block: {'y': '197', 'x': '266'}
 >>> c
 <chequer player=him>1</chequer>
 
->>> r = parser.rule(0, """point[parity=even] chequer[player=him]:data(2)  {image: uri("even-green-2.jpg")} """)
+>>> r = parser.rule('~/defaule.css', 0, """point[parity=even] chequer[player=him]:data(2)  {image: uri("even-green-2.jpg")} """)
 
 >>> r
 in line: 0
@@ -163,7 +163,7 @@ False
 
 
 
->>> r = parser.rule(0, """point[parity=even] chequer[player=him]:data(1)  {image: uri("even-green-1.jpg")} """)
+>>> r = parser.rule('~/defaule.css', 0, """point[parity=even] chequer[player=him]:data(1)  {image: uri("even-green-1.jpg")} """)
 
 >>> r
 in line: 0
@@ -181,7 +181,7 @@ True
 
 >>> r.apply([b, p, c])
 >>> c
-<chequer player=him image=uri("even-green-1.jpg")>1</chequer>
+<chequer player=him image=~/even-green-1.jpg>1</chequer>
 
 
 
