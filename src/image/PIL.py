@@ -41,7 +41,7 @@ class Context(bglib.image.context.Context):
       i = Image.open('./bglib/image/resource/original/'+fn)
       j = i.resize(size, resample=1)
       if upside_down:
-        j = j.rotate(180)
+        j = j.flip(180)
       self.cache.update({(fn, size, upside_down): j})
     else:
       j = self.cache[(fn, size, upside_down)]
@@ -353,6 +353,8 @@ class Context(bglib.image.xml.Context):
       print fn
       i = Image.open('./bglib/image/resource/safari/'+fn)
       j = i.resize(size, resample=1)
+      if hasattr(e, 'flip'):
+        j = j.transpose(Image.FLIP_TOP_BOTTOM)
       image.paste(j, (int(e.x), int(e.y)))
     elif hasattr(e, 'background-color'):
       pass #fill rect here
