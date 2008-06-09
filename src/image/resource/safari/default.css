@@ -1,6 +1,6 @@
 
 
-board {x: 0; y: 0; width: 341; height: 232; background-color: blue;}
+board {x: 0; y: 0; width: 341; height: 232; background-color: red;}
 
 match {x: 241; y: 0; width: 100; height: 232}
 length {x: 316; y: 93; width: 25; height: 46}
@@ -75,7 +75,7 @@ player[player=him]{x:0; y:0}
 
 
 
-position {x: 0; y: 0; width: 241; height: 232; image: uri("position.jpg")}
+position {x: 0; y: 0; width: 291; height: 232; image: uri("position.jpg")}
 point        {width: 18; height:88}
 point[parity=odd]    {color: pink}
 point[parity=even]   {color: skyblue}
@@ -106,13 +106,13 @@ point:data(24) {x: 248 ; y:   5 ; flip:  top-bottom  }
 point[parity=odd]  { image: uri("odd-none.jpg") } 
 point[parity=even] { image: uri("even-none.jpg") } 
 
-bar {width: 25; height: 88}
+bar {width: 25; height: 111}
 bar[player=him] { image: uri("bar-none.jpg")} 
 bar[player=you] { image: uri("bar-none.jpg")} 
-bar[player=you] {x:133; y:139}
+bar[player=you] {x:133; y:116}
 bar[player=him] {x:133; y: 5}
 
-cubeholder {width: 25 ;height: 101; image:uri("cubeholder.jpg"); x: 266; y: 101}
+cubeholder {width: 25 ;height: 30; image:uri("cubeholder.jpg"); x: 266; y: 101}
 
 home {width: 25 ;height: 101}
 home[player=you] {x: 266; y: 131; image:uri("your-home.jpg")}
