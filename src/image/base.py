@@ -24,14 +24,13 @@ class  ElementFactory(object):
   def register(self, kls):
     self.ec.update({kls.name: kls})
 
-
 Element = ElementFactory()
 
 
 class BaseAttribute(object):
-  def __init__(self, defualt=None):
+  def __init__(self, css_path, defualt=None):
+    self.css_path = css_path
     self._value = defualt
-    self.css_path = None
  
   def parse(self, s):
     pass
@@ -46,7 +45,7 @@ class BaseAttribute(object):
   def __hash__(self):
     return hash(self.value)
   def __str__(self):
-    return self.get()
+    return str(self.get())
 
 class InheritMixIn(object):
   @classmethod
@@ -72,9 +71,8 @@ class URIAttribute(StringAttribute):
     fn = s.split('"')[1]
     self.set(os.path.join(dir, fn))
   
-class FlipAttribute(StringAttribute):
+class FlipAttribute(InheritMixIn, StringAttribute):
   pass
-  
 class ParityAttribute(StringAttribute):
   pass
 class PlayerAttribute(StringAttribute):
@@ -122,8 +120,7 @@ class BaseElement(object):
     for key, value in d.items():
       if key not in self.DTD_ATTLIST:
         raise KeyError('no such attribute %s in %s'%(key, self.name))
-      a = self.attributes.get(key, self.DTD_ATTLIST[key]())
-      a.css_path = css_path
+      a = self.attributes.get(key, self.DTD_ATTLIST[key](css_path))
       a.parse(value)
       self.attributes.update({key:a})
 

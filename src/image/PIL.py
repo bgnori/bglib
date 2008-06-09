@@ -50,6 +50,7 @@ class Context(bglib.image.xml.Context):
     image = Image.open(uri)
     if flip:
       image = image.transpose(Image.FLIP_TOP_BOTTOM)
+    image = image.resize(size)
     self.cache.update({(uri, size, flip): image})
     return image
 
@@ -65,15 +66,15 @@ class Context(bglib.image.xml.Context):
 
   def xmlrender(self, path, image):
     e = path[-1]
-    position = (int(e.x), int(e.y))
-    size = (int(e.width), int(e.height))
+    position = (e.x, e.y)
+    size = (e.width, e.height)
     if hasattr(e, 'background'):
       bg = getattr(e, 'background')
       self.fill_rect(image, position, size, bg)
     if hasattr(e, 'color'):
       pass #fill rect here
     if hasattr(e, 'image'):
-      loaded = self.load_image(e.image.get(), size, hasattr(e, 'flip'))
+      loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
       self.paste_image(image, loaded, position)
 
   def result(self):
