@@ -67,8 +67,8 @@ score:data(25) {image: uri("score_25.jpg")}
 
 
 action{width: 25; height: 25; x:0; y:93}
-action[player=you] {image: uri("action_white.jpg) }
-action[player=him] {image: uri("action_green.jpg) }
+action[player=you] {image: uri("action_white.jpg") }
+action[player=him] {image: uri("action_green.jpg") }
 player {width:0; height: 0}
 player[player=you]{x:0; y:0}
 player[player=him]{x:0; y:0}
@@ -79,7 +79,7 @@ position {x: 0; y: 0; width: 241; height: 232; image: uri("position.jpg")}
 point        {width: 18; height:88}
 point[parity=odd]    {color: pink}
 point[parity=even]   {color: skyblue}
-point:data(1) { x: 249 ; y: 139 }
+point:data(1) { x: 248 ; y: 139 }
 point:data(2) { x: 230 ; y: 139 }
 point:data(3) { x: 212 ; y: 139 }
 point:data(4) { x: 194 ; y: 139 }
@@ -145,7 +145,6 @@ cube {width: 25; height: 25}
 field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
 chip {width: 25; height: 25; image: uri("chip.jpg"})
-
 
 
 
