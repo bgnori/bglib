@@ -63,6 +63,7 @@ samples:
 import re
 import logging
 
+import bglib.image.base
 
 class Selector(object):
   def __init__(self, element, name=None, value=None, data=None):
@@ -78,6 +79,7 @@ class Selector(object):
     if ret and self.name is not None:
       ret &= (self.name in element.attributes)
     if ret and self.value is not None:
+      assert isinstance(element.attributes[self.name], bglib.image.base.BaseAttribute)
       ret &= (element.attributes[self.name].is_match(self.value))
     if ret and self.data is not None:
       ret &= (self.data in element.children)

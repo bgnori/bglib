@@ -6,48 +6,51 @@
 >>> print s
 <point></point>
 
->>> s = bglib.image.css.Selector('point', 'x', '"42"')
+>>> s = bglib.image.css.Selector('point', 'x', '42')
 >>> print s
-<point x="42"></point>
+<point x=42></point>
 
->>> s = bglib.image.css.Selector('point', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('point', 'x', '42', "2")
 >>> print s
-<point x="42">2</point>
+<point x=42>2</point>
 
 
->>> s = bglib.image.css.Selector('point', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('point', 'x', '42', "2")
 >>> print s
-<point x="42">2</point>
+<point x=42>2</point>
 
->>> s = bglib.image.css.Selector('point', 'x', '"42"', "2")
+>>> s = bglib.image.css.Selector('point', 'x', '42', "2")
 >>> print s
-<point x="42">2</point>
+<point x=42>2</point>
 
->>> e = bglib.image.base.Element('point',  x='"42"')
+>>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> e.append("2")
+>>> e.x
+42
+
 >>> s.is_match(e)
 True
 
->>> e = bglib.image.base.Element('point',  x='"43"')
+>>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=43))
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('die',  x='"42"')
+>>> e = bglib.image.base.Element('die', x=bglib.image.base.IntAttribute(value=42))
 >>> e.append("2")
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('point',  x='"42"')
+>>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('point',  x='"42"')
+>>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> e.append("3")
 >>> s.is_match(e)
 False
 
->>> e = bglib.image.base.Element('point',  x='"42"', y='"22"')
+>>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42), y=bglib.image.base.IntAttribute(value=22))
 >>> e.append("2")
 >>> s.is_match(e)
 True
@@ -58,30 +61,30 @@ True
 >>> r.add(s)
 >>> r
 in line: 0
-pattern: <point x="42">2</point>
+pattern: <point x=42>2</point>
 block: {}
 
 >>> r.update({'image': 'uri("board.jpg")'})
 >>> r
 in line: 0
-pattern: <point x="42">2</point>
+pattern: <point x=42>2</point>
 block: {'image': 'uri("board.jpg")'}
 
 >>> r.update({'image': 'uri("backgammon.jpg")'})
 >>> r
 in line: 0
-pattern: <point x="42">2</point>
+pattern: <point x=42>2</point>
 block: {'image': 'uri("backgammon.jpg")'}
 
->>> e = bglib.image.base.Element('point',  x='"42"')
+>>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> e
-<point x="42"></point>
+<point x=42></point>
 
 
->>> e = bglib.image.base.Element('point',  x='"42"')
+>>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> e.append("2")
 >>> e
-<point x="42">2</point>
+<point x=42>2</point>
 
 >>> s.is_match(e)
 True
@@ -91,14 +94,14 @@ True
 
 >>> r.apply([e])
 >>> e
-<point x="42" image=~/backgammon.jpg>2</point>
+<point x=42 image=~/backgammon.jpg>2</point>
 
->>> e = bglib.image.base.Element('point',  x='"42"')
+>>> e = bglib.image.base.Element('point',  x=bglib.image.base.IntAttribute(value=42))
 >>> e
-<point x="42"></point>
+<point x=42></point>
 >>> r.apply([e])
 >>> e
-<point x="42"></point>
+<point x=42></point>
 
 >>> parser = bglib.image.css.CSSParser()
 >>> r = parser.rule('~/defaule.css', 0, """point:data(1) { x: 249 ; y: 139 }""")
@@ -135,8 +138,8 @@ block: {'y': '197', 'x': '266'}
 
 
 >>> b = bglib.image.base.Element('point')
->>> p = bglib.image.base.Element('point', parity="even")
->>> c = bglib.image.base.Element('chequer', player="him")
+>>> p = bglib.image.base.Element('point', parity=bglib.image.base.ParityAttributeEven())
+>>> c = bglib.image.base.Element('chequer', player=bglib.image.base.PlayerAttributeHim())
 >>> c.append('1')
 >>> c
 <chequer player=him>1</chequer>
@@ -183,5 +186,157 @@ True
 >>> c
 <chequer player=him image=~/even-green-1.jpg>1</chequer>
 
+>>> css_path = "./bglib/image/resource/safari/default.css"
+>>> parser = bglib.image.css.CSSParser()
+>>> rules = list()
+>>> f = file(css_path)
+>>> for no, line in enumerate(f.readlines()):
+...     r = parser.rule(css_path, no + 1, line)
+...     if r:
+...        rules.append(r)
 
+>>> import bglib.model.board
+>>> board = bglib.model.board.board()
+>>> t = bglib.image.base.ElementTree(board)
+>>> def apply(path, rules):
+...     for r in rules:
+...         r.apply(path)
 
+>>> t.visit(apply, [t.board], rules)
+>>> print t
+<board y=0 x=0 width=341 background=red height=232>
+  <position y=0 x=0 image=./bglib/image/resource/safari/position.jpg width=291 height=232>
+    <cubeholder y=101 width=25 image=./bglib/image/resource/safari/cubeholder.jpg height=30 x=266>
+      <cube y=105 x=266 height=25 width=25>
+        0
+      </cube>
+    </cubeholder>
+    <field player=you width=108 y=93 x=158 image=./bglib/image/resource/safari/field.jpg height=46>
+    </field>
+    <home player=you width=25 y=131 x=266 image=./bglib/image/resource/safari/your-home.jpg height=101>
+    </home>
+    <bar player=him width=25 y=5 x=133 image=./bglib/image/resource/safari/bar-none.jpg height=111>
+    </bar>
+    <point parity=odd y=139 width=18 color=pink x=248 image=./bglib/image/resource/safari/odd-none.jpg height=88>
+      1
+      <chequer player=him image=./bglib/image/resource/safari/odd-green-2.jpg>
+        2
+      </chequer>
+    </point>
+    <point parity=even y=139 width=18 color=skyblue x=230 image=./bglib/image/resource/safari/even-none.jpg height=88>
+      2
+    </point>
+    <point parity=odd y=139 width=18 color=pink x=212 image=./bglib/image/resource/safari/odd-none.jpg height=88>
+      3
+    </point>
+    <point parity=even y=139 width=18 color=skyblue x=194 image=./bglib/image/resource/safari/even-none.jpg height=88>
+      4
+    </point>
+    <point parity=odd y=139 width=18 color=pink x=176 image=./bglib/image/resource/safari/odd-none.jpg height=88>
+      5
+    </point>
+    <point parity=even y=139 width=18 color=skyblue x=158 image=./bglib/image/resource/safari/even-none.jpg height=88>
+      6
+      <chequer player=you image=./bglib/image/resource/safari/even-white-5.jpg>
+        5
+      </chequer>
+    </point>
+    <point parity=odd y=139 width=18 color=pink x=115 image=./bglib/image/resource/safari/odd-none.jpg height=88>
+      7
+    </point>
+    <point parity=even y=139 width=18 color=skyblue x=97 image=./bglib/image/resource/safari/even-none.jpg height=88>
+      8
+      <chequer player=you image=./bglib/image/resource/safari/even-white-3.jpg>
+        3
+      </chequer>
+    </point>
+    <point parity=odd y=139 width=18 color=pink x=79 image=./bglib/image/resource/safari/odd-none.jpg height=88>
+      9
+    </point>
+    <point parity=even y=139 width=18 color=skyblue x=61 image=./bglib/image/resource/safari/even-none.jpg height=88>
+      10
+    </point>
+    <point parity=odd y=139 width=18 color=pink x=43 image=./bglib/image/resource/safari/odd-none.jpg height=88>
+      11
+    </point>
+    <point parity=even y=139 width=18 color=skyblue x=25 image=./bglib/image/resource/safari/even-none.jpg height=88>
+      12
+      <chequer player=him image=./bglib/image/resource/safari/even-green-5.jpg>
+        5
+      </chequer>
+    </point>
+    <point parity=odd y=5 width=18 color=pink x=25 image=./bglib/image/resource/safari/odd-none.jpg flip=top-bottom height=88>
+      13
+      <chequer player=you image=./bglib/image/resource/safari/odd-white-5.jpg>
+        5
+      </chequer>
+    </point>
+    <point parity=even y=5 width=18 color=skyblue x=43 image=./bglib/image/resource/safari/even-none.jpg flip=top-bottom height=88>
+      14
+    </point>
+    <point parity=odd y=5 width=18 color=pink x=61 image=./bglib/image/resource/safari/odd-none.jpg flip=top-bottom height=88>
+      15
+    </point>
+    <point parity=even y=5 width=18 color=skyblue x=79 image=./bglib/image/resource/safari/even-none.jpg flip=top-bottom height=88>
+      16
+    </point>
+    <point parity=odd y=5 width=18 color=pink x=97 image=./bglib/image/resource/safari/odd-none.jpg flip=top-bottom height=88>
+      17
+      <chequer player=him image=./bglib/image/resource/safari/odd-green-3.jpg>
+        3
+      </chequer>
+    </point>
+    <point parity=even y=5 width=18 color=skyblue x=115 image=./bglib/image/resource/safari/even-none.jpg flip=top-bottom height=88>
+      18
+    </point>
+    <point parity=odd y=5 width=18 color=pink x=158 image=./bglib/image/resource/safari/odd-none.jpg flip=top-bottom height=88>
+      19
+      <chequer player=him image=./bglib/image/resource/safari/odd-green-5.jpg>
+        5
+      </chequer>
+    </point>
+    <point parity=even y=5 width=18 color=skyblue x=176 image=./bglib/image/resource/safari/even-none.jpg flip=top-bottom height=88>
+      20
+    </point>
+    <point parity=odd y=5 width=18 color=pink x=194 image=./bglib/image/resource/safari/odd-none.jpg flip=top-bottom height=88>
+      21
+    </point>
+    <point parity=even y=5 width=18 color=skyblue x=212 image=./bglib/image/resource/safari/even-none.jpg flip=top-bottom height=88>
+      22
+    </point>
+    <point parity=odd y=5 width=18 color=pink x=230 image=./bglib/image/resource/safari/odd-none.jpg flip=top-bottom height=88>
+      23
+    </point>
+    <point parity=even y=5 width=18 color=skyblue x=248 image=./bglib/image/resource/safari/even-none.jpg flip=top-bottom height=88>
+      24
+      <chequer player=you image=./bglib/image/resource/safari/even-white-2.jpg>
+        2
+      </chequer>
+    </point>
+    <bar player=you width=25 y=116 x=133 image=./bglib/image/resource/safari/bar-none.jpg height=111>
+    </bar>
+    <home player=him width=25 y=0 x=266 image=./bglib/image/resource/safari/his-home.jpg height=101>
+    </home>
+    <field player=him width=108 y=93 x=25 image=./bglib/image/resource/safari/field.jpg height=46>
+    </field>
+  </position>
+  <match y=0 x=291 width=100 height=232>
+    <action player=you background=white width=25 y=103 x=0 image=./bglib/image/resource/safari/action_white.jpg height=26>
+    </action>
+    <crawford y=93 x=291 width=25 height=46>
+      False
+    </crawford>
+    <length y=93 x=316 image=./bglib/image/resource/safari/score_0.jpg width=25 height=46>
+      0
+    </length>
+    <score player=you width=50 y=139 x=291 image=./bglib/image/resource/safari/score_0.jpg height=93>
+      0
+    </score>
+    <score player=him width=50 y=0 x=291 image=./bglib/image/resource/safari/score_0.jpg height=93>
+      0
+    </score>
+  </match>
+</board>
+<BLANKLINE>
+
+>>> 
