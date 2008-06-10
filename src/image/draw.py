@@ -26,11 +26,11 @@ class Draw(object):
     for r in self.rules:
       r.apply(path)
 
-  def draw(self, b):
+  def draw(self, b, size):
     t = bglib.image.base.ElementTree(b)
     t.visit(self.apply, [t.board])
     result = list()
-    t.visit(d.draw_element, [t.board], result)
+    t.visit(self.draw_element, [t.board], result)
     return result
 
   def fill_rect(self, canvas, position, size, color):
@@ -63,7 +63,7 @@ if __name__ == '__main__':
   import bglib.image.base
   b = bglib.model.board.board()
   d = Draw("./bglib/image/resource/safari/default.css")
-  for line in d.draw(b):
+  for line in d.draw(b, size):
     print line
 
 
