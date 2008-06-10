@@ -11,35 +11,14 @@ import ImageDraw
 
 import bglib.image.context
 import bglib.image.renderer
-import bglib.depot.lines
+import bglib.image.draw
 
 debug_color = 'blue'
-
-class Context(bglib.image.context.Context):
-  name = 'PIL'
-  def __init__(self, style):
-    bglib.image.context.Context.__init__(self, style)
-    x, y = style.size.table
-    self.image = Image.new("RGB", (x, y), debug_color)
-    self.cache = dict()
-
-    self.mag_numer  = 1
-    self.mag_denom  = 1
-
-  def apply_mag(self, t):
-    return (
-            t[0] *self.mag_numer/ self.mag_denom,
-            t[1] *self.mag_numer/ self.mag_denom
-            )
-
-
-  def paste_image(self, image, position):
-    self.image.paste(image, position)
 
 
 import bglib.image.xml
 class Context(bglib.image.xml.Context):
-  name = 'xmlPIL'
+  name = 'PIL'
   def __init__(self, style):
     bglib.image.xml.Context.__init__(self, style)
     self.cache = dict()
@@ -76,12 +55,15 @@ class Context(bglib.image.xml.Context):
     if hasattr(e, 'image'):
       loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
       self.paste_image(image, loaded, position)
+    else:
+      e.draw(self)
 
   def result(self):
     x, y = style.size.table
     image = Image.new("RGB", (x, y), debug_color)
     self.tree.css("./bglib/image/resource/safari/default.css")
-    self.tree.visit(self.xmlrender, [self.tree.board], image)
+    d = PILDraw()
+    self.tree.visit(d.draw, [self.tree.board], image)
     return image
 
 bglib.image.context.context_factory.register(Context)

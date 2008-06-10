@@ -28,9 +28,9 @@ Element = ElementFactory()
 
 
 class BaseAttribute(object):
-  def __init__(self, css_path, defualt=None):
+  def __init__(self, css_path=None, value=None):
     self.css_path = css_path
-    self._value = defualt
+    self._value = value
  
   def parse(self, s):
     pass
@@ -77,6 +77,14 @@ class ParityAttribute(StringAttribute):
   pass
 class PlayerAttribute(StringAttribute):
   pass
+class PlayerAttributeYou(PlayerAttribute):
+  def __init__(self, css_path=None):
+    self.css_path = css_path
+    self._value = you
+class PlayerAttributeHim(PlayerAttribute):
+  def __init__(self, css_path=None):
+    self.css_path = css_path
+    self._value = him
 
 
 class BaseElement(object):
@@ -116,13 +124,13 @@ class BaseElement(object):
     else:
       assert False
 
-  def update(self, css_path, d):
-    for key, value in d.items():
-      if key not in self.DTD_ATTLIST:
-        raise KeyError('no such attribute %s in %s'%(key, self.name))
-      a = self.attributes.get(key, self.DTD_ATTLIST[key](css_path))
+  def apply(self, css_path, d):
+    for name, value in d.items():
+      if name not in self.DTD_ATTLIST:
+        raise KeyError('no such attribute %s in %s'%(name, self.name))
+      a = self.attributes.get(name, self.DTD_ATTLIST[name](css_path=css_path))
       a.parse(value)
-      self.attributes.update({key:a})
+      setattr(self, name, a)
 
   def format(self, indent):
     s = ' '*indent + "<%s"%(self.name)
@@ -136,6 +144,18 @@ class BaseElement(object):
         s += ' '*(indent +2) + str(c) + '\n'
     s+= ' '*indent + "</%s>\n"%(self.name)
     return s
+
+  def draw(self, context):
+    pass
+
+  def __setattr__(self, name, attr):
+    if name not in self.DTD_ATTLIST:
+      if name not in self.__dict__:
+        raise KeyError('no such attribute %s in %s'%(name, self.name))
+      self.__dict__[name] = attr
+      return
+    assert isinstance(attr, self.DTD_ATTLIST[name])
+    self.attributes.update({name:attr})
 
   def __getattr__(self, name):
     if name in self.DTD_ATTLIST:
@@ -170,6 +190,8 @@ Element.register(Match)
 class Action(BaseElement):
   name = 'action'
   DTD_ELEMENT = ('#PCDATA')
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     player=PlayerAttribute)
 Element.register(Action)
 
 class Length(BaseElement):
@@ -281,15 +303,16 @@ class Point(BaseElement):
 Element.register(Point)
 
 
-
 class ElementTree(object):
-  def __init__(self):
+  def __init__(self, board=None):
     self.create_tree()
+    if board: 
+      self.set(board)
 
   def visit(self, callback, path, *args, **kw):
     callback(path, *args, **kw)
     for c in path[-1].children:
-      if isinstance(c, bglib.image.base.BaseElement):
+      if isinstance(c, BaseElement):
         path.append(c)
         self.visit(callback, path, *args, **kw)
         path.pop(-1)
@@ -305,6 +328,129 @@ class ElementTree(object):
       for r in rules:
         r.apply(path)
     self.visit(apply, [self.board])
+
+  def set(self, board):
+    self.score[bglib.model.constants.you].append(str(board.score[bglib.model.constants.you]))
+    self.score[bglib.model.constants.him].append(str(board.score[bglib.model.constants.him]))
+    self.length.append(str(board.match_length))
+    self.crawford.append(str(board.crawford))
+
+    for i in range(1, 25):
+      chequer_count = board.position[bglib.model.constants.you][i-1]
+      if chequer_count:
+        chequer = Element('chequer',
+                                           player=PlayerAttributeYou())
+        chequer.append(str(chequer_count))
+        self.points[i].append(chequer)
+      chequer_count = board.position[bglib.model.constants.him][24-i]
+      if chequer_count:
+        chequer = Element('chequer', 
+                                           player=PlayerAttributeHim())
+        chequer.append(str(chequer_count))
+        self.points[25-i].append(chequer)
+    chequer_count = board.position[bglib.model.constants.you][24]
+    if chequer_count:
+      chequer = Element('chequer',
+                                         player=PlayerAttributeYou())
+      chequer.append(str(chequer_count))
+      self.bar[bglib.model.constants.you].append(chequer)
+
+    chequer_count = board.position[bglib.model.constants.you][24]
+    if chequer_count:
+      chequer = Element('chequer',
+                                         player=PlayerAttributeHim())
+      chequer.append(str(chequer_count))
+      self.bar[bglib.model.constants.him].append(chequer)
+
+    chequer_count = 15 - reduce(lambda x, y: x+y, board.position[bglib.model.constants.you])
+    if chequer_count:
+      chequer = Element('chequer',
+                                         player=PlayerAttributeYou())
+      chequer.append(str(chequer_count))
+      self.home[bglib.model.constants.you].append(chequer)
+
+    chequer_count = 15 - reduce(lambda x, y: x+y, board.position[bglib.model.constants.him])
+    if chequer_count:
+      chequer = Element('chequer',
+                                         player=PlayerAttributeHim())
+      chequer.append(str(chequer_count))
+      self.home[bglib.model.constants.him].append(chequer)
+
+    if board.cube_owner == bglib.model.constants.you:
+      self.draw_your_cube(board.cube_in_logarithm)
+      cube = Element('cube')
+      cube.append(str(board.cube_in_logarithm))
+      self.home[bglib.model.constants.you].append(cube)
+    elif board.cube_owner == bglib.model.constants.him:
+      cube = Element('cube')
+      cube.append(str(board.cube_in_logarithm))
+      self.home[bglib.model.constants.him].append(cube)
+    elif board.cube_owner == bglib.model.constants.center:
+      cube = Element('cube')
+      cube.append(str(board.cube_in_logarithm))
+      self.cubeholder.append(cube)
+
+    if board.on_action == bglib.model.constants.you and board.rolled == (0, 0):
+      if not board.doubled and board.on_inner_action == bglib.model.constants.you:
+        self.action.player = PlayerAttributeYou()
+        return
+
+      if not board.doubled and board.on_inner_action == bglib.model.constants.him and board.resign_offer in bglib.model.constants.resign_types:
+        self.action.player = PlayerAttributeHim()
+        return
+
+      if board.doubled and board.on_inner_action == bglib.model.constants.him:
+        self.action.player = PlayerAttributeYou()
+        return
+
+      if board.doubled and board.on_inner_action == bglib.model.constants.you:
+        self.action.player = PlayerAttributeYou()
+        return
+
+    if board.on_action == bglib.model.constants.you and  board.rolled != (0, 0):
+      self.action.player = PlayerAttributeYou()
+      return
+
+    if board.on_action == bglib.model.constants.him and board.rolled == (0, 0):
+      if not board.doubled and board.on_inner_action == bglib.model.constants.him:
+        self.action.player = PlayerAttributeHim()
+        return
+      if not board.doubled and board.on_inner_action == bglib.model.constants.you and board.resign_offer in bglib.model.constants.resign_types:
+        self.action.player = PlayerAttributeYou()
+        return
+
+      if board.doubled and board.on_inner_action == bglib.model.constants.you:
+        self.action.player = PlayerAttributeYou()
+        return
+
+      if board.doubled and board.on_inner_action == bglib.model.constants.him:
+        self.action.player = PlayerAttributeHim()
+        return
+
+    if board.on_action == bglib.model.constants.him and  board.rolled !=(0, 0):
+      self.action.player = PlayerAttributeHim()
+      return
+
+    #assert not board.doubled and board.on_inner_action == bglib.model.constants.him and board.resign_offer not in bglib.model.constants.resign_types
+
+    raise AssertionError("""
+    Bad field draw with
+    board.rolled = %s
+    board.on_action = %i
+    board.doubled = %i
+    board.on_inner_action = %i
+    board.cube_in_logarithm = %i
+    board.resign_offer = %i
+    """%(
+    str(board.rolled),
+    board.on_action,
+    board.doubled,
+    board.on_inner_action,
+    board.cube_in_logarithm,
+    board.resign_offer
+    ))
+
+
 
   def create_tree(self):
     score = list()
@@ -369,7 +515,10 @@ class ElementTree(object):
     self.board = board
 
 if __name__ == '__main__':
+  import bglib.model.board
   t = ElementTree()
   print t.board.format(0)
-
+  b = bglib.model.board.board()
+  t = ElementTree(b)
+  print t.board.format(0)
 

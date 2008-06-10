@@ -136,7 +136,7 @@ class Rule(object):
       e = path[-1]
       logging.debug('applying rule in line %i to %s found in %s',
                      self.lineno, e.name,  str([e.name for e in path]))
-      e.update(self.css_path, self.block)
+      e.apply(self.css_path, self.block)
       e.css_lineno.append(self.lineno)
   
   def __str__(self):
