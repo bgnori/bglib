@@ -78,7 +78,7 @@ class Selector(object):
     if ret and self.name is not None:
       ret &= (self.name in element.attributes)
     if ret and self.value is not None:
-      ret &= (element.attributes[self.name] == self.value)
+      ret &= (element.attributes[self.name].is_match(self.value))
     if ret and self.data is not None:
       ret &= (self.data in element.children)
     return ret
