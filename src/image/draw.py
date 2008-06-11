@@ -13,9 +13,12 @@ class Draw(object):
     self.css = bglib.image.css.load(css_path)
     self.cache = dict()
 
-  def draw(self, b, size):
+  def make_tree(self, b):
     t = bglib.image.base.ElementTree(b)
     self.css.apply(t)
+    return t
+  def draw(self, b, size):
+    t = self.make_tree(b)
     result = list()
     t.visit(self.draw_element, [t.board], result)
     return result

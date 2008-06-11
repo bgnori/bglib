@@ -29,11 +29,10 @@ class Draw(bglib.image.draw.Draw):
     x2, y2 = position
     x2 += size[0]
     y2 += size[1]
-    draw.rectangle([position, (x2, y2)], fill=color)
+    draw.rectangle([position, (x2-1, y2-1)], fill=color)
 
   def draw(self, b, size):
-    t = bglib.image.base.ElementTree(b)
-    t.visit(self.apply, [t.board])
+    t = self.make_tree(b)
     result = Image.new('RGB', size)
     t.visit(self.draw_element, [t.board], result)
     return result
@@ -43,6 +42,6 @@ if __name__ == '__main__':
   import bglib.model.board
   b = bglib.model.board.board()
   d = Draw("./bglib/image/resource/safari/default.css")
-  image = d.draw(b, (500, 500))
+  image = d.draw(b, (400, 400))
   image.show()
 
