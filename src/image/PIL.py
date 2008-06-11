@@ -45,5 +45,4 @@ if __name__ == '__main__':
   d = Draw("./bglib/image/resource/safari/default.css")
   image = d.draw(b, (500, 500))
   image.show()
-  
 

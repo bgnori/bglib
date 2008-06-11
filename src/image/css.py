@@ -149,6 +149,23 @@ class Rule(object):
   __repr__ = __str__
 
 
+class Binder(object):
+  def __init__(self):
+    self.rules = list()
+  
+  def append(self, rule):
+    assert isinstance(rule, Rule)
+    self.rules.append(rule)
+
+  def apply(self, t):
+    assert(isinstance(t, bglib.image.base.ElementTree))
+    def apply(path):
+      for r in self.rules:
+        r.apply(path)
+    t.visit(apply)
+    #, [t.board])
+
+
 class CSSParser(object):
   def rule(self, css_path, lineno, s):
     if not s:
@@ -194,6 +211,15 @@ class CSSParser(object):
     if m:
       rule.update({m.group('name'): m.group('value')})
 
+def load(css_path):
+  p = bglib.image.css.CSSParser()
+  rules = Binder()
+  f = file(css_path)
+  for no, line in enumerate(f.readlines()):
+    r = p.rule(css_path, no + 1, line)
+    if r:
+      rules.append(r)
+  return rules
 
 
 if __name__ == '__main__':

@@ -330,7 +330,9 @@ class ElementTree(object):
   def __str__(self):
     return self.board.format(0)
 
-  def visit(self, callback, path, *args, **kw):
+  def visit(self, callback, path=None, *args, **kw):
+    if path is None:
+      path = [self.board]
     #print 'visiting', path[-1]
     callback(path, *args, **kw)
     for c in path[-1].children:
@@ -338,6 +340,7 @@ class ElementTree(object):
         path.append(c)
         self.visit(callback, path, *args, **kw)
         path.pop(-1)
+
   def css(self, fname):
     p = bglib.image.css.CSSParser()
     rules = list()

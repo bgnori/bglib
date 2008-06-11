@@ -6,29 +6,16 @@
 #
 
 import bglib.image.base
+import bglib.image.css
 
 class Draw(object):
   def __init__(self, css_path):
-    self.rules = self.load_css(css_path)
+    self.css = bglib.image.css.load(css_path)
     self.cache = dict()
-
-  def load_css(self, css_path):
-    p = bglib.image.css.CSSParser()
-    rules = list()
-    f = file(css_path)
-    for no, line in enumerate(f.readlines()):
-      r = p.rule(css_path, no + 1, line)
-      if r:
-        rules.append(r)
-    return rules
-
-  def apply(self, path):
-    for r in self.rules:
-      r.apply(path)
 
   def draw(self, b, size):
     t = bglib.image.base.ElementTree(b)
-    t.visit(self.apply, [t.board])
+    self.css.apply(t)
     result = list()
     t.visit(self.draw_element, [t.board], result)
     return result
@@ -63,7 +50,7 @@ if __name__ == '__main__':
   import bglib.image.base
   b = bglib.model.board.board()
   d = Draw("./bglib/image/resource/safari/default.css")
+  size = (400, 400)
   for line in d.draw(b, size):
     print line
-
 
