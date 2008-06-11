@@ -188,7 +188,7 @@ class CSSParser(object):
     assert s
     r = re.compile("""
         (?P<element>[a-zA-Z]+)
-        (?P<attribute>\[(?P<name>[a-zA-Z]+)=(?P<value>[a-zA-Z0-9]+)\])?
+        (?P<attribute>\[(?P<name>[\-_a-zA-Z]+)=(?P<value>[\-_a-zA-Z0-9]+)\])?
         (:data\((?P<data>[^)]+)\))?
       """, re.VERBOSE)
     m = r.search(s)
@@ -206,7 +206,7 @@ class CSSParser(object):
 
   def attribute(self, rule, s):
     assert s
-    r = re.compile(""" *(?P<name>[a-zA-Z]+) *: *(?P<value>[^ ]+) *""")
+    r = re.compile(""" *(?P<name>[\-_a-zA-Z]+) *: *(?P<value>[^ ]+) *""")
     m = r.search(s)
     if m:
       rule.update({m.group('name'): m.group('value')})

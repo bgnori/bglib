@@ -263,6 +263,9 @@ class Die(BaseElement):
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      x_offset=IntAttribute,
                      y_offset=IntAttribute)
+  def draw(self, context):
+    pass
+
 Element.register(Die)
 
 
@@ -295,10 +298,25 @@ class Chequer(BaseElement):
   name = 'chequer'
   DTD_ELEMENT = ('#PCDATA')
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
-                     player=PlayerAttribute)
+                     player=PlayerAttribute,
+                     x_offset=IntAttribute, 
+                     y_offset=IntAttribute
+                    )
   #FIXME
   #<!ATTLIST chequerbasic
   #                player (you|him) #REQUIRED
+  def draw(self, context):
+    count = int(self.children[0])
+    position = [self.x, self.y]
+    size = [self.width, self.height]
+
+    for i in range(min(count, 5)):
+      context.draw_ellipse(position, size,fill=self.color)
+      position[0] += self.x_offset
+      position[1] += self.y_offset
+    if count > 5:
+      context.draw_text([self.x, self.y], str(count))
+
 Element.register(Chequer)
 
 
@@ -330,7 +348,7 @@ class Point(BaseElement):
       pinacle = self.x + self.width/2, self.y
       rbase = self.x, self.y+self.height
       lbase = self.x + self.width, self.y+self.height
-    context.fill_polygon([rbase, pinacle, lbase])
+    context.draw_polygon([rbase, pinacle, lbase], fill=self.color)
 
 Element.register(Point)
 

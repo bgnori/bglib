@@ -26,8 +26,6 @@ class Draw(object):
     t = bglib.image.base.ElementTree(b)
     self.css.apply(t)
     return t
-  def set_pen(self, color):
-    self.color = color
 
   def draw(self, b, size):
     t = self.make_tree(b)
@@ -37,17 +35,20 @@ class Draw(object):
     self.delele_dc()
     return result
 
-  def draw_text(self, text):
-    pass
+  def draw_text(self, position, size, text):
+    self.dc.append('draw_text "%s" in %s with %s  @ %s'%(text, size, self.color, position))
 
-  def fill_polygon(self, points):
-    self.canvas.append('draw_polygon %s'%(points))
+  def draw_ellipse(self, position, size, fill=None):
+    self.dc.append('draw_ellipse %s with %s , fill=%s @ %s'%(size, self.color, bool(fill),  position))
 
-  def fill_rect(self, position, size):
-    self.canvas.append('fill_rect %s with %s @ %s'%(size, self.color, position))
+  def draw_polygon(self, points, fill=None):
+    self.dc.append('draw_polygon %s fill=%s'%(points, bool(fill)))
+
+  def draw_rect(self, position, size, fill=None):
+    self.dc.append('draw_rect %s with %s , fill=%s @ %s'%(size, self.color, bool(fill),  position))
 
   def paste_image(self, src, position):
-    self.canvas.append('paste_image %s @ %s'%(src, position))
+    self.dc.append('paste_image %s @ %s'%(src, position))
 
   def load_image(self, uri, size, flip):
     return uri + ' with ' + str(flip)
@@ -58,13 +59,12 @@ class Draw(object):
     size = (e.width, e.height)
     if hasattr(e, 'background'):
       bg = getattr(e, 'background')
-      self.set_pen(bg)
-      self.fill_rect(position, size)
+      self.draw_rect(position, size, bg)
     if hasattr(e, 'image'):
       loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
       self.paste_image(loaded, position)
     if hasattr(e, 'color'):
-      self.set_pen(e.color)
+      self.color = e.color
       e.draw(self)
 
 if __name__ == '__main__':
@@ -72,7 +72,8 @@ if __name__ == '__main__':
   import bglib.model.board
   import bglib.image.base
   b = bglib.model.board.board()
-  d = Draw("./bglib/image/resource/safari/default.css")
+  #d = Draw("./bglib/image/resource/safari/default.css")
+  d = Draw("./bglib/image/resource/minimal/default.css")
   size = (400, 400)
   for line in d.draw(b, size):
     print line

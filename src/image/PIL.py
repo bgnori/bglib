@@ -19,6 +19,11 @@ class Draw(bglib.image.draw.Draw):
   def delele_dc(self):
     del self.dc[1]
 
+  def draw_text(self, position, size, text):
+    draw = self.dc[1]
+    draw.text(position, text)
+    #Ugh! size!
+
   def result_from_dc(self):
     return self.dc[0]
 
@@ -35,16 +40,23 @@ class Draw(bglib.image.draw.Draw):
   def paste_image(self, src, position):
     self.dc[0].paste(src, position)
 
-  def fill_polygon(self, points):
+  def draw_ellipse(self, position, size, fill=None):
     draw = self.dc[1]
-    draw.polygon(points, fill=self.color)
+    x1, y1 = position
+    x2 = x1 + size[0]
+    y2 = y1 + size[1]
+    draw.ellipse([x1, y1, x2, y2], fill=fill)
 
-  def fill_rect(self, position, size):
+  def draw_polygon(self, points, fill=None):
+    draw = self.dc[1]
+    draw.polygon(points, fill=fill)
+
+  def draw_rect(self, position, size, fill=None):
     draw = self.dc[1]
     x2, y2 = position
     x2 += size[0]
     y2 += size[1]
-    draw.rectangle([position, (x2-1, y2-1)], fill=self.color)
+    draw.rectangle([position, (x2-1, y2-1)], fill=fill)
 
 if __name__ == '__main__':
   import bglib.model.board
