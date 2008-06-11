@@ -330,7 +330,7 @@ class Point(BaseElement):
       pinacle = self.x + self.width/2, self.y
       rbase = self.x, self.y+self.height
       lbase = self.x + self.width, self.y+self.height
-    context.draw_polygon([rbase, pinacle, lbase])
+    context.fill_polygon([rbase, pinacle, lbase])
 
 Element.register(Point)
 

@@ -37,7 +37,10 @@ class Draw(object):
     self.delele_dc()
     return result
 
-  def draw_polygon(self, points):
+  def draw_text(self, text):
+    pass
+
+  def fill_polygon(self, points):
     self.canvas.append('draw_polygon %s'%(points))
 
   def fill_rect(self, position, size):

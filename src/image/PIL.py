@@ -35,7 +35,7 @@ class Draw(bglib.image.draw.Draw):
   def paste_image(self, src, position):
     self.dc[0].paste(src, position)
 
-  def draw_polygon(self, points):
+  def fill_polygon(self, points):
     draw = self.dc[1]
     draw.polygon(points, fill=self.color)
 
@@ -49,7 +49,8 @@ class Draw(bglib.image.draw.Draw):
 if __name__ == '__main__':
   import bglib.model.board
   b = bglib.model.board.board()
-  d = Draw("./bglib/image/resource/safari/default.css")
+  #d = Draw("./bglib/image/resource/safari/default.css")
+  d = Draw("./bglib/image/resource/minimal/default.css")
   image = d.draw(b, (400, 400))
   image.show()
 

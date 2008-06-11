@@ -1,0 +1,81 @@
+
+board {x: 0; y: 0; width: 341; height: 232; background: #596580}
+
+match {x: 291; y: 0; width: 100; height: 232}
+length {x: 316; y: 93; width: 25; height: 46}
+
+crawford {x: 291; y: 93; width: 25; height: 46}
+score {width: 50; height: 93}
+score[player=you] {x: 291; y:139}
+score[player=him] {x: 291; y: 0 }
+
+action{width: 25; height: 26; x:0; y:103 ; background: #596580}
+action[player=you] {color: #3cb7ff}
+action[player=him] {color: #fd4993}
+
+player {width:0; height: 0}
+player[player=you]{x:0; y:0}
+player[player=him]{x:0; y:0}
+
+position {x: 0; y: 0; width: 291; height: 232; background: #827e7d}
+point        {width: 18; height:88}
+point[parity=odd]    {color: #cccecf}
+point[parity=even]   {color: #15212e}
+point:data(1) { x: 248 ; y: 139 }
+point:data(2) { x: 230 ; y: 139 }
+point:data(3) { x: 212 ; y: 139 }
+point:data(4) { x: 194 ; y: 139 }
+point:data(5) { x: 176 ; y: 139 }
+point:data(6) { x: 158 ; y: 139 }
+point:data(7) { x: 115 ; y: 139 }
+point:data(8) { x:  97 ; y: 139 }
+point:data(9) { x:  79 ; y: 139 }
+point:data(10) {x:  61 ; y: 139 }
+point:data(11) {x:  43 ; y: 139 }
+point:data(12) {x:  25 ; y: 139 }
+point:data(13) {x:  25 ; y:   5 ; flip:  top-bottom  }
+point:data(14) {x:  43 ; y:   5 ; flip:  top-bottom  }
+point:data(15) {x:  61 ; y:   5 ; flip:  top-bottom  }
+point:data(16) {x:  79 ; y:   5 ; flip:  top-bottom  }
+point:data(17) {x:  97 ; y:   5 ; flip:  top-bottom  }
+point:data(18) {x: 115 ; y:   5 ; flip:  top-bottom  }
+point:data(19) {x: 158 ; y:   5 ; flip:  top-bottom  }
+point:data(20) {x: 176 ; y:   5 ; flip:  top-bottom  }
+point:data(21) {x: 194 ; y:   5 ; flip:  top-bottom  }
+point:data(22) {x: 212 ; y:   5 ; flip:  top-bottom  }
+point:data(23) {x: 230 ; y:   5 ; flip:  top-bottom  }
+point:data(24) {x: 248 ; y:   5 ; flip:  top-bottom  }
+
+bar {width: 25; height: 111}
+bar[player=you] {x:133; y:116}
+bar[player=him] {x:133; y: 5}
+
+cubeholder {width: 25 ;height: 30; x: 266; y: 101 ;background: #b6bdc6}
+home {width: 25 ;height: 101}
+home[player=him] {x: 266; y: 0; background: #746f6d}
+home[player=you] {x: 266; y: 131 ; background: #746f6d}
+
+field {width: 108; height: 46}
+field[player=you] {x: 158;y: 93}
+field[player=him] {x: 25 ;y: 93}
+
+field[player=you] die {x: 176; y: 95; x-offset: 28; y-offset: 0; color:}
+field[player=him] die {x: 43; y:95 ; x-offset: 28 ; y-offset: 0: color:}
+die {width: 16; height: 16}
+
+
+cube {width: 25; height: 25}
+cubeholder cube {x: 266 ; y: 105}
+home[player=you] cube {x: 266; y: 197} 
+home[player=him] cube {x: 266; y: 5}
+field[player=you] cube {x: 50; y: 100}
+field[player=him] cube {x: 180; y: 100}
+
+field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
+field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
+chip {width: 25; height: 25; color: gold}
+
+chequer[player=you] {color: #3cb7ff}
+chequer[player=him] {color: #fd4993}
+
+
