@@ -215,20 +215,23 @@ Element.register(Action)
 class Length(BaseElement):
   name = 'length'
   DTD_ELEMENT = ('#PCDATA')
+  def draw(self, context):
+    pass
 Element.register(Length)
-
 
 class Crawford(BaseElement):
   name = 'crawford'
   DTD_ELEMENT = ('#PCDATA')
+  def draw(self, context):
+    pass
 Element.register(Crawford)
-
 
 class Score(BaseElement):
   name = 'score'
   DTD_ELEMENT = ('#PCDATA')
+  def draw(self, context):
+    pass
 Element.register(Score)
-
 
 class Position(BaseElement):
   name = 'position'
@@ -318,6 +321,17 @@ class Point(BaseElement):
   #FIXME
   #<!ATTLIST point basic
   #                parity (odd|even) #REQUIRED
+  def draw(self, context):
+    if hasattr(self, 'flip'):
+      pinacle = self.x + self.width/2, self.y+self.height
+      rbase = self.x, self.y
+      lbase = self.x + self.width, self.y
+    else:
+      pinacle = self.x + self.width/2, self.y
+      rbase = self.x, self.y+self.height
+      lbase = self.x + self.width, self.y+self.height
+    context.draw_polygon([rbase, pinacle, lbase])
+
 Element.register(Point)
 
 
@@ -404,7 +418,6 @@ class ElementTree(object):
       self.home[him].append(chequer)
 
     if board.cube_owner == you:
-      self.draw_your_cube(board.cube_in_logarithm)
       cube = Element('cube')
       cube.append(str(board.cube_in_logarithm))
       self.home[you].append(cube)
@@ -461,7 +474,7 @@ class ElementTree(object):
     #assert not board.doubled and board.on_inner_action == him and board.resign_offer not in bglib.model.constants.resign_types
 
     raise AssertionError("""
-    Bad field draw with
+    Bad element tree with
     board.rolled = %s
     board.on_action = %i
     board.doubled = %i

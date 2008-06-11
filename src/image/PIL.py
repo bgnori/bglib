@@ -11,6 +11,17 @@ import bglib.image.draw
 
 
 class Draw(bglib.image.draw.Draw):
+  def create_dc(self, size):
+    img = Image.new('RGB', size)
+    draw = ImageDraw.Draw(img)
+    return [img, draw]
+
+  def delele_dc(self):
+    del self.dc[1]
+
+  def result_from_dc(self):
+    return self.dc[0]
+
   def load_image(self, uri, size, flip):
     if (uri, size, flip) in self.cache:
       return self.cache[(uri, size, flip)]
@@ -21,22 +32,19 @@ class Draw(bglib.image.draw.Draw):
     self.cache.update({(uri, size, flip): image})
     return image
 
-  def paste_image(self, dest, src, position):
-    dest.paste(src, position)
+  def paste_image(self, src, position):
+    self.dc[0].paste(src, position)
 
-  def fill_rect(self, image, position, size, color):
-    draw = ImageDraw.Draw(image)
+  def draw_polygon(self, points):
+    draw = self.dc[1]
+    draw.polygon(points, fill=self.color)
+
+  def fill_rect(self, position, size):
+    draw = self.dc[1]
     x2, y2 = position
     x2 += size[0]
     y2 += size[1]
-    draw.rectangle([position, (x2-1, y2-1)], fill=color)
-
-  def draw(self, b, size):
-    t = self.make_tree(b)
-    result = Image.new('RGB', size)
-    t.visit(self.draw_element, [t.board], result)
-    return result
-
+    draw.rectangle([position, (x2-1, y2-1)], fill=self.color)
 
 if __name__ == '__main__':
   import bglib.model.board

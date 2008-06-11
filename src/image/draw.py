@@ -12,39 +12,56 @@ class Draw(object):
   def __init__(self, css_path):
     self.css = bglib.image.css.load(css_path)
     self.cache = dict()
+    self.dc = None
+    self.color = None
 
+  def create_dc(self, size):
+    return list()
+  def delele_dc(self):
+    pass
+  def result_from_dc(self):
+    return self.dc
+    
   def make_tree(self, b):
     t = bglib.image.base.ElementTree(b)
     self.css.apply(t)
     return t
+  def set_pen(self, color):
+    self.color = color
+
   def draw(self, b, size):
     t = self.make_tree(b)
-    result = list()
-    t.visit(self.draw_element, [t.board], result)
+    self.dc = self.create_dc(size)
+    t.visit(self.draw_element, [t.board])
+    result = self.result_from_dc()
+    self.delele_dc()
     return result
 
-  def fill_rect(self, canvas, position, size, color):
-    canvas.append('fill_rect %s with %s @ %s'%(size, color, position))
+  def draw_polygon(self, points):
+    self.canvas.append('draw_polygon %s'%(points))
 
-  def paste_image(self, canvas, src, position):
-    canvas.append('paste_image %s @ %s'%(src, position))
+  def fill_rect(self, position, size):
+    self.canvas.append('fill_rect %s with %s @ %s'%(size, self.color, position))
+
+  def paste_image(self, src, position):
+    self.canvas.append('paste_image %s @ %s'%(src, position))
 
   def load_image(self, uri, size, flip):
     return uri + ' with ' + str(flip)
 
-  def draw_element(self, path, canvas):
+  def draw_element(self, path):
     e = path[-1]
     position = (e.x, e.y)
     size = (e.width, e.height)
     if hasattr(e, 'background'):
       bg = getattr(e, 'background')
-      self.fill_rect(canvas, position, size, bg)
-    if hasattr(e, 'color'):
-      pass #fill rect here
+      self.set_pen(bg)
+      self.fill_rect(position, size)
     if hasattr(e, 'image'):
       loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
-      self.paste_image(canvas, loaded, position)
-    else:
+      self.paste_image(loaded, position)
+    if hasattr(e, 'color'):
+      self.set_pen(e.color)
       e.draw(self)
 
 if __name__ == '__main__':
