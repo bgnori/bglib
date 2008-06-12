@@ -134,6 +134,12 @@ home[player=him] cube {x: 266; y: 5}
 field[player=you] cube {x: 50; y: 100}
 field[player=him] cube {x: 180; y: 100}
 cube {width: 25; height: 25}
+cube:data(0) {image: uri("cube_0.jpg")}
+cube:data(1) {image: uri("cube_1.jpg")}
+cube:data(2) {image: uri("cube_2.jpg")}
+cube:data(3) {image: uri("cube_3.jpg")}
+cube:data(4) {image: uri("cube_4.jpg")}
+cube:data(5) {image: uri("cube_5.jpg")}
 
 field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
