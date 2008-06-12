@@ -445,18 +445,19 @@ class ElementTree(object):
       chequer.append(str(chequer_count))
       self.home[him].append(chequer)
 
-    if board.cube_owner == you:
-      cube = Element('cube')
-      cube.append(str(board.cube_in_logarithm))
-      self.home[you].append(cube)
-    elif board.cube_owner == him:
-      cube = Element('cube')
-      cube.append(str(board.cube_in_logarithm))
-      self.home[him].append(cube)
-    elif board.cube_owner == bglib.model.constants.center:
-      cube = Element('cube')
-      cube.append(str(board.cube_in_logarithm))
-      self.cubeholder.append(cube)
+    if not board.doubled or board.on_inner_action == board.on_action:
+      if board.cube_owner == you:
+        cube = Element('cube')
+        cube.append(str(board.cube_in_logarithm))
+        self.home[you].append(cube)
+      elif board.cube_owner == him:
+        cube = Element('cube')
+        cube.append(str(board.cube_in_logarithm))
+        self.home[him].append(cube)
+      elif board.cube_owner == bglib.model.constants.center:
+        cube = Element('cube')
+        cube.append(str(board.cube_in_logarithm))
+        self.cubeholder.append(cube)
 
     if board.on_action == you and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == you:
@@ -468,6 +469,9 @@ class ElementTree(object):
         return
 
       if board.doubled and board.on_inner_action == him:
+        cube = Element('cube')
+        cube.append(str(board.cube_in_logarithm+1))
+        self.field[him].append(cube)
         self.action.player = PlayerAttributeYou()
         return
 
@@ -489,6 +493,9 @@ class ElementTree(object):
 
       if board.doubled and board.on_inner_action == you:
         self.action.player = PlayerAttributeYou()
+        cube = Element('cube')
+        cube.append(str(board.cube_in_logarithm+1))
+        self.field[you].append(cube)
         return
 
       if board.doubled and board.on_inner_action == him:
