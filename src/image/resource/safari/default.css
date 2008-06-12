@@ -30,7 +30,12 @@ length:data(22) {image: uri("score_22.jpg")}
 length:data(23) {image: uri("score_23.jpg")}
 length:data(24) {image: uri("score_24.jpg")}
 length:data(25) {image: uri("score_25.jpg")}
+
+crawford:data(True) {image: uri("crawford.jpg")}
+crawford:data(False) {image: uri("score_template.jpg")}
 crawford {x: 291; y: 93; width: 25; height: 46}
+
+
 score {width: 50; height: 93}
 score[player=you] {x: 291; y:139}
 score[player=him] {x: 291; y: 0 }
