@@ -1,5 +1,6 @@
 
 board {x: 0; y: 0; width: 341; height: 232; background: #596580}
+board {font:uri("DejaVuLGCSans-Bold.ttf")}
 
 match {x: 291; y: 0; width: 100; height: 232}
 length {x: 316; y: 93; width: 25; height: 46}
@@ -64,7 +65,7 @@ field[player=him] die {x: 43; y:95 ; x_offset: 28 ; y_offset: 0: color:#fd4993}
 die {width: 16; height: 16}
 
 
-cube {width: 25; height: 25}
+cube {width: 25; height: 25; background: white; color: black}
 cubeholder cube {x: 266 ; y: 105}
 home[player=you] cube {x: 266; y: 197} 
 home[player=him] cube {x: 266; y: 5}

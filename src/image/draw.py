@@ -13,10 +13,21 @@ class Draw(object):
     self.css = bglib.image.css.load(css_path)
     self.cache = dict()
     self.dc = None
-    self.color = None
+    self.mag = 1.0
+
+  def calc_mag(self, xy):
+    return int(xy[0] *self.mag), int(xy[1]*self.mag)
+
+  def set_mag(self, bound, width, height):
+    xmag = float(bound[0])/width
+    ymag = float(bound[1])/height
+    assert xmag > 0
+    assert ymag > 0
+    self.mag = min(xmag, ymag)
 
   def create_dc(self, size):
     return list()
+
   def delele_dc(self):
     pass
   def result_from_dc(self):
@@ -29,29 +40,44 @@ class Draw(object):
 
   def draw(self, b, size):
     t = self.make_tree(b)
+    self.set_mag(size, t.board.width, t.board.height)
+
     self.dc = self.create_dc(size)
     t.visit(self.draw_element, [t.board])
     result = self.result_from_dc()
     self.delele_dc()
     return result
 
-  def draw_text(self, position, size, text):
-    self.dc.append('draw_text "%s" in %s with %s  @ %s'%(text, size, self.color, position))
+  def draw_text(self, position, size, text, font_name, fill):
+    position=self.calc_mag(position)
+    size=self.calc_mag(size)
+    self.dc.append('draw_text "%s" in %s @ %s'%(text, size, position))
 
   def draw_ellipse(self, position, size, fill=None):
-    self.dc.append('draw_ellipse %s with %s , fill=%s @ %s'%(size, self.color, bool(fill),  position))
+    position=self.calc_mag(position)
+    size=self.calc_mag(size)
+    self.dc.append('draw_ellipse %s, fill=%s @ %s'%(size, bool(fill),  position))
 
   def draw_polygon(self, points, fill=None):
+    points = [self.calc_mag(pt) for pt in points]
     self.dc.append('draw_polygon %s fill=%s'%(points, bool(fill)))
 
   def draw_rect(self, position, size, fill=None):
-    self.dc.append('draw_rect %s with %s , fill=%s @ %s'%(size, self.color, bool(fill),  position))
+    position=self.calc_mag(position)
+    size=self.calc_mag(size)
+    self.dc.append('draw_rect %s, fill=%s @ %s'%(size, bool(fill),  position))
 
   def paste_image(self, src, position):
+    position=self.calc_mag(position)
     self.dc.append('paste_image %s @ %s'%(src, position))
 
   def load_image(self, uri, size, flip):
+    size=self.calc_mag(size)
     return uri + ' with ' + str(flip)
+
+  def load_font(self, uri, size):
+    #size=self.calc_mag(size)
+    return uri
 
   def draw_element(self, path):
     e = path[-1]
@@ -64,7 +90,6 @@ class Draw(object):
       loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
       self.paste_image(loaded, position)
     if hasattr(e, 'color'):
-      self.color = e.color
       e.draw(self)
 
 if __name__ == '__main__':

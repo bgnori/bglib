@@ -74,6 +74,10 @@ class URIAttribute(StringAttribute):
   
 class FlipAttribute(InheritMixIn, StringAttribute):
   pass
+
+class FontAttribute(InheritMixIn, URIAttribute):
+  pass
+
 class ParityAttribute(StringAttribute):
   pass
 
@@ -106,7 +110,7 @@ class BaseElement(object):
                   'width':IntAttribute, 'height':IntAttribute,
                  'image':URIAttribute, 'flip': FlipAttribute,
                  'background': ColorAttribute, 'color':ColorAttribute, 
-                 'font':StringAttribute}
+                 'font':FontAttribute}
 
   def __init__(self,  **kw):
     self.__dict__['children'] = list()
@@ -272,6 +276,11 @@ Element.register(Die)
 class Cube(BaseElement):
   name = 'cube'
   DTD_ELEMENT = ('#PCDATA')
+  def draw(self, context):
+    log = int(self.children[0])
+    v = pow(2, log)
+    context.draw_text((self.x, self.y), (self.width, self.height), str(v), self.font, self.color)
+
 Element.register(Cube)
 
 
@@ -309,13 +318,14 @@ class Chequer(BaseElement):
     count = int(self.children[0])
     position = [self.x, self.y]
     size = [self.width, self.height]
+    xoff, yoff = self.x_offset, self.y_offset
 
     for i in range(min(count, 5)):
       context.draw_ellipse(position, size,fill=self.color)
-      position[0] += self.x_offset
-      position[1] += self.y_offset
+      position[0] += xoff
+      position[1] += yoff
     if count > 5:
-      context.draw_text([self.x, self.y], str(count))
+      context.draw_text([self.x, self.y], str(count), self.font, self.color)
 
 Element.register(Chequer)
 
