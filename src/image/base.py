@@ -325,8 +325,7 @@ class Chequer(BaseElement):
       position[0] += xoff
       position[1] += yoff
     if count > 5:
-      context.draw_text([self.x, self.y], str(count), self.font, self.color)
-
+      context.draw_text(position, size, str(count), self.font, self.color)
 Element.register(Chequer)
 
 
@@ -433,15 +432,13 @@ class ElementTree(object):
 
     chequer_count = 15 - reduce(lambda x, y: x+y, board.position[you])
     if chequer_count:
-      chequer = Element('chequer',
-                                         player=PlayerAttributeYou())
+      chequer = Element('chequer', player=PlayerAttributeYou())
       chequer.append(str(chequer_count))
       self.home[you].append(chequer)
 
     chequer_count = 15 - reduce(lambda x, y: x+y, board.position[him])
     if chequer_count:
-      chequer = Element('chequer',
-                                         player=PlayerAttributeHim())
+      chequer = Element('chequer', player=PlayerAttributeHim())
       chequer.append(str(chequer_count))
       self.home[him].append(chequer)
 

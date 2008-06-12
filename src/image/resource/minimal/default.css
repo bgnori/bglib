@@ -1,4 +1,3 @@
-
 board {x: 0; y: 0; width: 341; height: 232; background: #596580}
 board {font:uri("DejaVuLGCSans-Bold.ttf")}
 
@@ -52,9 +51,10 @@ bar[player=you] {x:133; y:116}
 bar[player=him] {x:133; y: 5}
 
 cubeholder {width: 25 ;height: 30; x: 266; y: 101 ;background: #b6bdc6}
+
 home {width: 25 ;height: 101}
-home[player=him] {x: 266; y: 0; background: #746f6d}
 home[player=you] {x: 266; y: 131 ; background: #746f6d}
+home[player=him] {x: 266; y: 0; background: #746f6d; flip:  top-bottom  }
 
 field {width: 108; height: 46}
 field[player=you] {x: 158;y: 93}
@@ -78,10 +78,7 @@ chip {width: 25; height: 25; color: gold}
 
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18}
 point[flip=top-bottom] chequer {y:6 ;y_offset: 18}
+home[flip=top-bottom] chequer{y:6 ;y_offset: 18}
 chequer[player=you] {color: #3cb7ff}
 chequer[player=him] {color: #fd4993}
-
-
-
-
 
