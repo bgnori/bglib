@@ -58,6 +58,7 @@ class Draw(bglib.image.draw.Draw):
     return font
 
   def load_image(self, uri, size, flip):
+    size=self.calc_mag(size)
     if (uri, size, flip) in self.cache:
       return self.cache[(uri, size, flip)]
     image = Image.open(uri)
