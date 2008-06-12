@@ -12,7 +12,7 @@ import bglib.image.draw
 
 b = bglib.model.board.board()
 tree = bglib.image.base.ElementTree(b)
-css = bglib.image.css.load("./bglib/image/resource/safari/default.css")
+css = bglib.image.css.load("./bglib/image/resource/minimal/default.css")
 css.apply(tree)
 
 print tree

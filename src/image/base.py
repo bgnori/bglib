@@ -220,13 +220,15 @@ class Length(BaseElement):
   name = 'length'
   DTD_ELEMENT = ('#PCDATA')
   def draw(self, context):
-    pass
+    context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
 Element.register(Length)
 
 class Crawford(BaseElement):
   name = 'crawford'
   DTD_ELEMENT = ('#PCDATA')
   def draw(self, context):
+    if self.children[0] == 'True':
+      context.draw_text((self.x, self.y), (self.width, self.height), '*', self.font, self.color)
     pass
 Element.register(Crawford)
 
@@ -234,7 +236,7 @@ class Score(BaseElement):
   name = 'score'
   DTD_ELEMENT = ('#PCDATA')
   def draw(self, context):
-    pass
+    context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
 Element.register(Score)
 
 class Position(BaseElement):
