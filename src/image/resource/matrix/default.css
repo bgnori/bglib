@@ -1,0 +1,99 @@
+board {x: 0; y: 0; width: 1000; height: 800; background: red;}
+board {font:uri("DejaVuLGCSans-Bold.ttf")}
+
+match {x: 800; y: 0; width: 200; height: 1000}
+length {x: 900; y: 400; width: 100; height: 200}
+
+crawford {x: 800; y: 400; width: 100; height: 200}
+
+score {width: 200; height: 300}
+score[player=you] {x: 800; y:500; color: #3cb7ff}
+score[player=him] {x: 800; y:0; color: #fd4993}
+
+action{width: 100; height: 100;}
+action[player=you] {x: 670; y:670; image: uri("ind_blue_r.png") }
+action[player=him] {x: 30; y:30; image: uri("ind_red_l.png") }
+player {width:0; height: 0}
+player[player=you]{x:0; y:0}
+player[player=him]{x:0; y:0}
+
+
+position {x: 0; y: 0; width: 800; height: 800; image: uri("position.png")}
+point        {width: 100; height:100}
+point:data(1) { x: 560 ; y: 560 }
+point:data(2) { x: 460 ; y: 560 }
+point:data(3) { x: 360 ; y: 560 }
+point:data(4) { x: 260 ; y: 560 }
+point:data(5) { x: 160 ; y: 560 }
+point:data(6) { x: 160 ; y: 460 }
+point:data(7) { x: 260 ; y: 460 }
+point:data(8) { x: 360 ; y: 460 }
+point:data(9) { x: 460 ; y: 460 }
+point:data(10) {x: 560 ; y: 460 }
+point:data(11) {x: 560 ; y: 360 }
+point:data(12) {x: 460 ; y: 360 }
+
+
+point:data(13) {x: 260 ; y: 360 }
+point:data(14) {x: 160 ; y: 360 }
+point:data(15) {x: 160 ; y: 260 }
+point:data(16) {x: 260 ; y: 260 }
+point:data(17) {x: 360 ; y: 260 }
+point:data(18) {x: 460 ; y: 260 }
+point:data(19) {x: 560 ; y: 260 }
+point:data(20) {x: 560 ; y: 160 }
+point:data(21) {x: 460 ; y: 160 }
+point:data(22) {x: 360 ; y: 160 }
+point:data(23) {x: 260 ; y: 160 }
+point:data(24) {x: 160 ; y: 160 }
+
+bar {width: 25; height: 111}
+bar[player=him] {x:160; y: 10}
+bar[player=you] {x:160; y:770}
+
+
+home {width: 500;height: 70}
+home[player=you] {x: 160; y: 670}
+home[player=him] {x: 160; y: 60}
+
+
+field {width: 100; height: 650}
+field[player=him] {x: 30;y: 30}
+field[player=you] {x: 670;y: 30}
+
+
+die {width: 30; height: 30}
+
+field[player=him] die {x: 60; y:500; x-offset: 45 ; y-offset: -20}
+field[player=him] die:data(1) {image: uri("dice_red_1.png")}
+field[player=him] die:data(2) {image: uri("dice_red_2.png")}
+field[player=him] die:data(3) {image: uri("dice_red_3.png")}
+field[player=him] die:data(4) {image: uri("dice_red_4.png")}
+field[player=him] die:data(5) {image: uri("dice_red_5.png")}
+field[player=him] die:data(6) {image: uri("dice_red_6.png")}
+
+field[player=you] die {x: 690; y: 260; x-offset: 45; y-offset: 20}
+field[player=you] die:data(1) {image: uri("dice_blue_1.png")}
+field[player=you] die:data(2) {image: uri("dice_blue_2.png")}
+field[player=you] die:data(3) {image: uri("dice_blue_3.png")}
+field[player=you] die:data(4) {image: uri("dice_blue_4.png")}
+field[player=you] die:data(5) {image: uri("dice_blue_5.png")}
+field[player=you] die:data(6) {image: uri("dice_blue_6.png")}
+
+cubeholder {width: 100 ;height: 100; x: 360; y: 460}
+home[player=you] cube {x: 580; y: 680} 
+home[player=him] cube {x: 580; y: 60}
+field[player=you] cube {x: 680; y: 360}
+field[player=him] cube {x: 50; y: 360}
+cubeholder cube {x: 360; y: 360}
+cube {width: 80; height: 80}
+
+field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
+field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
+chip {width: 25; height: 25;}
+
+chequer {max_count: 3}
+chequer[player=you] {width: 20; height:20; image:uri("checker_blue.png")}
+chequer[player=him] {width: 20; height:20; image:uri("checker_red.png")}
+chequer {x_offset: 25; y_offset:0}
+
