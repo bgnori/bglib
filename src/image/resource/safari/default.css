@@ -150,6 +150,7 @@ field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
 chip {width: 25; height: 25; image: uri("chip.jpg"})
 
+chequer{max_count: 1}
 
 point[parity=odd] chequer[player=you]:data(1)   {image: uri("odd-white-1.jpg")} 
 point[parity=odd] chequer[player=you]:data(2)   {image: uri("odd-white-2.jpg")} 

@@ -13,7 +13,7 @@ import bglib.image.draw
 
 class Draw(bglib.image.draw.Draw):
   def create_dc(self, size):
-    img = Image.new('RGB', size)
+    img = Image.new('RGBA', size)
     draw = ImageDraw.Draw(img)
     return [img, draw]
 
@@ -68,9 +68,13 @@ class Draw(bglib.image.draw.Draw):
     self.cache.update({(uri, size, flip): image})
     return image
 
-  def paste_image(self, src, position):
+  def paste_image(self, src, position, size):
     position=self.calc_mag(position)
-    self.dc[0].paste(src, position)
+    size=self.calc_mag(size)
+    x1, y1 = position
+    x2 = x1 + size[0]
+    y2 = y1 + size[1]
+    self.dc[0].paste(src, [x1, y1, x2, y2])
 
   def draw_ellipse(self, position, size, fill=None):
     draw = self.dc[1]
@@ -98,7 +102,6 @@ class Draw(bglib.image.draw.Draw):
 if __name__ == '__main__':
   import bglib.model.board
   b = bglib.model.board.board()
-  #d = Draw("./bglib/image/resource/safari/default.css")
   d = Draw("./bglib/image/resource/minimal/default.css")
   image = d.draw(b, (400, 400))
   image.show()

@@ -54,9 +54,12 @@ class InheritMixIn(object):
   def is_inherit(cls):
     return True
 
-class IntAttribute(InheritMixIn, BaseAttribute):
+class IntAttribute(BaseAttribute):
   def parse(self, s):
     return int(s)
+
+class InheritIntAttribute(InheritMixIn, IntAttribute):
+  pass
 
 class StringAttribute(BaseAttribute):
   pass
@@ -106,8 +109,8 @@ class PlayerAttributeHim(PlayerAttribute):
 class BaseElement(object):
   name = None
   DTD_ELEMENT = None
-  DTD_ATTLIST = {'x':IntAttribute, 'y':IntAttribute,
-                  'width':IntAttribute, 'height':IntAttribute,
+  DTD_ATTLIST = {'x':InheritIntAttribute, 'y':InheritIntAttribute,
+                  'width':InheritIntAttribute, 'height':InheritIntAttribute,
                  'image':URIAttribute, 'flip': FlipAttribute,
                  'background': ColorAttribute, 'color':ColorAttribute, 
                  'font':FontAttribute}
@@ -163,7 +166,11 @@ class BaseElement(object):
     return s
 
   def draw(self, context):
-    pass
+    if hasattr(self, 'image'):
+      size = context.calc_mag((self.width, self.height))
+      position = context.calc_mag((self.x, self.y))
+      loaded = context.load_image(self.image, size, hasattr(self, 'flip'))
+      context.paste_image(loaded, position, size)
 
   def __setattr__(self, name, attr):
     if name in self.DTD_ATTLIST:
@@ -311,7 +318,10 @@ class Chequer(BaseElement):
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute,
                      x_offset=IntAttribute, 
-                     y_offset=IntAttribute
+                     y_offset=IntAttribute,
+                     x_offset2=IntAttribute, 
+                     y_offset2=IntAttribute,
+                     max_count=IntAttribute
                     )
   #FIXME
   #<!ATTLIST chequerbasic
@@ -320,14 +330,21 @@ class Chequer(BaseElement):
     count = int(self.children[0])
     position = [self.x, self.y]
     size = [self.width, self.height]
-    xoff, yoff = self.x_offset, self.y_offset
+    xoff = getattr(self, 'x_offset', 0)
+    yoff = getattr(self, 'y_offset', 0)
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
 
-    for i in range(min(count, 5)):
-      context.draw_ellipse(position, size,fill=self.color)
+    for i in range(min(count, self.max_count)):
+      if image:
+        loaded = context.load_image(image, size, hasattr(self, 'flip'))
+        context.paste_image(loaded, position, size)
+      else:
+        context.draw_ellipse(position, size,fill=self.color)
       position[0] += xoff
       position[1] += yoff
-    if count > 5:
-      context.draw_text(position, size, str(count), self.font, self.color)
+    if count > self.max_count:
+      context.draw_text(position, size, str(count), self.font, color)
 Element.register(Chequer)
 
 

@@ -67,7 +67,7 @@ class Draw(object):
     size=self.calc_mag(size)
     self.dc.append('draw_rect %s, fill=%s @ %s'%(size, bool(fill),  position))
 
-  def paste_image(self, src, position):
+  def paste_image(self, src, position, size):
     position=self.calc_mag(position)
     self.dc.append('paste_image %s @ %s'%(src, position))
 
@@ -86,10 +86,7 @@ class Draw(object):
     if hasattr(e, 'background'):
       bg = getattr(e, 'background')
       self.draw_rect(position, size, bg)
-    if hasattr(e, 'image'):
-      loaded = self.load_image(e.image, size, hasattr(e, 'flip'))
-      self.paste_image(loaded, position)
-    if hasattr(e, 'color'):
+    if hasattr(e, 'image') or hasattr(e, 'color'):
       e.draw(self)
 
 if __name__ == '__main__':
