@@ -23,6 +23,19 @@ class  ElementFactory(object):
   def register(self, kls):
     self.ec.update({kls.name: kls})
 
+  def make_dtd(self):
+    CRLF = '\n'
+    r = ''
+    for elemclass in self.ec.values():
+      r+= elemclass.make_DTD_ELEMENT() + CRLF
+      r+= CRLF.join(list(elemclass. make_DTD_ATTLIST())) + CRLF
+    return r
+
+  def dtd_url(self):
+    return 'http://dtd.wxpygammon.org/backgammon.dtd'
+    
+    
+
 Element = ElementFactory()
 
 
@@ -30,10 +43,8 @@ class BaseAttribute(object):
   def __init__(self, css_path=None, value=None):
     self.css_path = css_path
     self._value = value
- 
   def parse(self, s):
     return s
-
   @classmethod
   def is_inherit(cls):
     return False
@@ -45,9 +56,9 @@ class BaseAttribute(object):
     return hash(self.value)
   def __str__(self):
     return str(self.get())
-
   def is_match(self, value):
     return self.parse(value) == self.get()
+
 
 class InheritMixIn(object):
   @classmethod
@@ -76,6 +87,9 @@ class URIAttribute(StringAttribute):
     return os.path.join(dir, fn)
   
 class FlipAttribute(InheritMixIn, StringAttribute):
+  pass
+
+class HideCountAttribute(StringAttribute):
   pass
 
 class FontAttribute(InheritMixIn, URIAttribute):
@@ -124,7 +138,7 @@ class BaseElement(object):
   def __str__(self):
     s = "<%s"%self.name
     for name, value in self.attributes.items():
-      s += " %s=%s"%(name, value)
+      s += ' %s="%s"'%(name, value)
     s += ">"
     for c in self.children:
       if not isinstance(c, BaseElement):
@@ -139,7 +153,8 @@ class BaseElement(object):
       e.parent = self
       self.children.append(e)
     elif isinstance(e, str):
-      assert '#PCDATA' in self.DTD_ELEMENT
+      if '#PCDATA' not in self.DTD_ELEMENT:
+        raise TypeError("can't append %s to %s", e, self)
       self.children.append(e)
     else:
       assert False
@@ -155,7 +170,7 @@ class BaseElement(object):
   def format(self, indent):
     s = ' '*indent + "<%s"%(self.name)
     for n, v in self.attributes.items():
-      s+= ' %s=%s'%(n, str(v))
+      s+= ' %s="%s"'%(n, str(v))
     s+=">\n"
     for c in self.children:
       if isinstance(c, BaseElement):
@@ -195,19 +210,21 @@ class BaseElement(object):
         return getattr(self.parent, name)
     raise AttributeError('Element %s does not have such attribute "%s".'%(self.name, name))
 
-  def make_DTD_ELEMENT(self):
-    return "<!ELEMENT %s (%s)>"%(self.name, ','.join(self.DTD_ELEMENT))
-  def make_DTD_ATTLIST(self):
-    s = '<!ATTLIST %s'%self.name
-    for key, value in self.DTD_ATTLIST.items():
-        s+='%s %s\n'%(key, str(vaule))
-    s+='>'
-    return s
+  @classmethod
+  def make_DTD_ELEMENT(cls):
+    if not cls.DTD_ELEMENT:
+      raise TypeError('Bad class %s'%cls)
+    return "<!ELEMENT %s (%s)* >"%(cls.name, '? '.join(cls.DTD_ELEMENT))
+
+  @classmethod
+  def make_DTD_ATTLIST(cls):
+    for key, value in cls.DTD_ATTLIST.items():
+      yield '<!ATTLIST %s  %s CDATA #IMPLIED >'%(cls.name, key)
 
 
 class Board(BaseElement):
   name = 'board'
-  DTD_ELEMENT = ('match, position')
+  DTD_ELEMENT = ('match', 'position')
 Element.register(Board)
 
 
@@ -218,32 +235,62 @@ Element.register(Match)
 
 class Action(BaseElement):
   name = 'action'
-  DTD_ELEMENT = ('#PCDATA')
+  #DTD_ELEMENT = ('EMPTY', )
+  DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
 Element.register(Action)
 
 class Length(BaseElement):
   name = 'length'
-  DTD_ELEMENT = ('#PCDATA')
+  DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
+    position = [self.x, self.y]
+    size = [self.width, self.height]
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    if image:
+      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      context.paste_image(loaded, position, size)
+    elif font:
+      context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
 Element.register(Length)
 
 class Crawford(BaseElement):
   name = 'crawford'
-  DTD_ELEMENT = ('#PCDATA')
+  DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    if self.children[0] == 'True':
-      context.draw_text((self.x, self.y), (self.width, self.height), '*', self.font, self.color)
+    position = [self.x, self.y]
+    size = [self.width, self.height]
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    if image:
+      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      context.paste_image(loaded, position, size)
+    elif font:
+      if self.children[0] == 'True':
+        context.draw_text((self.x, self.y), (self.width, self.height), '*', self.font, self.color)
     pass
 Element.register(Crawford)
 
 class Score(BaseElement):
   name = 'score'
-  DTD_ELEMENT = ('#PCDATA')
+  DTD_ELEMENT = ('#PCDATA', )
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     player=PlayerAttribute)
   def draw(self, context):
-    context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
+    position = [self.x, self.y]
+    size = [self.width, self.height]
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    if image:
+      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      context.paste_image(loaded, position, size)
+    elif font:
+      context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
 Element.register(Score)
 
 class Position(BaseElement):
@@ -272,7 +319,7 @@ Element.register(Field)
 
 class Die(BaseElement):
   name = 'die'
-  DTD_ELEMENT = ('#PCDATA')
+  DTD_ELEMENT = ('CDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      x_offset=IntAttribute,
                      y_offset=IntAttribute)
@@ -284,16 +331,29 @@ Element.register(Die)
 
 class Cube(BaseElement):
   name = 'cube'
-  DTD_ELEMENT = ('#PCDATA')
+  DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    log = int(self.children[0])
-    v = pow(2, log)
-    context.draw_text((self.x, self.y), (self.width, self.height), str(v), self.font, self.color)
+    position = [self.x, self.y]
+    size = [self.width, self.height]
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    if image:
+      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      context.paste_image(loaded, position, size)
+    elif font:
+      log = int(self.children[0])
+      v = pow(2, log)
+      context.draw_text((self.x, self.y), (self.width, self.height), str(v), self.font, self.color)
+    else:
+      assert False
 
 Element.register(Cube)
 
 
 class Chip(BaseElement):
+  name = 'chip'
+  DTD_ELEMENT = ('CDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      x_offset=IntAttribute,
                      y_offset=IntAttribute)
@@ -314,13 +374,14 @@ Element.register(Home)
 
 class Chequer(BaseElement):
   name = 'chequer'
-  DTD_ELEMENT = ('#PCDATA')
+  DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute,
                      x_offset=IntAttribute, 
                      y_offset=IntAttribute,
                      x_offset2=IntAttribute, 
                      y_offset2=IntAttribute,
+                     hide_count=HideCountAttribute,
                      max_count=IntAttribute
                     )
   #FIXME
@@ -334,16 +395,23 @@ class Chequer(BaseElement):
     yoff = getattr(self, 'y_offset', 0)
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    hide = getattr(self, 'hide_count', None)
 
     for i in range(min(count, self.max_count)):
       if image:
         loaded = context.load_image(image, size, hasattr(self, 'flip'))
         context.paste_image(loaded, position, size)
       else:
-        context.draw_ellipse(position, size,fill=self.color)
+        context.draw_ellipse(position, size,fill=color)
       position[0] += xoff
       position[1] += yoff
-    if count > self.max_count:
+      if position[0] + self.width > self.parent.x + self.parent.width or\
+         position[1] + self.height > self.parent.y + self.parent.height:
+        position[0] += getattr(self, 'x_offset2', 0)
+        position[1] += getattr(self, 'y_offset2', 0)
+
+    if font is not None and hide is None and count > self.max_count:
       context.draw_text(position, size, str(count), self.font, color)
 Element.register(Chequer)
 
@@ -368,16 +436,25 @@ class Point(BaseElement):
   #<!ATTLIST point basic
   #                parity (odd|even) #REQUIRED
   def draw(self, context):
-    if hasattr(self, 'flip'):
-      pinacle = self.x + self.width/2, self.y+self.height
-      rbase = self.x, self.y
-      lbase = self.x + self.width, self.y
+    position = [self.x, self.y]
+    size = [self.width, self.height]
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    if image:
+      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      context.paste_image(loaded, position, size)
+    elif color:
+      if hasattr(self, 'flip'):
+        pinacle = self.x + self.width/2, self.y+self.height
+        rbase = self.x, self.y
+        lbase = self.x + self.width, self.y
+      else:
+        pinacle = self.x + self.width/2, self.y
+        rbase = self.x, self.y+self.height
+        lbase = self.x + self.width, self.y+self.height
+      context.draw_polygon([rbase, pinacle, lbase], fill=color)
     else:
-      pinacle = self.x + self.width/2, self.y
-      rbase = self.x, self.y+self.height
-      lbase = self.x + self.width, self.y+self.height
-    context.draw_polygon([rbase, pinacle, lbase], fill=self.color)
-
+      assert False
 Element.register(Point)
 
 
@@ -389,6 +466,15 @@ class ElementTree(object):
 
   def __str__(self):
     return self.board.format(0)
+
+  def dec_xml(self):
+    return '<?xml version="1.0" encoding="us-ascii" ?>\n'
+
+  def dec_doctype(self):
+    return '<!DOCTYPE board SYSTEM "%s" >\n'%(Element.dtd_url())
+    
+  def xml(self):
+    return self.dec_xml() + self.dec_doctype() + str(self)
 
   def visit(self, callback, path=None, *args, **kw):
     if path is None:
@@ -557,8 +643,8 @@ class ElementTree(object):
 
     match = Element('match')
     match.append(action)
-    match.append(crawford)
     match.append(length)
+    match.append(crawford)
     match.append(score[you])
     match.append(score[him])
     self.match = match
@@ -601,15 +687,12 @@ class ElementTree(object):
     self.position = position
 
     board = Element('board')
-    board.append(position)
     board.append(match)
+    board.append(position)
     self.board = board
 
 if __name__ == '__main__':
-  import bglib.model.board
-  t = ElementTree()
-  print t
-  b = bglib.model.board.board()
-  t = ElementTree(b)
-  print t
+  print Element.make_dtd()
+
+
 
