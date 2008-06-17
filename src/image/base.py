@@ -28,7 +28,9 @@ class  ElementFactory(object):
     r = ''
     for elemclass in self.ec.values():
       r+= elemclass.make_DTD_ELEMENT() + CRLF
+      r+= "<!ATTLIST %s \n"%elemclass.name  
       r+= CRLF.join(list(elemclass. make_DTD_ATTLIST())) + CRLF
+      r+= ">\n"
     return r
 
   def dtd_url(self):
@@ -214,12 +216,12 @@ class BaseElement(object):
   def make_DTD_ELEMENT(cls):
     if not cls.DTD_ELEMENT:
       raise TypeError('Bad class %s'%cls)
-    return "<!ELEMENT %s (%s)* >"%(cls.name, '? '.join(cls.DTD_ELEMENT))
+    return "<!ELEMENT %s (%s)* >"%(cls.name, '|'.join(cls.DTD_ELEMENT))
 
   @classmethod
   def make_DTD_ATTLIST(cls):
     for key, value in cls.DTD_ATTLIST.items():
-      yield '<!ATTLIST %s  %s CDATA #IMPLIED >'%(cls.name, key)
+      yield '   %s CDATA #IMPLIED'%(key)
 
 
 class Board(BaseElement):
@@ -230,12 +232,11 @@ Element.register(Board)
 
 class Match(BaseElement):
   name = 'match'
-  DTD_ELEMENT = ('action', 'length', 'crawford', 'score', 'score')
+  DTD_ELEMENT = ('action', 'length', 'crawford', 'score')
 Element.register(Match)
 
 class Action(BaseElement):
   name = 'action'
-  #DTD_ELEMENT = ('EMPTY', )
   DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
@@ -295,19 +296,19 @@ Element.register(Score)
 
 class Position(BaseElement):
   name = 'position'
-  DTD_ELEMENT =('cubeholder', 'field', 'home', 'bar') + ('point',)*24 + ('bar', 'home', 'field')
+  DTD_ELEMENT =('cubeholder', 'field', 'home', 'bar', 'point',)
 Element.register(Position)
 
 
 class CubeHolder(BaseElement):
   name = 'cubeholder'
-  DTD_ELEMENT = ('EMPTY', 'cube', 'chip' )
+  DTD_ELEMENT = ('#PCDATA', 'cube', 'chip' )
 Element.register(CubeHolder)
 
 
 class Field(BaseElement):
   name = 'field'
-  DTD_ELEMENT = ('EMPTY', 'die', 'die', 'cube', 'chip' )
+  DTD_ELEMENT = ('#PCDATA', 'die', 'cube', 'chip' )
   #FIXME <!ELEMENT field (EMPTY | (die, die) | cube | chip )>
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
@@ -319,7 +320,7 @@ Element.register(Field)
 
 class Die(BaseElement):
   name = 'die'
-  DTD_ELEMENT = ('CDATA', )
+  DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      x_offset=IntAttribute,
                      y_offset=IntAttribute)
@@ -353,7 +354,7 @@ Element.register(Cube)
 
 class Chip(BaseElement):
   name = 'chip'
-  DTD_ELEMENT = ('CDATA', )
+  DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      x_offset=IntAttribute,
                      y_offset=IntAttribute)
@@ -362,7 +363,7 @@ Element.register(Chip)
 
 class Home(BaseElement):
   name = 'home'
-  DTD_ELEMENT = ('EMPTY', 'cube', 'chequer')
+  DTD_ELEMENT = ('#PCDATA', 'cube', 'chequer')
   #FIXME <!ELEMENT home (EMPTY |  cube | chequer )>
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
@@ -418,7 +419,7 @@ Element.register(Chequer)
 
 class Bar(BaseElement):
   name = 'bar'
-  DTD_ELEMENT = ('EMPTY', 'chequer')
+  DTD_ELEMENT = ('#PCDATA', 'children')
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
   #FIXME
