@@ -1,6 +1,5 @@
-
-
 board {x: 0; y: 0; width: 341; height: 232; background: red;}
+board {font:uri("DejaVuLGCSans-Bold.ttf")}
 
 match {x: 291; y: 0; width: 100; height: 232}
 length {x: 316; y: 93; width: 25; height: 46}
@@ -107,8 +106,8 @@ point[parity=even] { image: uri("even-none.jpg") }
 bar {width: 25; height: 111}
 bar[player=him] { image: uri("bar-none.jpg")} 
 bar[player=you] { image: uri("bar-none.jpg")} 
-bar[player=you] {x:133; y:116}
 bar[player=him] {x:133; y: 5}
+bar[player=you] {x:133; y:116}
 
 cubeholder {width: 25 ;height: 30; image:uri("cubeholder.jpg"); x: 266; y: 101}
 
@@ -150,7 +149,7 @@ field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
 chip {width: 25; height: 25; image: uri("chip.jpg"})
 
-chequer{max_count: 1}
+chequer {max_count:1 ; hide_count: True}
 
 point[parity=odd] chequer[player=you]:data(1)   {image: uri("odd-white-1.jpg")} 
 point[parity=odd] chequer[player=you]:data(2)   {image: uri("odd-white-2.jpg")} 
