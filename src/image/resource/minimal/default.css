@@ -77,7 +77,7 @@ field[player=you] chip {x: 157;y: 93; x_offset: 20; y_offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x_offset: 20; y_offset: 0}
 chip {width: 25; height: 25; color: gold}
 
-chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18}
+chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=top-bottom] chequer {y:6 ;y_offset: 18}
 home[flip=top-bottom] chequer{y:6 ;y_offset: 18}
 chequer[player=you] {color: #3cb7ff}
