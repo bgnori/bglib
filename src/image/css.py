@@ -88,7 +88,7 @@ class Selector(object):
   def __str__(self):
     s = "<%s"%self.element
     if self.name:
-      s += " %s=%s"%(self.name, self.value)
+      s += ' %s="%s"'%(self.name, self.value)
     s += ">"
     if self.data:
       s += "%s"%self.data

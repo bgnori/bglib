@@ -8,20 +8,20 @@
 
 >>> s = bglib.image.css.Selector('point', 'x', '42')
 >>> print s
-<point x=42></point>
+<point x="42"></point>
 
 >>> s = bglib.image.css.Selector('point', 'x', '42', "2")
 >>> print s
-<point x=42>2</point>
+<point x="42">2</point>
 
 
 >>> s = bglib.image.css.Selector('point', 'x', '42', "2")
 >>> print s
-<point x=42>2</point>
+<point x="42">2</point>
 
 >>> s = bglib.image.css.Selector('point', 'x', '42', "2")
 >>> print s
-<point x=42>2</point>
+<point x="42">2</point>
 
 >>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> e.append("2")
@@ -61,30 +61,30 @@ True
 >>> r.add(s)
 >>> r
 in line: 0
-pattern: <point x=42>2</point>
+pattern: <point x="42">2</point>
 block: {}
 
 >>> r.update({'image': 'uri("board.jpg")'})
 >>> r
 in line: 0
-pattern: <point x=42>2</point>
+pattern: <point x="42">2</point>
 block: {'image': 'uri("board.jpg")'}
 
 >>> r.update({'image': 'uri("backgammon.jpg")'})
 >>> r
 in line: 0
-pattern: <point x=42>2</point>
+pattern: <point x="42">2</point>
 block: {'image': 'uri("backgammon.jpg")'}
 
 >>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> e
-<point x=42></point>
+<point x="42"></point>
 
 
 >>> e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
 >>> e.append("2")
 >>> e
-<point x=42>2</point>
+<point x="42">2</point>
 
 >>> s.is_match(e)
 True
@@ -94,14 +94,14 @@ True
 
 >>> r.apply([e])
 >>> e
-<point x=42 image=~/backgammon.jpg>2</point>
+<point x="42" image="~/backgammon.jpg">2</point>
 
 >>> e = bglib.image.base.Element('point',  x=bglib.image.base.IntAttribute(value=42))
 >>> e
-<point x=42></point>
+<point x="42"></point>
 >>> r.apply([e])
 >>> e
-<point x=42></point>
+<point x="42"></point>
 
 >>> parser = bglib.image.css.CSSParser()
 >>> r = parser.rule('~/defaule.css', 0, """point:data(1) { x: 249 ; y: 139 }""")
@@ -132,7 +132,7 @@ block: {}
 >>> r = parser.rule('~/defaule.css', 0, """home[player=you] cube{x: 266; y: 197;}""")
 >>> r
 in line: 0
-pattern: <home player=you></home> <cube></cube>
+pattern: <home player="you"></home> <cube></cube>
 block: {'y': '197', 'x': '266'}
 
 
@@ -142,17 +142,17 @@ block: {'y': '197', 'x': '266'}
 >>> c = bglib.image.base.Element('chequer', player=bglib.image.base.PlayerAttributeHim())
 >>> c.append('1')
 >>> c
-<chequer player=him>1</chequer>
+<chequer player="him">1</chequer>
 
 >>> r = parser.rule('~/defaule.css', 0, """point[parity=even] chequer[player=him]:data(2)  {image: uri("even-green-2.jpg")} """)
 
 >>> r
 in line: 0
-pattern: <point parity=even></point> <chequer player=him>2</chequer>
+pattern: <point parity="even"></point> <chequer player="him">2</chequer>
 block: {'image': 'uri("even-green-2.jpg")'}
 
 >>> r.pattern[-1]
-<chequer player=him>2</chequer>
+<chequer player="him">2</chequer>
 
 >>> r.pattern[-1].is_match(c)
 False
@@ -162,7 +162,7 @@ False
 
 >>> r.apply([b, p, c])
 >>> c
-<chequer player=him>1</chequer>
+<chequer player="him">1</chequer>
 
 
 
@@ -170,11 +170,11 @@ False
 
 >>> r
 in line: 0
-pattern: <point parity=even></point> <chequer player=him>1</chequer>
+pattern: <point parity="even"></point> <chequer player="him">1</chequer>
 block: {'image': 'uri("even-green-1.jpg")'}
 
 >>> r.pattern[-1]
-<chequer player=him>1</chequer>
+<chequer player="him">1</chequer>
 
 >>> r.pattern[-1].is_match(c)
 True
@@ -184,5 +184,5 @@ True
 
 >>> r.apply([b, p, c])
 >>> c
-<chequer player=him image=~/even-green-1.jpg>1</chequer>
+<chequer player="him" image="~/even-green-1.jpg">1</chequer>
 
