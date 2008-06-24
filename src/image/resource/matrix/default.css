@@ -92,8 +92,10 @@ field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
 chip {width: 25; height: 25;}
 
-chequer {max_count: 3}
+chequer {max_count: 8}
 chequer[player=you] {width: 20; height:20; image:uri("checker_blue.png")}
 chequer[player=him] {width: 20; height:20; image:uri("checker_red.png")}
-chequer {x_offset: 25; y_offset:0}
+point chequer {x_offset: 30; y_offset:0}
+point chequer {x_offset2: -90; y_offset2: 30}
+home chequer {x_offset: 30; y_offset:0 ; max_count: 15}
 
