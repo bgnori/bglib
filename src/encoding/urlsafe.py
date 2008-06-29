@@ -7,7 +7,7 @@
 
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 from base import *
-from gnubg import MatchProxy
+import bglib.encoding.gnubg
 
 def encode_position(xs):
   """ encode tuple expression into urlsafe gnubg position id"""
@@ -42,7 +42,7 @@ def decode_match(s):
       s += '='
     else:
       break
-  return MatchProxy(bin)
+  return bglibg.encoding.gnubg.MatchProxy(bin)
 
 if __name__ == '__main__':
   import doctest

@@ -94,7 +94,8 @@ def decode_match(s):
   return MatchProxy(bin)
 
 def encode(model):
-  pid = bglib.encoding.gnubg.encode_position(model.position)
+  #pid = bglib.encoding.gnubg.encode_position(model.position)
+  pid = encode_position(model.position)
   mp = MatchProxy()
 
   mp.cube_in_logarithm = model.cube_in_logarithm 
