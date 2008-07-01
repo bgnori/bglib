@@ -7,12 +7,36 @@
 
 import logging
 import bglib.model.board
+import bglib.encoding.gnubg
 import bglib.image.base
 import bglib.image.draw
 
-b = bglib.model.board.board()
-tree = bglib.image.base.ElementTree(b)
-css = bglib.image.css.load("./bglib/image/resource/minimal/default.css")
-css.apply(tree)
+tests = [
+     ('4Dl4ADqwt4MDIA', 'MBmgAAAAAAAA'),
 
-print tree
+     ('4Dl4ADqwt4MDIA', 'AQGgAAAAAAAA'),
+     ('22wqECCw8+ABYA', 'UQmgAAAAAAAA'),
+     ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+     ('4HPKATDgc/ABMA', 'cAngAAAAAAAA'),
+     ('mGfwATDgc/ABMA', 'cCOgAAAAAAAA'),
+     ('mGfwATDgc/ABMA', 'cEOgAAAAAAAA'),
+     ('mGfwATDgc/ABMA', 'cGOgAAAAAAAA'),
+
+     ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
+     ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
+     ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
+     ('NgAAACAEAAAAAA', 'cAnyAAAAAAAA'),
+     ('4PPIQRCYc4sBMA', '8Am1AEAAAAAA'),
+     ('284lIADf7QAAYA', '8Im1AEAAAAAA'),
+     ('AAAAgAAAAAAAAA', 'cAqgAFAAAAAA'),
+     ('2OBIAEpDu4EBKA', 'cInsAFAAIAAA'),
+    ]
+
+b = bglib.model.board.board()
+css = bglib.image.css.load("./bglib/image/resource/minimal/default.css")
+
+for test in tests:
+  bglib.encoding.gnubg.decode(b, test[0], test[1])
+  tree = bglib.image.base.ElementTree(b)
+  css.apply(tree)
+  print tree

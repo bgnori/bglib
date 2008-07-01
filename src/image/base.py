@@ -151,7 +151,8 @@ class BaseElement(object):
 
   def append(self, e):
     if isinstance(e, BaseElement):
-      assert e.name in self.DTD_ELEMENT
+      if e.name not in self.DTD_ELEMENT:
+        raise TypeError("can't append %s to %s", e.name, self)
       e.parent = self
       self.children.append(e)
     elif isinstance(e, str):
@@ -419,7 +420,7 @@ Element.register(Chequer)
 
 class Bar(BaseElement):
   name = 'bar'
-  DTD_ELEMENT = ('#PCDATA', 'children')
+  DTD_ELEMENT = ('#PCDATA', 'chequer')
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
   #FIXME
@@ -510,29 +511,25 @@ class ElementTree(object):
     for i in range(1, 25):
       chequer_count = board.position[you][i-1]
       if chequer_count:
-        chequer = Element('chequer',
-                                           player=PlayerAttributeYou())
+        chequer = Element('chequer',player=PlayerAttributeYou())
         chequer.append(str(chequer_count))
         self.points[i].append(chequer)
 
       chequer_count = board.position[him][i-1]
       if chequer_count:
-        chequer = Element('chequer', 
-                                           player=PlayerAttributeHim())
+        chequer = Element('chequer', player=PlayerAttributeHim())
         chequer.append(str(chequer_count))
         self.points[25-i].append(chequer)
 
     chequer_count = board.position[you][24]
     if chequer_count:
-      chequer = Element('chequer',
-                                         player=PlayerAttributeYou())
+      chequer = Element('chequer', player=PlayerAttributeYou())
       chequer.append(str(chequer_count))
       self.bar[you].append(chequer)
 
-    chequer_count = board.position[you][24]
+    chequer_count = board.position[him][24]
     if chequer_count:
-      chequer = Element('chequer',
-                                         player=PlayerAttributeHim())
+      chequer = Element('chequer', player=PlayerAttributeHim())
       chequer.append(str(chequer_count))
       self.bar[him].append(chequer)
 

@@ -72,6 +72,7 @@ home[player=you] cube {x: 266; y: 197}
 home[player=him] cube {x: 266; y: 5}
 field[player=you] cube {x: 50; y: 100}
 field[player=him] cube {x: 180; y: 100}
+cubeholder cube {x: 266; y: 105}
 
 field[player=you] chip {x: 157;y: 93; x_offset: 20; y_offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x_offset: 20; y_offset: 0}

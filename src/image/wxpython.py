@@ -47,7 +47,9 @@ class Region(object):
     return  self.name + ' @ ' + str(self.rect)
 
 
-class Context(bglib.image.PIL.Context):
+'''
+class Context(object):
+  #bglib.image.PIL.Context):
   name = 'wx'
   def __init__(self, style):
     bglib.image.PIL.Context.__init__(self, style.image)
@@ -204,6 +206,7 @@ class Context(bglib.image.PIL.Context):
     bglib.image.PIL.Context.draw_his_score(self, score)
 
 bglib.image.context.context_factory.register(Context)
+'''
 
-if __name__ == '__main__':
-  print 'test code is in bglib/gui/viewer,py'
+# if __name__ == '__main__':
+# print 'test code is in bglib/gui/viewer,py'
