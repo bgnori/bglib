@@ -28,10 +28,14 @@ tests = [
      ('284lIADf7QAAYA', '8Im1AEAAAAAA'),
      ('AAAAgAAAAAAAAA', 'cAqgAFAAAAAA'),
      ('2ObIAEpDu5EBKA', 'cInsAFAAIAAA'),
+     ('AAAAAAAAAAAAAA', 'AAAAAAAAAAAA'),
     ]
 #tests = [
 #     ('2ObIAEpDu5EBKA', 'cInsAFAAIAAA'),
 #     ]
+tests = [
+     ('AAAAAAAAAAAAAA', 'AAAAAAAAAAAA'),
+  ]
 
 b = bglib.model.board.board()
 

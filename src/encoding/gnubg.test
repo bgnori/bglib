@@ -106,3 +106,19 @@ Bit 37-51 and bit 52-66 is the score for player 0 and player 1 respectively. The
 >>> b = bglib.model.board.board()
 >>> b = decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA')
 
+>>> b = bglib.model.board.board()
+>>> b.cube_owner
+3
+
+>>> mp = MatchProxy()
+>>> mp.cube_owner = b.cube_owner
+>>> mp.cube_owner
+3
+
+>>> pid, mid = encode(b)
+>>> pid
+'4HPwATDgc/ABMA'
+
+>>> mid
+'MAAAAAAAAAAA'
+

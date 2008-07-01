@@ -258,6 +258,11 @@ class BitArray:
       mask = mask << 1
     return ret
 
+  def set_shiftable(self, value, begin, end):
+    d = value
+    for n in range(begin, end):
+      d, m = divmod(d, 2)
+      self[n] = m
 
   def _getbyte(self, pos_of_byte):
     return struct.unpack(self.strcut_fmt, self.binary[pos_of_byte])[0]

@@ -29,18 +29,47 @@ def decode_position(s):
       break
   return bglib.encoding.base.twoside_decode(bin)
 
+class Validator(object):
+  def to_bitarray(self, value, bitarray, begin, end):
+    assert isinstance(bitarray, bglib.encoding.base.BitArray)
+    bitarray.set_shiftable(value, begin, end)
+  def from_bitarray(self, bitarray):
+    pass
 
-def single_int(bitarray):
-  return bitarray.int()
-  
-def single_boolean(bitarray):
-  return bitarray.int()!=0
+class SingleIntValidator(Validator):
+  def to_bitarray(self, value, bitarray, begin, end):
+    d = value
+    for n in range(begin, end):
+      d, m = divmod(d, 2)
+      bitarray[n] = m
 
-def double_int_tuple(bitarray):
-  n = bitarray.size
-  upper=bitarray[:n/2]
-  bottom = bitarray[n/2:n]
-  return upper.int(), bottom.int()
+  def from_bitarray(self, bitarray):
+    return bitarray.int()
+
+single_int = SingleIntValidator()
+
+class SingleBooleanValidator(Validator):
+  def to_bitarray(self, value, bitarray, begin, end):
+    bitarray.set_shiftable(value, begin, end)
+  def from_bitarray(self, bitarray):
+    return bitarray.int()!=0
+single_boolean = SingleBooleanValidator()
+
+class DoubleIntValidator(Validator):
+  def to_bitarray(self, value, bitarray, begin, end):
+    top, bottom = value
+    top_begin = begin
+    bottom_end = end
+    top_end = bottom_begin = begin + (end - begin)/2
+    bitarray.set_shiftable(top, top_begin, top_end)
+    bitarray.set_shiftable(bottom, bottom_begin, bottom_end)
+
+  def from_bitarray(self, bitarray):
+    n = bitarray.size
+    upper=bitarray[:n/2]
+    bottom = bitarray[n/2:n]
+    return upper.int(), bottom.int()
+double_int_tuple = DoubleIntValidator()
 
 class MatchProxy(object):
   '''you:him'''
@@ -59,13 +88,14 @@ class MatchProxy(object):
       )
 
   def __getattr__(self, name):
-    begin, end, func = self.index[name]
-    if func:
-      return func(self._data[begin:end])
-    return self._data[begin:end]
+    begin, end, validator = self.index[name]
+    assert validator
+    return validator.from_bitarray(self._data[begin:end])
 
   def __setattr__(self, name, value):
-    pass
+    begin, end, validator = self.index[name]
+    assert validator
+    validator.to_bitarray(value, self._data, begin, end)
 
   def __init__(self, s=None):
     self.__dict__['_data'] = bglib.encoding.base.BitArray(66, binary=s, endian='<')
