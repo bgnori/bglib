@@ -230,7 +230,7 @@ def byte_length(length_in_bit):
 
 
 
-class BitArray:
+class BitArray(object):
   strcut_fmt = '!B'
   def __init__(self, size, binary=None, endian=None):
     self.size = size
