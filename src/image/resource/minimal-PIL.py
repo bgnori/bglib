@@ -13,7 +13,6 @@ import bglib.image.PIL
 
 tests = [
      ('4Dl4ADqwt4MDIA', 'MBmgAAAAAAAA'),
-
      ('4Dl4ADqwt4MDIA', 'AQGgAAAAAAAA'),
      ('22wqECCw8+ABYA', 'UQmgAAAAAAAA'),
      ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
@@ -21,7 +20,6 @@ tests = [
      ('mGfwATDgc/ABMA', 'cCOgAAAAAAAA'),
      ('mGfwATDgc/ABMA', 'cEOgAAAAAAAA'),
      ('mGfwATDgc/ABMA', 'cGOgAAAAAAAA'),
-
      ('PwkAACoBAAAAAA', 'cAn2AAAAAAAA'),
      ('FwAA4CcBAAAAAA', 'MAH2AAAAAAAA'),
      ('4HPiASHgc/ABMA', 'UQn1AAAAAAAA'),
@@ -29,8 +27,11 @@ tests = [
      ('4PPIQRCYc4sBMA', '8Am1AEAAAAAA'),
      ('284lIADf7QAAYA', '8Im1AEAAAAAA'),
      ('AAAAgAAAAAAAAA', 'cAqgAFAAAAAA'),
-     ('2OBIAEpDu4EBKA', 'cInsAFAAIAAA'),
+     ('2ObIAEpDu5EBKA', 'cInsAFAAIAAA'),
     ]
+#tests = [
+#     ('2ObIAEpDu5EBKA', 'cInsAFAAIAAA'),
+#     ]
 
 b = bglib.model.board.board()
 

@@ -29,7 +29,7 @@ tests = [
      ('4PPIQRCYc4sBMA', '8Am1AEAAAAAA'),
      ('284lIADf7QAAYA', '8Im1AEAAAAAA'),
      ('AAAAgAAAAAAAAA', 'cAqgAFAAAAAA'),
-     ('2OBIAEpDu4EBKA', 'cInsAFAAIAAA'),
+     ('2ObIAEpDu5EBKA', 'cInsAFAAIAAA'),
     ]
 
 b = bglib.model.board.board()
