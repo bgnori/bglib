@@ -558,6 +558,8 @@ class ElementTree(object):
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm))
         self.cubeholder.append(cube)
+      else:
+        assert False
 
     if board.on_action == you and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == you:
