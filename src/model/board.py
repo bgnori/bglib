@@ -56,20 +56,21 @@ class board(object):
     return False
 
   def is_ok_to_bearoff_from(self, n, die):
-    if n < die:
+    if n +1 < die:
       for i in range(n + 1, constants.bar + 1):
         if self.has_chequer_to_move(i):
           return False
       return True
-    elif n == die:
-      for i in range(6, constants.bar + 1): 
-        # check all chequers are beared in 
+    elif n+1 == die:
+      for i in constants.none_bearoff_points:
         if self.has_chequer_to_move(i):
           return False
-      return True
+      if self.has_chequer_to_move(n):
+        return True
+      return False
     else:
-      assert die > n
-      assert False
+      assert die < n +1
+      return False
 
   def find_src_of_bearoff_with(self, die):
     for i in constants.none_bearoff_points:
@@ -77,10 +78,10 @@ class board(object):
         return None
     if self.has_chequer_to_move(die - 1):
       return die - 1
-    for i in range(die - 1, 5):
+    for i in range(die - 1, 6):
       if self.has_chequer_to_move(i):
         return None
-    for i in range(die):
+    for i in range(die, 0, -1):
       if self.has_chequer_to_move(i):
         return i
     return None# no chequer on board!

@@ -62,10 +62,10 @@ class ModelTest(unittest.TestCase):
     #FIXME need test for bear off
 
   def bearoff_test(self):
-    self.assertFalse(self.board.is_ok_to_bearoff_from(5 ,5))
+    self.assertFalse(self.board.is_ok_to_bearoff_from(5 ,6))
     self.assertFalse(self.board.is_ok_to_bearoff_from(2 ,5))
     self.board.position = \
-                ((0, 5, 3, 2, 4, 0,
+                ((0, 5, 0, 3, 4, 0,
                   0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 0, 0),
@@ -73,9 +73,12 @@ class ModelTest(unittest.TestCase):
                   0, 3, 0, 0, 0, 0,
                   5, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 2, 0))
-    self.assert_(self.board.is_ok_to_bearoff_from(5, 5))
-    self.assert_(self.board.is_ok_to_bearoff_from(5, 6))
+    self.assert_(self.board.is_ok_to_bearoff_from(4, 5))
+    self.assert_(self.board.is_ok_to_bearoff_from(4, 6))
+    self.assertFalse(self.board.is_ok_to_bearoff_from(5, 6))
+    self.assert_(self.board.is_ok_to_bearoff_from(4, 5))
     self.assertFalse(self.board.is_ok_to_bearoff_from(2, 5))
+    self.assertFalse(self.board.is_ok_to_bearoff_from(3, 2))
 
   def find_src_of_bearoff_with_test(self):
     self.assertEqual(self.board.find_src_of_bearoff_with(5), None)
@@ -89,9 +92,12 @@ class ModelTest(unittest.TestCase):
                   0, 3, 0, 0, 0, 0,
                   5, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 2, 0))
+    self.assert_(self.board.has_chequer_to_move(4))
     self.assertEqual(self.board.find_src_of_bearoff_with(5), 4)
+    self.assertFalse(self.board.has_chequer_to_move(5))
     self.assertEqual(self.board.find_src_of_bearoff_with(6), 4)
-    self.assertEqual(self.board.find_src_of_bearoff_with(5), None)
+    self.assertEqual(self.board.find_src_of_bearoff_with(2), 1)
+    self.assertFalse(self.board.has_chequer_to_move(2))
     self.assertEqual(self.board.find_src_of_bearoff_with(3), None)
 
 
