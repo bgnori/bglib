@@ -11,6 +11,7 @@ import nose
 
 import bglib.model.constants
 import bglib.model.board
+import bglib.model.move
 
 class ModelTest(unittest.TestCase):
   def setUp(self):
@@ -118,11 +119,48 @@ class ModelTest(unittest.TestCase):
                   0, 0, 0, 0, 0, 1, 1))
     self.assert_(self.board.is_hitting_to_land(0))
 
-  def make_partial_move_test(self):
+  def make_partial_move_1_test(self):
+    pm = bglib.model.move.PartialMove(6, 12, 6, False)
+    self.board.make_partial_move(pm)
+    self.assert_(self.board.position, 
+                ((0, 0, 0, 0, 0, 5,
+                  1, 3, 0, 0, 0, 0,
+                  4, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 2, 0),
+                 (0, 0, 0, 0, 0, 5,
+                  0, 3, 0, 0, 0, 0,
+                  5, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 2, 0))
+                )
+  def make_partial_move_2_test(self):
+    self.board.position = \
+                ((0, 5, 0, 3, 4, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0),
+                 (0, 0, 0, 0, 0, 5,
+                  0, 3, 0, 0, 0, 0,
+                  5, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 1, 1))
+    pm = bglib.model.move.PartialMove(1, 1, 0, True)
+    self.board.make_partial_move(pm)
+    self.assert_(self.board.position, 
+                ((1, 4, 0, 3, 4, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0),
+                 (0, 0, 0, 0, 0, 5,
+                  0, 3, 0, 0, 0, 0,
+                  5, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 2))
+                )
+
+  def make_test(self):
     pass
 
-
-
-
-
+  def is_leagal_to_roll_test(self):
+    self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.you))
+    self.board.game_state = bglib.model.constants.on_going
+    self.assert_(self.board.is_leagal_to_roll(bglib.model.constants.you))
+    
 

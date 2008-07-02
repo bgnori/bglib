@@ -140,14 +140,14 @@ class board(object):
     for pm in mv._pms:
       self.make_partial_move(pm)
 
-  def is_leagal_to_roll(self):
+  def is_leagal_to_roll(self, who):
     return \
        self.game_state == constants.on_going and \
        self.resign_offer == constants.resign_none and \
        self.doubled == False and \
-       self.rolled == (0, 0)
-       #self.on_action == constants.you and \
-       #self.on_inner_action == constants.you and \
+       self.rolled == (0, 0) and \
+       self.on_action == who and \
+       self.on_inner_action == who
 
   def is_leagal_to_move(self):
     '''

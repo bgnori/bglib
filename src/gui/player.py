@@ -242,7 +242,7 @@ class Player(bglib.gui.viewer.Viewer):#bglib.gui.viewer.Viewer):
         else:
           self.StatusBarMessage('move your checker')
           return
-      elif b.is_leagal_to_roll():
+      elif b.is_leagal_to_roll(bglib.model.constants.you):
         evt = RollRequest(self.GetId())
         self.GetEventHandler().ProcessEvent(evt)
         self.StatusBarMessage('rolling ...')
