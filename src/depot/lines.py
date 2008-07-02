@@ -46,12 +46,4 @@ def CRLFProxy(filename):
 
   return Proxy(Proxy, config, [])
 
-if __name__ == '__main__':
-  proxy = CRLFProxy('./bglib/image/resource/align.txt')
-  print proxy.point
-  x = proxy.point
-  print x
-  print x[1]
-  print proxy.bar
-  print proxy.field
 
