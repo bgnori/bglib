@@ -21,7 +21,7 @@ class CFGTest(unittest.TestCase):
 
   def creation_test(self):
     self.assertNotEqual(self.cfg_proxy, None)
-    assert isinstance(self.cfg_proxy, bglib.depot.cfg.Proxy)
+    self.assert_(isinstance(self.cfg_proxy, bglib.depot.cfg.Proxy))
 
   def secion_test(self):
     self.assert_( hasattr(self.cfg_proxy, 'logging'))
