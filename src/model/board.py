@@ -62,8 +62,9 @@ class board(object):
           return False
       return True
     elif n == die:
-      for i in range(6, constants.bar + 1): # check all chequers are beared in 
-        if b.has_chequer_to_move(i):
+      for i in range(6, constants.bar + 1): 
+        # check all chequers are beared in 
+        if self.has_chequer_to_move(i):
           return False
       return True
     else:
@@ -212,9 +213,4 @@ class board(object):
                                  constants.resign_gammon,
                                  constants.resign_backgammon
                                  ) 
-
-
-if __name__ == '__main__':
-  import doctest
-  doctest.testfile('board.test')
 
