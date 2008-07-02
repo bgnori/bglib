@@ -1,5 +1,5 @@
 logging level 10
-logging format '%%(asctime)s %%(levelname)s %%(message)s'
+logging format '%(asctime)s %(levelname)s %(message)s'
 logging filename ./wxPyGammon.log
 logging filemode w
 CommandDebugger show True
