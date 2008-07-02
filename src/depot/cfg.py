@@ -6,7 +6,9 @@
 #
 import ConfigParser
 
-class Proxy(baseclass):
+import bglib.depot.base
+
+class Proxy(bglib.depot.base.Proxy):
   def __repr__(self):
     return "<cfg.Proxy for %s of  %s>"%(self._apth, str(self._impl))
 
@@ -46,5 +48,12 @@ def CFGProxy(filenames):
   return  Proxy(Proxy, config, [])
 
 def write(proxy, filename):
-  return None
+  f = file(filename, 'w+r')
+  if f:
+    try:
+      proxy._impl.write(f)
+      return True
+    finally:
+      f.close()
+  return False
 

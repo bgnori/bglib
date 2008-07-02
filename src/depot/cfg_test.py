@@ -14,7 +14,7 @@ import bglib.depot.cfg
 class CFGTest(unittest.TestCase):
   def setUp(self):
     self.temp = tempfile.NamedTemporaryFile()
-    self.cfg_proxy = bglib.depot.cfg.CFGProxy(['./depot/cfg_test.cfg'])
+    self.cfg_proxy = bglib.depot.cfg.CFGProxy(['./bglib/depot/cfg_test.cfg'])
 
   def tearDown(self):
     pass
@@ -53,7 +53,5 @@ class CFGTest(unittest.TestCase):
     bglib.depot.cfg.write(self.cfg_proxy, self.temp.name)
 
     p = bglib.depot.cfg.CFGProxy([self.temp.name])
-    self.assertEqual(p.c.port, '4321')
-
-
+    self.assertEqual(p.c.port, '54321')
 
