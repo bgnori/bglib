@@ -100,6 +100,29 @@ class ModelTest(unittest.TestCase):
     self.assertFalse(self.board.has_chequer_to_move(2))
     self.assertEqual(self.board.find_src_of_bearoff_with(3), None)
 
+  def is_open_to_land_test(self):
+    self.assertFalse(self.board.is_open_to_land(0))
+    self.assert_(self.board.is_open_to_land(1))
+
+  def is_hitting_to_land_test(self):
+    self.assertFalse(self.board.is_hitting_to_land(0))
+    self.assertFalse(self.board.is_hitting_to_land(1))
+    self.board.position = \
+                ((0, 5, 0, 3, 4, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0, 0),
+                 (0, 0, 0, 0, 0, 5,
+                  0, 3, 0, 0, 0, 0,
+                  5, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 1, 1))
+    self.assert_(self.board.is_hitting_to_land(0))
+
+  def make_partial_move_test(self):
+    pass
+
+
+
 
 
 
