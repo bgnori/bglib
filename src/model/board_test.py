@@ -199,7 +199,16 @@ class ModelTest(unittest.TestCase):
     self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.you))
     self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.him))
     
-
+  def is_leagal_to_redouble_test(self):
+    self.board.game_state = bglib.model.constants.on_going
+    self.assertFalse(self.board.is_leagal_to_redouble(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_redouble(bglib.model.constants.him))
+    self.board.double(bglib.model.constants.you)
+    self.assertFalse(self.board.is_leagal_to_redouble(bglib.model.constants.you))
+    self.assert_(self.board.is_leagal_to_redouble(bglib.model.constants.him))
+    self.board.match_length= 1
+    self.assertFalse(self.board.is_leagal_to_redouble(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_redouble(bglib.model.constants.him))
 
 
 

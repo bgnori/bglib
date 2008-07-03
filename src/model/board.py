@@ -205,8 +205,10 @@ class board(object):
       return False
     assert False
 
-  def is_leagal_to_redouble(self):
-    return self.is_cube_take_or_pass() and False # is allowed to beaver?
+  def is_leagal_to_redouble(self, who):
+    """is allowed to beaver?"""
+    return self.is_cube_take_or_pass(who) and \
+           self.match_length == constants.money_game 
 
   def redouble(self):
     pass
