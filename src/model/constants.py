@@ -25,6 +25,8 @@ finished = 2
 resigned = 3
 doubled_out = 4
 
+# for match length
+money_game = 0
 
 #resing type
 resign_none = 0
@@ -36,4 +38,13 @@ resign_strings = ('none', 'single', 'gammon', 'backgammon')
 
 initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
+
+def get_opp(player):
+  if player == him:
+    return you
+  elif player == you:
+    return him
+  else:
+    pass
+  assert False
 

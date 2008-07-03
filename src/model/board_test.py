@@ -163,4 +163,45 @@ class ModelTest(unittest.TestCase):
     self.board.game_state = bglib.model.constants.on_going
     self.assert_(self.board.is_leagal_to_roll(bglib.model.constants.you))
     
+  def double_test(self):
+    self.assertFalse(self.board.doubled)
+    self.board.game_state = bglib.model.constants.on_going
+
+    self.assertEqual(self.board.on_action, bglib.model.constants.you)
+    self.assertEqual(self.board.on_inner_action, bglib.model.constants.you)
+
+    self.assertFalse(self.board.is_cube_take_or_pass(bglib.model.constants.you))
+    self.assertFalse(self.board.is_cube_take_or_pass(bglib.model.constants.him))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.him))
+    self.assert_(self.board.is_leagal_to_double(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.him))
+
+    self.board.double(bglib.model.constants.you)
+
+    self.assertEqual(self.board.on_action, bglib.model.constants.you)
+    self.assertEqual(self.board.on_inner_action, bglib.model.constants.him)
+    self.assert_(self.board.doubled)
+    self.assertFalse(self.board.is_cube_take_or_pass(bglib.model.constants.you))
+    self.assert_(self.board.is_cube_take_or_pass(bglib.model.constants.him))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.him))
+    
+
+
+
+
+
 

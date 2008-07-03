@@ -149,45 +149,57 @@ class board(object):
        self.on_action == who and \
        self.on_inner_action == who
 
-  def is_leagal_to_move(self):
+  def is_leagal_to_move(self, who):
     '''
     verify leagality of the situation.
     i.e. you cant move on opponent turn, etc.
     '''
     return \
        self.game_state == constants.on_going and \
-       self.on_action == constants.you and \
-       self.on_inner_action == constants.you and \
+       self.on_action == who and \
+       self.on_inner_action == who and \
        self.resign_offer == constants.resign_none and \
        self.doubled == False and \
        self.rolled != (0, 0) # already rolled something.
 
 
-  def is_cube_take_or_pass(self):
-    return self.doubled and self.on_inner_action != self.on_action
+  def is_cube_take_or_pass(self, who):
+    return self.doubled and self.on_inner_action != self.on_action and \
+      self.on_inner_action == who
   
-  def double(self):
-    pass
+  def double(self, who):
+    assert self.is_leagal_to_double(who) 
+    self.on_inner_action = constants.get_opp(who)
+    self.doubled = True
 
   def has_rolled(self):
     if self.rolled == (0, 0):
       return False
     return True
 
-  def is_leagal_to_double(self):
+  def is_leagal_to_double(self, who):
     assert self.rolled == (0, 0)
+    assert self.game_state == constants.on_going
     your_score, his_score = self.score
     if self.game_state != constants.on_going:
       return False
     if self.crawford:
       return False
     if self.on_action == constants.you:
+      if who != constants.you:
+        return False
       if self.on_inner_action == constants.you:
+        if self.match_length == constants.money_game:
+          return True
         if your_score <= self.match_length - pow(2, self.cube_in_logarithm):
           return True
       return False
     elif self.on_action == constants.him:
+      if who != constants.him:
+        return False
       if self.on_inner_action == constants.him:
+        if self.match_length == constants.money_game:
+          return True
         if his_score < self.match_length - pow(2, self.cube_in_logarithm):
           return True
       return False
@@ -202,16 +214,18 @@ class board(object):
     pass
   def drop(self):
     pass
-  def is_leagal_to_resign(self):
-    return self.on_action == constants.you
+  def is_leagal_to_resign(self, who):
+    return self.on_action == who
   def offer_resign(self):
     pass
   def accept_resign(self):
     pass
-  def is_to_accept_resign(self):
-    #  and self.on_inner_action == constants.you
+
+  def is_to_accept_resign(self, who):
+
     return self.resign_offer in (constants.resign_single, 
                                  constants.resign_gammon,
                                  constants.resign_backgammon
-                                 ) 
+                                 ) \
+           and self.on_inner_action == who
 
