@@ -212,6 +212,7 @@ class board(object):
 
   def redouble(self):
     pass
+
   def take(self):
     pass
   def drop(self):

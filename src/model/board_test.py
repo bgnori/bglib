@@ -193,6 +193,7 @@ class ModelTest(unittest.TestCase):
     self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
     self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
     self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.you))
     self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.him))
     self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.you))
     self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.him))
@@ -210,7 +211,18 @@ class ModelTest(unittest.TestCase):
     self.assertFalse(self.board.is_leagal_to_redouble(bglib.model.constants.you))
     self.assertFalse(self.board.is_leagal_to_redouble(bglib.model.constants.him))
 
+  def take_test(self):
+    self.board.game_state = bglib.model.constants.on_going
+    self.board.double(bglib.model.constants.you)
+    self.board.take(bglib.model.constants.him)
 
+    self.assert_(self.board.is_leagal_to_roll(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.him))
 
+  def drop_test(self):
+    pass
+
+  def is_leagal_to_resign_test(self):
+    pass
 
 
