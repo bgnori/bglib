@@ -174,8 +174,6 @@ class ModelTest(unittest.TestCase):
     self.assertFalse(self.board.is_cube_take_or_pass(bglib.model.constants.him))
     self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
     self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
-    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
-    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
     self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.him))
     self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.you))
     self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.him))
@@ -189,8 +187,6 @@ class ModelTest(unittest.TestCase):
     self.assert_(self.board.doubled)
     self.assertFalse(self.board.is_cube_take_or_pass(bglib.model.constants.you))
     self.assert_(self.board.is_cube_take_or_pass(bglib.model.constants.him))
-    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
-    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
     self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
     self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
     self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.you))
@@ -218,11 +214,74 @@ class ModelTest(unittest.TestCase):
 
     self.assert_(self.board.is_leagal_to_roll(bglib.model.constants.you))
     self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.him))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
 
-  def drop_test(self):
-    pass
+  def drop_1_test(self):
+    self.board.game_state = bglib.model.constants.on_going
+    self.board.double(bglib.model.constants.you)
+
+    self.board.drop(bglib.model.constants.him)
+
+    self.assertEqual(self.board.game_state, bglib.model.constants.doubled_out)
+    self.assertEqual(self.board.score, (1, 0))
+
+  def drop_2_test(self):
+    self.board.game_state = bglib.model.constants.on_going
+    self.board.score = (1, 3)
+    self.board.cube_in_logarithm = 3
+    self.board.on_action = bglib.model.constants.him
+    self.board.on_inner_action = bglib.model.constants.him
+    self.board.double(bglib.model.constants.him)
+
+    self.board.drop(bglib.model.constants.you)
+
+    self.assertEqual(self.board.game_state, bglib.model.constants.doubled_out)
+    self.assertEqual(self.board.score, (1, 11))
 
   def is_leagal_to_resign_test(self):
-    pass
+    self.board.game_state = bglib.model.constants.on_going
+    self.assert_(self.board.is_leagal_to_resign(bglib.model.constants.you))
+
+  def offer_resign_1_test(self):
+    self.board.game_state = bglib.model.constants.on_going
+    self.assertEqual(self.board.score, (0, 0))
+
+    self.board.offer_resign(bglib.model.constants.you, bglib.model.constants.resign_single)
+    self.assert_(self.board.is_to_accept_resign(bglib.model.constants.him))
+    self.board.reject_resign(bglib.model.constants.him)
+
+    self.assertEqual(self.board.on_action, bglib.model.constants.you)
+    self.assertEqual(self.board.on_inner_action, bglib.model.constants.you)
+    self.assertFalse(self.board.is_cube_take_or_pass(bglib.model.constants.you))
+    self.assertFalse(self.board.is_cube_take_or_pass(bglib.model.constants.him))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.you))
+    self.assertFalse(self.board.is_to_accept_resign(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_roll(bglib.model.constants.him))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_move(bglib.model.constants.him))
+    self.assert_(self.board.is_leagal_to_double(bglib.model.constants.you))
+    self.assertFalse(self.board.is_leagal_to_double(bglib.model.constants.him))
+    self.assertEqual(self.board.score, (0, 0))
+
+  def offer_resign_2_test(self):
+    self.board.game_state = bglib.model.constants.on_going
+    self.board.cube_in_logarithm = 3
+    self.assertEqual(self.board.score, (0, 0))
+
+    self.board.on_action = bglib.model.constants.him
+    self.board.on_inner_action = bglib.model.constants.him
+    self.board.offer_resign(bglib.model.constants.him, bglib.model.constants.resign_backgammon)
+    self.assert_(self.board.is_to_accept_resign(bglib.model.constants.you))
+
+    self.board.accept_resign(bglib.model.constants.you)
+
+    self.assertEqual(self.board.game_state, bglib.model.constants.resigned)
+    self.assertEqual(self.board.score, (24, 0))
+
 
 
