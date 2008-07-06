@@ -143,11 +143,34 @@ class MoveTest(unittest.TestCase):
     self.assertFalse(av.is_doubles())
     self.assertEqual(repr(av), '<AvailableToPlay: [(1, 0), (2, 1), (3, 1), (4, 0), (5, 0), (6, 0)]>')
 
+  def pm_1_test(self):
+    pm = bglib.model.move.PartialMove(6, 12, 6, True)
+    self.assertEqual(repr(pm), "<PartialMove: 13/7*>")
+    self.assert_(pm.is_hitting)
+    self.assertFalse(pm.is_undo())
 
-  def pm_test(self):
-    pass
+  def pm_2_test(self):
+    pm = bglib.model.move.PartialMove(1, 24, 23, False)
+    self.assertEqual(repr(pm), "<PartialMove: bar/24>")
+    self.assertFalse(pm.is_hitting)
+    self.assertFalse(pm.is_undo())
 
+  def pm_3_test(self):
+    pm = bglib.model.move.PartialMove(4, 3, -1, False)
+    self.assertEqual(repr(pm), "<PartialMove: 4/off>")
+    self.assertFalse(pm.is_hitting)
+    self.assertFalse(pm.is_undo())
 
+  def pm_4_test(self):
+    pm = bglib.model.move.PartialMove(4, 3, 3, False)
+    self.assertFalse(pm.is_undo())
+    self.assert_(pm.is_dance())
 
+  def pm_5_test(self):
+    pm = bglib.model.move.PartialMove(4, -1, 3, False)
+    self.assertEqual(repr(pm), "<PartialMove: off/4>")
+    self.assert_(pm.is_undo())
 
+    pm2 = bglib.model.move.PartialMove(4, 3, -1, False)
+    self.assert_(pm2.are_invertible_element(pm))
 
