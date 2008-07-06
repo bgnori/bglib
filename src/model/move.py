@@ -63,9 +63,11 @@ class AvailableToPlay(object):
     return self._imp.items()
 
   def is_doubles(self):
-    for value in self._imp:
+    for value in self._imp.values():
       if value > 1:
         return True
+    return False
+
   def get_max(self):
     for i in range(6, 0, -1):
       if i in self:
