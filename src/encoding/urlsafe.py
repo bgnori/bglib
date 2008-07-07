@@ -42,9 +42,5 @@ def decode_match(s):
       s += '='
     else:
       break
-  return bglibg.encoding.gnubg.MatchProxy(bin)
-
-if __name__ == '__main__':
-  import doctest
-  doctest.testfile('urlsafe.test')
+  return bglib.encoding.gnubg.MatchProxy(bin)
 
