@@ -343,7 +343,3 @@ class BitArray(object):
   def __rmul__(self, x): raise NotImplemented
   def __imul__(self, x): raise NotImplemented
 
-
-if __name__ == '__main__':
-  import doctest
-  doctest.testfile('base.test', )
