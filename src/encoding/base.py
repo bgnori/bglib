@@ -302,6 +302,8 @@ class BitArray(object):
       return self.getnth(nth_or_slice)
     elif isinstance(nth_or_slice, slice):
       assert(nth_or_slice.step is None)# or nth_or_slice.step == 1)
+      assert isinstance(nth_or_slice.start, int)
+      assert isinstance(nth_or_slice.stop, int)
       slice_length = nth_or_slice.stop - nth_or_slice.start
       ret = BitArray(size=slice_length, 
                      endian=self.endian

@@ -66,7 +66,9 @@ class DoubleIntValidator(Validator):
 
   def from_bitarray(self, bitarray):
     n = bitarray.size
-    upper=bitarray[:n/2]
+    assert n
+    assert isinstance(n, int)
+    upper=bitarray[0:n/2]
     bottom = bitarray[n/2:n]
     return upper.int(), bottom.int()
 double_int_tuple = DoubleIntValidator()
