@@ -169,7 +169,7 @@ class board(object):
   
   def double(self, who):
     assert self.is_leagal_to_double(who) 
-    self.on_inner_action = constants.get_opp(who)
+    self.on_inner_action = util.get_opp(who)
     self.doubled = True
 
   def has_rolled(self):
@@ -225,7 +225,7 @@ class board(object):
     new = [0, 0]
     self.game_state = constants.doubled_out
     new[who] = self.score[who]
-    new[constants.get_opp(who)] = self.score[constants.get_opp(who)] + pow(2, self.cube_in_logarithm)
+    new[util.get_opp(who)] = self.score[util.get_opp(who)] + pow(2, self.cube_in_logarithm)
     self.score = tuple(new)
 
   def is_leagal_to_resign(self, who):
@@ -238,20 +238,20 @@ class board(object):
                                  constants.resign_backgammon
                                  )
     self.resign_offer = how_much
-    self.on_inner_action = constants.get_opp(who)
+    self.on_inner_action = util.get_opp(who)
 
   def accept_resign(self, who):
     assert self.is_to_accept_resign(who)
     new = [0, 0]
     self.game_state = constants.resigned
     new[who] = self.score[who] + self.resign_offer * pow(2, self.cube_in_logarithm)
-    new[constants.get_opp(who)] = self.score[constants.get_opp(who)]
+    new[util.get_opp(who)] = self.score[util.get_opp(who)]
     self.score = tuple(new)
 
 
   def reject_resign(self, who):
     assert self.is_to_accept_resign(who)
-    self.on_inner_action = constants.get_opp(who)
+    self.on_inner_action = util.get_opp(who)
     self.resign_offer = constants.resign_none
 
   def is_to_accept_resign(self, who):

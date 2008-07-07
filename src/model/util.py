@@ -61,9 +61,13 @@ def move_pton(p):
       return i-1
   assert False
 
-if __name__ == '__main__':
-  import doctest
-  doctest.testfile('util.test')
-
+def get_opp(player):
+  if player == constants.him:
+    return constants.you
+  elif player == constants.you:
+    return constants.him
+  else:
+    pass
+  assert False
 
 
