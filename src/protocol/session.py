@@ -48,7 +48,6 @@ class Transport(telnetlib.Telnet):
       self.set_debuglevel(0)
     else:
       self.set_debuglevel(debug)
-    self.r, self.w = os.pipe()
     self._active = False
     self._termination_requested = False
     self.terminated = threading.Event()
@@ -138,9 +137,3 @@ class Session(Transport):
       self.subscribers.remove(subscriber)
       logging.debug('subscriber %s is unregistered.', str(subscriber))
 
-
-if __name__ == '__main__':
-  logging.basicConfig(level=logging.DEBUG,
-                     format='%(asctime)s %(levelname)s %(message)s',
-                     filename='./session.log',
-                     filemode='w')

@@ -27,12 +27,12 @@ login:
 |                                                        |
 | All bots, even non-playing ones, must have a valid     |
 | email address entered via the address command.  Any    |
-  print m.make_cookie("| bot that doesn't have that information may be booted.  |")
+| bot that doesn't have that information may be booted.  |
 |                                                        |
 | Shoutbots are limited to one shout per hour per        |
 | owner, no matter how many shoutbots that person        |
-  print m.make_cookie("| has.  I'm not going to throw shoutbots out entirely,   |")
-  print m.make_cookie("| but don't be obnoxious with them.                      |")
+| has.  I'm not going to throw shoutbots out entirely,   |
+| but don't be obnoxious with them.                      |
 |                                                        |
 +--------------------------------------------------------+
 4
