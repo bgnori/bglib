@@ -36,7 +36,6 @@ class  ElementFactory(object):
   def dtd_url(self):
     return 'http://dtd.wxpygammon.org/backgammon.dtd'
     
-    
 
 Element = ElementFactory()
 
