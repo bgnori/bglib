@@ -114,7 +114,7 @@ class PlayerAttributeYou(PlayerAttribute):
   def __init__(self, css_path=None):
     self.css_path = css_path
     self._value = bglib.model.constants.player_string[you]
-    'you'
+
 class PlayerAttributeHim(PlayerAttribute):
   def __init__(self, css_path=None):
     self.css_path = css_path
@@ -150,7 +150,7 @@ class BaseElement(object):
 
   def append(self, e):
     if isinstance(e, BaseElement):
-      if e.name not in self.DTD_ELEMENT:
+      if self.DTD_ELEMENT is not None and e.name not in self.DTD_ELEMENT:
         raise TypeError("can't append %s to %s", e.name, self)
       e.parent = self
       self.children.append(e)
@@ -208,8 +208,9 @@ class BaseElement(object):
       a = self.attributes.get(name, None)
       if a:
         return a.get()
-      elif self.DTD_ATTLIST[name].is_inherit():
+      elif self.DTD_ATTLIST[name].is_inherit() and self.parent is not None:
         return getattr(self.parent, name)
+      raise ValueError('Element %s is not assigned a value of attribute "%s".'%(self.name, name))
     raise AttributeError('Element %s does not have such attribute "%s".'%(self.name, name))
 
   @classmethod
@@ -475,7 +476,7 @@ class ElementTree(object):
     return '<!DOCTYPE board SYSTEM "%s" >\n'%(Element.dtd_url())
     
   def xml(self):
-    return self.dec_xml() + self.dec_doctype() + str(self)
+    return self.dec_doctype() + self.dec_xml() + str(self)
 
   def visit(self, callback, path=None, *args, **kw):
     if path is None:
