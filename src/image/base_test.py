@@ -7,9 +7,17 @@
 import os
 import os.path
 
-import unittest
-import nose
+import StringIO
+
 import urllib
+from urllib2 import urlopen
+
+import unittest
+
+import nose
+import ClientForm
+
+import bglib.model.board
 
 from bglib.image.base import Element
 from bglib.image.base import BaseElement
@@ -20,6 +28,9 @@ from bglib.image.base import URIAttribute
 from bglib.image.base import FlipAttribute
 from bglib.image.base import ParityAttribute
 from bglib.image.base import PlayerAttributeYou
+
+from bglib.image.base import  ElementTree
+
 
 class ElementTest(unittest.TestCase):
   def setUp(self):
@@ -240,6 +251,9 @@ class AttributeTest(unittest.TestCase):
 
 
 class TreeTest(unittest.TestCase):
+  def setUp(self):
+    self.buf = StringIO.StringIO()
+    self.tree = ElementTree()
   def dtd_test(self):
     url = Element.dtd_url()
     try:
@@ -250,8 +264,22 @@ class TreeTest(unittest.TestCase):
     self.assertEqual(obj.read(), Element.make_dtd(), 'dtd mismatch')
 
   def validity_test(self):
-    self.assert_(False, 'implement this test. using POST to w3c valicator')
+    res = urlopen('http://validator.w3.org/#validate_by_upload')
+    forms = ClientForm.ParseResponse(res, backwards_compat=False)
+    form = forms[1]
 
+    self.tree.set(bglib.model.board.board())
+    self.buf.write(self.tree.xml())
+    self.buf.flush()
+    self.buf.seek(0)
+
+    form.add_file(self.buf, 
+                  content_type='text/xml; charset=us-ascii',
+                  name='uploaded_file', filename='test.xml')
+    req = form.click()
+    res = urlopen(req)
+    self.assertEqual(res.info()['X-W3C-Validator-Status'], 'Valid')
+    self.assertEqual(res.info()['X-W3C-Validator-Errors'], '0')
 
 
 

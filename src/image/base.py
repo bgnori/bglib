@@ -476,7 +476,7 @@ class ElementTree(object):
     return '<!DOCTYPE board SYSTEM "%s" >\n'%(Element.dtd_url())
     
   def xml(self):
-    return self.dec_doctype() + self.dec_xml() + str(self)
+    return self.dec_xml() + self.dec_doctype() + str(self)
 
   def visit(self, callback, path=None, *args, **kw):
     if path is None:
