@@ -221,8 +221,3 @@ def load(css_path):
       rules.append(r)
   return rules
 
-
-if __name__ == '__main__':
-  import doctest
-  doctest.testfile('css.test', )
-
