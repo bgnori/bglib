@@ -9,8 +9,8 @@ import bglib.image.base
 import bglib.image.css
 
 class Draw(object):
-  def __init__(self, css_path):
-    self.css = bglib.image.css.load(css_path)
+  def __init__(self, css):
+    self.css = css
     self.cache = dict()
     self.dc = None
     self.mag = 1.0
@@ -26,10 +26,10 @@ class Draw(object):
     self.mag = min(xmag, ymag)
 
   def create_dc(self, size):
-    return list()
+    self.dc = list()
 
   def delele_dc(self):
-    pass
+    self.dc = None
   def result_from_dc(self):
     return self.dc
     
@@ -42,7 +42,7 @@ class Draw(object):
     t = self.make_tree(b)
     self.set_mag(size, t.board.width, t.board.height)
 
-    self.dc = self.create_dc(size)
+    self.create_dc(size)
     t.visit(self.draw_element, [t.board])
     result = self.result_from_dc()
     self.delele_dc()
@@ -73,11 +73,11 @@ class Draw(object):
 
   def load_image(self, uri, size, flip):
     size=self.calc_mag(size)
-    return uri + ' with ' + str(flip)
+    return uri + ' size='+ str(size) + ' with flip=' + str(flip)
 
   def load_font(self, uri, size):
     #size=self.calc_mag(size)
-    return uri
+    return uri + ' size=' + str(size)
 
   def draw_element(self, path):
     e = path[-1]
@@ -95,8 +95,11 @@ if __name__ == '__main__':
   import bglib.image.base
   b = bglib.model.board.board()
   #d = Draw("./bglib/image/resource/safari/default.css")
-  d = Draw("./bglib/image/resource/minimal/default.css")
+  d = Draw(bglib.image.css.load("./bglib/image/resource/minimal/default.css"))
   size = (400, 400)
   for line in d.draw(b, size):
     print line
+
+
+
 
