@@ -66,8 +66,8 @@ class Writer(object):
   def make_helper(self, css):
     helper = (
       '''\n'''
-      '''def load(b, mid, pid):\n'''
-      '''  bglib.encoding.gnubg.decode(b, mid, pid)\n'''
+      '''def load(b, pid, mid):\n'''
+      '''  bglib.encoding.gnubg.decode(b, pid, mid)\n'''
       '''\n'''
       '''def get_image(self, name):\n'''
       '''  return Image.open(os.path.join(testdatapath, name + '.png'))\n'''
@@ -203,8 +203,8 @@ class WriterTest(unittest.TestCase):
     helper_code = self.writer.make_helper('matrix')
     self.assertLinesEqual(helper_code, (
       '''\n'''
-      '''def load(b, mid, pid):\n'''
-      '''  bglib.encoding.gnubg.decode(b, mid, pid)\n'''
+      '''def load(b, pid, mid):\n'''
+      '''  bglib.encoding.gnubg.decode(b, pid, mid)\n'''
       '''\n'''
       '''def get_image(self, name):\n'''
       '''  return Image.open(os.path.join(testdatapath, name + '.png'))\n'''
