@@ -16,9 +16,9 @@ css = bglib.image.css.load(os.path.join(themata, mypath, "default.css"))
 draw = bglib.image.PIL.Draw(css)
 
 if __name__ == '__main__':
-  import bglib.image.writer
-  w = bglib.image.writer.Writer()
-  f = file(os.path.join(themata, mypath, 'test.py'), 'w')
+  import bglib.image.testwriter
+  w = bglib.image.testwriter.Writer()
+  f = file(os.path.join(themata, 'safari_test.py'), 'w')
   w.write(f, 'safari')
   f.close()
 
