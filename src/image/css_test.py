@@ -28,7 +28,6 @@ from bglib.image.base import ColorAttribute
 from bglib.image.base import URIAttribute
 from bglib.image.base import FlipAttribute
 from bglib.image.base import ParityAttribute
-from bglib.image.base import PlayerAttributeYou
 
 from bglib.image.base import  ElementTree
 
@@ -74,38 +73,38 @@ class ElementTest(unittest.TestCase):
   def selector_match_test(self):
     s = bglib.image.css.Selector('point', 'x', '42', "2")
     self.assertEqual(str(s), '''<point x="42">2</point>''')
-    e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
+    e = bglib.image.base.Element('point', x=42)
     e.append("2")
     self.assertEqual(repr(e.x), '''42''')
     self.assert_(s.is_match(e))
 
   def selector_mismatch_attr_test(self):
     s = bglib.image.css.Selector('point', 'x', '42', "2")
-    e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=43))
+    e = bglib.image.base.Element('point', x=43)
     e.append("2")
     self.assertFalse(s.is_match(e))
 
   def selector_mismatch_elem_test(self):
     s = bglib.image.css.Selector('point', 'x', '42', "2")
-    e = bglib.image.base.Element('die', x=bglib.image.base.IntAttribute(value=42))
+    e = bglib.image.base.Element('die', x=42)
     e.append("2")
     self.assertFalse(s.is_match(e))
 
 
   def selector_mismatch_child_1_test(self):
     s = bglib.image.css.Selector('point', 'x', '42', "2")
-    e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
+    e = bglib.image.base.Element('point', x=42)
     self.assertFalse(s.is_match(e))
 
   def selector_mismatch_child_2_test(self):
     s = bglib.image.css.Selector('point', 'x', '42', "2")
-    e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
+    e = bglib.image.base.Element('point', x=42)
     e.append("3")
     self.assertFalse(s.is_match(e))
 
   def selector_match_extra_attr_test(self):
     s = bglib.image.css.Selector('point', 'x', '42', "2")
-    e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42), y=bglib.image.base.IntAttribute(value=22))
+    e = bglib.image.base.Element('point', x=42, y=22)
     e.append("2")
     self.assert_(s.is_match(e))
 
@@ -134,10 +133,10 @@ block: {'image': 'uri("backgammon.jpg")'}''')
     r.add(s)
     r.update({'image': 'uri("backgammon.jpg")'})
     s = bglib.image.css.Selector('point', 'x', '42', "2")
-    e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
+    e = bglib.image.base.Element('point', x=42)
     self.assertEqual(repr(e), '''<point x="42"></point>''')
 
-    e = bglib.image.base.Element('point', x=bglib.image.base.IntAttribute(value=42))
+    e = bglib.image.base.Element('point', x=42)
     e.append("2")
     self.assertEqual(repr(e), '''<point x="42">2</point>''')
 
@@ -147,7 +146,7 @@ block: {'image': 'uri("backgammon.jpg")'}''')
     r.apply([e])
     self.assertEqual(repr(e), '''<point x="42" image="~/backgammon.jpg">2</point>''')
 
-    e = bglib.image.base.Element('point',  x=bglib.image.base.IntAttribute(value=42))
+    e = bglib.image.base.Element('point',  x=42)
     self.assertEqual(repr(e), '''<point x="42"></point>''')
     r.apply([e])
     self.assertEqual(repr(e), '''<point x="42"></point>''')
@@ -181,9 +180,9 @@ block: {'y': '197', 'x': '266'}''')
 
   def css_apply_test(self):
     parser = bglib.image.css.CSSParser()
-    b = bglib.image.base.Element('point')
-    p = bglib.image.base.Element('point', parity=bglib.image.base.ParityAttributeEven())
-    c = bglib.image.base.Element('chequer', player=bglib.image.base.PlayerAttributeHim())
+    b = bglib.image.base.Element('board')
+    p = bglib.image.base.Element('point', parity='even')
+    c = bglib.image.base.Element('chequer', player='him')
     c.append('1')
     self.assertEqual(repr(c), '''<chequer player="him">1</chequer>''')
 

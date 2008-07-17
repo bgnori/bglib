@@ -53,7 +53,7 @@ class BaseAttribute(object):
     return False
   def set(self, value):
     if not self.is_acceptable(value):
-      raise TypeError
+      raise TypeError('%s got bad value %s'%(self.name, str(value)))
     self._value = value
     
   def get(self):
@@ -66,6 +66,7 @@ class BaseAttribute(object):
     return self.parse(value) == self.get()
   def is_acceptable(self, v):
     return False
+  __repr__ = __str__
 
 class InheritMixIn(object):
   @classmethod
@@ -85,7 +86,6 @@ class InheritIntAttribute(InheritMixIn, IntAttribute):
 class StringAttribute(BaseAttribute):
   def is_acceptable(self, v):
     return isinstance(v, str)
-  pass
 
 class ColorAttribute(StringAttribute):
   def is_acceptable(self, v):
@@ -116,13 +116,11 @@ class FontAttribute(InheritMixIn, URIAttribute):
   name = 'font'
   def is_acceptable(self, v):
     return isinstance(v, str)
-  pass
 
 class ParityAttribute(StringAttribute):
   name = 'parity'
   def is_acceptable(self, v):
     return isinstance(v, str) and v in ['even', 'odd']
-  pass
 
 class PlayerAttribute(StringAttribute):
   name='player'
@@ -176,8 +174,9 @@ class BaseElement(object):
       if name not in self.DTD_ATTLIST:
         raise KeyError('no such attribute %s in %s'%(name, self.name))
       a = self.attributes.get(name, self.DTD_ATTLIST[name](css_path=css_path))
-      a.set(a.parse(value))
-      setattr(self, name, a)
+      assert a
+      v = a.parse(value)
+      setattr(self, name, v)
 
   def format(self, indent):
     s = ' '*indent + "<%s"%(self.name)
@@ -288,7 +287,6 @@ class Crawford(BaseElement):
     elif font:
       if self.children[0] == 'True':
         context.draw_text((self.x, self.y), (self.width, self.height), '*', self.font, self.color)
-    pass
 Element.register(Crawford)
 
 class Score(BaseElement):
