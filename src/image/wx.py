@@ -11,12 +11,18 @@ import bglib.image.draw
 
 class Draw(bglib.image.draw.Draw):
   def create_dc(self, size):
-    img = Image.new('RGBA', size)
-    draw = ImageDraw.Draw(img)
-    return [img, draw]
+    assert self.dc is None
+    wxbmp = wx.EmptyBitmap(size[0], size[1])
+    dc = wx.MemoryDC()
+    dc.SelectObject(wxbmp)
+    self.dc = [wxbmp, dc]
 
   def delele_dc(self):
     del self.dc[1]
+    self.dc = None
+
+  def result_from_dc(self):
+    return self.dc[0]
 
   def calc_font_size(self, font_name, size, text):
     fsize = size[1]
@@ -35,8 +41,8 @@ class Draw(bglib.image.draw.Draw):
 
   def draw_text(self, position, size, text, font_name, fill):
     ''' places text in center of rect, rect is specified by size and position.'''
-    position=self.calc_mag(position)
-    size=self.calc_mag(size)
+    position = self.calc_mag(position)
+    size = self.calc_mag(size)
     x, y = position
     fsize, w, h = self.calc_font_size(font_name, size, text)
     font = self.load_font(font_name, fsize)
@@ -45,12 +51,11 @@ class Draw(bglib.image.draw.Draw):
     yoff = (size[1] - h)/2
     draw.text((x+xoff, y+yoff), text, font=font, fill=fill)
 
-  def result_from_dc(self):
-    return self.dc[0]
 
   def load_font(self, uri, size):
     if (uri, size)  in self.cache:
       return self.cache[(uri, size)]
+
     font = ImageFont.truetype(uri, size)
     self.cache.update({(uri, size): font})
     return font
@@ -103,5 +108,4 @@ if __name__ == '__main__':
   d = Draw("./bglib/image/resource/minimal/default.css")
   image = d.draw(b, (400, 400))
   image.show()
-
 

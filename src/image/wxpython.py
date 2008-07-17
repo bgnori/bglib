@@ -47,7 +47,6 @@ class Region(object):
     return  self.name + ' @ ' + str(self.rect)
 
 
-'''
 class Context(object):
   #bglib.image.PIL.Context):
   name = 'wx'
@@ -206,7 +205,6 @@ class Context(object):
     bglib.image.PIL.Context.draw_his_score(self, score)
 
 bglib.image.context.context_factory.register(Context)
-'''
 
 # if __name__ == '__main__':
 # print 'test code is in bglib/gui/viewer,py'
