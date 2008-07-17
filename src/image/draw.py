@@ -31,6 +31,7 @@ class Draw(object):
 
   def delele_dc(self):
     self.dc = None
+
   def result_from_dc(self):
     assert self.dc
     return self.dc
@@ -41,6 +42,8 @@ class Draw(object):
     return t
 
   def draw(self, b, size):
+    if self.dc is not None:
+      self.delele_dc()
     t = self.make_tree(b)
     self.set_mag(size, t.board.width, t.board.height)
 
@@ -49,6 +52,7 @@ class Draw(object):
     t.visit(self.draw_element, [t.board])
     result = self.result_from_dc()
     self.delele_dc()
+    assert self.dc is None
     return result
 
   def draw_text(self, position, size, text, font_name, fill):

@@ -104,11 +104,15 @@ class URIAttribute(StringAttribute):
   
 class FlipAttribute(InheritMixIn, StringAttribute):
   name = 'flip'
+  def parse(self, s):
+    return bool(s)
   def is_acceptable(self, v):
     return isinstance(v, bool)
 
 class HideCountAttribute(StringAttribute):
   name = 'hidecount'
+  def parse(self, s):
+    return bool(s)
   def is_acceptable(self, v):
     return isinstance(v, bool)
 

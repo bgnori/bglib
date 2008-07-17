@@ -21,7 +21,7 @@ class Draw(bglib.image.draw.Draw):
     self.dc = [img, draw]
 
   def delele_dc(self):
-    #del self.dc[1]
+    assert self.dc
     self.dc = None
 
   def result_from_dc(self):

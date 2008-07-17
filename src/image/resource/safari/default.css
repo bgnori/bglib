@@ -88,18 +88,18 @@ point:data(9) { x:  79 ; y: 139 }
 point:data(10) {x:  61 ; y: 139 }
 point:data(11) {x:  43 ; y: 139 }
 point:data(12) {x:  25 ; y: 139 }
-point:data(13) {x:  25 ; y:   5 ; flip:  top-bottom  }
-point:data(14) {x:  43 ; y:   5 ; flip:  top-bottom  }
-point:data(15) {x:  61 ; y:   5 ; flip:  top-bottom  }
-point:data(16) {x:  79 ; y:   5 ; flip:  top-bottom  }
-point:data(17) {x:  97 ; y:   5 ; flip:  top-bottom  }
-point:data(18) {x: 115 ; y:   5 ; flip:  top-bottom  }
-point:data(19) {x: 158 ; y:   5 ; flip:  top-bottom  }
-point:data(20) {x: 176 ; y:   5 ; flip:  top-bottom  }
-point:data(21) {x: 194 ; y:   5 ; flip:  top-bottom  }
-point:data(22) {x: 212 ; y:   5 ; flip:  top-bottom  }
-point:data(23) {x: 230 ; y:   5 ; flip:  top-bottom  }
-point:data(24) {x: 248 ; y:   5 ; flip:  top-bottom  }
+point:data(13) {x:  25 ; y:   5 ; flip:  True  }
+point:data(14) {x:  43 ; y:   5 ; flip:  True  }
+point:data(15) {x:  61 ; y:   5 ; flip:  True  }
+point:data(16) {x:  79 ; y:   5 ; flip:  True  }
+point:data(17) {x:  97 ; y:   5 ; flip:  True  }
+point:data(18) {x: 115 ; y:   5 ; flip:  True  }
+point:data(19) {x: 158 ; y:   5 ; flip:  True  }
+point:data(20) {x: 176 ; y:   5 ; flip:  True  }
+point:data(21) {x: 194 ; y:   5 ; flip:  True  }
+point:data(22) {x: 212 ; y:   5 ; flip:  True  }
+point:data(23) {x: 230 ; y:   5 ; flip:  True  }
+point:data(24) {x: 248 ; y:   5 ; flip:  True  }
 point[parity=odd]  { image: uri("odd-none.jpg") } 
 point[parity=even] { image: uri("even-none.jpg") } 
 

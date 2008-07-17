@@ -34,18 +34,18 @@ point:data(9) { x:  79 ; y: 139 }
 point:data(10) {x:  61 ; y: 139 }
 point:data(11) {x:  43 ; y: 139 }
 point:data(12) {x:  25 ; y: 139 }
-point:data(13) {x:  25 ; y:   5 ; flip:  top-bottom  }
-point:data(14) {x:  43 ; y:   5 ; flip:  top-bottom  }
-point:data(15) {x:  61 ; y:   5 ; flip:  top-bottom  }
-point:data(16) {x:  79 ; y:   5 ; flip:  top-bottom  }
-point:data(17) {x:  97 ; y:   5 ; flip:  top-bottom  }
-point:data(18) {x: 115 ; y:   5 ; flip:  top-bottom  }
-point:data(19) {x: 158 ; y:   5 ; flip:  top-bottom  }
-point:data(20) {x: 176 ; y:   5 ; flip:  top-bottom  }
-point:data(21) {x: 194 ; y:   5 ; flip:  top-bottom  }
-point:data(22) {x: 212 ; y:   5 ; flip:  top-bottom  }
-point:data(23) {x: 230 ; y:   5 ; flip:  top-bottom  }
-point:data(24) {x: 248 ; y:   5 ; flip:  top-bottom  }
+point:data(13) {x:  25 ; y:   5 ; flip:  True  }
+point:data(14) {x:  43 ; y:   5 ; flip:  True  }
+point:data(15) {x:  61 ; y:   5 ; flip:  True  }
+point:data(16) {x:  79 ; y:   5 ; flip:  True  }
+point:data(17) {x:  97 ; y:   5 ; flip:  True  }
+point:data(18) {x: 115 ; y:   5 ; flip:  True  }
+point:data(19) {x: 158 ; y:   5 ; flip:  True  }
+point:data(20) {x: 176 ; y:   5 ; flip:  True  }
+point:data(21) {x: 194 ; y:   5 ; flip:  True  }
+point:data(22) {x: 212 ; y:   5 ; flip:  True  }
+point:data(23) {x: 230 ; y:   5 ; flip:  True  }
+point:data(24) {x: 248 ; y:   5 ; flip:  True  }
 
 bar {width: 25; height: 111}
 bar[player=you] {x:133; y:116}
@@ -55,7 +55,7 @@ cubeholder {width: 25 ;height: 30; x: 266; y: 101 ;background: #b6bdc6}
 
 home {width: 25 ;height: 101}
 home[player=you] {x: 266; y: 131 ; background: #746f6d}
-home[player=him] {x: 266; y: 0; background: #746f6d; flip:  top-bottom  }
+home[player=him] {x: 266; y: 0; background: #746f6d; flip:  True  }
 
 field {width: 108; height: 46}
 field[player=you] {x: 158;y: 93}
@@ -79,8 +79,8 @@ field[player=him] chip {x: 25 ;y: 93; x_offset: 20; y_offset: 0}
 chip {width: 25; height: 25; color: gold}
 
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
-point[flip=top-bottom] chequer {y:6 ;y_offset: 18}
-home[flip=top-bottom] chequer{y:6 ;y_offset: 18}
+point[flip=True] chequer {y:6 ;y_offset: 18}
+home[flip=True] chequer{y:6 ;y_offset: 18}
 chequer[player=you] {color: #3cb7ff}
 chequer[player=him] {color: #fd4993}
 
