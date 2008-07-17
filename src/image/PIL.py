@@ -13,12 +13,20 @@ import bglib.image.draw
 
 class Draw(bglib.image.draw.Draw):
   def create_dc(self, size):
+    assert self.dc is None
     img = Image.new('RGBA', size)
+    assert img
     draw = ImageDraw.Draw(img)
-    return [img, draw]
+    assert draw
+    self.dc = [img, draw]
 
   def delele_dc(self):
-    del self.dc[1]
+    #del self.dc[1]
+    self.dc = None
+
+  def result_from_dc(self):
+    assert self.dc
+    return self.dc[0]
 
   def calc_font_size(self, font_name, size, text):
     fsize = size[1]
@@ -47,9 +55,6 @@ class Draw(bglib.image.draw.Draw):
     yoff = (size[1] - h)/2
     draw.text((x+xoff, y+yoff), text, font=font, fill=fill)
 
-  def result_from_dc(self):
-    return self.dc[0]
-
   def load_font(self, uri, size):
     if (uri, size)  in self.cache:
       return self.cache[(uri, size)]
@@ -69,6 +74,7 @@ class Draw(bglib.image.draw.Draw):
     return image
 
   def paste_image(self, src, position, size):
+    assert self.dc
     position=self.calc_mag(position)
     size=self.calc_mag(size)
     x1, y1 = position
@@ -77,6 +83,7 @@ class Draw(bglib.image.draw.Draw):
     self.dc[0].paste(src, [x1, y1, x2, y2])
 
   def draw_ellipse(self, position, size, fill=None):
+    assert self.dc
     draw = self.dc[1]
     x1, y1 = position
     x2 = x1 + size[0]
@@ -86,11 +93,13 @@ class Draw(bglib.image.draw.Draw):
     draw.ellipse([x1, y1, x2, y2], fill=fill)
 
   def draw_polygon(self, points, fill=None):
+    assert self.dc
     points = [self.calc_mag(pt) for pt in points]
     draw = self.dc[1]
     draw.polygon(points, fill=fill)
 
   def draw_rect(self, position, size, fill=None):
+    assert self.dc is not None
     position=self.calc_mag(position)
     size=self.calc_mag(size)
     draw = self.dc[1]
@@ -101,8 +110,9 @@ class Draw(bglib.image.draw.Draw):
 
 if __name__ == '__main__':
   import bglib.model.board
+  from bglib.image.css import load
   b = bglib.model.board.board()
-  d = Draw("./bglib/image/resource/minimal/default.css")
+  d = Draw(load("./bglib/image/resource/minimal/default.css"))
   image = d.draw(b, (400, 400))
   image.show()
 
