@@ -27,7 +27,6 @@ from bglib.image.base import ColorAttribute
 from bglib.image.base import URIAttribute
 from bglib.image.base import FlipAttribute
 from bglib.image.base import ParityAttribute
-from bglib.image.base import PlayerAttributeYou
 
 from bglib.image.base import  ElementTree
 
@@ -209,17 +208,17 @@ class AttributeTest(unittest.TestCase):
     parent = BaseElement()
     child = BaseElement()
     parent.append(child)
-    parent.x = IntAttribute(value=10)
+    parent.x = 10
     self.assertEqual(child.x, 10)
 
   def attr_string_test(self):
     base = BaseElement()
-    base.x = StringAttribute(value='hoge')
-    self.assertEqual(base.x, 'hoge')
+    base.image = 'hoge'
+    self.assertEqual(base.image, 'hoge')
 
   def attr_int_test(self):
     base = BaseElement()
-    base.x = IntAttribute(value=10)
+    base.x = 10
     self.assertEqual(base.x, 10)
     try:
       base.x = 'hoge'
@@ -230,25 +229,31 @@ class AttributeTest(unittest.TestCase):
 
   def attr_uri_test(self):
     base = BaseElement()
-    base.image = URIAttribute(css_path=os.getcwd(), value='./bglib/image/base_test.py')
+    base.image = './bglib/image/base_test.py'
     self.assert_(os.path.exists(base.image))
 
   def attr_flip_test(self):
     base = BaseElement()
-    base.flip = FlipAttribute()
+    base.flip = True
 
   def attr_parity_test(self):
     point= Element('point')
-    point.parity= ParityAttribute()
+    point.parity= 'even'
 
   def attr_player_test(self):
     home = Element('home')
-    home.player = PlayerAttributeYou()
+    home.player = 'you'
+    home.player = 'him'
+    try:
+      home.player = 'hoge'
+      self.assert_(False)
+    except TypeError:
+      return
+    self.assert_(False)
 
   def facotry_test(self):
-    score = Element('score', player=PlayerAttributeYou())
+    score = Element('score', player='you')
     self.assertEqual(score.player, 'you')
-
 
 class TreeTest(unittest.TestCase):
   def setUp(self):

@@ -21,6 +21,7 @@ class  ElementFactory(object):
     return kls(*args, **kw)
 
   def register(self, kls):
+    assert kls.name
     self.ec.update({kls.name: kls})
 
   def make_dtd(self):
@@ -41,6 +42,7 @@ Element = ElementFactory()
 
 
 class BaseAttribute(object):
+  name = None
   def __init__(self, css_path=None, value=None):
     self.css_path = css_path
     self._value = value
@@ -50,7 +52,10 @@ class BaseAttribute(object):
   def is_inherit(cls):
     return False
   def set(self, value):
+    if not self.is_acceptable(value):
+      raise TypeError
     self._value = value
+    
   def get(self):
     return self._value
   def __hash__(self):
@@ -59,7 +64,8 @@ class BaseAttribute(object):
     return str(self.get())
   def is_match(self, value):
     return self.parse(value) == self.get()
-
+  def is_acceptable(self, v):
+    return False
 
 class InheritMixIn(object):
   @classmethod
@@ -67,6 +73,9 @@ class InheritMixIn(object):
     return True
 
 class IntAttribute(BaseAttribute):
+  name = 'int'
+  def is_acceptable(self, v):
+    return isinstance(v, int)
   def parse(self, s):
     return int(s)
 
@@ -74,51 +83,52 @@ class InheritIntAttribute(InheritMixIn, IntAttribute):
   pass
 
 class StringAttribute(BaseAttribute):
+  def is_acceptable(self, v):
+    return isinstance(v, str)
   pass
 
 class ColorAttribute(StringAttribute):
+  def is_acceptable(self, v):
+    return isinstance(v, str)
   def parse(self, s):
     #FIXME validation is needed
     return s
 
 class URIAttribute(StringAttribute):
+  def is_acceptable(self, v):
+    return isinstance(v, str)
   def parse(self, s):
     dir = os.path.dirname(self.css_path)
     fn = s.split('"')[1]
     return os.path.join(dir, fn)
   
 class FlipAttribute(InheritMixIn, StringAttribute):
-  pass
+  name = 'flip'
+  def is_acceptable(self, v):
+    return isinstance(v, bool)
 
 class HideCountAttribute(StringAttribute):
-  pass
+  name = 'hidecount'
+  def is_acceptable(self, v):
+    return isinstance(v, bool)
 
 class FontAttribute(InheritMixIn, URIAttribute):
+  name = 'font'
+  def is_acceptable(self, v):
+    return isinstance(v, str)
   pass
 
 class ParityAttribute(StringAttribute):
+  name = 'parity'
+  def is_acceptable(self, v):
+    return isinstance(v, str) and v in ['even', 'odd']
   pass
-
-class ParityAttributeEven(StringAttribute):
-  def __init__(self, css_path=None):
-    self.css_path = css_path
-    self._value = 'even'
-class ParityAttributeOdd(StringAttribute):
-  def __init__(self, css_path=None):
-    self.css_path = css_path
-    self._value = 'odd'
 
 class PlayerAttribute(StringAttribute):
-  pass
-class PlayerAttributeYou(PlayerAttribute):
-  def __init__(self, css_path=None):
-    self.css_path = css_path
-    self._value = bglib.model.constants.player_string[you]
+  name='player'
+  def is_acceptable(self, v):
+    return isinstance(v, str) and v in bglib.model.constants.player_string
 
-class PlayerAttributeHim(PlayerAttribute):
-  def __init__(self, css_path=None):
-    self.css_path = css_path
-    self._value = bglib.model.constants.player_string[him]
 
 
 class BaseElement(object):
@@ -132,7 +142,7 @@ class BaseElement(object):
 
   def __init__(self,  **kw):
     self.__dict__['children'] = list()
-    self.__dict__['attributes'] = dict(kw)
+    self.__dict__['attributes'] = dict([[key, self.DTD_ATTLIST[key](value=value)] for key, value in kw.items()])
     self.__dict__['parent'] = None
     self.__dict__['css_lineno'] = list()
 
@@ -189,21 +199,25 @@ class BaseElement(object):
       loaded = context.load_image(self.image, size, hasattr(self, 'flip'))
       context.paste_image(loaded, position, size)
 
-  def __setattr__(self, name, attr):
+  def __setattr__(self, name, value):
     if name in self.DTD_ATTLIST:
-      self.attributes.update({name:attr})
-      return
-    else:
-      if name not in self.__dict__:
-        raise KeyError('no such attribute %s in %s'%(name, self.name))
-      if isinstance(attr, BaseAttribute):
-        self.attributes[name] = attr
-        return
+      if name in self.attributes:
+        if isinstance(value, BaseAttribute):
+          self.attributes[name] = value
+        else:
+          self.attributes[name].set(value)
       else:
-        self.__dict__[name] = attr
-      return
+        ac = self.DTD_ATTLIST[name]
+        a = ac()
+        a.set(value)
+        self.attributes.update({name:a})
+        
+    else:
+      self.__dict__[name] = value
 
   def __getattr__(self, name):
+    if name in self.__dict__:
+      return self.__dict__[nane]
     if name in self.DTD_ATTLIST:
       a = self.attributes.get(name, None)
       if a:
@@ -511,37 +525,37 @@ class ElementTree(object):
     for i in range(1, 25):
       chequer_count = board.position[you][i-1]
       if chequer_count:
-        chequer = Element('chequer',player=PlayerAttributeYou())
+        chequer = Element('chequer',player=bglib.model.constants.player_string[you])
         chequer.append(str(chequer_count))
         self.points[i].append(chequer)
 
       chequer_count = board.position[him][i-1]
       if chequer_count:
-        chequer = Element('chequer', player=PlayerAttributeHim())
+        chequer = Element('chequer', player=bglib.model.constants.player_string[him])
         chequer.append(str(chequer_count))
         self.points[25-i].append(chequer)
 
     chequer_count = board.position[you][24]
     if chequer_count:
-      chequer = Element('chequer', player=PlayerAttributeYou())
+      chequer = Element('chequer', player=bglib.model.constants.player_string[you])
       chequer.append(str(chequer_count))
       self.bar[you].append(chequer)
 
     chequer_count = board.position[him][24]
     if chequer_count:
-      chequer = Element('chequer', player=PlayerAttributeHim())
+      chequer = Element('chequer', player=bglib.model.constants.player_string[him])
       chequer.append(str(chequer_count))
       self.bar[him].append(chequer)
 
     chequer_count = 15 - reduce(lambda x, y: x+y, board.position[you])
     if chequer_count:
-      chequer = Element('chequer', player=PlayerAttributeYou())
+      chequer = Element('chequer', player=bglib.model.constants.player_string[you])
       chequer.append(str(chequer_count))
       self.home[you].append(chequer)
 
     chequer_count = 15 - reduce(lambda x, y: x+y, board.position[him])
     if chequer_count:
-      chequer = Element('chequer', player=PlayerAttributeHim())
+      chequer = Element('chequer', player=bglib.model.constants.player_string[him])
       chequer.append(str(chequer_count))
       self.home[him].append(chequer)
 
@@ -563,49 +577,49 @@ class ElementTree(object):
 
     if board.on_action == you and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == you:
-        self.action.player = PlayerAttributeYou()
+        self.action.player = bglib.model.constants.player_string[you]
         return
 
       if not board.doubled and board.on_inner_action == him and board.resign_offer in bglib.model.constants.resign_types:
-        self.action.player = PlayerAttributeHim()
+        self.action.player = bglib.model.constants.player_string[him]
         return
 
       if board.doubled and board.on_inner_action == him:
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm+1))
         self.field[him].append(cube)
-        self.action.player = PlayerAttributeYou()
+        self.action.player = bglib.model.constants.player_string[you]
         return
 
       if board.doubled and board.on_inner_action == you:
-        self.action.player = PlayerAttributeYou()
+        self.action.player = bglib.model.constants.player_string[you]
         return
 
     if board.on_action == you and  board.rolled != (0, 0):
-      self.action.player = PlayerAttributeYou()
+      self.action.player = bglib.model.constants.player_string[you]
       return
 
     if board.on_action == him and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == him:
-        self.action.player = PlayerAttributeHim()
+        self.action.player = bglib.model.constants.player_string[him]
         return
       if not board.doubled and board.on_inner_action == you and board.resign_offer in bglib.model.constants.resign_types:
-        self.action.player = PlayerAttributeYou()
+        self.action.player = bglib.model.constants.player_string[you]
         return
 
       if board.doubled and board.on_inner_action == you:
-        self.action.player = PlayerAttributeYou()
+        self.action.player = bglib.model.constants.player_string[you]
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm+1))
         self.field[you].append(cube)
         return
 
       if board.doubled and board.on_inner_action == him:
-        self.action.player = PlayerAttributeHim()
+        self.action.player = bglib.model.constants.player_string[him]
         return
 
     if board.on_action == him and  board.rolled !=(0, 0):
-      self.action.player = PlayerAttributeHim()
+      self.action.player = bglib.model.constants.player_string[him]
       return
 
     #assert not board.doubled and board.on_inner_action == him and board.resign_offer not in bglib.model.constants.resign_types
@@ -631,8 +645,8 @@ class ElementTree(object):
 
   def create_tree(self):
     score = list()
-    score.append(Element('score', player=PlayerAttributeYou()))
-    score.append(Element('score',  player=PlayerAttributeHim()))
+    score.append(Element('score', player=bglib.model.constants.player_string[you]))
+    score.append(Element('score',  player=bglib.model.constants.player_string[him]))
     self.score = score
     length = Element('length')
     self.length = length
@@ -653,16 +667,16 @@ class ElementTree(object):
     points.append(None)
     self.points = points
     home = list()
-    home.append(Element('home', player=PlayerAttributeYou()))
-    home.append(Element('home', player=PlayerAttributeHim()))
+    home.append(Element('home', player=bglib.model.constants.player_string[you]))
+    home.append(Element('home', player=bglib.model.constants.player_string[him]))
     self.home = home
     bar = list()
-    bar.append(Element('bar', player=PlayerAttributeYou()))
-    bar.append(Element('bar', player=PlayerAttributeHim()))
+    bar.append(Element('bar', player=bglib.model.constants.player_string[you]))
+    bar.append(Element('bar', player=bglib.model.constants.player_string[him]))
     self.bar = bar
     field = list()
-    field.append(Element('field', player=PlayerAttributeYou()))
-    field.append(Element('field', player=PlayerAttributeHim()))
+    field.append(Element('field', player=bglib.model.constants.player_string[you]))
+    field.append(Element('field', player=bglib.model.constants.player_string[him]))
     self.field = field
     cubeholder = CubeHolder()
     self.cubeholder = cubeholder
@@ -674,9 +688,9 @@ class ElementTree(object):
     position.append(bar[him])
     for i in range(1, 25):
       if i%2:
-        pt = Element('point', parity=ParityAttributeOdd())
+        pt = Element('point', parity='odd')
       else:
-        pt = Element('point', parity=ParityAttributeEven())
+        pt = Element('point', parity='even')
       pt.append(str(i))
       position.append(pt)
       points.append(pt)
@@ -693,6 +707,5 @@ class ElementTree(object):
 
 if __name__ == '__main__':
   print Element.make_dtd()
-
 
 
