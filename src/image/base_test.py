@@ -282,7 +282,15 @@ class TreeTest(unittest.TestCase):
     except:
       self.assert_(False, 'failed to obtain dtd.')
       return
-    self.assertEqual(obj.read(), Element.make_dtd(), 'dtd mismatch')
+    uploaded = obj.read()
+    assert uploaded
+    uploaded = uploaded.split('\n')
+    local = Element.make_dtd()
+    assert local
+    local= local.split('\n')
+    for i, line in enumerate(local):
+      self.assertEqual(uploaded[i], local[i])
+    self.assertEqual(uploaded[-1], '')
 
   def validity_test(self):
     res = urlopen('http://validator.w3.org/#validate_by_upload')

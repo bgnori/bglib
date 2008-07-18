@@ -29,9 +29,9 @@ class  ElementFactory(object):
     r = ''
     for elemclass in self.ec.values():
       r+= elemclass.make_DTD_ELEMENT() + CRLF
-      r+= "<!ATTLIST %s \n"%elemclass.name  
+      r+= "<!ATTLIST %s "%elemclass.name + CRLF
       r+= CRLF.join(list(elemclass. make_DTD_ATTLIST())) + CRLF
-      r+= ">\n"
+      r+= ">" + CRLF
     return r
 
   def dtd_url(self):
