@@ -171,12 +171,28 @@ class AttributeTest(unittest.TestCase):
 
   def hasattr_flip_test(self):
     base = BaseElement()
-    try:
-      base.flip
-      self.assert_(False)
-    except AttributeError:
-      return
-    self.assert_(False)
+    self.assertFalse(base.flip)
+
+  def hasattr_hide_count_test(self):
+    chequer = Element('chequer')
+    self.assertFalse(chequer.hide_count)
+
+  def hasattr_x_offset_test(self):
+    chequer = Element('chequer')
+    self.assertEqual(chequer.x_offset, 0)
+
+  def hasattr_y_offset_test(self):
+    chequer = Element('chequer')
+    self.assertEqual(chequer.y_offset, 0)
+
+  def hasattr_x_offset2_test(self):
+    chequer = Element('chequer')
+    self.assertEqual(chequer.x_offset2, 0)
+
+  def hasattr_y_offset2_test(self):
+    chequer = Element('chequer')
+    self.assertEqual(chequer.y_offset2, 0)
+
 
   def hasattr_background_test(self):
     base = BaseElement()

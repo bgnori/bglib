@@ -116,7 +116,7 @@ class FlipAttribute(InheritMixIn, StringAttribute):
 
 class HideCountAttribute(StringAttribute):
   default = False
-  name = 'hidecount'
+  name = 'hide_count'
   def parse(self, s):
     return bool(s)
   def is_acceptable(self, v):
