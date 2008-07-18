@@ -128,6 +128,7 @@ class Session(Transport):
   @synchronized_with(Transport.lock)
   def register(self, *args):
     for subscriber in args:
+      assert isinstance(subscriber, Subscriber)
       self.subscribers.append(subscriber)
       logging.debug('subscriber %s is registered.', str(subscriber))
 

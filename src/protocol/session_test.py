@@ -34,19 +34,21 @@ class SessionTest(unittest.TestCase):
       self.session.close()
     assert not self.session.is_active()
     os.kill(self.serverps.pid, signal.SIGKILL)
+    time.sleep(.2)
     self.serverps.wait()
+    time.sleep(.2)
 
   def subscriber_1_test(self):
     sub = Subscriber()
-    self.session.register([sub])
+    self.session.register(sub)
     self.session.open('localhost', 4321)
-    self.session.unregister([sub])
+    self.session.unregister(sub)
 
   def subscriber_2_test(self):
     sub = Subscriber()
     self.session.open('localhost', 4321)
-    self.session.register([sub])
-    self.session.unregister([sub])
+    self.session.register(sub)
+    self.session.unregister(sub)
 
   def subscriber_3_test(self):
     class PreLogin(Subscriber):
@@ -55,18 +57,14 @@ class SessionTest(unittest.TestCase):
       def CLIP_OWN_INFO(self, got):pass
       def CLIP_WELCOME(self, got):pass
       def CLIP_MOTD_BEGIN(self, got):pass
-      def FIBS_MOTD(self, got):
-        print 'FIBS_MOTD'
-      @synchronized_with(Transport.lock)
+      def FIBS_MOTD(self, got):pass
       def FIBS_PreLogin(self, got):
-        print 'FIBS_PreLogin'
         self.flag = True
     sub = PreLogin()
     self.assertFalse(sub.flag)
-    self.session.register([sub])
+    self.session.register(sub)
     self.session.open('localhost', 4321)
     time.sleep(2)
     self.assert_(sub.flag)
-    self.session.unregister([sub])
-
+    self.session.unregister(sub)
 
