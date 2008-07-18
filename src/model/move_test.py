@@ -418,7 +418,15 @@ class MoveTest(unittest.TestCase):
     self.assert_(mf.is_leagal_to_pickup_dice())
 
   def mf_18_test(self):
-    b = bglib.model.board.board(position=((0, 2, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0),(1, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0)))
+    b = bglib.model.board.board(
+          position=((0, 2, 3, 3, 3, 0, 
+                     0, 0, 0, 0, 0, 0, 
+                     2, 0, 0, 0, 0, 0, 
+                     0, 0, 0, 0, 2, 0, 0),
+                    (1, 0, 0, 2, 2, 2,
+                     2, 0, 0, 0, 0, 0,
+                     2, 0, 0, 0, 2, 0,
+                     0, 0, 0, 0, 0, 2, 0)))
     b.rolled = (6, 5)
 
     mf = bglib.model.move.MoveFactory(b)
@@ -429,7 +437,15 @@ class MoveTest(unittest.TestCase):
     self.assertFalse(mf.is_leagal_to_pickup_dice())
 
   def mf_19_test(self):
-    b = bglib.model.board.board(position=((0, 3, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0),(1, 0, 0, 2, 2, 4, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0)))
+    b = bglib.model.board.board(
+          position=((0, 3, 3, 3, 3, 2,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 1, 0, 0),
+                    (1, 0, 0, 2, 2, 4,
+                     0, 0, 0, 0, 0, 0,
+                     2, 0, 0, 0, 2, 0,
+                     0, 0, 0, 0, 0, 2, 0)))
     b.rolled = (6, 5)
 
     mf = bglib.model.move.MoveFactory(b)
@@ -439,9 +455,15 @@ class MoveTest(unittest.TestCase):
     self.assert_(mf.is_leagal_to_pickup_dice())
 
   def mf_20_test(self):
-    b = bglib.model.board.board(position=(
-      (0, 3, 3, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0),
-      (1, 0, 0, 2, 2, 4, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0)))
+    b = bglib.model.board.board(
+          position=((0, 3, 3, 3, 3, 2,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 1, 0, 0),
+                    (1, 0, 0, 2, 2, 4,
+                     0, 0, 0, 0, 0, 0,
+                     2, 0, 0, 0, 2, 0,
+                     0, 0, 0, 0, 0, 2, 0)))
     b.rolled = (6, 5)
 
     mf = bglib.model.move.MoveFactory(b)

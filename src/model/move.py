@@ -206,6 +206,37 @@ class MoveFactory(object):
       if self.board.has_chequer_to_move(pt):
         if self.guess_your_single_pm_from_source(pt):
           return False
+    #rewind all moves and check for blocked moves.
+    mf = MoveFactory(self.board, self.move, self.available)
+    for pm in mf.move:
+      inverse = PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting)
+      mf.append(inverse)
+    assert len(mf.move) == 0
+
+    # No need to check doubles.
+    # care only about small-big use.
+    # thus ...
+    for src in constants.points:
+      if mf.board.has_chequer_to_move(src):
+        for dst in range(0, src):
+          if mf.board.is_open_to_land(dst) or mf.board.is_hitting_to_land(dst):
+            pms = mf.guess_your_multiple_pms(src, dst)
+            if pms and len(pms) == 2:
+              # all dice are used.
+              # that means there is way to use all dice.
+              return False
+    # There is no way to use both dice
+    # Make sure use big one
+    # thus ... 
+    if self.available.get_max() != mf.available.get_max():
+      return True #max is used.
+
+    die = mf.available.get_max()
+    for src in constants.points:
+      if mf.board.has_chequer_to_move(src):
+        pm = mf.guess_your_single_pm_from_source(src, available=AvailableToPlay(rolled=(die, 0)))
+        if pm:
+          return False # There is way to use big one.
     return True
 
   def guess_your_single_pm_from_source(self, src, b=None, available=None):
