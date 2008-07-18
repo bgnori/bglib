@@ -64,9 +64,19 @@ class Draw(bglib.image.draw.Draw):
     size=self.calc_mag(size)
     if (uri, size, flip) in self.cache:
       return self.cache[(uri, size, flip)]
-    image = Image.open(uri)
+
+    if uri.endswith(".jpg"):
+      bitmap_type = wx.BITMAP_TYPE_JPEG
+    elif uri.endswith(".png"):
+      bitmap_type = wx.BITMAP_TYPE_PNG
+    else:
+      #FIXME 
+      assert False
+
+    image = wx.Image(uri, bitmap_type)
     if flip:
       image = image.transpose(Image.FLIP_TOP_BOTTOM)
+      image = image.Scale(size[0], size[1])
     image = image.resize(size)
     self.cache.update({(uri, size, flip): image})
     return image
@@ -75,9 +85,15 @@ class Draw(bglib.image.draw.Draw):
     position=self.calc_mag(position)
     size=self.calc_mag(size)
     x1, y1 = position
-    x2 = x1 + size[0]
-    y2 = y1 + size[1]
-    self.dc[0].paste(src, [x1, y1, x2, y2])
+    #x2 = x1 + size[0]
+    #y2 = y1 + size[1]
+    #self.dc[0].paste(src, [x1, y1, x2, y2])
+
+    wximage =self.dc[0]
+    dc = self.dc[1]
+    assert isinstance(wximage, wx.Image)
+    dc.DrawBitmap(wximage.ConvertToBitmap(), x1, y1)
+    #FIXME size is gone!
 
   def draw_ellipse(self, position, size, fill=None):
     draw = self.dc[1]

@@ -108,14 +108,14 @@ class Writer(object):
       '''    """ tree test for ${name} pid='${pid}', mid='${mid}'"""\n'''
       '''    load(self.b, pid='${pid}', mid='${mid}')\n'''
       '''    tree = make_tree(self.b)\n'''
-      '''    self.assertEqual(str(tree), get_xml('${name}'))\n'''
+      '''    self.assertEqual(str(tree), get_xml('${name}'), 'xml mismatch')\n'''
       '''    \n'''
       '''  def ${name}_image_test(self):\n'''
       '''    """ image test for ${name} pid='${pid}', mid='${mid}'"""\n'''
       '''    load(self.b, pid='${pid}', mid='${mid}')\n'''
       '''    image = draw.draw(self.b, (1000, 800))\n'''
       '''    ans = get_image('${name}')\n'''
-      '''    self.assertEqual(image.tostring(), ans.tostring())\n'''
+      '''    self.assertEqual(image.tostring(), ans.tostring(), 'image mismatch')\n'''
       '''    \n'''
     )
     t = string.Template(method)
@@ -177,14 +177,14 @@ class WriterTest(unittest.TestCase):
       '''    """ tree test for initial_position pid='4HPwATDgc/ABMA', mid='MAAAAAAAAAAA'"""\n'''
       '''    load(self.b, pid='4HPwATDgc/ABMA', mid='MAAAAAAAAAAA')\n'''
       '''    tree = make_tree(self.b)\n'''
-      '''    self.assertEqual(str(tree), get_xml('initial_position'))\n'''
+      '''    self.assertEqual(str(tree), get_xml('initial_position'), 'xml mismatch')\n'''
       '''    \n'''
       '''  def initial_position_image_test(self):\n'''
       '''    """ image test for initial_position pid='4HPwATDgc/ABMA', mid='MAAAAAAAAAAA'"""\n'''
       '''    load(self.b, pid='4HPwATDgc/ABMA', mid='MAAAAAAAAAAA')\n'''
       '''    image = draw.draw(self.b, (1000, 800))\n'''
       '''    ans = get_image('initial_position')\n'''
-      '''    self.assertEqual(image.tostring(), ans.tostring())\n'''
+      '''    self.assertEqual(image.tostring(), ans.tostring(), 'image mismatch')\n'''
       '''    \n'''
       ))
 

@@ -54,6 +54,7 @@
    y CDATA #IMPLIED
    x CDATA #IMPLIED
    font CDATA #IMPLIED
+   fill CDATA #IMPLIED
 >
 <!ELEMENT die (#PCDATA)* >
 <!ATTLIST die 
@@ -157,6 +158,7 @@
    y CDATA #IMPLIED
    x CDATA #IMPLIED
    font CDATA #IMPLIED
+   fill CDATA #IMPLIED
 >
 <!ELEMENT action (#PCDATA)* >
 <!ATTLIST action 

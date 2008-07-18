@@ -45,8 +45,8 @@ class Draw(bglib.image.draw.Draw):
 
   def draw_text(self, position, size, text, font_name, fill):
     ''' places text in center of rect, rect is specified by size and position.'''
-    position=self.calc_mag(position)
-    size=self.calc_mag(size)
+    position = self.calc_mag(position)
+    size = self.calc_mag(size)
     x, y = position
     fsize, w, h = self.calc_font_size(font_name, size, text)
     font = self.load_font(font_name, fsize)
@@ -74,14 +74,14 @@ class Draw(bglib.image.draw.Draw):
     self.cache.update({(uri, size, flip): image})
     return image
 
-  def paste_image(self, src, position, size):
+  def paste_image(self, to_paste, position, size):
     assert self.dc
-    position=self.calc_mag(position)
-    size=self.calc_mag(size)
+    position = self.calc_mag(position)
+    size = self.calc_mag(size)
     x1, y1 = position
     x2 = x1 + size[0]
     y2 = y1 + size[1]
-    self.dc[0].paste(src, [x1, y1, x2, y2])
+    self.dc[0].paste(to_paste, [x1, y1, x2, y2])
 
   def draw_ellipse(self, position, size, fill=None):
     assert self.dc
@@ -101,8 +101,8 @@ class Draw(bglib.image.draw.Draw):
 
   def draw_rect(self, position, size, fill=None):
     assert self.dc is not None
-    position=self.calc_mag(position)
-    size=self.calc_mag(size)
+    position = self.calc_mag(position)
+    size = self.calc_mag(size)
     draw = self.dc[1]
     x2, y2 = position
     x2 += size[0]

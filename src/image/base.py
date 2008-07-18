@@ -106,15 +106,21 @@ class URIAttribute(StringAttribute):
     fn = s.split('"')[1]
     return os.path.join(dir, fn)
   
-class FlipAttribute(InheritMixIn, StringAttribute):
-  default = False
-  name = 'flip'
+class BoolAttribute(StringAttribute):
   def parse(self, s):
     return bool(s)
   def is_acceptable(self, v):
     return isinstance(v, bool)
 
-class HideCountAttribute(StringAttribute):
+class FlipAttribute(InheritMixIn, BoolAttribute):
+  default = False
+  name = 'flip'
+
+class FillAttribute(InheritMixIn, BoolAttribute):
+  default = True 
+  name = 'fill'
+
+class HideCountAttribute(BoolAttribute):
   default = False
   name = 'hide_count'
   def parse(self, s):
@@ -205,7 +211,7 @@ class BaseElement(object):
     if hasattr(self, 'image'):
       size = context.calc_mag((self.width, self.height))
       position = context.calc_mag((self.x, self.y))
-      loaded = context.load_image(self.image, size, hasattr(self, 'flip'))
+      loaded = context.load_image(self.image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
 
   def __setattr__(self, name, value):
@@ -281,7 +287,7 @@ class Length(BaseElement):
     color = None
     font = getattr(self, 'font', None)
     if image:
-      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      loaded = context.load_image(image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
     elif font:
       context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
@@ -297,7 +303,7 @@ class Crawford(BaseElement):
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
     if image:
-      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      loaded = context.load_image(image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
     elif font:
       if self.children[0] == 'True':
@@ -316,7 +322,7 @@ class Score(BaseElement):
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
     if image:
-      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      loaded = context.load_image(image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
     elif font:
       context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
@@ -368,7 +374,7 @@ class Cube(BaseElement):
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
     if image:
-      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      loaded = context.load_image(image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
     elif font:
       log = int(self.children[0])
@@ -394,6 +400,7 @@ class Home(BaseElement):
   DTD_ELEMENT = ('#PCDATA', 'cube', 'chequer')
   #FIXME <!ELEMENT home (EMPTY |  cube | chequer )>
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     fill=FillAttribute,
                      player=PlayerAttribute)
   #FIXME
   #<!ATTLIST home basic
@@ -424,16 +431,19 @@ class Chequer(BaseElement):
     yoff = getattr(self, 'y_offset', 0)
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
-    color = None
     font = getattr(self, 'font', None)
     hide = getattr(self, 'hide_count', None)
+    fill = getattr(self, 'fill', True)
 
     for i in range(min(count, self.max_count)):
       if image:
-        loaded = context.load_image(image, size, hasattr(self, 'flip'))
+        loaded = context.load_image(image, size, getattr(self, 'flip'))
         context.paste_image(loaded, position, size)
       else:
-        context.draw_ellipse(position, size,fill=color)
+        if fill:
+          context.draw_ellipse(position, size, fill=color)
+        else:
+          context.draw_ellipse(position, size, fill)
       position[0] += xoff
       position[1] += yoff
       if position[0] + self.width > self.parent.x + self.parent.width or\
@@ -441,7 +451,7 @@ class Chequer(BaseElement):
         position[0] += getattr(self, 'x_offset2', 0)
         position[1] += getattr(self, 'y_offset2', 0)
 
-    if font is not None and hide is None and count > self.max_count:
+    if font is not None and not hide and count > self.max_count:
       context.draw_text(position, size, str(count), self.font, color)
 Element.register(Chequer)
 
@@ -461,6 +471,7 @@ class Point(BaseElement):
   name = 'point'
   DTD_ELEMENT = ('#PCDATA', 'chequer')
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     fill=FillAttribute,
                      parity=ParityAttribute)
   #FIXME
   #<!ATTLIST point basic
@@ -470,11 +481,12 @@ class Point(BaseElement):
     size = [self.width, self.height]
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
+    fill = getattr(self, 'fill', True)
     if image:
-      loaded = context.load_image(image, size, hasattr(self, 'flip'))
+      loaded = context.load_image(image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
     elif color:
-      if hasattr(self, 'flip'):
+      if getattr(self, 'flip'):
         pinacle = self.x + self.width/2, self.y+self.height
         rbase = self.x, self.y
         lbase = self.x + self.width, self.y
@@ -482,7 +494,10 @@ class Point(BaseElement):
         pinacle = self.x + self.width/2, self.y
         rbase = self.x, self.y+self.height
         lbase = self.x + self.width, self.y+self.height
-      context.draw_polygon([rbase, pinacle, lbase], fill=color)
+      if fill:
+        context.draw_polygon([rbase, pinacle, lbase], fill=color)
+      else:
+        context.draw_polygon([rbase, pinacle, lbase])
     else:
       assert False
 Element.register(Point)
