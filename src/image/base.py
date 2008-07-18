@@ -42,7 +42,6 @@ Element = ElementFactory()
 
 
 class BaseAttribute(object):
-  name = None
   def __init__(self, css_path=None, value=None):
     self.css_path = css_path
     self._value = value
@@ -79,15 +78,21 @@ class IntAttribute(BaseAttribute):
     return isinstance(v, int)
   def parse(self, s):
     return int(s)
+class IntWithDefaultZeroAttribute(BaseAttribute):
+  name = 'intDefaultZero'
+  default = 0
 
 class InheritIntAttribute(InheritMixIn, IntAttribute):
   pass
 
 class StringAttribute(BaseAttribute):
+  name = 'string'
   def is_acceptable(self, v):
     return isinstance(v, str)
 
 class ColorAttribute(StringAttribute):
+  name = 'color'
+  def is_acceptable(self, v):
   def is_acceptable(self, v):
     return isinstance(v, str)
   def parse(self, s):
@@ -103,6 +108,7 @@ class URIAttribute(StringAttribute):
     return os.path.join(dir, fn)
   
 class FlipAttribute(InheritMixIn, StringAttribute):
+  default = False
   name = 'flip'
   def parse(self, s):
     return bool(s)
@@ -110,6 +116,7 @@ class FlipAttribute(InheritMixIn, StringAttribute):
     return isinstance(v, bool)
 
 class HideCountAttribute(StringAttribute):
+  default = False
   name = 'hidecount'
   def parse(self, s):
     return bool(s)
@@ -227,7 +234,11 @@ class BaseElement(object):
         return a.get()
       elif self.DTD_ATTLIST[name].is_inherit() and self.parent is not None:
         return getattr(self.parent, name)
-      raise ValueError('Element %s is not assigned a value of attribute "%s".'%(self.name, name))
+      else:
+        try:
+          return self.DTD_ATTLIST[name].default
+        except AttributeError:
+          raise ValueError('Element %s is not assigned a value of attribute "%s".'%(self.name, name))
     raise AttributeError('Element %s does not have such attribute "%s".'%(self.name, name))
 
   @classmethod
@@ -266,8 +277,14 @@ class Length(BaseElement):
   def draw(self, context):
     position = [self.x, self.y]
     size = [self.width, self.height]
-    image = getattr(self, 'image', None)
-    color = getattr(self, 'color', 'white')
+    try:
+      image = getattr(self, 'image', None)
+    except:
+      image = None
+    try:
+      color = getattr(self, 'color', 'white')
+    except:
+      color = None
     font = getattr(self, 'font', None)
     if image:
       loaded = context.load_image(image, size, hasattr(self, 'flip'))
@@ -301,8 +318,14 @@ class Score(BaseElement):
   def draw(self, context):
     position = [self.x, self.y]
     size = [self.width, self.height]
-    image = getattr(self, 'image', None)
-    color = getattr(self, 'color', 'white')
+    try:
+      image = getattr(self, 'image', None)
+    except ValueError:
+      image = None
+    try:
+      color = getattr(self, 'color', 'white')
+    except ValueError:
+      color = None
     font = getattr(self, 'font', None)
     if image:
       loaded = context.load_image(image, size, hasattr(self, 'flip'))
@@ -339,8 +362,8 @@ class Die(BaseElement):
   name = 'die'
   DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
-                     x_offset=IntAttribute,
-                     y_offset=IntAttribute)
+                     x_offset=IntWithDefaultZeroAttribute,
+                     y_offset=IntWithDefaultZeroAttribute)
   def draw(self, context):
     pass
 
@@ -373,8 +396,8 @@ class Chip(BaseElement):
   name = 'chip'
   DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
-                     x_offset=IntAttribute,
-                     y_offset=IntAttribute)
+                     x_offset=IntWithDefaultZeroAttribute,
+                     y_offset=IntWithDefaultZeroAttribute)
 Element.register(Chip)
 
 
@@ -395,10 +418,10 @@ class Chequer(BaseElement):
   DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute,
-                     x_offset=IntAttribute, 
-                     y_offset=IntAttribute,
-                     x_offset2=IntAttribute, 
-                     y_offset2=IntAttribute,
+                     x_offset=IntWithDefaultZeroAttribute, 
+                     y_offset=IntWithDefaultZeroAttribute,
+                     x_offset2=IntWithDefaultZeroAttribute, 
+                     y_offset2=IntWithDefaultZeroAttribute,
                      hide_count=HideCountAttribute,
                      max_count=IntAttribute
                     )
@@ -411,8 +434,14 @@ class Chequer(BaseElement):
     size = [self.width, self.height]
     xoff = getattr(self, 'x_offset', 0)
     yoff = getattr(self, 'y_offset', 0)
-    image = getattr(self, 'image', None)
-    color = getattr(self, 'color', 'white')
+    try:
+      image = getattr(self, 'image', None)
+    except:
+      image = None
+    try:
+      color = getattr(self, 'color', 'white')
+    except:
+      color = None
     font = getattr(self, 'font', None)
     hide = getattr(self, 'hide_count', None)
 

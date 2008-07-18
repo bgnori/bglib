@@ -58,6 +58,7 @@ class Draw(bglib.image.draw.Draw):
   def load_font(self, uri, size):
     if (uri, size)  in self.cache:
       return self.cache[(uri, size)]
+    assert uri
     font = ImageFont.truetype(uri, size)
     self.cache.update({(uri, size): font})
     return font
