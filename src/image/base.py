@@ -78,7 +78,7 @@ class IntAttribute(BaseAttribute):
     return isinstance(v, int)
   def parse(self, s):
     return int(s)
-class IntWithDefaultZeroAttribute(BaseAttribute):
+class IntWithDefaultZeroAttribute(IntAttribute):
   name = 'intDefaultZero'
   default = 0
 
@@ -92,7 +92,6 @@ class StringAttribute(BaseAttribute):
 
 class ColorAttribute(StringAttribute):
   name = 'color'
-  def is_acceptable(self, v):
   def is_acceptable(self, v):
     return isinstance(v, str)
   def parse(self, s):
@@ -238,7 +237,7 @@ class BaseElement(object):
         try:
           return self.DTD_ATTLIST[name].default
         except AttributeError:
-          raise ValueError('Element %s is not assigned a value of attribute "%s".'%(self.name, name))
+          raise AttributeError('Element %s is not assigned a value of attribute "%s".'%(self.name, name))
     raise AttributeError('Element %s does not have such attribute "%s".'%(self.name, name))
 
   @classmethod
@@ -277,14 +276,9 @@ class Length(BaseElement):
   def draw(self, context):
     position = [self.x, self.y]
     size = [self.width, self.height]
-    try:
-      image = getattr(self, 'image', None)
-    except:
-      image = None
-    try:
-      color = getattr(self, 'color', 'white')
-    except:
-      color = None
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    color = None
     font = getattr(self, 'font', None)
     if image:
       loaded = context.load_image(image, size, hasattr(self, 'flip'))
@@ -318,14 +312,8 @@ class Score(BaseElement):
   def draw(self, context):
     position = [self.x, self.y]
     size = [self.width, self.height]
-    try:
-      image = getattr(self, 'image', None)
-    except ValueError:
-      image = None
-    try:
-      color = getattr(self, 'color', 'white')
-    except ValueError:
-      color = None
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
     if image:
       loaded = context.load_image(image, size, hasattr(self, 'flip'))
@@ -434,14 +422,9 @@ class Chequer(BaseElement):
     size = [self.width, self.height]
     xoff = getattr(self, 'x_offset', 0)
     yoff = getattr(self, 'y_offset', 0)
-    try:
-      image = getattr(self, 'image', None)
-    except:
-      image = None
-    try:
-      color = getattr(self, 'color', 'white')
-    except:
-      color = None
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    color = None
     font = getattr(self, 'font', None)
     hide = getattr(self, 'hide_count', None)
 

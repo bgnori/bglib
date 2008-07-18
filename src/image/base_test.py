@@ -129,7 +129,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.x
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return 
     self.assert_(False)
 
@@ -138,7 +138,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.y
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
     self.assert_(False)
 
@@ -147,7 +147,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.width
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
     self.assert_(False)
 
@@ -156,7 +156,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.height
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
     self.assert_(False)
 
@@ -165,7 +165,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.image
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
     self.assert_(False)
 
@@ -174,7 +174,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.flip
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
     self.assert_(False)
 
@@ -183,7 +183,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.background
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
 
   def hasattr_color_test(self):
@@ -191,7 +191,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.color
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
     self.assert_(False)
 
@@ -200,7 +200,7 @@ class AttributeTest(unittest.TestCase):
     try:
       base.font
       self.assert_(False)
-    except ValueError:
+    except AttributeError:
       return
     self.assert_(False)
 
