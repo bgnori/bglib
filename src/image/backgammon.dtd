@@ -1,94 +1,210 @@
-#
-# -*- coding: us-ascii -*-
-# vim: syntax=dtd
-#
-# Copyright 2006-2008 Noriyuki Hosaka bgnori@gmail.com
-#
-<!DOCTYPE backgammon
+<!ELEMENT cube (#PCDATA)* >
+<!ATTLIST cube 
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT bar (#PCDATA|chequer)* >
+<!ATTLIST bar 
+   player CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT chequer (#PCDATA)* >
+<!ATTLIST chequer 
+   x_offset2 CDATA #IMPLIED
+   x_offset CDATA #IMPLIED
+   player CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   y_offset2 CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   hide_count CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   max_count CDATA #IMPLIED
+   y_offset CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT point (#PCDATA|chequer)* >
+<!ATTLIST point 
+   parity CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT die (#PCDATA)* >
+<!ATTLIST die 
+   x_offset CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   y_offset CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT chip (#PCDATA)* >
+<!ATTLIST chip 
+   x_offset CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   y_offset CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT cubeholder (#PCDATA|cube|chip)* >
+<!ATTLIST cubeholder 
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT field (#PCDATA|die|cube|chip)* >
+<!ATTLIST field 
+   player CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT length (#PCDATA)* >
+<!ATTLIST length 
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT score (#PCDATA)* >
+<!ATTLIST score 
+   player CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT board (match|position)* >
+<!ATTLIST board 
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT home (#PCDATA|cube|chequer)* >
+<!ATTLIST home 
+   player CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT action (#PCDATA)* >
+<!ATTLIST action 
+   player CDATA #IMPLIED
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT position (cubeholder|field|home|bar|point)* >
+<!ATTLIST position 
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT crawford (#PCDATA)* >
+<!ATTLIST crawford 
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
+<!ELEMENT match (action|length|crawford|score)* >
+<!ATTLIST match 
+   color CDATA #IMPLIED
+   image CDATA #IMPLIED
+   flip CDATA #IMPLIED
+   height CDATA #IMPLIED
+   width CDATA #IMPLIED
+   background CDATA #IMPLIED
+   y CDATA #IMPLIED
+   x CDATA #IMPLIED
+   font CDATA #IMPLIED
+>
 
-
-  <!ELEMENT board (match, position)>
-
-  <!ELEMENT match (length, crawford, score, score)>
-  <!ELEMENT crawford (#PCDATA)>
-  <!ELEMENT score (#PCDATA)>
-  <!ELEMENT player (#PCDATA)>
-  <!ELEMENT action (#PCDATA)>
-
-  <!ELEMENT position  (field, home, bar, points, bar, home, field)>
-  <!ELEMENT field (EMPTY | (die, die) | cube | chip )>
-  <!ELEMENT home (EMPTY |  cube | chequer )>
-  <!ELEMENT bar (EMPTY | chequer)>
-  <!ELEMENT point (EMPTY | chequer)>
-  <!ELEMENT die (#PCDATA)>
-  <!ELEMENT cube (#PCDATA)>
-  <!ELEMENT chequer (#PCDATA)>
-
-
-  <!ATTLIST board basic>
-
-  <!ATTLIST match basic>
-  <!ATTLIST length basic>
-  <!ATTLIST crawford basic>
-  <!ATTLIST score basic
-                  player (you|him) #REQUIRED
-  >
-  <!ATTLIST player basic
-                  player (you|him) #REQUIRED
-  >
-  <!ATTLIST action basic>
-
-
-  <!ATTLIST position basic>
-  <!ATTLIST field basic
-                  player (you|him) #REQUIRED
-
-  >
-
-  <!ATTLIST home basic
-                 player (you|him) #REQUIRED
-  >
-
-  <!ATTLIST bar basic
-                player (you|him) #REQUIRED
-  >
-
-
-  <!ATTLIST point basic
-                  parity (even|odd) #REQUIRED
-  >
-
-  <!ATTLIST die basic
-                x-offset CDATA #REQUIRED
-                y-offset CDATA #REQUIRED
-  >
-
-  <!ATTLIST cube basic
-  >
-
-  <!ATTLIST chip basic
-                x-offset CDATA #REQUIRED
-                y-offset CDATA #REQUIRED
-  >
-
-  <!ATTLIST cubeholder basic
-  >
-
-  <!ATTLIST chequer basic
-                player (you|him) #REQUIRED
-                x-offset CDATA #REQUIRED
-                y-offset CDATA #REQUIRED
-                x-stacking-offeset CDATA #REQUIRED
-                y-stacking-offeset CDATA #REQUIRED
-  >
-
-  <!ENTITY % points "point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point, point">
-  <!ENTITY % basic 'widht CDATA #REQUIRED
-                height CDATA #REQUIRED
-                x CDATA #REQUIRED
-                y CDATA #REQUIRED
-                color CDATA "#FFFFFF"
-                background-color CDATA "#000000"
-                image  CDATA #IMPLIED'
-   >
-]>
