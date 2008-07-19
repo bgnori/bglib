@@ -75,11 +75,8 @@ class Draw(object):
   def draw_element(self, path):
     assert self.dc is not None
     e = path[-1]
-    position = (e.x, e.y)
-    size = (e.width, e.height)
     if hasattr(e, 'background'):
-      bg = getattr(e, 'background')
-      self.draw_rect(position, size, bg)
+      e.bg_draw(self)
     if hasattr(e, 'image') or hasattr(e, 'color'):
       e.draw(self)
 

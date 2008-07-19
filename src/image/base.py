@@ -188,7 +188,10 @@ class BaseElement(object):
   __repr__ = __str__
 
   def calc_mag(self, xy):
-    return [int(xy[0] *self.mag), int(xy[1]*self.mag)]
+    return [self.apply_mag(xy[0]), self.apply_mag(xy[1])]
+
+  def apply_mag(self, x):
+    return int(x *self.mag)
 
   def append(self, e):
     if isinstance(e, BaseElement):
@@ -224,6 +227,12 @@ class BaseElement(object):
         s += ' '*(indent +2) + str(c) + '\n'
     s+= ' '*indent + "</%s>\n"%(self.name)
     return s
+
+  def bg_draw(self, context):
+    assert hasattr(self, 'background')
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
+    context.draw_rect(tuple(position), tuple(size), self.background)
 
   def draw(self, context):
     size = self.calc_mag((self.width, self.height))
@@ -317,8 +326,7 @@ class Length(BaseElement):
       context.paste_image(loaded, position, size)
     elif font:
       context.draw_text(
-                (self.x, self.y), (self.width, self.height),
-                self.children[0], self.font, self.color)
+                position, size, self.children[0], self.font, self.color)
 
 Element.register(Length)
 
@@ -336,7 +344,7 @@ class Crawford(BaseElement):
       context.paste_image(loaded, position, size)
     elif font:
       if self.children[0] == 'True':
-        context.draw_text((self.x, self.y), (self.width, self.height), '*', self.font, self.color)
+        context.draw_text(position, size, '*', self.font, self.color)
 Element.register(Crawford)
 
 class Score(BaseElement):
@@ -354,7 +362,7 @@ class Score(BaseElement):
       loaded = context.load_image(image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
     elif font:
-      context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
+      context.draw_text(position, size, self.children[0], self.font, self.color)
 Element.register(Score)
 
 class Position(BaseElement):
@@ -388,8 +396,16 @@ class Die(BaseElement):
                      x_offset=IntWithDefaultZeroAttribute,
                      y_offset=IntWithDefaultZeroAttribute)
   def draw(self, context):
-    pass
-
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    if image:
+      loaded = context.load_image(image, size, getattr(self, 'flip'))
+      context.paste_image(loaded, position, size)
+    elif font:
+      context.draw_text(position, size, self.children[0], self.font, self.color)
 Element.register(Die)
 
 
@@ -408,7 +424,7 @@ class Cube(BaseElement):
     elif font:
       log = int(self.children[0])
       v = pow(2, log)
-      context.draw_text((self.x, self.y), (self.width, self.height), str(v), self.font, self.color)
+      context.draw_text(position, size, str(v), self.font, color)
     else:
       assert False
 
@@ -454,10 +470,13 @@ class Chequer(BaseElement):
   #                player (you|him) #REQUIRED
   def draw(self, context):
     count = int(self.children[0]) #FIXME
-    size = self.calc_mag((self.width, self.height))
+    height = self.apply_mag(self.height)
+    width = self.apply_mag(self.width)
+    size = (width, height)
+    
     position = self.calc_mag((self.x, self.y))
-    xoff = getattr(self, 'x_offset', 0)
-    yoff = getattr(self, 'y_offset', 0)
+    xoff = self.apply_mag(getattr(self, 'x_offset', 0))
+    yoff = self.apply_mag(getattr(self, 'y_offset', 0))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -475,10 +494,10 @@ class Chequer(BaseElement):
           context.draw_ellipse(position, size, fill)
       position[0] += xoff
       position[1] += yoff
-      if position[0] + self.width > self.parent.x + self.parent.width or\
-         position[1] + self.height > self.parent.y + self.parent.height:
-        position[0] += getattr(self, 'x_offset2', 0)
-        position[1] += getattr(self, 'y_offset2', 0)
+      if position[0] + width > self.apply_mag(self.parent.x) + self.apply_mag(self.parent.width) or\
+         position[1] + height > self.apply_mag(self.parent.y) + self.apply_mag(self.parent.height):
+        position[0] += self.apply_mag(getattr(self, 'x_offset2', 0))
+        position[1] += self.apply_mag(getattr(self, 'y_offset2', 0))
 
     if font is not None and not hide and count > self.max_count:
       context.draw_text(position, size, str(count), self.font, color)
@@ -506,8 +525,12 @@ class Point(BaseElement):
   #<!ATTLIST point basic
   #                parity (odd|even) #REQUIRED
   def draw(self, context):
-    size = self.calc_mag((self.width, self.height))
-    position = self.calc_mag((self.x, self.y))
+    x = self.apply_mag(self.x)
+    y = self.apply_mag(self.y)
+    position = (x, y)
+    width = self.apply_mag(self.width) 
+    height = self.apply_mag(self.height)
+    size = (width, height)
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     fill = getattr(self, 'fill', True)
@@ -516,13 +539,13 @@ class Point(BaseElement):
       context.paste_image(loaded, position, size)
     elif color:
       if getattr(self, 'flip'):
-        pinacle = self.x + self.width/2, self.y+self.height
-        rbase = self.x, self.y
-        lbase = self.x + self.width, self.y
+        pinacle = x + width/2, y + height
+        rbase = x, y
+        lbase = x + width, y
       else:
-        pinacle = self.x + self.width/2, self.y
-        rbase = self.x, self.y+self.height
-        lbase = self.x + self.width, self.y+self.height
+        pinacle = x + width/2, y
+        rbase = x, y + height
+        lbase = x + width, y+height
       if fill:
         context.draw_polygon([rbase, pinacle, lbase], fill=color)
       else:
