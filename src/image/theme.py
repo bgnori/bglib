@@ -5,5 +5,5 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-themata = "./bglib/image/resource"
+themata = "/home/nori/Desktop/work/bglib/src/bglib/image/resource"
 
