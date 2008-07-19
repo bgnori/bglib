@@ -5,5 +5,7 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-themata = "/home/nori/Desktop/work/bglib/src/bglib/image/resource"
+import os.path
+
+themata = os.path.join(os.path.dirname(__file__), "resource")
 
