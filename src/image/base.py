@@ -208,9 +208,9 @@ class BaseElement(object):
     return s
 
   def draw(self, context):
+    size = context.calc_mag((self.width, self.height))
+    position = context.calc_mag((self.x, self.y))
     if hasattr(self, 'image'):
-      size = context.calc_mag((self.width, self.height))
-      position = context.calc_mag((self.x, self.y))
       loaded = context.load_image(self.image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
 
@@ -280,25 +280,27 @@ class Length(BaseElement):
   name = 'length'
   DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    position = [self.x, self.y]
-    size = [self.width, self.height]
+    size = context.calc_mag((self.width, self.height))
+    position = context.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
-    color = None
     font = getattr(self, 'font', None)
     if image:
-      loaded = context.load_image(image, size, getattr(self, 'flip'))
+      loaded = context.load_image(image, size, self.flip)
       context.paste_image(loaded, position, size)
     elif font:
-      context.draw_text((self.x, self.y), (self.width, self.height), self.children[0], self.font, self.color)
+      context.draw_text(
+                (self.x, self.y), (self.width, self.height),
+                self.children[0], self.font, self.color)
+
 Element.register(Length)
 
 class Crawford(BaseElement):
   name = 'crawford'
   DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    position = [self.x, self.y]
-    size = [self.width, self.height]
+    size = context.calc_mag((self.width, self.height))
+    position = context.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -316,8 +318,8 @@ class Score(BaseElement):
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
   def draw(self, context):
-    position = [self.x, self.y]
-    size = [self.width, self.height]
+    size = context.calc_mag((self.width, self.height))
+    position = context.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -368,8 +370,8 @@ class Cube(BaseElement):
   name = 'cube'
   DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    position = [self.x, self.y]
-    size = [self.width, self.height]
+    size = context.calc_mag((self.width, self.height))
+    position = context.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -424,9 +426,9 @@ class Chequer(BaseElement):
   #<!ATTLIST chequerbasic
   #                player (you|him) #REQUIRED
   def draw(self, context):
-    count = int(self.children[0])
-    position = [self.x, self.y]
-    size = [self.width, self.height]
+    count = int(self.children[0]) #FIXME
+    size = context.calc_mag((self.width, self.height))
+    position = context.calc_mag((self.x, self.y))
     xoff = getattr(self, 'x_offset', 0)
     yoff = getattr(self, 'y_offset', 0)
     image = getattr(self, 'image', None)
@@ -477,8 +479,8 @@ class Point(BaseElement):
   #<!ATTLIST point basic
   #                parity (odd|even) #REQUIRED
   def draw(self, context):
-    position = [self.x, self.y]
-    size = [self.width, self.height]
+    size = context.calc_mag((self.width, self.height))
+    position = context.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     fill = getattr(self, 'fill', True)

@@ -45,8 +45,6 @@ class Draw(bglib.image.draw.Draw):
 
   def draw_text(self, position, size, text, font_name, fill):
     ''' places text in center of rect, rect is specified by size and position.'''
-    position = self.calc_mag(position)
-    size = self.calc_mag(size)
     x, y = position
     fsize, w, h = self.calc_font_size(font_name, size, text)
     font = self.load_font(font_name, fsize)
@@ -64,7 +62,7 @@ class Draw(bglib.image.draw.Draw):
     return font
 
   def load_image(self, uri, size, flip):
-    size=self.calc_mag(size)
+    size = tuple(size)
     if (uri, size, flip) in self.cache:
       return self.cache[(uri, size, flip)]
     image = Image.open(uri)
@@ -76,12 +74,12 @@ class Draw(bglib.image.draw.Draw):
 
   def paste_image(self, to_paste, position, size):
     assert self.dc
-    position = self.calc_mag(position)
-    size = self.calc_mag(size)
+    assert to_paste.size[0] == size[0]
+    assert to_paste.size[1] == size[1]
     x1, y1 = position
     x2 = x1 + size[0]
     y2 = y1 + size[1]
-    self.dc[0].paste(to_paste, [x1, y1, x2, y2])
+    self.dc[0].paste(to_paste, (x1, y1, x2, y2))
 
   def draw_ellipse(self, position, size, fill=None):
     assert self.dc
@@ -89,20 +87,15 @@ class Draw(bglib.image.draw.Draw):
     x1, y1 = position
     x2 = x1 + size[0]
     y2 = y1 + size[1]
-    x1, y1 = self.calc_mag((x1, y1))
-    x2, y2 = self.calc_mag((x2, y2))
     draw.ellipse([x1, y1, x2, y2], fill=fill)
 
   def draw_polygon(self, points, fill=None):
     assert self.dc
-    points = [self.calc_mag(pt) for pt in points]
     draw = self.dc[1]
     draw.polygon(points, fill=fill)
 
   def draw_rect(self, position, size, fill=None):
     assert self.dc is not None
-    position = self.calc_mag(position)
-    size = self.calc_mag(size)
     draw = self.dc[1]
     x2, y2 = position
     x2 += size[0]
@@ -113,7 +106,7 @@ if __name__ == '__main__':
   import bglib.model.board
   from bglib.image.css import load
   b = bglib.model.board.board()
-  d = Draw(load("./bglib/image/resource/minimal/default.css"))
+  d = Draw(load("./bglib/image/resource/safari/default.css"))
   image = d.draw(b, (400, 400))
   image.show()
 

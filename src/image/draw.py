@@ -16,14 +16,16 @@ class Draw(object):
     self.mag = 1.0
 
   def calc_mag(self, xy):
-    return int(xy[0] *self.mag), int(xy[1]*self.mag)
+    return [int(xy[0] *self.mag), int(xy[1]*self.mag)]
 
   def set_mag(self, bound, width, height):
     xmag = float(bound[0])/width
     ymag = float(bound[1])/height
-    assert xmag > 0
-    assert ymag > 0
+    assert xmag > 0.0
+    assert ymag > 0.0
     self.mag = min(xmag, ymag)
+    assert width * self.mag <= bound[0]
+    assert height * self.mag <= bound[1]
 
   def create_dc(self, size):
     assert self.dc is None
@@ -57,38 +59,28 @@ class Draw(object):
 
   def draw_text(self, position, size, text, font_name, fill):
     assert self.dc is not None
-    position=self.calc_mag(position)
-    size=self.calc_mag(size)
     self.dc.append('draw_text "%s" in %s @ %s'%(text, size, position))
 
   def draw_ellipse(self, position, size, fill=None):
     assert self.dc is not None
-    position=self.calc_mag(position)
-    size=self.calc_mag(size)
     self.dc.append('draw_ellipse %s, fill=%s @ %s'%(size, bool(fill),  position))
 
   def draw_polygon(self, points, fill=None):
     assert self.dc is not None
-    points = [self.calc_mag(pt) for pt in points]
     self.dc.append('draw_polygon %s fill=%s'%(points, bool(fill)))
 
   def draw_rect(self, position, size, fill=None):
     assert self.dc is not None
-    position=self.calc_mag(position)
-    size=self.calc_mag(size)
     self.dc.append('draw_rect %s, fill=%s @ %s'%(size, bool(fill),  position))
 
   def paste_image(self, src, position, size):
     assert self.dc is not None
-    position=self.calc_mag(position)
     self.dc.append('paste_image %s @ %s'%(src, position))
 
   def load_image(self, uri, size, flip):
-    size=self.calc_mag(size)
     return uri + ' size='+ str(size) + ' with flip=' + str(flip)
 
   def load_font(self, uri, size):
-    #size=self.calc_mag(size)
     return uri + ' size=' + str(size)
 
   def draw_element(self, path):
