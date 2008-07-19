@@ -17,18 +17,6 @@ class MethodTest(unittest.TestCase):
   def tearDown(self):
     pass
 
-  def mag_test(self):
-    self.draw.set_mag([400, 300], 300, 200)
-    self.assertEqual(self.draw.calc_mag([300, 200])[0], 400)
-    self.assertNotEqual(self.draw.calc_mag([300, 200])[1], 200)
-    self.assertEqual(self.draw.calc_mag([300, 200])[1], 266)
-    self.assertEqual(self.draw.calc_mag([150, 200])[0], 200)
-
-    self.draw.set_mag([400, 300], 300, 300)
-    self.assertEqual(self.draw.calc_mag([300, 200])[0], 300)
-    self.assertEqual(self.draw.calc_mag([300, 200])[1], 200)
-
-
   def dc_test(self):
     self.draw.create_dc([1,1])
     self.assert_(self.draw.dc is not None)

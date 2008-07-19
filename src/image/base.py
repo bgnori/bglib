@@ -82,6 +82,15 @@ class IntWithDefaultZeroAttribute(IntAttribute):
   name = 'intDefaultZero'
   default = 0
 
+class FloatAttribute(BaseAttribute):
+  name = 'float'
+  def is_acceptable(self, v):
+    return isinstance(v, float)
+  def parse(self, s):
+    return float(s)
+class InheritFloatAttribute(InheritMixIn, FloatAttribute):
+  name = 'inheritFloat'
+
 class InheritIntAttribute(InheritMixIn, IntAttribute):
   pass
 
@@ -148,11 +157,17 @@ class PlayerAttribute(StringAttribute):
 class BaseElement(object):
   name = None
   DTD_ELEMENT = None
-  DTD_ATTLIST = {'x':InheritIntAttribute, 'y':InheritIntAttribute,
-                  'width':InheritIntAttribute, 'height':InheritIntAttribute,
-                 'image':URIAttribute, 'flip': FlipAttribute,
-                 'background': ColorAttribute, 'color':ColorAttribute, 
-                 'font':FontAttribute}
+  DTD_ATTLIST = dict(x=InheritIntAttribute, 
+                     y=InheritIntAttribute,
+                     width=InheritIntAttribute,
+                     height=InheritIntAttribute,
+                     image=URIAttribute, 
+                     flip=FlipAttribute,
+                     background=ColorAttribute,
+                     color=ColorAttribute, 
+                     font=FontAttribute,
+                     mag=InheritFloatAttribute,
+                     )
 
   def __init__(self,  **kw):
     self.__dict__['children'] = list()
@@ -171,6 +186,9 @@ class BaseElement(object):
     s += "</%s>"%self.name
     return s
   __repr__ = __str__
+
+  def calc_mag(self, xy):
+    return [int(xy[0] *self.mag), int(xy[1]*self.mag)]
 
   def append(self, e):
     if isinstance(e, BaseElement):
@@ -208,8 +226,8 @@ class BaseElement(object):
     return s
 
   def draw(self, context):
-    size = context.calc_mag((self.width, self.height))
-    position = context.calc_mag((self.x, self.y))
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
     if hasattr(self, 'image'):
       loaded = context.load_image(self.image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
@@ -261,8 +279,17 @@ class BaseElement(object):
 class Board(BaseElement):
   name = 'board'
   DTD_ELEMENT = ('match', 'position')
-Element.register(Board)
 
+  def set_mag(self, bound):
+    xmag = float(bound[0])/self.width
+    ymag = float(bound[1])/self.height
+    assert xmag > 0.0
+    assert ymag > 0.0
+    self.mag = min(xmag, ymag)
+    assert self.width * self.mag <= bound[0]
+    assert self.height * self.mag <= bound[1]
+
+Element.register(Board)
 
 class Match(BaseElement):
   name = 'match'
@@ -280,8 +307,8 @@ class Length(BaseElement):
   name = 'length'
   DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    size = context.calc_mag((self.width, self.height))
-    position = context.calc_mag((self.x, self.y))
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -299,8 +326,8 @@ class Crawford(BaseElement):
   name = 'crawford'
   DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    size = context.calc_mag((self.width, self.height))
-    position = context.calc_mag((self.x, self.y))
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -318,8 +345,8 @@ class Score(BaseElement):
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
   def draw(self, context):
-    size = context.calc_mag((self.width, self.height))
-    position = context.calc_mag((self.x, self.y))
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -370,8 +397,8 @@ class Cube(BaseElement):
   name = 'cube'
   DTD_ELEMENT = ('#PCDATA', )
   def draw(self, context):
-    size = context.calc_mag((self.width, self.height))
-    position = context.calc_mag((self.x, self.y))
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     font = getattr(self, 'font', None)
@@ -427,8 +454,8 @@ class Chequer(BaseElement):
   #                player (you|him) #REQUIRED
   def draw(self, context):
     count = int(self.children[0]) #FIXME
-    size = context.calc_mag((self.width, self.height))
-    position = context.calc_mag((self.x, self.y))
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
     xoff = getattr(self, 'x_offset', 0)
     yoff = getattr(self, 'y_offset', 0)
     image = getattr(self, 'image', None)
@@ -479,8 +506,8 @@ class Point(BaseElement):
   #<!ATTLIST point basic
   #                parity (odd|even) #REQUIRED
   def draw(self, context):
-    size = context.calc_mag((self.width, self.height))
-    position = context.calc_mag((self.x, self.y))
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
     color = getattr(self, 'color', 'white')
     fill = getattr(self, 'fill', True)

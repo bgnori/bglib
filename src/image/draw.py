@@ -15,17 +15,6 @@ class Draw(object):
     self.dc = None
     self.mag = 1.0
 
-  def calc_mag(self, xy):
-    return [int(xy[0] *self.mag), int(xy[1]*self.mag)]
-
-  def set_mag(self, bound, width, height):
-    xmag = float(bound[0])/width
-    ymag = float(bound[1])/height
-    assert xmag > 0.0
-    assert ymag > 0.0
-    self.mag = min(xmag, ymag)
-    assert width * self.mag <= bound[0]
-    assert height * self.mag <= bound[1]
 
   def create_dc(self, size):
     assert self.dc is None
@@ -47,7 +36,7 @@ class Draw(object):
     if self.dc is not None:
       self.delele_dc()
     t = self.make_tree(b)
-    self.set_mag(size, t.board.width, t.board.height)
+    t.board.set_mag(size)
 
     self.create_dc(size)
     assert self.dc is not None

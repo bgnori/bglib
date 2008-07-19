@@ -83,6 +83,21 @@ class ElementTest(unittest.TestCase):
   def board_test(self):
     self._append('board', ['match', 'position'])
 
+  def mag_test(self):
+    self.board.width = 300
+    self.board.height = 200
+    self.board.set_mag([400, 300])
+    self.assertEqual(self.board.calc_mag([300, 200])[0], 400)
+    self.assertNotEqual(self.board.calc_mag([300, 200])[1], 200)
+    self.assertEqual(self.board.calc_mag([300, 200])[1], 266)
+    self.assertEqual(self.board.calc_mag([150, 200])[0], 200)
+
+    self.board.width = 300
+    self.board.height = 300
+    self.board.set_mag([400, 300])
+    self.assertEqual(self.board.calc_mag([300, 200])[0], 300)
+    self.assertEqual(self.board.calc_mag([300, 200])[1], 200)
+
   def match_test(self):
     self._append('match', ['action', 'length', 'crawford', 'score'])
 
