@@ -312,6 +312,19 @@ class Action(BaseElement):
   DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
+  def draw(self, context):
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    if image:
+      loaded = context.load_image(image, size, self.flip)
+      context.paste_image(loaded, position, size)
+    elif font:
+      context.draw_text(
+                position, size, self.children[0], self.font, self.color)
+
 Element.register(Action)
 
 class Length(BaseElement):
@@ -668,10 +681,12 @@ class ElementTree(object):
     if board.on_action == you and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == you:
         self.action.player = bglib.model.constants.player_string[you]
+        self.action.append('you to roll or double.')
         return
 
       if not board.doubled and board.on_inner_action == him and board.resign_offer in bglib.model.constants.resign_types:
         self.action.player = bglib.model.constants.player_string[him]
+        self.action.append('he to accept your resignation or not.')
         return
 
       if board.doubled and board.on_inner_action == him:
@@ -679,22 +694,27 @@ class ElementTree(object):
         cube.append(str(board.cube_in_logarithm+1))
         self.field[him].append(cube)
         self.action.player = bglib.model.constants.player_string[you]
+        self.action.append('you doubled. he to take or drop.')
         return
 
       if board.doubled and board.on_inner_action == you:
         self.action.player = bglib.model.constants.player_string[you]
+        self.action.append('you doubled. he took. you to roll.')
         return
 
     if board.on_action == you and  board.rolled != (0, 0):
       self.action.player = bglib.model.constants.player_string[you]
+      self.action.append('you to roll.')
       return
 
     if board.on_action == him and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == him:
         self.action.player = bglib.model.constants.player_string[him]
+        self.action.append('he to roll or double.')
         return
       if not board.doubled and board.on_inner_action == you and board.resign_offer in bglib.model.constants.resign_types:
         self.action.player = bglib.model.constants.player_string[you]
+        self.action.append('you to accept his resignation or not.')
         return
 
       if board.doubled and board.on_inner_action == you:
@@ -702,14 +722,17 @@ class ElementTree(object):
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm+1))
         self.field[you].append(cube)
+        self.action.append('he doubled. you to take or drop.')
         return
 
       if board.doubled and board.on_inner_action == him:
         self.action.player = bglib.model.constants.player_string[him]
+        self.action.append('he doubled. you took. him to roll.')
         return
 
     if board.on_action == him and  board.rolled !=(0, 0):
       self.action.player = bglib.model.constants.player_string[him]
+      self.action.append('him to roll.')
       return
 
     #assert not board.doubled and board.on_inner_action == him and board.resign_offer not in bglib.model.constants.resign_types
