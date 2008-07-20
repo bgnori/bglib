@@ -152,6 +152,8 @@ class PlayerAttribute(StringAttribute):
   def is_acceptable(self, v):
     return isinstance(v, str) and v in bglib.model.constants.player_string
 
+class InitialCubeString(StringAttribute):
+  name='initialCube'
 
 
 class BaseElement(object):
@@ -406,12 +408,16 @@ class Die(BaseElement):
       context.paste_image(loaded, position, size)
     elif font:
       context.draw_text(position, size, self.children[0], self.font, self.color)
+    else:
+      assert False
 Element.register(Die)
 
 
 class Cube(BaseElement):
   name = 'cube'
   DTD_ELEMENT = ('#PCDATA', )
+  DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     initialCube=InitialCubeString)
   def draw(self, context):
     size = self.calc_mag((self.width, self.height))
     position = self.calc_mag((self.x, self.y))
@@ -424,7 +430,10 @@ class Cube(BaseElement):
     elif font:
       log = int(self.children[0])
       v = pow(2, log)
-      context.draw_text(position, size, str(v), self.font, color)
+      if v == 1 and hasattr(self, 'initialCube'):
+        context.draw_text(position, size, str(self.initialCube), self.font, color)
+      else:
+        context.draw_text(position, size, str(v), self.font, color)
     else:
       assert False
 
