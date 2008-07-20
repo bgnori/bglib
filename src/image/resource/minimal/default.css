@@ -47,11 +47,11 @@ point:data(22) {x: 212 ; y:   5 ; flip:  True  }
 point:data(23) {x: 230 ; y:   5 ; flip:  True  }
 point:data(24) {x: 248 ; y:   5 ; flip:  True  }
 
-bar {width: 25; height: 111}
+bar {width: 25; height: 111; background: #746f6d}
 bar[player=you] {x:133; y:116}
 bar[player=him] {x:133; y: 5}
 
-cubeholder {width: 25 ;height: 30; x: 266; y: 101 ;background: #b6bdc6}
+cubeholder {width: 25 ;height: 30; x: 0; y: 101 ;background: #b6bdc6}
 
 home {width: 25 ;height: 101}
 home[player=you] {x: 266; y: 131 ; background: #746f6d}
@@ -67,12 +67,12 @@ die {width: 16; height: 16}
 
 
 cube {width: 25; height: 25; background: white; color: black; initialCube: 64}
-cubeholder cube {x: 266 ; y: 105}
-home[player=you] cube {x: 266; y: 197} 
-home[player=him] cube {x: 266; y: 5}
+cubeholder cube {x: 0 ; y: 105}
+home[player=you] cube {x: 0; y: 197} 
+home[player=him] cube {x: 0; y: 5}
 field[player=you] cube {x: 50; y: 100}
 field[player=him] cube {x: 180; y: 100}
-cubeholder cube {x: 266; y: 105}
+cubeholder cube {x: 0; y: 105}
 
 field[player=you] chip {x: 157;y: 93; x_offset: 20; y_offset: 0}
 field[player=him] chip {x: 25 ;y: 93; x_offset: 20; y_offset: 0}
