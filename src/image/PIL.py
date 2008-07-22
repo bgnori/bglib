@@ -34,6 +34,8 @@ class Draw(bglib.image.draw.Draw):
     w, h = font.getsize(text)
     while w >= size[0] or h >= size[1]:
       fsize = fsize - 1
+      if fsize < 8: # FIXME
+        return None, w, h
       font = self.load_font(font_name, fsize)
       w, h = font.getsize(text)
     return fsize, w, h
@@ -47,6 +49,8 @@ class Draw(bglib.image.draw.Draw):
     ''' places text in center of rect, rect is specified by size and position.'''
     x, y = position
     fsize, w, h = self.calc_font_size(font_name, size, text)
+    if fsize is None: #FIXME
+      return
     font = self.load_font(font_name, fsize)
     draw = self.dc[1]
     xoff = (size[0] - w)/2
