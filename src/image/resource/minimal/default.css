@@ -1,4 +1,4 @@
-board {x: 0; y: 0; width: 341; height: 232; background: #596580}
+board {x: 0; y: 0; width: 341; height: 262; background: #596580}
 board {font:uri("DejaVuLGCSans-Bold.ttf")}
 
 match {x: 291; y: 0; width: 100; height: 232}
@@ -10,7 +10,7 @@ score[player=you] {x: 291; y:139; color: #3cb7ff}
 score[player=him] {x: 291; y: 0 ; color: #fd4993}
 
 
-action{width: 25; height: 26; x:291; y:103 ; background: #596580}
+action{width: 341; height: 30; x:0; y:232 ; background: #596580}
 action[player=you] {color: #3cb7ff}
 action[player=him] {color: #fd4993}
 
