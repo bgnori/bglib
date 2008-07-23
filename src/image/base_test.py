@@ -44,7 +44,7 @@ class ElementTest(unittest.TestCase):
     self.field = Element('field')
     self.die = Element('die')
     self.cube = Element('cube')
-    self.chip = Element('chip')
+    self.resign = Element('resign')
     self.home = Element('home')
     self.chequer = Element('chequer')
     self.bar = Element('bar')
@@ -123,7 +123,7 @@ class ElementTest(unittest.TestCase):
     self._append('cube', [])
 
   def field_test(self):
-    self._append('field', ['cube', 'die', 'chip'])
+    self._append('field', ['cube', 'die', 'resign'])
 
   def home_test(self):
     self._append('home', ['cube', 'chequer'])

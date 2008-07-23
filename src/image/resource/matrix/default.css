@@ -12,7 +12,7 @@ score[player=him] {x: 800; y:0; color: #fd4993}
 
 action{width: 100; height: 100;}
 action[player=you] {x: 830; y:670; image: uri("ind_blue_r.png") }
-action[player=him] {x: 830; y:30; image: uri("ind_red_r.png") }
+action[player=him] {x: 830; y:30; image: uri("ind_red_l.png") }
 player {width:0; height: 0}
 player[player=you]{x:0; y:0}
 player[player=him]{x:0; y:0}

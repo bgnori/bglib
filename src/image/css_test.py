@@ -45,7 +45,7 @@ class ElementTest(unittest.TestCase):
     self.field = Element('field')
     self.die = Element('die')
     self.cube = Element('cube')
-    self.chip = Element('chip')
+    self.resign = Element('resign')
     self.home = Element('home')
     self.chequer = Element('chequer')
     self.bar = Element('bar')

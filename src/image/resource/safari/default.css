@@ -147,9 +147,9 @@ cube:data(3) {image: uri("cube_3.jpg")}
 cube:data(4) {image: uri("cube_4.jpg")}
 cube:data(5) {image: uri("cube_5.jpg")}
 
-field[player=you] chip {x: 157;y: 93; x-offset: 20; y-offset: 0}
-field[player=him] chip {x: 25 ;y: 93; x-offset: 20; y-offset: 0}
-chip {width: 25; height: 25; image: uri("chip.jpg"})
+field[player=you] resign {x: 157;y: 93; x_offset: 20; y_offset: 0}
+field[player=him] resign {x: 25 ;y: 93; x_offset: 20; y_offset: 0}
+resign {width: 25; height: 25; image: uri("chip.png"})
 
 chequer {max_count:1 ; hide_count: True}
 
@@ -252,6 +252,5 @@ bar[player=you] chequer[player=you]:data(12)  {image: uri("bar-white-12.jpg")}
 bar[player=you] chequer[player=you]:data(13)  {image: uri("bar-white-13.jpg")} 
 bar[player=you] chequer[player=you]:data(14)  {image: uri("bar-white-14.jpg")} 
 bar[player=you] chequer[player=you]:data(15)  {image: uri("bar-white-15.jpg")} 
-
 
 

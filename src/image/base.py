@@ -404,14 +404,14 @@ Element.register(Position)
 
 class CubeHolder(BaseElement):
   name = 'cubeholder'
-  DTD_ELEMENT = ('#PCDATA', 'cube', 'chip' )
+  DTD_ELEMENT = ('#PCDATA', 'cube')
 Element.register(CubeHolder)
 
 
 class Field(BaseElement):
   name = 'field'
-  DTD_ELEMENT = ('#PCDATA', 'die', 'cube', 'chip' )
-  #FIXME <!ELEMENT field (EMPTY | (die, die) | cube | chip )>
+  DTD_ELEMENT = ('#PCDATA', 'die', 'cube', 'resign' )
+  #FIXME <!ELEMENT field (EMPTY | (die, die) | cube | resign )>
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
                      player=PlayerAttribute)
   #FIXME
@@ -512,13 +512,32 @@ class Cube(BaseElement):
 Element.register(Cube)
 
 
-class Chip(BaseElement):
-  name = 'chip'
+class Resign(BaseElement):
+  name = 'resign'
   DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
+                     player=PlayerAttribute,
                      x_offset=IntWithDefaultZeroAttribute,
                      y_offset=IntWithDefaultZeroAttribute)
-Element.register(Chip)
+  def draw(self, context):
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'white')
+    font = getattr(self, 'font', None)
+    x_offset = self.apply_mag(self.x_offset)
+    y_offset = self.apply_mag(self.y_offset)
+    if image:
+      loaded = context.load_image(image, size, False)
+      for i in range(int(self.children[0])):
+        position = (position[0] + x_offset, position[1] + y_offset)
+        context.paste_image(loaded, position, size)
+    elif font:
+      s = bglib.model.constants.resign_strings[int(self.children[0])]
+      context.draw_text(position, size, s, self.font, color)
+    else:
+      assert False
+Element.register(Resign)
 
 
 class Home(BaseElement):
@@ -746,6 +765,9 @@ class ElementTree(object):
       if not board.doubled and board.on_inner_action == him and board.resign_offer in bglib.model.constants.resign_types:
         self.action.player = bglib.model.constants.player_string[him]
         self.action.append('him to accept your resignation or not.')
+        resign = Element('resign')
+        resign.append(str(board.resign_offer))
+        self.field[him].append(resign)
         return
 
       if board.doubled and board.on_inner_action == him:
@@ -780,6 +802,9 @@ class ElementTree(object):
       if not board.doubled and board.on_inner_action == you and board.resign_offer in bglib.model.constants.resign_types:
         self.action.player = bglib.model.constants.player_string[you]
         self.action.append('you to accept his resignation or not.')
+        resign = Element('resign')
+        resign.append(str(board.resign_offer))
+        self.field[you].append(resign)
         return
 
       if board.doubled and board.on_inner_action == you:
