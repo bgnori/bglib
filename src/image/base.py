@@ -745,7 +745,7 @@ class ElementTree(object):
 
       if not board.doubled and board.on_inner_action == him and board.resign_offer in bglib.model.constants.resign_types:
         self.action.player = bglib.model.constants.player_string[him]
-        self.action.append('he to accept your resignation or not.')
+        self.action.append('him to accept your resignation or not.')
         return
 
       if board.doubled and board.on_inner_action == him:
@@ -753,7 +753,7 @@ class ElementTree(object):
         cube.append(str(board.cube_in_logarithm+1))
         self.field[him].append(cube)
         self.action.player = bglib.model.constants.player_string[you]
-        self.action.append('you doubled. he to take or drop.')
+        self.action.append('you doubled. him to take or drop.')
         return
 
       if board.doubled and board.on_inner_action == you:
@@ -763,7 +763,7 @@ class ElementTree(object):
 
     if board.on_action == you and  board.rolled != (0, 0):
       self.action.player = bglib.model.constants.player_string[you]
-      self.action.append('you to roll.')
+      self.action.append('you to move.')
       die = Element('die', id='right')
       die.append(str(board.rolled[0]))
       self.field[you].append(die)
@@ -775,7 +775,7 @@ class ElementTree(object):
     if board.on_action == him and board.rolled == (0, 0):
       if not board.doubled and board.on_inner_action == him:
         self.action.player = bglib.model.constants.player_string[him]
-        self.action.append('he to roll or double.')
+        self.action.append('him to roll or double.')
         return
       if not board.doubled and board.on_inner_action == you and board.resign_offer in bglib.model.constants.resign_types:
         self.action.player = bglib.model.constants.player_string[you]
@@ -797,7 +797,7 @@ class ElementTree(object):
 
     if board.on_action == him and  board.rolled !=(0, 0):
       self.action.player = bglib.model.constants.player_string[him]
-      self.action.append('him to roll.')
+      self.action.append('him to move.')
       die = Element('die', id='right')
       die.append( str(board.rolled[0]))
       self.field[him].append(die)

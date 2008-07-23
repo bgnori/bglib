@@ -65,7 +65,7 @@ field[player=you] die[id=left] {x: 176; y: 95; color:#3cb7ff}
 field[player=you] die[id=right] {x: 204; y: 95; color:#3cb7ff}
 field[player=him] die[id=left] {x: 43; y:95 ; color:#fd4993}
 field[player=him] die[id=right] {x: 71; y:95 ; color:#fd4993}
-die {width: 16; height: 16; background:white; diestyle:dot; eyesize:3}
+die {width: 16; height: 16; background:#cccecf; diestyle:dot; eyesize:3}
 
 
 cube {width: 25; height: 25; background: white; color: black; initialCube: 64}
