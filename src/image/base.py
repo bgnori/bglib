@@ -78,6 +78,7 @@ class IntAttribute(BaseAttribute):
     return isinstance(v, int)
   def parse(self, s):
     return int(s)
+
 class IntWithDefaultZeroAttribute(IntAttribute):
   name = 'intDefaultZero'
   default = 0
@@ -99,9 +100,23 @@ class StringAttribute(BaseAttribute):
   def is_acceptable(self, v):
     return isinstance(v, str)
 
+class IdAttribute(StringAttribute):
+  name = 'id'
+
+class DieStyleAttribute(StringAttribute):
+  name='die_style'
+  default='dot'
+  def is_acceptable(self, v):
+    #FIXME
+    return isinstance(v, str) and v in ['dot', 'numeric']
+  def parse(self, s):
+    #FIXME validation is needed
+    return s
+
 class ColorAttribute(StringAttribute):
   name = 'color'
   def is_acceptable(self, v):
+    #FIXME
     return isinstance(v, str)
   def parse(self, s):
     #FIXME validation is needed
@@ -109,13 +124,14 @@ class ColorAttribute(StringAttribute):
 
 class URIAttribute(StringAttribute):
   def is_acceptable(self, v):
+    #FIXME
     return isinstance(v, str)
   def parse(self, s):
     dir = os.path.dirname(self.css_path)
     fn = s.split('"')[1]
     return os.path.join(dir, fn)
   
-class BoolAttribute(StringAttribute):
+class BoolAttribute(BaseAttribute):
   def parse(self, s):
     return bool(s)
   def is_acceptable(self, v):
@@ -408,19 +424,62 @@ class Die(BaseElement):
   name = 'die'
   DTD_ELEMENT = ('#PCDATA', )
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
-                     x_offset=IntWithDefaultZeroAttribute,
-                     y_offset=IntWithDefaultZeroAttribute)
+                     backgammon=ColorAttribute,
+                     diestyle=DieStyleAttribute,
+                     eyesize=IntAttribute,
+                     id=IdAttribute)
+
   def draw(self, context):
     size = self.calc_mag((self.width, self.height))
     position = self.calc_mag((self.x, self.y))
     image = getattr(self, 'image', None)
-    color = getattr(self, 'color', 'white')
+    color = getattr(self, 'color', 'black')
     font = getattr(self, 'font', None)
+    style = self.diestyle
     if image:
       loaded = context.load_image(image, size, getattr(self, 'flip'))
       context.paste_image(loaded, position, size)
-    elif font:
-      context.draw_text(position, size, self.children[0], self.font, self.color)
+    elif style == 'numeric' and font:
+      context.draw_text(position, size, self.children[0], self.font, color)
+    elif style == 'dot':
+      dotsize = self.calc_mag((self.eyesize, self.eyesize))
+      center = (position[0] + size[0]/2 - dotsize[0]/2, position[1] + size[1]/2 -dotsize[1]/2)
+      ltop = (position[0] + size[0]*1/4 - dotsize[0]/2, position[1] + size[1]*1/4 - dotsize[1]/2)
+      lmid = (position[0] + size[0]*1/4 - dotsize[0]/2, position[1] + size[1]*2/4 - dotsize[1]/2)
+      lbot = (position[0] + size[0]*1/4 - dotsize[0]/2, position[1] + size[1]*3/4 - dotsize[1]/2)
+      rtop = (position[0] + size[0]*3/4 - dotsize[0]/2, position[1] + size[1]*1/4 - dotsize[1]/2)
+      rmid = (position[0] + size[0]*3/4 - dotsize[0]/2, position[1] + size[1]*2/4 - dotsize[1]/2)
+      rbot = (position[0] + size[0]*3/4 - dotsize[0]/2, position[1] + size[1]*3/4 - dotsize[1]/2)
+      if self.children[0] == '1':
+        context.draw_ellipse(center, dotsize, fill=color)
+      elif self.children[0] == '2':
+        context.draw_ellipse(rtop, dotsize, fill=color)
+        context.draw_ellipse(lbot, dotsize, fill=color)
+      elif self.children[0] == '3':
+        context.draw_ellipse(rtop, dotsize, fill=color)
+        context.draw_ellipse(center, dotsize, fill=color)
+        context.draw_ellipse(lbot, dotsize, fill=color)
+      elif self.children[0] == '4':
+        context.draw_ellipse(rtop, dotsize, fill=color)
+        context.draw_ellipse(rbot, dotsize, fill=color)
+        context.draw_ellipse(ltop, dotsize, fill=color)
+        context.draw_ellipse(lbot, dotsize, fill=color)
+      elif self.children[0] == '5':
+        context.draw_ellipse(rtop, dotsize, fill=color)
+        context.draw_ellipse(rbot, dotsize, fill=color)
+        context.draw_ellipse(ltop, dotsize, fill=color)
+        context.draw_ellipse(lbot, dotsize, fill=color)
+        context.draw_ellipse(center, dotsize, fill=color)
+
+      elif self.children[0] == '6':
+        context.draw_ellipse(rtop, dotsize, fill=color)
+        context.draw_ellipse(rmid, dotsize, fill=color)
+        context.draw_ellipse(rbot, dotsize, fill=color)
+        context.draw_ellipse(ltop, dotsize, fill=color)
+        context.draw_ellipse(lmid, dotsize, fill=color)
+        context.draw_ellipse(lbot, dotsize, fill=color)
+      else:
+        assert False
     else:
       assert False
 Element.register(Die)
@@ -705,6 +764,12 @@ class ElementTree(object):
     if board.on_action == you and  board.rolled != (0, 0):
       self.action.player = bglib.model.constants.player_string[you]
       self.action.append('you to roll.')
+      die = Element('die', id='right')
+      die.append(str(board.rolled[0]))
+      self.field[you].append(die)
+      die = Element('die', id='left')
+      die.append(str(board.rolled[1]))
+      self.field[you].append(die)
       return
 
     if board.on_action == him and board.rolled == (0, 0):
@@ -733,6 +798,12 @@ class ElementTree(object):
     if board.on_action == him and  board.rolled !=(0, 0):
       self.action.player = bglib.model.constants.player_string[him]
       self.action.append('him to roll.')
+      die = Element('die', id='right')
+      die.append( str(board.rolled[0]))
+      self.field[him].append(die)
+      die = Element('die', id='left')
+      die.append(str(board.rolled[1]))
+      self.field[him].append(die)
       return
 
     #assert not board.doubled and board.on_inner_action == him and board.resign_offer not in bglib.model.constants.resign_types

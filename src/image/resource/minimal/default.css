@@ -61,9 +61,11 @@ field {width: 108; height: 46}
 field[player=you] {x: 158;y: 93}
 field[player=him] {x: 25 ;y: 93}
 
-field[player=you] die {x: 176; y: 95; x_offset:28; y_offset: 0; color:#3cb7ff}
-field[player=him] die {x: 43; y:95 ; x_offset:28 ; y_offset: 0: color:#fd4993}
-die {width: 16; height: 16}
+field[player=you] die[id=left] {x: 176; y: 95; color:#3cb7ff}
+field[player=you] die[id=right] {x: 204; y: 95; color:#3cb7ff}
+field[player=him] die[id=left] {x: 43; y:95 ; color:#fd4993}
+field[player=him] die[id=right] {x: 71; y:95 ; color:#fd4993}
+die {width: 16; height: 16; background:white; diestyle:dot; eyesize:3}
 
 
 cube {width: 25; height: 25; background: white; color: black; initialCube: 64}

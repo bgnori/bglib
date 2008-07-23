@@ -123,8 +123,10 @@ field[player=him] {x: 25 ;y: 93}
 cubeholder cube {x: 266 ; y: 105}
 
 
-field[player=you] die {x: 176; y: 95; x-offset: 28; y-offset: 0}
-field[player=him] die {x: 43; y:95 ; x-offset: 28 ; y-offset: 0}
+field[player=you] die[id=left] {x: 176; y: 95}
+field[player=you] die[id=right] {x: 204; y: 95}
+field[player=him] die[id=left] {x: 43; y:95}
+field[player=him] die[id=right] {x: 71; y:95}
 die:data(1) {image: uri("die_1.jpg")}
 die:data(2) {image: uri("die_2.jpg")}
 die:data(3) {image: uri("die_3.jpg")}

@@ -64,7 +64,8 @@ field[player=you] {x: 670;y: 30}
 
 die {width: 30; height: 30}
 
-field[player=him] die {x: 60; y:500; x-offset: 45 ; y-offset: -20}
+field[player=him] die[id=left] {x: 60; y:500}
+field[player=him] die[id=right] {x: 105; y:480}
 field[player=him] die:data(1) {image: uri("dice_red_1.png")}
 field[player=him] die:data(2) {image: uri("dice_red_2.png")}
 field[player=him] die:data(3) {image: uri("dice_red_3.png")}
@@ -72,7 +73,8 @@ field[player=him] die:data(4) {image: uri("dice_red_4.png")}
 field[player=him] die:data(5) {image: uri("dice_red_5.png")}
 field[player=him] die:data(6) {image: uri("dice_red_6.png")}
 
-field[player=you] die {x: 690; y: 260; x-offset: 45; y-offset: 20}
+field[player=you] die[id=left] {x: 690; y: 260}
+field[player=you] die[id=right] {x: 735; y: 280}
 field[player=you] die:data(1) {image: uri("dice_blue_1.png")}
 field[player=you] die:data(2) {image: uri("dice_blue_2.png")}
 field[player=you] die:data(3) {image: uri("dice_blue_3.png")}

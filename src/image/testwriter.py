@@ -28,6 +28,9 @@ tests = {
      'o':('AAAAgAAAAAAAAA', 'cAqgAFAAAAAA'),
      'q':('2ObIAEpDu5EBKA', 'cInsAFAAIAAA'),
      'r':('AAAAAAAAAAAAAA', 'AAAAAAAAAAAA'),
+     'rolled_31':('vzsAAFhu2xFABA','QYksASAAIAAA'),
+     'rolled_52':('vzsAAFhu2xFABA','QYkqASAAIAAA'),
+     'rolled_64':('vzsAAFhu2xFABA','QQkzASAAIAAA'),
     }
 
 class Writer(object):
