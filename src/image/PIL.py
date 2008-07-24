@@ -83,7 +83,11 @@ class Draw(bglib.image.draw.Draw):
     x1, y1 = position
     x2 = x1 + size[0]
     y2 = y1 + size[1]
-    self.dc[0].paste(to_paste, (x1, y1, x2, y2))
+    if to_paste.mode == 'RGBA':
+      # mask
+      self.dc[0].paste(to_paste, (x1, y1, x2, y2), to_paste)
+    else:
+      self.dc[0].paste(to_paste, (x1, y1, x2, y2))
 
   def draw_ellipse(self, position, size, fill=None):
     assert self.dc
