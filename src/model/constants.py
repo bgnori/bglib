@@ -30,12 +30,19 @@ money_game = 0
 
 #resing type
 resign_none = 0
-resign_single=1
-resign_gammon=2
-resign_backgammon=3
+resign_single = 1
+resign_gammon = 2
+resign_backgammon = 3
 resign_types = (resign_single, resign_gammon, resign_backgammon)
 resign_strings = ('none', 'single', 'gammon', 'backgammon')
 
 initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
+
+no_double = 0
+double_take = 1
+double_pass = 2
+too_good_to_double = 3
+cubeaction_types = (no_double, double_take, double_pass, too_good_to_double)
+cubeaction_strings = ('No double', 'Double, take', 'Double, pass', 'Too good to double')
 
