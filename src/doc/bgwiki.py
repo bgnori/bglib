@@ -7,8 +7,8 @@
 import re
 import string
 
+import bglib.doc
 import bglib.doc.html
-import bglib.doc.viewer
 import bglib.doc.macro
 import bglib.doc.rst
 
@@ -237,7 +237,7 @@ class ElementStack(object):
   def empty(self):
     return ''.join(list(self.pop_L(self.iter_from_top())))
 
-class BaseFormatter(bglib.doc.viewer.Formatter):
+class BaseFormatter(bglib.doc.Formatter):
   _compiled = None
   def make_pdf(self, text):
     #FIXME not implemented
@@ -346,7 +346,7 @@ class ExternalFormatterElement(Element):
     return self.formatter
 
 
-class PreformatFormatter(bglib.doc.viewer.Formatter):
+class PreformatFormatter(bglib.doc.Formatter):
   def make_html(self, text):
     return bglib.doc.html.escape(text)
 

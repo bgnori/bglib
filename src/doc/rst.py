@@ -4,12 +4,11 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
-import StringIO
 from docutils import core, io
 
-import bglib.doc.viewer
+import bglib.doc
 
-class Formatter(bglib.doc.viewer.Formatter):
+class Formatter(bglib.doc.Formatter):
   '''
     http://docutils.sourceforge.net/rst.html
     http://www.planewave.org/translations/rst/quickref.html
