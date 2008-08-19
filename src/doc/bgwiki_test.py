@@ -7,20 +7,20 @@
 import re
 import unittest
 
-import macro
-import bgwiki
-import mock
-import viewer_type
+import bglib.doc.macro
+import bglib.doc.bgwiki
+import bglib.doc.mock
+import bglib.doc.viewer_type
 
 
 class ElementTest(unittest.TestCase):
   def setUp(self):
-    self.stack = bgwiki.ElementStack()
+    self.stack = bglib.doc.bgwiki.ElementStack()
   def test_is_acceptable_of_Span(self):
-    b = bgwiki.BoldElement()
-    i = bgwiki.ItalicElement()
-    isinstance(b, bgwiki.SpanElement)
-    isinstance(i, bgwiki.SpanElement)
+    b = bglib.doc.bgwiki.BoldElement()
+    i = bglib.doc.bgwiki.ItalicElement()
+    isinstance(b, bglib.doc.bgwiki.SpanElement)
+    isinstance(i, bglib.doc.bgwiki.SpanElement)
     self.assert_(i.is_acceptable(b))
     self.assert_(b.is_acceptable(i))
 
@@ -38,11 +38,11 @@ class ElementTest(unittest.TestCase):
     )
     
   def test_is_acceptable_of_itemize(self):
-    b = bgwiki.BoldElement()
-    i = bgwiki.ItemizeElement()
-    o = bgwiki.ListElement()
-    isinstance(i, bgwiki.LineElement)
-    isinstance(o, bgwiki.BoxElement)
+    b = bglib.doc.bgwiki.BoldElement()
+    i = bglib.doc.bgwiki.ItemizeElement()
+    o = bglib.doc.bgwiki.ListElement()
+    isinstance(i, bglib.doc.bgwiki.LineElement)
+    isinstance(o, bglib.doc.bgwiki.BoxElement)
     self.assert_(i.is_acceptable(b))
     self.assert_(o.is_acceptable(i))
     self.assert_(o.is_acceptable(b))
@@ -55,22 +55,22 @@ class RegexpTest(unittest.TestCase):
   def setUp(self):
     pass
   def test_regexp(self):
-    for p in bgwiki.LineFormatter.patterns():
+    for p in bglib.doc.bgwiki.LineFormatter.patterns():
       print p
       r = re.compile(p)
 
-class FormatterDuckTypeTest(viewer_type.FormatterDuckTypeTest):
+class FormatterDuckTypeTest(bglib.doc.viewer_type.FormatterDuckTypeTest):
   def setUp(self):
-    db = mock.DataBaseMock()
-    self.target = bgwiki.Formatter(db)
+    db = bglib.doc.mock.DataBaseMock()
+    self.target = bglib.doc.bgwiki.Formatter(db)
 
 class FormatterTest(unittest.TestCase):
   def setUp(self):
-    db = mock.DataBaseMock()
-    stack = bgwiki.ElementStack()
-    macroprocessor = macro.Processor(db)
-    self.line = bgwiki.LineFormatter(stack, macroprocessor)
-    self.wiki = bgwiki.Formatter(db)
+    db = bglib.doc.mock.DataBaseMock()
+    stack = bglib.doc.bgwiki.ElementStack()
+    macroprocessor = bglib.doc.macro.Processor(db)
+    self.line = bglib.doc.bgwiki.LineFormatter(stack, macroprocessor)
+    self.wiki = bglib.doc.bgwiki.Formatter(db)
 
   def test_bold(self):
     self.assertEqual(
@@ -294,10 +294,10 @@ class FormatterTest(unittest.TestCase):
        ))
 
   def test_preformatted_x(self):
-    e = bgwiki.ExternalFormatterElement()
+    e = bglib.doc.bgwiki.ExternalFormatterElement()
     self.wiki.stack.push(e)
     f = self.wiki.get_formatter()
-    self.assert_(isinstance(f, bgwiki.ExternalFormatter))
+    self.assert_(isinstance(f, bglib.doc.bgwiki.ExternalFormatter))
     self.assertEqual(f.make_html("#!XXX\n"), "")
     self.assertEqual(f.make_html("}}}\n"), "</pre>\n")
     self.assertEqual(len(self.wiki.stack), 0)

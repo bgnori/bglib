@@ -7,12 +7,10 @@
 import re
 import string
 
-import html
-
-import viewer
-
-import macro
-import rst
+import bglib.doc.html
+import bglib.doc.viewer
+import bglib.doc.macro
+import bglib.doc.rst
 
 class Element(object):
   html_element = None
@@ -239,7 +237,7 @@ class ElementStack(object):
   def empty(self):
     return ''.join(list(self.pop_L(self.iter_from_top())))
 
-class BaseFormatter(viewer.Formatter):
+class BaseFormatter(bglib.doc.viewer.Formatter):
   _compiled = None
   def make_pdf(self, text):
     #FIXME not implemented
@@ -299,7 +297,7 @@ class ExternalFormatter(BaseFormatter):
     self.buf = ''
     self.selected = PreformatFormatter
     self._known_formatters = dict(
-         rst=rst.Formatter,
+         rst=bglib.doc.rst.Formatter,
          preformat=PreformatFormatter,
     )
 
@@ -348,9 +346,9 @@ class ExternalFormatterElement(Element):
     return self.formatter
 
 
-class PreformatFormatter(viewer.Formatter):
+class PreformatFormatter(bglib.doc.viewer.Formatter):
   def make_html(self, text):
-    return html.escape(text)
+    return bglib.doc.html.escape(text)
 
 class LineFormatter(BaseFormatter):
 
@@ -399,7 +397,7 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_definition_header>^\w+::$)",
     r"(?P<_pattern_quote_or_definition_body>^[ ]{2})", # Line starts with WhiteSpaces but NOT ITEMIZE.
     r"(?P<_pattern_macro>\[\[(?P<macro_name>\w+)(\((?P<macro_args>[a-zA-Z0-9,.=/#]+)\))?\]\])",
-    r"(?P<_pattern_escape_html>(%s))"%html.UNSAFE_LETTERS,
+    r"(?P<_pattern_escape_html>(%s))"%bglib.doc.html.UNSAFE_LETTERS,
   ]
 
   def __init__(self, stack, macroprocessor):
@@ -422,14 +420,14 @@ class LineFormatter(BaseFormatter):
     for name, match in matchobj.groupdict().items():
       if match:
         if match[0] == '!':
-          return html.escape(match[1:])
+          return bglib.doc.html.escape(match[1:])
         handler_name = '_handle' + name
         handler = getattr(self, handler_name, None)
         if handler:
           return handler(match, matchobj)
 
   def _handle_pattern_escape_html(self, match, matchobj):
-    return html.escape(match)
+    return bglib.doc.html.escape(match)
 
   def _handle_pattern_bold(self, match, matchobj):
     return self.start_or_end_handler(BoldElement)
@@ -554,7 +552,7 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_definition_header>^\w+::$)",
     return self.end_handler(DefinitionHeaderElement) + \
            self.start_on_not_exist_handler(DefinitionListElement) + \
-           '<dt>%s</dt>'%html.escape(match[:-2])
+           '<dt>%s</dt>'%bglib.doc.html.escape(match[:-2])
 
   def _handle_pattern_quote_or_definition_body(self, match, matchobj):
     found, L = self.stack.find(DefinitionListElement)
@@ -597,27 +595,27 @@ class LineFormatter(BaseFormatter):
     t = string.Template(
       '''<a class="wiki-link" href="/wiki/$camelcased">'''
       '''$camelcased</a>''')
-    return t.substitute(camelcased=html.escape(match))
+    return t.substitute(camelcased=bglib.doc.html.escape(match))
 
   def _handle_pattern_auto_anchor(self, match, matchobj):
     t = string.Template('<a class="ext-link" href="$url"><span class="icon">$url</span></a>')
-    return t.substitute(url=html.escape(match))
+    return t.substitute(url=bglib.doc.html.escape(match))
 
   def _handle_pattern_scheme_wikiname(self, match, matchobj):
     #>!?\[wiki:\w+\])",
     t = string.Template('<a class="wiki-link" href="/wiki/$wikiname">$wikiname</a>')
     assert match[0:6] == '[wiki:'
     assert match[-1] == ']'
-    return t.substitute(wikiname=html.escape(match[6:-1]))
+    return t.substitute(wikiname=bglib.doc.html.escape(match[6:-1]))
 
   def _handle_pattern_scheme_url(self, match, matchobj):
     t = string.Template('''<a class="ext-link" href="$url"><span class="icon">$disp</span></a>''')
     d = matchobj.groupdict()
     if d['disp']:
-      disp = html.escape(d['disp'][1:])
+      disp = bglib.doc.html.escape(d['disp'][1:])
     else:
-      disp = html.escape(d['url_1'])
-    return t.substitute(url=html.escape(d['url_1']), disp=disp)
+      disp = bglib.doc.html.escape(d['url_1'])
+    return t.substitute(url=bglib.doc.html.escape(d['url_1']), disp=disp)
 
   def _handle_pattern_macro(self, match, matchobj):
     d = matchobj.groupdict()
@@ -627,7 +625,7 @@ class Formatter(BaseFormatter):
   def __init__(self, db):
     self.db = db
     self.stack = ElementStack()
-    self.macroprocessor = macro.Processor(db)
+    self.macroprocessor = bglib.doc.macro.Processor(db)
     self.line_formatter = LineFormatter(self.stack, self.macroprocessor)
     self.preformat_formatter = None
 

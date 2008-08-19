@@ -5,12 +5,12 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-import viewer_type
-import rst
+import bglib.doc.viewer_type
+import bglib.doc.rst
 
-class FormatterDuckTypeTest(viewer_type.FormatterDuckTypeTest):
+class FormatterDuckTypeTest(bglib.doc.viewer_type.FormatterDuckTypeTest):
   def setUp(self):
-    self.target = rst.Formatter()
+    self.target = bglib.doc.rst.Formatter()
 
   def sample_test(self):
     self.target.make_html('hogehoge')

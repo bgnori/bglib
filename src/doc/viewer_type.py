@@ -5,11 +5,11 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 import unittest
-import viewer
+import bglib.doc.viewer
 
 class ViewerDuckTypeTest(unittest.TestCase):
   def instance_viewer_test(self):
-    self.assert_(isinstance(self.target, viewer.Viewer))
+    self.assert_(isinstance(self.target, bglib.doc.viewer.Viewer))
 
   def has_make_html_test(self):
     self.assert_(hasattr(self.target, 'make_html'))
@@ -22,7 +22,7 @@ class ViewerDuckTypeTest(unittest.TestCase):
 
 class FormatterDuckTypeTest(ViewerDuckTypeTest):
   def instance_formatter_test(self):
-    self.assert_(isinstance(self.target, viewer.Formatter))
+    self.assert_(isinstance(self.target, bglib.doc.viewer.Formatter))
 
   def call_make_html_test(self):
     f = getattr(self.target, 'make_html')

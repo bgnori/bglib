@@ -6,12 +6,12 @@
 #
 import unittest
 import bglib.model.constants
-import macro
-import mock
+import bglib.doc.macro
+import bglib.doc.mock
 
 class MacroTest(unittest.TestCase):
   def setUp(self):
-    self.macroprocessor = macro.Processor(mock.DataBaseMock())
+    self.macroprocessor = bglib.doc.macro.Processor(bglib.doc.mock.DataBaseMock())
 
   def test_bad_handler(self):
     self.assertEqual(

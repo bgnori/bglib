@@ -8,7 +8,7 @@ import string
 import re
 import bglib.model.constants
 
-import html 
+import bglib.doc.html 
 
 def signed_one_three(f):
   assert isinstance(f, float)
@@ -33,10 +33,10 @@ class Processor(object):
   
   def bad_name_handler(self, name, args):
     t = string.Template('''<div class="error">No such macro "$name" with argument "$args" </div>''')
-    return t.substitute(name=html.escape(name), args=html.escape(args or 'None'))
+    return t.substitute(name=bglib.doc.html.escape(name), args=bglib.doc.html.escape(args or 'None'))
 
   def bad_args_handler(self, name, args):
-    return '''<div class="error">Bad args "%s" for %s</div>\n'''%(html.escape(args), name)
+    return '''<div class="error">Bad args "%s" for %s</div>\n'''%(bglib.doc.html.escape(args), name)
 
   def BR(self, args):
     return '<br />'

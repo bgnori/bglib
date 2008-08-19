@@ -6,29 +6,30 @@
 #
 import unittest
 
-import html
+import bglib.doc.html
+
 class HTMLEscapeTest(unittest.TestCase):
   def test_escape_lt(self):
     self.assertEqual(
-      html.escape('<'),
+      bglib.doc.html.escape('<'),
       '&lt;')
 
   def test_escape_gt(self):
     self.assertEqual(
-      html.escape('>'),
+      bglib.doc.html.escape('>'),
       '&gt;')
 
   def test_escape_amp(self):
     self.assertEqual(
-      html.escape('&'),
+      bglib.doc.html.escape('&'),
       '&amp;')
 
   def test_escape_combined(self):
     self.assertEqual(
-      html.escape('&<>'),
+      bglib.doc.html.escape('&<>'),
       '&amp;&lt;&gt;')
 
   def test_escape_combined(self):
     self.assertEqual(
-      html.escape('!&<>'),
+      bglib.doc.html.escape('!&<>'),
       '!&amp;&lt;&gt;')
