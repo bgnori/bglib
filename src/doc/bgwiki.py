@@ -283,72 +283,77 @@ class BaseFormatter(bglib.doc.Formatter):
       return self.start_handler(*element_classes)
 
 
-class ExternalFormatter(BaseFormatter):
+class WrappingFormatterElement(Element, BaseFormatter):
   PREFORMAT_END_TOKEN = r"}}}"
   _patterns = [ #order matters!, first come first match.
     r"(?P<_pattern_preformat_end>^%s$)"%PREFORMAT_END_TOKEN,
-    r"(?P<_pattern_processor_specifier>^#!(?P<processor_name>[A-Za-z]+)\n$)",
-    r"(?P<_pattern_rest_of_the_world>.*)",
+    r"(?P<_pattern_processor_specifier>^#!(?P<processor_name>\w+)$)",
+    r"(?P<_pattern_rest_of_the_world>^.*$)",
   ]
   _known_formatters = None
 
-  def __init__(self, stack):
-    self.stack = stack
+  def __init__(self):
+    Element.__init__(self)
+    self.stack = None #BaseFormatter needs this.
     self.buf = ''
-    self.selected = PreformatFormatter
+    self.wrapped = None
     self._known_formatters = dict(
          rst=bglib.doc.rst.Formatter,
          preformat=PreformatFormatter,
     )
+  def open(self):
+    return ''
 
-  def resolve_formatter(self, name):
-    return self._known_formatters.get(name, PreformatFormatter)
+  def close(self):
+    if self.wrapped is None:
+      self.prepare_formatter()
+    return self.wrapped.make_html(self.buf)
+
+  def set_stack(self, stack):
+    self.stack = stack
+
+  def prepare_formatter(self, name=None):
+    klass = self._known_formatters.get(name, PreformatFormatter)
+    self.wrapped = klass()
 
   def make_html(self, input_line):
-    return re.sub(self.get_regexp(), self._format, input_line)
+    print 'WrappingFormatterElement::make_html', repr(input_line)
+    if input_line:
+      return re.sub(self.get_regexp(), self._format, input_line)
+    else:
+      self.buf += '\n' # adding EmptyLine
+      return
 
   def _format(self, matchobj):
+    assert self.stack
     for name, match in matchobj.groupdict().items():
       if match:
         handler_name = '_handle' + name
         handler = getattr(self, handler_name, None)
         if handler:
           return handler(match, matchobj)
-        return ''
 
   def _handle_pattern_preformat_end(self, match, matchobj):
-    formatter = self.selected()
-    return formatter.make_html(self.buf) + \
-           self.end_handler(ExternalFormatterElement)
+    assert self.stack
+    return self.end_handler(WrappingFormatterElement) #self terminating
 
   def _handle_pattern_rest_of_the_world(self, match, matchobj):
-    self.buf += match
+    assert self.stack
+    print '_handle_pattern_rest_of_the_world', repr(match)
+    self.buf += match + '\n'
     return ''
 
   def _handle_pattern_processor_specifier(self, match, matchobj):
+    assert self.stack
     d = matchobj.groupdict()
-    print '_handle_pattern_processor_specifier'
-    self.selected = self.resolve_formatter(d['processor_name'])
+    self.prepare_formatter(d['processor_name'])
     return ''
-
-class ExternalFormatterElement(Element):
-  def __init__(self):
-    Element.__init__(self)
-    self.formatter = None
-  def open(self):
-    return ''
-  def close(self):
-    if self.formatter:
-      return self.formatter.make_html(self.formatter.buf) #FIXME!
-    return ''
-  def make_formatter(self, stack):
-    self.formatter = ExternalFormatter(stack)
-    return self.formatter
 
 
 class PreformatFormatter(bglib.doc.Formatter):
   def make_html(self, text):
-    return bglib.doc.html.escape(text)
+    print 'PreformatFormatter got:', repr(text)
+    return '<pre class="wiki">' + bglib.doc.html.escape(text) + '</pre>\n'
 
 class LineFormatter(BaseFormatter):
 
@@ -469,7 +474,7 @@ class LineFormatter(BaseFormatter):
     return self.end_handler(TableRowElement)
 
   def _handle_pattern_preformat_start(self, match, matchobj):
-    return self.start_handler(ExternalFormatterElement)
+    return self.start_handler(WrappingFormatterElement)
 
   def _calc_indent(self, match, letter):
     indent = 0
@@ -630,10 +635,10 @@ class Formatter(BaseFormatter):
     self.preformat_formatter = None
 
   def get_formatter(self):
-    if self.stack and isinstance(self.stack.peek(), ExternalFormatterElement):
-      if self.preformat_formatter is None:
-        self.preformat_formatter = self.stack.peek().make_formatter(self.stack)
-      return self.preformat_formatter
+    if self.stack and isinstance(self.stack.peek(), WrappingFormatterElement):
+      wrapper = self.stack.peek()
+      wrapper.set_stack(self.stack)
+      return wrapper
     else:
       return self.line_formatter
 
@@ -643,7 +648,8 @@ class Formatter(BaseFormatter):
       formatter = self.get_formatter()
       html_fragment = formatter.make_html(line)
       if html:
-        html = html + '\n' + html_fragment 
+        if html_fragment:
+          html = html + '\n' + html_fragment 
       else:
         html = html_fragment
     return html + self.flush()

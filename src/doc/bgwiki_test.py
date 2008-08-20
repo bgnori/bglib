@@ -293,25 +293,47 @@ class FormatterTest(unittest.TestCase):
        "</dd></dl>\n"
        ))
 
-  def test_preformatted_x(self):
-    e = bglib.doc.bgwiki.ExternalFormatterElement()
+  def test_get_formatter_0(self):
+    f = self.wiki.get_formatter()
+    self.assert_(isinstance(f, bglib.doc.bgwiki.LineFormatter))
+
+  def test_get_formatter_1(self):
+    e = bglib.doc.bgwiki.WrappingFormatterElement()
     self.wiki.stack.push(e)
     f = self.wiki.get_formatter()
-    self.assert_(isinstance(f, bglib.doc.bgwiki.ExternalFormatter))
-    self.assertEqual(f.make_html("#!XXX\n"), "")
-    self.assertEqual(f.make_html("}}}\n"), "</pre>\n")
-    self.assertEqual(len(self.wiki.stack), 0)
+    self.assert_(isinstance(f, bglib.doc.bgwiki.WrappingFormatterElement))
 
-  def test_preformatted_start(self):
+  def test_preformatted_empty(self):
     self.assertEqual(
       self.wiki.make_html('{{{\n}}}\n'),
       '<pre class="wiki"></pre>\n')
+
+  def test_preformatted_emptyline(self):
+    self.assertEqual(
+      self.wiki.make_html('{{{\n\n}}}\n'),
+      '<pre class="wiki">\n</pre>\n')
+
+  def test_preformatted_emptylines(self):
+    self.assertEqual(
+      self.wiki.make_html('{{{\n\n\n}}}\n'),
+      '<pre class="wiki">\n\n</pre>\n')
 
   def test_preformatted(self):
     self.assertEqual(
       self.wiki.make_html('{{{\n'
                       '  def HelloWorld():\n'
-                      '     print "Hello World\n'
+                      '     print "Hello World"\n'
+                      '}}}\n'),
+      ('<pre class="wiki">  def HelloWorld():\n'
+       '     print "Hello World"\n'
+       '</pre>\n'))
+
+  def test_preformatted_2(self):
+    self.assertEqual(
+      self.wiki.make_html('{{{\n'
+                      '#!preformat\n'
+                      '  def HelloWorld():\n'
+                      '     print "Hello World"\n'
                       '}}}\n'),
       ('<pre class="wiki">  def HelloWorld():\n'
        '     print "Hello World"\n'

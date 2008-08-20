@@ -19,5 +19,3 @@ def escape(s):
   return re.sub(UNSAFE_LETTERS, handler, s)
 
 
-
-
