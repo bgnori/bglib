@@ -378,9 +378,9 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_subscript>!?%s)"%SUBSCRIPT_TOKEN,
     r"(?P<_pattern_superscript>!?%s)"%SUPERSCRIPT_TOKEN,
     r"(?P<_pattern_monospace>!?%s)"%MONOSPACE_TOKEN,
-    r"(?P<_pattern_preformat_start>!?^%s)"%PREFORMAT_START_TOKEN,
+    r"(?P<_pattern_preformat_start>!?^%s$)"%PREFORMAT_START_TOKEN,
     r"(?P<_pattern_preformat_end>!?^%s$)"%PREFORMAT_END_TOKEN,
-    r"(?P<_pattern_monospace_start>!?%s(?!$))"%PREFORMAT_START_TOKEN,
+    r"(?P<_pattern_monospace_start>!?%s)"%PREFORMAT_START_TOKEN,
     r"(?P<_pattern_monospace_end>!?%s)"%PREFORMAT_END_TOKEN,
     r"(?P<_pattern_entry_link>!?(#|entry:)\d+)",
     r"(?P<_pattern_query_link>!?((query:\d+)|(\{\d+\})))",
@@ -459,6 +459,7 @@ class LineFormatter(BaseFormatter):
     return self.start_or_end_handler(MonospaceElement)
 
   def _handle_pattern_monospace_start(self, match, matchobj):
+    print '_handle_pattern_monospace_start'
     return self.start_handler(MonospaceElement)
 
   def _handle_pattern_monospace_end(self, match, matchobj):
