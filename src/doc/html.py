@@ -18,4 +18,6 @@ def escape(s):
       return '&amp;'
   return re.sub(UNSAFE_LETTERS, handler, s)
 
+def is_valid_nesting(html):
+  return True
 
