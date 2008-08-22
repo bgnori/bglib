@@ -9,8 +9,8 @@ import sys
 import StringIO
 import traceback
 import random
-import xml.parsers.expat
 
+import bglib.doc.html
 
 class Error(object):
   def __init__(self, e):
@@ -75,25 +75,8 @@ class Gene(object):
 
   def verify(self):
     assert self.html
-    p = xml.parsers.expat.ParserCreate()
     try:
-      p.Parse(
-      '''<?xml version="1.0" encoding="us-ascii"?>\n''')
-      p.Parse(
-      '''<!DOCTYPE html PUBLIC "'''
-      '''-//W3C//DTD XHTML 1.0 Strict//EN"\n'''
-      '''"http://www.w3.org/TR/xhtml1'''
-      '''/DTD/xhtml1-strict.dtd">\n''')
-      p.Parse(
-      '''<html xmlns="http://www.w3.org/\n'''
-      '''1999/xhtml" xml:lang="en">\n''')
-      #'''lang="en">\n''')
-      p.Parse(
-      '''<head><title>test</title></head>\n''')
-      p.Parse('''<body>\n''')
-
-      p.Parse(self.html)
-      p.Parse('''</body></html>\n''', True)
+      bglib.doc.html.validate(self.html)
     except Exception, e:
       return ParseError(e)
     return True

@@ -277,6 +277,52 @@ class FormatterTest(unittest.TestCase):
        '</li></ul>\n'
       ))
 
+  def test_bad_indent(self):
+    self.assertEqual(self.wiki.make_html('  8 '),
+      ('<ul>\n'
+       '<li>'
+       '<ol>\n'
+       '<li>Item 1\n'
+       )
+    )
+
+  def test_bad_indent_a(self):
+    self.assertEqual(self.wiki.make_html('  a. Item 1'),
+      ('<ul>\n'
+       '<li>'
+       '<ol>\n'
+       '<li>Item 1\n'
+       '</ol>\n'
+       '</li>'
+       '</ul>\n'
+       )
+    )
+
+  def test_bad_indent_i(self):
+    self.assertEqual(self.wiki.make_html('  i. Item 1'),
+      ('<ul>\n'
+       '<li>'
+       '<ol>\n'
+       '<li>Item 1\n'
+       '</ol>\n'
+       '</li>'
+       '</ul>\n'
+       )
+    )
+
+  def test_bad_indent_1(self):
+    self.assertEqual(self.wiki.make_html('  1. Item 1'),
+      ('<ul>\n'
+       '<li>'
+       '<ol>\n'
+       '<li>Item 1\n'
+       '</ol>\n'
+       '</li>'
+       '</ul>\n'
+       )
+    )
+
+
   def test_definition(self):
     self.assertEqual(
       self.wiki.make_html("llama::\n"
@@ -493,4 +539,5 @@ class FormatterTest(unittest.TestCase):
     self.assertEqual(
       self.line.make_html('!&<>'),
       '!&amp;&lt;&gt;')
+
 
