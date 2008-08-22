@@ -145,7 +145,7 @@ class CitationElement(BoxElement):
 
 class ListElement(BoxElement):
   _design = dict(star=('ul', None, None),
-              sign = ('ul', 'class="sign"', 
+              sign=('ul', 'class="sign"', 
                {'+':'class="plus"', # class names for li elements
                 '++':'class="doubleplus"', 
                 '+++':'class="tripleplus"',
@@ -162,7 +162,7 @@ class ListElement(BoxElement):
 
   def get_design_name(self):
     for key in self._design:
-      if self.attrs[key] is not None:
+      if self.attrs[key]:
         return key
     assert False
 
@@ -317,7 +317,6 @@ class WrappingFormatterElement(Element, BaseFormatter):
     self.wrapped = klass()
 
   def make_html(self, input_line):
-    print 'WrappingFormatterElement::make_html', repr(input_line)
     if input_line:
       return re.sub(self.get_regexp(), self._format, input_line)
     else:
@@ -339,7 +338,6 @@ class WrappingFormatterElement(Element, BaseFormatter):
 
   def _handle_pattern_rest_of_the_world(self, match, matchobj):
     assert self.stack
-    print '_handle_pattern_rest_of_the_world', repr(match)
     self.buf += match + '\n'
     return ''
 
@@ -352,7 +350,6 @@ class WrappingFormatterElement(Element, BaseFormatter):
 
 class PreformatFormatter(bglib.doc.Formatter):
   def make_html(self, text):
-    print 'PreformatFormatter got:', repr(text)
     return '<pre class="wiki">' + bglib.doc.html.escape(text) + '</pre>\n'
 
 class LineFormatter(BaseFormatter):
@@ -459,7 +456,6 @@ class LineFormatter(BaseFormatter):
     return self.start_or_end_handler(MonospaceElement)
 
   def _handle_pattern_monospace_start(self, match, matchobj):
-    print '_handle_pattern_monospace_start'
     return self.start_handler(MonospaceElement)
 
   def _handle_pattern_monospace_end(self, match, matchobj):
@@ -540,8 +536,12 @@ class LineFormatter(BaseFormatter):
       found, L = self.stack.find(ListElement)
       parent = L[-1]
     elif indent > nest:
-      assert indent == nest + 1 #indentation error
-      # need to nest one more List Element
+      while indent > nest + 1:
+        #bad indentation, push ListElement to balance.
+        r += self.stack.push(ListElement(star='*'))
+        nest += 1
+      assert indent == nest + 1
+      # need to nest just one more List Element
       d = matchobj.groupdict()
       parent = ListElement(**d)
       r += self.stack.push(parent)

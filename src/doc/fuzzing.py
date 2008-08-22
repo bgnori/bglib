@@ -5,8 +5,29 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
+import sys
+import StringIO
+import traceback
 import random
-import bglib.doc.html
+import xml.parsers.expat
+
+
+class Error(object):
+  def __init__(self, e):
+    self.exception = e
+    buf = StringIO.StringIO()
+    traceback.print_tb(sys.exc_info()[2], file=buf)
+    self.stacktrace = buf.getvalue()
+    buf.close()
+  def __nonzero__(self):
+    return False
+
+class FormatError(Error):
+  pass
+
+class ParseError(Error):
+  pass
+
 
 class Gene(object):
   seps = '\n '
@@ -16,7 +37,8 @@ class Gene(object):
   romaon_n ='iv'
   words = ["""http:""", """https:""", 
            """query:""", """entry:""", 
-           """match:""", """wiki:""",]
+           """match:""", """wiki:""",
+           """||""", """CamelWord""",]
   single = list(seps + symbols + numeric + alpha_n + romaon_n)
   multi = words
 
@@ -30,33 +52,65 @@ class Gene(object):
     return x[n]
 
   def __init__(self, code):
-    self.code = code
+    self.code = tuple(code)
+    self.html = None
+
+  def __hash__(self):
+    return hash(self.code)
+
+  def __str__(self):
+    return '<Gene: code:%s\n, text:%s\n, html:%s\n>'%\
+             (repr(self.code), repr(self.get_text()), repr(self.html))
 
   def get_text(self):
     return ''.join([Gene.num_to_text(c) for c in self.code])
 
-  def is_ok(self, formatter):
+  def format(self, formatter):
     text = self.get_text()
     try:
-      html = formatter.make_html(text)
+      self.html = formatter.make_html(text)
     except Exception, e:
-      print e
-      return False
-    return bglib.doc.html.is_valid_nesting(html)
+      return FormatError(e) 
+    return True
 
-  def subg(self):
+  def verify(self):
+    assert self.html
+    p = xml.parsers.expat.ParserCreate()
+    try:
+      p.Parse(
+      '''<?xml version="1.0" encoding="us-ascii"?>\n''')
+      p.Parse(
+      '''<!DOCTYPE html PUBLIC "'''
+      '''-//W3C//DTD XHTML 1.0 Strict//EN"\n'''
+      '''"http://www.w3.org/TR/xhtml1'''
+      '''/DTD/xhtml1-strict.dtd">\n''')
+      p.Parse(
+      '''<html xmlns="http://www.w3.org/\n'''
+      '''1999/xhtml" xml:lang="en">\n''')
+      #'''lang="en">\n''')
+      p.Parse(
+      '''<head><title>test</title></head>\n''')
+      p.Parse('''<body>\n''')
+
+      p.Parse(self.html)
+      p.Parse('''</body></html>\n''', True)
+    except Exception, e:
+      return ParseError(e)
+    return True
+
+  def iter_subset(self):
     for i, c in enumerate(self.code):
       yield Gene(self.code[:i] + self.code[i+1:])
   
   def shorter_fails(self):
-    for sub in subg(g):
+    for sub in iter_subset(g):
       if not is_ok(sub):
         yield sub
 
 class Vat(object):
   def __init__(self):
     pass
-  
+
 
 if __name__ == "__main__":
   '''
@@ -65,12 +119,23 @@ if __name__ == "__main__":
   generate Unittests based on failures.
 
   '''
+  import sys
   from bglib.doc.bgwiki import Formatter
   from bglib.doc.mock import DataBaseMock
   db = DataBaseMock()
   f = Formatter(db)
-  for j in range(100):
-    g = Gene([random.randint(0, Gene.count() - 1 ) for i in range(100)])
-    print repr(g.get_text()), repr(f.make_html(g.get_text()))
-  
+  length = int(sys.argv[1])
+  trials = int(sys.argv[2])
+  for j in range(trials):
+    g = Gene([random.randint(0, Gene.count() - 1 ) for i in range(length)])
+    ok_or_error = g.format(f)
+    if not ok_or_error:
+      print ok_or_error.exception, ok_or_error.stacktrace
+      print g
+      continue
+    ok_or_error = g.verify()
+    if not ok_or_error:
+      print ok_or_error.exception, ok_or_error.stacktrace
+      print g
+      continue
 
