@@ -164,7 +164,7 @@ class ListElement(BoxElement):
     for key in self._design:
       if self.attrs[key]:
         return key
-    assert False
+    return 'star' #default design name
 
   def get_tag_info(self):
     return self._design[self.get_design_name()][:2]
@@ -184,7 +184,7 @@ class ListElement(BoxElement):
     tag, attrs = self.get_tag_info()
     return '</%s>\n'%(tag)
 
-    
+
 
 class ElementStack(object):
   def __init__(self):
@@ -538,7 +538,11 @@ class LineFormatter(BaseFormatter):
     elif indent > nest:
       while indent > nest + 1:
         #bad indentation, push ListElement to balance.
-        r += self.stack.push(ListElement(star='*'))
+        r += self.stack.push(ListElement(star=None,
+                                         ordered_numeric=None,
+                                         ordered_roman=None,
+                                         ordered_alpha=None,
+                                         sign=None))
         nest += 1
       assert indent == nest + 1
       # need to nest just one more List Element

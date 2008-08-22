@@ -278,22 +278,22 @@ class FormatterTest(unittest.TestCase):
       ))
 
   def test_bad_indent(self):
+    #AssertionError: '<ul>\n<ol>\n<li>\n</li></ol>\n</ul>\n' != '<ul>\n<li><ol>\n<li>Item 1\n'
     self.assertEqual(self.wiki.make_html('  8 '),
       ('<ul>\n'
-       '<li>'
        '<ol>\n'
-       '<li>Item 1\n'
+       '<li>\n'
+       '</li></ol>\n'
+       '</ul>\n'
        )
     )
 
   def test_bad_indent_a(self):
-    self.assertEqual(self.wiki.make_html('  a. Item 1'),
+    self.assertEqual(self.wiki.make_html('  a. Item a'),
       ('<ul>\n'
-       '<li>'
-       '<ol>\n'
-       '<li>Item 1\n'
-       '</ol>\n'
-       '</li>'
+       '<ol class="loweralpha">\n'
+       '<li>Item a\n'
+       '</li></ol>\n'
        '</ul>\n'
        )
     )
@@ -301,11 +301,9 @@ class FormatterTest(unittest.TestCase):
   def test_bad_indent_i(self):
     self.assertEqual(self.wiki.make_html('  i. Item 1'),
       ('<ul>\n'
-       '<li>'
-       '<ol>\n'
+       '<ol class="lowerroman">\n'
        '<li>Item 1\n'
-       '</ol>\n'
-       '</li>'
+       '</li></ol>\n'
        '</ul>\n'
        )
     )
@@ -313,11 +311,9 @@ class FormatterTest(unittest.TestCase):
   def test_bad_indent_1(self):
     self.assertEqual(self.wiki.make_html('  1. Item 1'),
       ('<ul>\n'
-       '<li>'
        '<ol>\n'
        '<li>Item 1\n'
-       '</ol>\n'
-       '</li>'
+       '</li></ol>\n'
        '</ul>\n'
        )
     )
