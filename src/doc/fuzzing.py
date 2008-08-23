@@ -30,29 +30,15 @@ class ParseError(Error):
 
 
 class Gene(object):
-  seps = '\n '
-  symbols = """[]'"_~^`{}.:*=-+#|!<>/&"""
-  numeric = '1234567890'
-  alpha_n = 'abcdefgh'
-  romaon_n ='iv'
-  words = ["""http:""", """https:""", 
-           """query:""", """entry:""", 
-           """match:""", """wiki:""",
-           """||""", """CamelWord""",]
-  single = list(seps + symbols + numeric + alpha_n + romaon_n)
-  multi = words
+  def count(self):
+    return len(self.single) + len(self.multi)
 
-  @classmethod
-  def count(cls):
-    return len(cls.single) + len(cls.multi)
-
-  @classmethod
-  def num_to_text(cls, n):
-    x = cls.single + cls.multi
+  def num_to_text(self, n):
+    x = self.single + self.multi
     return x[n]
 
-  def __init__(self, code):
-    self.code = tuple(code)
+  def __init__(self, rnd, length):
+    self.code = tuple([rnd.randint(0, self.count() - 1 ) for i in range(length)])
     self.html = None
 
   def __hash__(self):
@@ -63,7 +49,7 @@ class Gene(object):
              (repr(self.code), repr(self.get_text()), repr(self.html))
 
   def get_text(self):
-    return ''.join([Gene.num_to_text(c) for c in self.code])
+    return ''.join([self.num_to_text(c) for c in self.code])
 
   def format(self, formatter):
     text = self.get_text()
@@ -90,28 +76,13 @@ class Gene(object):
       if not is_ok(sub):
         yield sub
 
-class Vat(object):
-  def __init__(self):
-    pass
-
-
-if __name__ == "__main__":
-  '''
-  start fuzzing test
-  and 
-  generate Unittests based on failures.
-
-  '''
+def fuzz_it(gklass, formatter):
   import sys
-  from bglib.doc.bgwiki import Formatter
-  from bglib.doc.mock import DataBaseMock
-  db = DataBaseMock()
-  f = Formatter(db)
   length = int(sys.argv[1])
   trials = int(sys.argv[2])
   for j in range(trials):
-    g = Gene([random.randint(0, Gene.count() - 1 ) for i in range(length)])
-    ok_or_error = g.format(f)
+    g = gklass(random, length)
+    ok_or_error = g.format(formatter)
     if not ok_or_error:
       print ok_or_error.exception, ok_or_error.stacktrace
       print g
@@ -121,4 +92,5 @@ if __name__ == "__main__":
       print ok_or_error.exception, ok_or_error.stacktrace
       print g
       continue
+
 

@@ -664,3 +664,24 @@ class Formatter(BaseFormatter):
       return ''
     return '\n' + self.stack.empty()
 
+from bglib.doc.fuzzing import Gene
+class wGene(Gene):
+  seps = '\n '
+  symbols = """[]'"_~^`{}.:*=-+#|!<>/&Xx"""
+  numeric = '1234567890'
+  alpha_n = 'abcdefgh'
+  romaon_n ='iv'
+  words = ["""http:""", """https:""", 
+           """query:""", """entry:""", 
+           """match:""", """wiki:""",
+           """||""", """CamelWord""",]
+  single = list(seps + symbols + numeric + alpha_n + romaon_n)
+  multi = words
+
+if __name__ == "__main__":
+  from bglib.doc.fuzzing import fuzz_it
+  from bglib.doc.mock import DataBaseMock
+  
+  db = DataBaseMock()
+  fuzz_it(wGene, Formatter(db))
+

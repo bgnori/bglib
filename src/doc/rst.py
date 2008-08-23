@@ -77,3 +77,8 @@ class Formatter(bglib.doc.Formatter):
   def make_pdf(self, text):
     return ''
 
+
+if __name__ == "__main__":
+  from bglib.doc.fuzzing import fuzz_it
+  fuzz_it(Formatter())
+
