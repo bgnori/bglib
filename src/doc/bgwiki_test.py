@@ -16,6 +16,7 @@ import bglib.doc.viewer_type
 class ElementTest(unittest.TestCase):
   def setUp(self):
     self.stack = bglib.doc.bgwiki.ElementStack()
+
   def test_is_acceptable_of_Span(self):
     b = bglib.doc.bgwiki.BoldElement()
     i = bglib.doc.bgwiki.ItalicElement()
@@ -504,6 +505,34 @@ class FormatterTest(unittest.TestCase):
       self.line.make_html('''[[Timestamp]]'''),
       '<b>Sun Jul 27 08:59:07 2008</b>')
 
+  def test_macro_analysis_move(self):
+    self.assertEqual(
+      self.wiki.make_html('[[Analysis(cNcxAxCY54YBBg:cAn7ADAAIAAA)]]'),
+      ('''<table>\n'''
+'''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
+'''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
+'''<tr class='oddrow'><th rowspan='2'>1</th><td rowspan='2'>21/15(2) 13/7(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.975 </td></tr>\n'''
+'''<tr class='oddrow'><td>0.8</td><td>0.1</td><td>0.0</td><td>0.2</td><td>0.0</td><td>0.0</td></tr>\n'''
+'''<tr class='evenrow'><th rowspan='2'>2</th><td rowspan='2'>21/9(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.914 (-0.061) </td></tr>\n'''
+'''<tr class='evenrow'><td>0.7</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.0</td><td>0.0</td></tr>\n'''
+'''<tr class='oddrow'><th rowspan='2'>3</th><td rowspan='2'>21/15(2) 8/2*(2)</td><td rowspan='2'>0</td><td class='Equity' colspan='6'> +0.614 (-0.362) </td></tr>\n'''
+'''<tr class='oddrow'><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n'''
+       '''</table>\n'''))
+  def test_macro_analysis_cube(self):
+    self.assertEqual(
+      self.make_html('[[Analysis(vzsAAFhu2xFABA:QYkqASAAIAAA)]]'),
+      ('''<table>\n'''
+       '''<tr class='headerrow'><th rowspan='2'>Ply</th><th colspan='6'> Cubeless Eq. </th></tr>\n'''
+       '''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
+       '''<tr class='oddrow'><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.011 (Moeny +0.008) </td></tr>\n'''
+       '''<tr class='oddrow'><td>0.5</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.0</td></tr>\n'''
+       '''</table>\n'''
+       '''<table>\n'''
+       '''<tr class='headerrow'><th>#</th><th>action</th><th colspan='2'> Cubeful Eq. </th></tr>\n'''
+       '''<tr class='actualrow'><th>1</th><td> No double </td><td> +0.236 </td><td>  </td></tr>\n'''
+       '''<tr class='evenrow'><th>2</th><td> Double, pass </td><td> +0.236 </td><td> +0.764 </td></tr>\n'''
+       '''<tr class='oddrow'><th>3</th><td> Double, take </td><td> -0.096 </td><td> -0.332 </td></tr>\n'''
+       '''</table>\n'''))
 
 
   def test_escape_lt(self):
@@ -535,5 +564,66 @@ class FormatterTest(unittest.TestCase):
     self.assertEqual(
       self.line.make_html('!&<>'),
       '!&amp;&lt;&gt;')
+
+  def test_extract_references_wikiname_by_camelcase(self):
+    d = self.wiki.extract_references('''BackgammonBase'''),
+    self.assert_('wikiname' in d)
+    self.assertEqual(d['wikiname'], ["BackgammonBase"])
+
+  def test_wikiname_by_scheme_1(self):
+    self.assertEqual('''[wiki:BackgammonBase]'''),
+    self.assert_('wikiname' in d)
+    self.assertEqual(d['wikiname'], ["BackgammonBase"])
+
+  def test_wikiname_by_scheme_2(self):
+    self.assertEqualself.line.make_html('''[wiki:blot]'''),
+    self.assert_('wikiname' in d)
+    self.assertEqual(d['wikiname'], ["blot"])
+
+  def test_extract_references_wikinames(self):
+    d = self.wiki.extract_references('''BackgammonBase, [wiki:blot]'''),
+    self.assert_('wikiname' in d)
+    self.assertEqual(d['wikiname'], ["BackgammonBase", "blot"])
+
+  def test_extract_references_entry_1(self):
+    d = self.wiki.extract_references('''Entry: #1 or entry:1'''),
+    self.assert_('entry' in d)
+    self.assertEqual(d['entry'], [1])
+
+  def test_extract_references_entry_1(self):
+    d = self.wiki.extract_references('''Entry: #1 or entry:2'''),
+    self.assert_('entry' in d)
+    self.assertEqual(d['entry'], [1, 2])
+
+  def test_extract_references_query_1(self):
+    d = self.wiki.extract_references('''Query: {1} or query:1''')
+    self.assert_('query' in d)
+    self.assertEqual(d['query'], [1])
+
+  def test_extract_references_query_2(self):
+    d = self.wiki.extract_references('''Query: {1} or query:2''')
+    self.assert_('query' in d)
+    self.assertEqual(d['query'], [1, 2])
+
+  def test_extract_references_match_link_1(self):
+    d = self.wiki.extract_references('''Match: m1, [1] or match:1''')
+    self.assert_('query' in d)
+    self.assertEqual(d['match'], [1])
+
+  def test_extract_references_match_link_2(self):
+    d = self.wiki.extract_references('''Match: m2, [1] or match:3''')
+    self.assert_('query' in d)
+    self.assertEqual(d['match'], [1, 2, 3])
+
+  def test_extract_references_escaping_link(self):
+    d = self.wiki.extract_references('''!#42 is not a link''')
+    self.assert_('entry' in d)
+    self.assert_(42 not in d['entry'])
+
+  def test_extract_references_analysis(self):
+    d = self.wiki.extract_references('Analysis(cNcxAxCY54YBBg:cAn7ADAAIAAA)')
+    self.assert_('Analysis' in d)
+    self.assert_('cNcxAxCY54YBBg:cAn7ADAAIAAA' in d['Analysis'])
+
 
 

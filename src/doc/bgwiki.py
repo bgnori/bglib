@@ -659,6 +659,9 @@ class Formatter(BaseFormatter):
         html = html_fragment
     return html + self.flush()
 
+  def extract_references(self, wiki):
+    pass
+
   def flush(self):
     if not self.stack:
       return ''
