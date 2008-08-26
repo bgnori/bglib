@@ -500,10 +500,25 @@ class FormatterTest(unittest.TestCase):
       self.line.make_html('''!#42 is not a link'''),
       '#42 is not a link')
 
-  def test_macros(self):
+  def test_macro_timestamp(self):
     self.assertEqual(
       self.line.make_html('''[[Timestamp]]'''),
       '<b>Sun Jul 27 08:59:07 2008</b>')
+
+  def test_macro_BR(self):
+    self.assertEqual(
+      self.line.make_html('''[[BR]]'''),
+      '<br />')
+
+  def test_macro_Position(self):
+    self.assertEqual(
+      self.line.make_html('''[[Position(vzsAAFhu2xFABA:QYkqASAAIAAA)]]'''),
+      ('''<div class="position">\n'''
+           '''<img src="/image?format=png'''
+           '''&pid=vzsAAFhu2xFABA'''
+           '''&mid=QYkqASAAIAAA'''
+           '''&height=300&width=400&css=minimal" />\n'''
+       '''</div>\n'''))
 
   def test_macro_analysis_move(self):
     self.assertEqual(
