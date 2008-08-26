@@ -379,6 +379,8 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_preformat_end>!?^%s$)"%PREFORMAT_END_TOKEN,
     r"(?P<_pattern_monospace_start>!?%s)"%PREFORMAT_START_TOKEN,
     r"(?P<_pattern_monospace_end>!?%s)"%PREFORMAT_END_TOKEN,
+    r"(?P<_pattern_macro>\[\[(?P<macro_name>\w+)(\((?P<macro_args>\w+)\))?\]\])",
+    #r"(?P<_pattern_macro>\[\[(?P<macro_name>\w+)(\((?P<macro_args>[a-zA-Z0-9,.=/#]+)\))?\]\])",
     r"(?P<_pattern_entry_link>!?(#|entry:)\d+)",
     r"(?P<_pattern_query_link>!?((query:\d+)|(\{\d+\})))",
     r"(?P<_pattern_match_link>!?((m\d+)|(match:\d+)|(\[\d+\])))",
@@ -398,7 +400,6 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_citation>^[>]+[ ])",
     r"(?P<_pattern_definition_header>^\w+::$)",
     r"(?P<_pattern_quote_or_definition_body>^[ ]{2})", # Line starts with WhiteSpaces but NOT ITEMIZE.
-    r"(?P<_pattern_macro>\[\[(?P<macro_name>\w+)(\((?P<macro_args>[a-zA-Z0-9,.=/#]+)\))?\]\])",
     r"(?P<_pattern_escape_html>(%s))"%bglib.doc.html.UNSAFE_LETTERS,
   ]
 
@@ -660,7 +661,7 @@ class Formatter(BaseFormatter):
     return html + self.flush()
 
   def extract_references(self, wiki):
-    pass
+    return dict()
 
   def flush(self):
     if not self.stack:

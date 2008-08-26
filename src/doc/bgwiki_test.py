@@ -508,19 +508,22 @@ class FormatterTest(unittest.TestCase):
   def test_macro_analysis_move(self):
     self.assertEqual(
       self.wiki.make_html('[[Analysis(cNcxAxCY54YBBg:cAn7ADAAIAAA)]]'),
-      ('''<table>\n'''
-'''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
-'''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-'''<tr class='oddrow'><th rowspan='2'>1</th><td rowspan='2'>21/15(2) 13/7(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.975 </td></tr>\n'''
-'''<tr class='oddrow'><td>0.8</td><td>0.1</td><td>0.0</td><td>0.2</td><td>0.0</td><td>0.0</td></tr>\n'''
-'''<tr class='evenrow'><th rowspan='2'>2</th><td rowspan='2'>21/9(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.914 (-0.061) </td></tr>\n'''
-'''<tr class='evenrow'><td>0.7</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.0</td><td>0.0</td></tr>\n'''
-'''<tr class='oddrow'><th rowspan='2'>3</th><td rowspan='2'>21/15(2) 8/2*(2)</td><td rowspan='2'>0</td><td class='Equity' colspan='6'> +0.614 (-0.362) </td></tr>\n'''
-'''<tr class='oddrow'><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n'''
-       '''</table>\n'''))
+      (
+       '''<table>\n'''
+       '''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
+       '''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
+       '''<tr class='oddrow'><th rowspan='2'>1</th><td rowspan='2'>21/15(2) 13/7(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.975 </td></tr>\n'''
+       '''<tr class='oddrow'><td>0.8</td><td>0.1</td><td>0.0</td><td>0.2</td><td>0.0</td><td>0.0</td></tr>\n'''
+       '''<tr class='evenrow'><th rowspan='2'>2</th><td rowspan='2'>21/9(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.914 (-0.061) </td></tr>\n'''
+       '''<tr class='evenrow'><td>0.7</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.0</td><td>0.0</td></tr>\n'''
+       '''<tr class='oddrow'><th rowspan='2'>3</th><td rowspan='2'>21/15(2) 8/2*(2)</td><td rowspan='2'>0</td><td class='Equity' colspan='6'> +0.614 (-0.362) </td></tr>\n'''
+       '''<tr class='oddrow'><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n'''
+       '''</table>\n'''
+      ))
+
   def test_macro_analysis_cube(self):
     self.assertEqual(
-      self.make_html('[[Analysis(vzsAAFhu2xFABA:QYkqASAAIAAA)]]'),
+      self.wiki.make_html('[[Analysis(vzsAAFhu2xFABA:QYkqASAAIAAA)]]'),
       ('''<table>\n'''
        '''<tr class='headerrow'><th rowspan='2'>Ply</th><th colspan='6'> Cubeless Eq. </th></tr>\n'''
        '''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
@@ -571,12 +574,12 @@ class FormatterTest(unittest.TestCase):
     self.assertEqual(d['wikiname'], ["BackgammonBase"])
 
   def test_wikiname_by_scheme_1(self):
-    self.assertEqual('''[wiki:BackgammonBase]'''),
+    d = self.wiki.extract_references('''[wiki:BackgammonBase]''')
     self.assert_('wikiname' in d)
     self.assertEqual(d['wikiname'], ["BackgammonBase"])
 
   def test_wikiname_by_scheme_2(self):
-    self.assertEqualself.line.make_html('''[wiki:blot]'''),
+    d = self.wiki.extract_references('''[wiki:blot]''')
     self.assert_('wikiname' in d)
     self.assertEqual(d['wikiname'], ["blot"])
 
