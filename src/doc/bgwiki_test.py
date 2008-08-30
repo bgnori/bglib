@@ -444,8 +444,8 @@ class FormatterTest(unittest.TestCase):
   def test_entry_link(self):
     self.assertEqual(
       self.line.make_html('''Entry: #1 or entry:1'''),
-      'Entry: <a class="entry" href="/entry/1" title="title">#1</a> '
-      'or <a class="entry" href="/entry/1" title="title">entry:1</a>')
+      'Entry: <a href="/entry/1" class="entry" title="#1">#1</a> '
+      'or <a href="/entry/1" class="entry" title="entry:1">entry:1</a>')
 
   def test_query_link(self):
     self.assertEqual(
