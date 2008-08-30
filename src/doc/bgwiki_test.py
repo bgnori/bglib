@@ -13,45 +13,6 @@ import bglib.doc.mock
 import bglib.doc.viewer_type
 
 
-class ElementTest(unittest.TestCase):
-  def setUp(self):
-    self.stack = bglib.doc.bgwiki.ElementStack()
-
-  def test_is_acceptable_of_Span(self):
-    b = bglib.doc.bgwiki.BoldElement()
-    i = bglib.doc.bgwiki.ItalicElement()
-    isinstance(b, bglib.doc.bgwiki.SpanElement)
-    isinstance(i, bglib.doc.bgwiki.SpanElement)
-    self.assert_(i.is_acceptable(b))
-    self.assert_(b.is_acceptable(i))
-
-    self.assertEqual(
-      self.stack.push(b),
-      '<strong>'
-    )
-    self.assertEqual(
-      self.stack.push(i),
-      '<i>'
-    )
-    self.assertEqual(
-      self.stack.empty(),
-      '</i></strong>'
-    )
-    
-  def test_is_acceptable_of_itemize(self):
-    b = bglib.doc.bgwiki.BoldElement()
-    i = bglib.doc.bgwiki.ItemizeElement()
-    o = bglib.doc.bgwiki.ListElement()
-    isinstance(i, bglib.doc.bgwiki.LineElement)
-    isinstance(o, bglib.doc.bgwiki.BoxElement)
-    self.assert_(i.is_acceptable(b))
-    self.assert_(o.is_acceptable(i))
-    self.assert_(o.is_acceptable(b))
-
-    self.assertFalse(b.is_acceptable(o))
-    self.assertFalse(b.is_acceptable(i))
-
-
 class RegexpTest(unittest.TestCase):
   def setUp(self):
     pass
@@ -68,10 +29,10 @@ class FormatterDuckTypeTest(bglib.doc.viewer_type.FormatterDuckTypeTest):
 class FormatterTest(unittest.TestCase):
   def setUp(self):
     db = bglib.doc.mock.DataBaseMock()
-    stack = bglib.doc.bgwiki.ElementStack()
+    #stack = bglib.doc.bgwiki.ElementStack()
     macroprocessor = bglib.doc.macro.Processor(db)
-    self.line = bglib.doc.bgwiki.LineFormatter(stack, macroprocessor)
     self.wiki = bglib.doc.bgwiki.Formatter(db)
+    self.line = bglib.doc.bgwiki.LineFormatter(self.wiki.editor, macroprocessor)
 
   def test_bold(self):
     self.assertEqual(
@@ -341,8 +302,7 @@ class FormatterTest(unittest.TestCase):
     self.assert_(isinstance(f, bglib.doc.bgwiki.LineFormatter))
 
   def test_get_formatter_1(self):
-    e = bglib.doc.bgwiki.WrappingFormatterElement()
-    self.wiki.stack.push(e)
+    self.wiki.editor.enter(bglib.doc.bgwiki.WrappingFormatterElement)
     f = self.wiki.get_formatter()
     self.assert_(isinstance(f, bglib.doc.bgwiki.WrappingFormatterElement))
 
@@ -442,39 +402,43 @@ class FormatterTest(unittest.TestCase):
   def test_auto_anchor(self):
     self.assertEqual(
       self.line.make_html('''http://www.tonic-water.com/'''),
-      '<a class="ext-link" href="http://www.tonic-water.com/"><span class="icon">http://www.tonic-water.com/</span></a>')
+      ('<a href="http://www.tonic-water.com/" class="ext-link" title="title">'
+       '<span class="icon">http://www.tonic-water.com/</span></a>'))
 
   def test_auto_anchor_https(self):
     self.assertEqual(
       self.line.make_html('''https://www.tonic-water.com/'''),
-      '<a class="ext-link" href="https://www.tonic-water.com/"><span class="icon">https://www.tonic-water.com/</span></a>')
+      ('<a href="https://www.tonic-water.com/" class="ext-link" title="title">'
+       '<span class="icon">https://www.tonic-water.com/</span></a>'))
 
   def test_external_anchor_noname(self):
     self.assertEqual(
       self.line.make_html('''[http://www.tonic-water.com/]'''),
-      '''<a class="ext-link" href="http://www.tonic-water.com/"><span class="icon">http://www.tonic-water.com/</span></a>''')
+      ('''<a href="http://www.tonic-water.com/" class="ext-link" title="http://www.tonic-water.com/">'''
+      '''<span class="icon">http://www.tonic-water.com/</span></a>'''))
 
   def test_external_anchor_named(self):
     self.assertEqual(
       self.line.make_html('''[http://www.tonic-water.com/ Nori's personal server]'''),
-      '''<a class="ext-link" href="http://www.tonic-water.com/"><span class="icon">Nori's personal server</span></a>''')
+      ('''<a href="http://www.tonic-water.com/" class="ext-link" title="Nori's personal server">'''
+       '''<span class="icon">Nori's personal server</span></a>'''))
 
   def test_wikiname_by_camelcase(self):
     self.assertEqual(
       self.line.make_html('''BackgammonBase'''),
-      '''<a class="wiki-link" href="/wiki/BackgammonBase">'''
+      '''<a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">'''
       '''BackgammonBase</a>''')
 
   def test_wikiname_by_scheme_1(self):
     self.assertEqual(
       self.line.make_html('''[wiki:BackgammonBase]'''),
-      '''<a class="wiki-link" href="/wiki/BackgammonBase">'''
+      '''<a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">'''
       '''BackgammonBase</a>''')
 
   def test_wikiname_by_scheme_2(self):
     self.assertEqual(
       self.line.make_html('''[wiki:blot]'''),
-      '''<a class="wiki-link" href="/wiki/blot">'''
+      '''<a href="/wiki/blot" class="wiki-link" title="blot">'''
       '''blot</a>''')
 
   def test_entry_link(self):
@@ -486,7 +450,8 @@ class FormatterTest(unittest.TestCase):
   def test_query_link(self):
     self.assertEqual(
       self.line.make_html('''Query: {1} or query:1'''),
-      'Query: <a class="query" href="/query/1">{1}</a> or <a class="query" href="/query/1">query:1</a>')
+      'Query: <a href="/query/1" class="query" title="{1}">{1}</a>'
+      ' or <a href="/query/1" class="query" title="query:1">query:1</a>')
 
   def test_match_link(self):
     self.assertEqual(
@@ -588,12 +553,12 @@ class FormatterTest(unittest.TestCase):
     self.assert_('wikiname' in d)
     self.assertEqual(d['wikiname'], ["BackgammonBase"])
 
-  def test_wikiname_by_scheme_1(self):
+  def test_extract_references_wikiname_by_scheme_1(self):
     d = self.wiki.extract_references('''[wiki:BackgammonBase]''')
     self.assert_('wikiname' in d)
     self.assertEqual(d['wikiname'], ["BackgammonBase"])
 
-  def test_wikiname_by_scheme_2(self):
+  def test_extract_references_wikiname_by_scheme_2(self):
     d = self.wiki.extract_references('''[wiki:blot]''')
     self.assert_('wikiname' in d)
     self.assertEqual(d['wikiname'], ["blot"])
@@ -642,6 +607,5 @@ class FormatterTest(unittest.TestCase):
     d = self.wiki.extract_references('Analysis(cNcxAxCY54YBBg:cAn7ADAAIAAA)')
     self.assert_('Analysis' in d)
     self.assert_('cNcxAxCY54YBBg:cAn7ADAAIAAA' in d['Analysis'])
-
 
 

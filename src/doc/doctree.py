@@ -49,7 +49,7 @@ class Root(Node):
 
 
 class BgWikiElementNode(Node):
-  html_element = Node
+  html_element = None
   def __init__(self, parent, **d):
     Node.__init__(self, parent)
     self.attrs = dict(**d)
@@ -61,15 +61,25 @@ class BgWikiElementNode(Node):
     return isinstance(e, self.acceptables())
 
   def open(self):
+    if not self.html_element:
+      return ''
     if self.attrs:
-      return '<%s'%self.html_element + \
-             ' '.join(['%s=%s'%(key, item) for key, item in self.attrs.items()]) + \
+      return '<%s '%self.html_element + \
+             ' '.join(['%s="%s"'%(key, item) for key, item in self.attrs.items()]) + \
              '>'
     else:
       return '<%s>'%self.html_element
 
   def close(self):
+    if not self.html_element:
+      return ''
     return '</%s>'%self.html_element
+
+class BgWikiElementRoot(BgWikiElementNode, Root):
+  html_element = None
+  def __init__(self, **d):
+    BgWikiElementNode.__init__(self, None)
+    self.attrs = dict(**d)
 
 
 class LineElement(BgWikiElementNode):
@@ -78,7 +88,7 @@ class LineElement(BgWikiElementNode):
 
 
 class SpanElement(LineElement):
-  pass
+  html_element = 'span'
 
 class BoldElement(SpanElement):
   html_element = 'strong'
@@ -140,9 +150,7 @@ class DefinitionBodyElement(LineElement):
 class AnchorElement(LineElement):
   html_element = 'a'
   def set_url(self, url):
-    self.url = url
-  def open(self):
-    return '<a href="%s">'%self.url
+    self.attrs["href"] = url
 
 class BoxElement(BgWikiElementNode):
   def acceptables(self):
@@ -282,6 +290,7 @@ class Editor(object):
 
   def enter(self, klass, **d):
     self.current = self.append(klass, **d)
+    return self.current
 
   def leave(self, *klasses):
     node = self.current
@@ -291,7 +300,7 @@ class Editor(object):
         return
       node = node.parent
       #implicitly leaving node.
-    assert False #ugh! No such node!
+    #assert False #ugh! No such node!
 
   def append(self, klass, **d):
     assert issubclass(klass, Node)
@@ -308,7 +317,16 @@ class Editor(object):
       if isinstance(n, Text):
         n.append_text(text)
         return
-    self.current.append(Text(self.current, text))
+    self.current.append(Text(self.current, text=text))
+
+  def count_nesting(self, klass_or_klasses):
+    nest = 0
+    node = self.current
+    while node:
+      if isinstance(node, klass_or_klasses):
+        nest += 1
+      node = node.parent
+    return nest
 
   def ancestor(self, *klassses):
     node = self.current
@@ -318,6 +336,8 @@ class Editor(object):
       node = node.parent
     return None
 
+class HtmlEditor(Editor):
+  pass
 
 
 class Visitor(object):
@@ -339,10 +359,15 @@ class PrintVisitor(Visitor):
     print node
 
 
-class HtmlVisitor(Visitor):
+class HtmlWriter(Visitor):
+  def __init__(self):
+    Visitor.__init__(self)
+    self.buf = ''
   def enter(self, node):
-    print node.open()
+    self.buf += node.open()
   def leave(self, node):
-    print node.close()
+    self.buf += node.close()
+  def html(self):
+    return self.buf
 
 

@@ -75,6 +75,7 @@ class EditorTest(unittest.TestCase):
     self.assertEqual(t, self.root)
 
   def test_append_text(self):
+    #FIXME move append_text method to HtmlEditor.
     editor = self.editor
     editor.start(self.root)
     editor.append_text('ho')
@@ -104,6 +105,44 @@ class EditorTest(unittest.TestCase):
 
 class BgWikiElementNodeTest(unittest.TestCase):
   def setUp(self):
-    pass
+    self.root = bglib.doc.doctree.BgWikiElementRoot()
+    self.editor = bglib.doc.doctree.Editor()
+    self.writer = bglib.doc.doctree.HtmlWriter()
+
+  def test_append_text(self):
+    editor = self.editor
+    editor.start(self.root)
+    editor.append_text('ho')
+    editor.append_text('ge')
+    editor.enter(bglib.doc.doctree.BoldElement)
+    self.assertEqual(len(editor.current.children), 0)
+    editor.append_text('pi')
+    self.assertEqual(len(editor.current.children), 1)
+    editor.append_text('yo')
+    self.assertEqual(len(editor.current.children), 1)
+    editor.leave(bglib.doc.doctree.BoldElement)
+    editor.append_text('foo')
+    editor.append_text('bar')
+    t = editor.done()
+    d = bglib.doc.doctree.DebugVisitor()
+    self.root.accept(d)
+    self.assertEqual(
+      d.buf,
+      ('Root\n'
+      'Text:hoge\n'
+      'BoldElement\n'
+      'Text:piyo\n'
+      'Text:foobar\n'
+      )
+    )
+    self.assertEqual(len(t.children), 3)# Text, BgWikiElementNode, Text
+
+    self.root.accept(self.writer)
+    self.assertEqual(
+      self.writer.html(),
+      ('hoge'
+       '<strong>piyo</strong>'
+       'foobar')
+    )
 
 

@@ -15,3 +15,8 @@ class Formatter(Viewer):
     pass
   def make_pdf(self, text):
     pass
+
+
+class Document(object):
+  pass
+
