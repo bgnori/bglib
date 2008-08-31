@@ -175,7 +175,7 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_definition_header>^\w+::$)",
     r"(?P<_pattern_quote_or_definition_body>^[ ]{2})", # Line starts with WhiteSpaces but NOT ITEMIZE.
     r"(?P<_pattern_escape_html>(%s))"%bglib.doc.html.UNSAFE_LETTERS,
-    r"(?P<_pattern_rest_of_the_world>.)",
+    r"(?P<_pattern_rest_of_the_world>[^\n])",
   ]
 
   def __init__(self, editor, macroprocessor):
