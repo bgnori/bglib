@@ -24,7 +24,7 @@ _handlers = dict()
 def _get_name(handler):
   if isinstance(handler, Processor):
     return handler.__class__.__name__
-  elif isinstance(hander, types.FunctionType):
+  elif isinstance(handler, types.FunctionType):
     return handler.func_name
   else:
     assert False
@@ -34,20 +34,21 @@ def register(handler):
   _handlers.update({_get_name(handler):handler})
 
 def unregister(name, handler):
-  _handlers.(_get_name(handler))
+  _handlers.remove(_get_name(handler))
 
 _db = None
 def setup(db):
+  global _db
   _db = db
 
 def dispatch(name, arg_string):
-  hander = _handlers.get(name, None)
+  handler = _handlers.get(name, None)
   if handler is not None and callable(handler):
-    ret = handler(args)
-    if ret == args:
-      return _bad_args_handler(name, args)
+    ret = handler(arg_string)
+    if ret == arg_string:
+      return _bad_args_handler(name, arg_string)
     return ret
-  return _bad_name_handler(name, args)
+  return _bad_name_handler(name, arg_string)
   
 def _bad_name_handler(name, args):
     t = string.Template('''<div class="error">No such macro "$name" with argument "$args" </div>''')
@@ -55,16 +56,20 @@ def _bad_name_handler(name, args):
 
 def _bad_args_handler(name, args):
     return '''<div class="error">Bad args "%s" for %s</div>\n'''%(bglib.doc.html.escape(args), name)
+
 class Processor(object):
+  pass
 
 
 def BR(args):
-    return '<br />'
+  return '<br />'
+register(BR)
 
-    r"(?P<_pattern_temp_map>!?temp_map\([a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12}\))",
+  #r"(?P<_pattern_temp_map>!?temp_map\([a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12}\))",
 
 def Timestamp(args):
     return '<b>Sun Jul 27 08:59:07 2008</b>'
+register(Timestamp)
 
 def Position(args):
     def replace(matchobj):
@@ -79,6 +84,7 @@ def Position(args):
       return t.substitute(d)
     r = r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))"
     return re.sub(r, replace, args)
+register(Position)
 
 def Analysis(args):
     matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))", args)
@@ -103,7 +109,7 @@ def Analysis(args):
         assert i + 1 == row['nth']
         ret += Movelisting_row(**row)
       return ret + '</table>\n'
-    
+register(Analysis) 
 
 def CubeAction_table_header():
     return '''<tr class='headerrow'><th>#</th><th>action</th><th colspan='2'> Cubeful Eq. </th></tr>\n'''
