@@ -4,6 +4,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import types
 import string
 import re
 import bglib.model.constants
@@ -18,35 +19,54 @@ def percent_two_one(f):
   assert isinstance(f, float)
   return '%2.1f'%f
 
-class Processor(object):
-  def __init__(self, db):
-    self.db = db
-  #dispatch and exec
-  def dispatch(self, name, args):
-    handler = getattr(self, name, None)
-    if handler is not None and callable(handler):
-      ret = handler(args)
-      if ret == args:
-        return self.bad_args_handler(name, args)
-      return ret
-    return self.bad_name_handler(name, args)
+_handlers = dict()
+
+def _get_name(handler):
+  if isinstance(handler, Processor):
+    return handler.__class__.__name__
+  elif isinstance(hander, types.FunctionType):
+    return handler.func_name
+  else:
+    assert False
+
+def register(handler):
+  assert callable(handler)
+  _handlers.update({_get_name(handler):handler})
+
+def unregister(name, handler):
+  _handlers.(_get_name(handler))
+
+_db = None
+def setup(db):
+  _db = db
+
+def dispatch(name, arg_string):
+  hander = _handlers.get(name, None)
+  if handler is not None and callable(handler):
+    ret = handler(args)
+    if ret == args:
+      return _bad_args_handler(name, args)
+    return ret
+  return _bad_name_handler(name, args)
   
-  def bad_name_handler(self, name, args):
+def _bad_name_handler(name, args):
     t = string.Template('''<div class="error">No such macro "$name" with argument "$args" </div>''')
     return t.substitute(name=bglib.doc.html.escape(name), args=bglib.doc.html.escape(args or 'None'))
 
-  def bad_args_handler(self, name, args):
+def _bad_args_handler(name, args):
     return '''<div class="error">Bad args "%s" for %s</div>\n'''%(bglib.doc.html.escape(args), name)
+class Processor(object):
 
-  def BR(self, args):
+
+def BR(args):
     return '<br />'
 
     r"(?P<_pattern_temp_map>!?temp_map\([a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12}\))",
 
-  def Timestamp(self, args):
+def Timestamp(args):
     return '<b>Sun Jul 27 08:59:07 2008</b>'
 
-  def Position(self, args):
+def Position(args):
     def replace(matchobj):
       d = matchobj.groupdict(dict(pid='N/A', mid='N/A'))
       t = string.Template(
@@ -60,35 +80,35 @@ class Processor(object):
     r = r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))"
     return re.sub(r, replace, args)
 
-  def Analysis(self, args):
+def Analysis(args):
     matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))", args)
     if not matchobj:
       return args
     d = matchobj.groupdict(dict(pid='N/A', mid='N/A'))
-    cubeaction, analysis = self.db.get_analysis(d['pid'], d['mid'])
+    cubeaction, analysis = _db.get_analysis(d['pid'], d['mid'])
     ret = ''
 
     if cubeaction:
-      ret += self.CubelessEquity(**(analysis[0]))
+      ret += CubelessEquity(**(analysis[0]))
       ret += '<table>\n'
-      ret += self.CubeAction_table_header()
+      ret += CubeAction_table_header()
       for i, row in enumerate(analysis[1:]):
         assert i + 1 == row['nth']
-        ret += self.CubeAction_table_row(**row)
+        ret += CubeAction_table_row(**row)
       return ret + '</table>\n'
     else:
       ret += '<table>\n'
-      ret += self.Movelisting_header()
+      ret += Movelisting_header()
       for i, row in enumerate(analysis):
         assert i + 1 == row['nth']
-        ret += self.Movelisting_row(**row)
+        ret += Movelisting_row(**row)
       return ret + '</table>\n'
     
 
-  def CubeAction_table_header(self):
+def CubeAction_table_header():
     return '''<tr class='headerrow'><th>#</th><th>action</th><th colspan='2'> Cubeful Eq. </th></tr>\n'''
 
-  def CubeAction_table_row(self, nth=0, action=0, equity=0.0, diff=None, actual=False, **kw):
+def CubeAction_table_row(nth=0, action=0, equity=0.0, diff=None, actual=False, **kw):
     assert isinstance(nth, int)
     assert actual in bglib.model.constants.cubeaction_types
     assert isinstance(equity, float)
@@ -109,13 +129,13 @@ class Processor(object):
                         action=bglib.model.constants.cubeaction_strings[action],
                         equity=equity, diff=diff)
 
-  def Movelisting_header(self):
+def Movelisting_header():
       return ('''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
       '''<tr class='headerrow'>'''
       '''<th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
       )
 
-  def Movelisting_row(self, nth, move, ply, equity, diff, Win, WinG, WinBg, Lose, LoseG, LoseBg, actual=None, **kw):
+def Movelisting_row(nth, move, ply, equity, diff, Win, WinG, WinBg, Lose, LoseG, LoseBg, actual=None, **kw):
     assert isinstance(nth, int)
     assert isinstance(move, str)
     assert isinstance(ply, int)
@@ -157,7 +177,7 @@ class Processor(object):
                         Lose=Lose, LoseG=LoseG, LoseBg=LoseBg)
 
 
-  def CubelessEquity(self, ply=0, cubeless=0.0, money=0.0, 
+def CubelessEquity(ply=0, cubeless=0.0, money=0.0, 
                            Win=0.0, WinG=0.0, WinBg=0.0, Lose=0.0, LoseG=0.0, LoseBg=0.0, **kw):
     assert isinstance(ply, int)
     assert isinstance(money, float)
