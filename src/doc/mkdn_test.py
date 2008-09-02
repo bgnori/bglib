@@ -6,6 +6,7 @@
 #
 
 import bglib.doc.viewer_type
+import bglib.doc.html
 import bglib.doc.mkdn
 
 class FormatterDuckTypeTest(bglib.doc.viewer_type.FormatterDuckTypeTest):
@@ -16,3 +17,5 @@ class FormatterDuckTypeTest(bglib.doc.viewer_type.FormatterDuckTypeTest):
     self.target.parse('hogehoge')
     self.target.make_html()
 
+class FormatterHtmlTest(bglib.doc.html.HtmlTestCase):
+  pass

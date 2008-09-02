@@ -5,6 +5,9 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 import re
+import unittest
+import pprint
+import difflib
 import xml.parsers.expat
 
 UNSAFE_LETTERS = '(?P<lt>[<])|(?P<gt>[>])|(?P<amp>[&])'
@@ -19,6 +22,25 @@ def escape(s):
       return '&amp;'
   return re.sub(UNSAFE_LETTERS, handler, s)
 
+crlf = re.compile(r'\n')
+gt = re.compile(r'>')
+def nomalize(html):
+  crlfless = re.sub(crlf, '', html)
+  return re.sub(gt, '>\n', crlfless)
+
+def cmp(html_a, html_b):
+  if html_a == html_b:
+    return []
+  na = nomalize(html_a)
+  nb = nomalize(html_b)
+  g = difflib.unified_diff(na.splitlines(), nb.splitlines())
+  return list(g)
+
+class HtmlTestCase(unittest.TestCase):
+  def assertHtmlEqual(self, html_a, html_b, message=None):
+    r = cmp(html_a, html_b)
+    pprint.pprint(r)
+    self.assertFalse(r, message)
 
 def validate(html_fragment):
   p = xml.parsers.expat.ParserCreate()
