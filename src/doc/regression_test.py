@@ -12,7 +12,7 @@ import bglib.doc.html
 class FormatterTest(unittest.TestCase):
   def setUp(self):
     db = bglib.doc.mock.DataBaseMock()
-    macroprocessor = bglib.doc.macro.Processor(db)
+    bglib.doc.macro.setup(db)
     self.wiki = bglib.doc.bgwiki.Formatter(db)
 
   def test_1(self):

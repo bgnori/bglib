@@ -10,6 +10,7 @@ import re
 import bglib.model.constants
 
 import bglib.doc.html 
+import bglib.doc.doctree
 
 def signed_one_three(f):
   assert isinstance(f, float)
@@ -41,37 +42,38 @@ def setup(db):
   global _db
   _db = db
 
-def dispatch(name, arg_string):
+def dispatch(editor, name, arg_string):
+  assert isinstance(editor, bglib.doc.doctree.Editor)
   handler = _handlers.get(name, None)
   if handler is not None and callable(handler):
-    ret = handler(arg_string)
+    ret = handler(editor, arg_string)
     if ret == arg_string:
-      return _bad_args_handler(name, arg_string)
-    return ret
-  return _bad_name_handler(name, arg_string)
+      _bad_args_handler(editor, name, arg_string)
+  _bad_name_handler(editor, name, arg_string)
+
   
-def _bad_name_handler(name, args):
+def _bad_name_handler(editor, name, args):
     t = string.Template('''<div class="error">No such macro "$name" with argument "$args" </div>''')
     return t.substitute(name=bglib.doc.html.escape(name), args=bglib.doc.html.escape(args or 'None'))
 
-def _bad_args_handler(name, args):
+def _bad_args_handler(editor, name, args):
     return '''<div class="error">Bad args "%s" for %s</div>\n'''%(bglib.doc.html.escape(args), name)
 
 class Processor(object):
   pass
 
 
-def BR(args):
+def BR(editor, args):
   return '<br />'
 register(BR)
 
   #r"(?P<_pattern_temp_map>!?temp_map\([a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12}\))",
 
-def Timestamp(args):
+def Timestamp(editor, args):
     return '<b>Sun Jul 27 08:59:07 2008</b>'
 register(Timestamp)
 
-def Position(args):
+def Position(editor, args):
     def replace(matchobj):
       d = matchobj.groupdict(dict(pid='N/A', mid='N/A'))
       t = string.Template(
@@ -86,7 +88,7 @@ def Position(args):
     return re.sub(r, replace, args)
 register(Position)
 
-def Analysis(args):
+def Analysis(editor, args):
     matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))", args)
     if not matchobj:
       return args
@@ -95,26 +97,26 @@ def Analysis(args):
     ret = ''
 
     if cubeaction:
-      ret += CubelessEquity(**(analysis[0]))
+      ret += CubelessEquity(editor, **(analysis[0]))
       ret += '<table>\n'
-      ret += CubeAction_table_header()
+      ret += CubeAction_table_header(editor)
       for i, row in enumerate(analysis[1:]):
         assert i + 1 == row['nth']
-        ret += CubeAction_table_row(**row)
+        ret += CubeAction_table_row(editor, **row)
       return ret + '</table>\n'
     else:
       ret += '<table>\n'
-      ret += Movelisting_header()
+      ret += Movelisting_header(editor)
       for i, row in enumerate(analysis):
         assert i + 1 == row['nth']
-        ret += Movelisting_row(**row)
+        ret += Movelisting_row(editor, **row)
       return ret + '</table>\n'
 register(Analysis) 
 
-def CubeAction_table_header():
+def CubeAction_table_header(editor):
     return '''<tr class='headerrow'><th>#</th><th>action</th><th colspan='2'> Cubeful Eq. </th></tr>\n'''
 
-def CubeAction_table_row(nth=0, action=0, equity=0.0, diff=None, actual=False, **kw):
+def CubeAction_table_row(editor, nth=0, action=0, equity=0.0, diff=None, actual=False, **kw):
     assert isinstance(nth, int)
     assert actual in bglib.model.constants.cubeaction_types
     assert isinstance(equity, float)
@@ -135,13 +137,13 @@ def CubeAction_table_row(nth=0, action=0, equity=0.0, diff=None, actual=False, *
                         action=bglib.model.constants.cubeaction_strings[action],
                         equity=equity, diff=diff)
 
-def Movelisting_header():
+def Movelisting_header(editor):
       return ('''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
       '''<tr class='headerrow'>'''
       '''<th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
       )
 
-def Movelisting_row(nth, move, ply, equity, diff, Win, WinG, WinBg, Lose, LoseG, LoseBg, actual=None, **kw):
+def Movelisting_row(editor, nth, move, ply, equity, diff, Win, WinG, WinBg, Lose, LoseG, LoseBg, actual=None, **kw):
     assert isinstance(nth, int)
     assert isinstance(move, str)
     assert isinstance(ply, int)
@@ -183,7 +185,7 @@ def Movelisting_row(nth, move, ply, equity, diff, Win, WinG, WinBg, Lose, LoseG,
                         Lose=Lose, LoseG=LoseG, LoseBg=LoseBg)
 
 
-def CubelessEquity(ply=0, cubeless=0.0, money=0.0, 
+def CubelessEquity(editor, ply=0, cubeless=0.0, money=0.0, 
                            Win=0.0, WinG=0.0, WinBg=0.0, Lose=0.0, LoseG=0.0, LoseBg=0.0, **kw):
     assert isinstance(ply, int)
     assert isinstance(money, float)

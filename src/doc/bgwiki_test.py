@@ -31,9 +31,11 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
   def setUp(self):
     db = bglib.doc.mock.DataBaseMock()
     #stack = bglib.doc.bgwiki.ElementStack()
-    macroprocessor = bglib.doc.macro.Processor(db)
+    #macroprocessor = bglib.doc.macro.Processor(db)
+    bglib.doc.macro.setup(db)
     self.wiki = bglib.doc.bgwiki.Formatter(db)
-    self.line = bglib.doc.bgwiki.LineFormatter(self.wiki.editor, macroprocessor)
+    self.line = bglib.doc.bgwiki.LineFormatter(self.wiki.editor)
+    #, macroprocessor)
 
   def test_bold(self):
     self.line.parse(r"'''bold''', '''!''' can be bold too''', and '''! '''")

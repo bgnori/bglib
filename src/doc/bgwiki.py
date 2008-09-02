@@ -194,9 +194,10 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_rest_of_the_world>.)",
   ]
 
-  def __init__(self, editor, macroprocessor):
+  def __init__(self, editor):
+  #, macroprocessor):
     self.editor = editor
-    self.macroprocessor = macroprocessor
+    #self.macroprocessor = macroprocessor
 
   def parse(self, input_line):
     editor = self.editor
@@ -465,17 +466,19 @@ class LineFormatter(BaseFormatter):
 
 
   def _handle_pattern_macro(self, match, matchobj):
+    editor = self.editor
     d = matchobj.groupdict()
-    self.macroprocessor.dispatch(d['macro_name'], d['macro_args'])
-
+    bglib.doc.macro.dispatch(editor, d['macro_name'], d['macro_args'])
+    
 class Formatter(BaseFormatter):
   def __init__(self, db):
     self.db = db
     self.doctree = bglib.doc.doctree.BgWikiElementRoot()
     self.editor = bglib.doc.doctree.Editor()
     self.editor.start(self.doctree)
-    self.macroprocessor = bglib.doc.macro.Processor(db)
-    self.line_formatter = LineFormatter(self.editor, self.macroprocessor)
+    #self.macroprocessor = bglib.doc.macro.Processor(db)
+    self.line_formatter = LineFormatter(self.editor)
+   # , self.macroprocessor)
     self.preformat_formatter = None
 
   def get_formatter(self):
