@@ -47,8 +47,9 @@ def dispatch(editor, name, arg_string):
   handler = _handlers.get(name, None)
   if handler is not None and callable(handler):
     ret = handler(editor, arg_string)
-    if ret == arg_string:
+    if not ret:
       _bad_args_handler(editor, name, arg_string)
+    return
   _bad_name_handler(editor, name, arg_string)
 
   
@@ -64,7 +65,11 @@ class Processor(object):
 
 
 def BR(editor, args):
-  return '<br />'
+  editor.enter(bglib.doc.doctree.BRElement)
+  editor.leave(bglib.doc.doctree.BRElement)
+  return True
+  
+
 register(BR)
 
   #r"(?P<_pattern_temp_map>!?temp_map\([a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12}\))",

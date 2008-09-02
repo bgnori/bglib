@@ -90,6 +90,13 @@ class LineElement(BgWikiElementNode):
 class SpanElement(LineElement):
   html_element = 'span'
 
+class BRElement(SpanElement):
+  html_element = 'span'
+  def open(self):
+    return '<br />'
+  def close(self):
+    return ''
+  
 class BoldElement(SpanElement):
   html_element = 'strong'
 
