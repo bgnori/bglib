@@ -50,6 +50,7 @@ class Root(Node):
 
 class BgWikiElementNode(Node):
   html_element = None
+  is_single = False
   def __init__(self, parent, **d):
     Node.__init__(self, parent)
     self.attrs = dict(**d)
@@ -64,16 +65,25 @@ class BgWikiElementNode(Node):
     if not self.html_element:
       return ''
     if self.attrs:
-      return '<%s '%self.html_element + \
-             ' '.join(['%s="%s"'%(key, item) for key, item in self.attrs.items()]) + \
-             '>'
+      attrs = ' '.join(['%s="%s"'%(key, item) for key, item in self.attrs.items()])
     else:
+      attrs = ''
+    if self.is_single:
+      if attrs: 
+        return '<%s '%self.html_element + attrs + ' />'
+      return '<%s />'%self.html_element
+    else:
+      if attrs: 
+        return '<%s '%self.html_element + attrs + '>'
       return '<%s>'%self.html_element
 
   def close(self):
     if not self.html_element:
       return ''
-    return '</%s>'%self.html_element
+    if self.is_single:
+      return ''
+    else:
+      return '</%s>'%self.html_element
 
 class BgWikiElementRoot(BgWikiElementNode, Root):
   html_element = None
@@ -91,11 +101,8 @@ class SpanElement(LineElement):
   html_element = 'span'
 
 class BRElement(SpanElement):
-  html_element = 'span'
-  def open(self):
-    return '<br />'
-  def close(self):
-    return ''
+  html_element = 'br'
+  is_single = True
   
 class BoldElement(SpanElement):
   html_element = 'strong'
@@ -130,8 +137,10 @@ class TableRowElement(LineElement):
   html_element = 'tr'
   def acceptables(self):
     return super(TableRowElement, self).acceptables() + \
-          (TableCellElement,)
+          (TableCellElement, TableHeaderElement)
 
+class TableHeaderElement(LineElement):
+  html_element = 'th'
 
 class ItemizeElement(LineElement):
   html_element = 'li'
@@ -162,11 +171,15 @@ class AnchorElement(LineElement):
 class BoxElement(BgWikiElementNode):
   def acceptables(self):
     return (SpanElement,)
-  def open(self):
-    return '<%s>\n'%self.html_element
-  def close(self):
-    return '</%s>\n'%self.html_element
   
+class DivElement(BoxElement):
+  html_element = 'div'
+  def acceptables(self):
+    return (SpanElement, BoxElement) #Any Element...
+
+class ImgElement(BoxElement):
+  html_element = 'img'
+  is_single = True
 
 class DefinitionListElement(BoxElement):
   html_element = 'dl'
@@ -179,10 +192,7 @@ class TableElement(BoxElement):
   html_element = 'table'
   def acceptables(self):
     return super(TableElement, self).acceptables() + \
-          (TableRowElement, TableCellElement)
-  def open(self):
-    return '<table class="wiki">\n' # \n for readability
-
+          (TableRowElement, TableHeaderElement, TableCellElement)
 
 class BlockQuoteElement(BoxElement):
   def open(self):

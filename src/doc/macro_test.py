@@ -19,117 +19,117 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.writer = bglib.doc.doctree.HtmlWriter()
 
   def test_bad_handler(self):
-    bglib.doc.macro.dispatch(self.editor, 'badname', None)
+    bglib.doc.macro.dispatch(self.editor, "badname", None)
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '''<div class="error">No such macro "badname" with argument "None" </div>'''
+      """<div class="position"><div class="error">No such macro "badname" with argument "None"</div></div>"""
       )
     
-  def test_RB(self):
-    bglib.doc.macro.dispatch(self.editor, 'BR', None)
+  def test_BR(self):
+    bglib.doc.macro.dispatch(self.editor, "BR", None)
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '<br />'
+      "<br />"
       )
 
   def test_position_box_1(self):
-    bglib.doc.macro.dispatch(self.editor, 'Position', 'vzsAAFhu2xFABA:QYkqASAAIAAA')
+    bglib.doc.macro.dispatch(self.editor, "Position", "vzsAAFhu2xFABA:QYkqASAAIAAA")
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<div class="position">\n'''
-           '''<img src="/image?format=png'''
-           '''&pid=vzsAAFhu2xFABA'''
-           '''&mid=QYkqASAAIAAA'''
-           '''&height=300&width=400&css=minimal" />\n'''
-       '''</div>\n'''))
+      ("""<div class="position">\n"""
+           """<img src="/image?format=png"""
+           """&pid=vzsAAFhu2xFABA"""
+           """&mid=QYkqASAAIAAA"""
+           """&height=300&width=400&css=minimal" />\n"""
+       """</div>\n"""))
 
   def test_position_box_2(self):
-    bglib.doc.macro.dispatch(self.editor, 'Position', '4HPwATDgc/ABMA:MAAAAAAAAAAA')
+    bglib.doc.macro.dispatch(self.editor, "Position", "4HPwATDgc/ABMA:MAAAAAAAAAAA")
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<div class="position">\n'''
-           '''<img src="/image?format=png'''
-           '''&pid=4HPwATDgc/ABMA'''
-           '''&mid=MAAAAAAAAAAA'''
-           '''&height=300&width=400&css=minimal" />\n'''
-       '''</div>\n'''))
+      ("""<div class="position">\n"""
+           """<img src="/image?format=png"""
+           """&pid=4HPwATDgc/ABMA"""
+           """&mid=MAAAAAAAAAAA"""
+           """&height=300&width=400&css=minimal" />\n"""
+       """</div>\n"""))
 
   def test_position_box_3(self):
-    bglib.doc.macro.dispatch(self.editor, 'Position', 'haha:hahaha')
+    bglib.doc.macro.dispatch(self.editor, "Position", "haha:hahaha")
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '''<div class="error">Bad args "haha:hahaha" for Position</div>\n''')
+      """<div class="position"><div class="error">Bad args "haha:hahaha" for Position</div></div>""")
 
   def test_analysis_box_cubeaction_1(self):
-    bglib.doc.macro.dispatch(self.editor, 'Analysis', 'vzsAAFhu2xFABA:QYkqASAAIAAA')
+    bglib.doc.macro.dispatch(self.editor, "Analysis", "vzsAAFhu2xFABA:QYkqASAAIAAA")
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<table>\n'''
-       '''<tr class='headerrow'><th rowspan='2'>Ply</th><th colspan='6'> Cubeless Eq. </th></tr>\n'''
-       '''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-       '''<tr class='oddrow'><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.011 (Moeny +0.008) </td></tr>\n'''
-       '''<tr class='oddrow'><td>0.5</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.0</td></tr>\n'''
-       '''</table>\n'''
-       '''<table>\n'''
-       '''<tr class='headerrow'><th>#</th><th>action</th><th colspan='2'> Cubeful Eq. </th></tr>\n'''
-       '''<tr class='actualrow'><th>1</th><td> No double </td><td> +0.236 </td><td>  </td></tr>\n'''
-       '''<tr class='evenrow'><th>2</th><td> Double, pass </td><td> +0.236 </td><td> +0.764 </td></tr>\n'''
-       '''<tr class='oddrow'><th>3</th><td> Double, take </td><td> -0.096 </td><td> -0.332 </td></tr>\n'''
-       '''</table>\n'''))
+      ("""<table>\n"""
+       """<tr class="headerrow"><th rowspan="2">Ply</th><th colspan="6"> Cubeless Eq. </th></tr>\n"""
+       """<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
+       """<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.011 (Moeny +0.008) </td></tr>\n"""
+       """<tr class="oddrow"><td>0.5</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.0</td></tr>\n"""
+       """</table>\n"""
+       """<table>\n"""
+       """<tr class="headerrow"><th>#</th><th>action</th><th colspan="2"> Cubeful Eq. </th></tr>\n"""
+       """<tr class="actualrow"><th>1</th><td> No double </td><td> +0.236 </td><td>  </td></tr>\n"""
+       """<tr class="evenrow"><th>2</th><td> Double, pass </td><td> +0.236 </td><td> +0.764 </td></tr>\n"""
+       """<tr class="oddrow"><th>3</th><td> Double, take </td><td> -0.096 </td><td> -0.332 </td></tr>\n"""
+       """</table>\n"""))
 
   def test_analysis_box_move_2(self):
-    bglib.doc.macro.dispatch(self.editor, 'Analysis', 'cNcxAxCY54YBBg:cAn7ADAAIAAA')
+    bglib.doc.macro.dispatch(self.editor, "Analysis", "cNcxAxCY54YBBg:cAn7ADAAIAAA")
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<table>\n'''
-'''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
-'''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-'''<tr class='oddrow'><th rowspan='2'>1</th><td rowspan='2'>21/15(2) 13/7(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.975 </td></tr>\n'''
-'''<tr class='oddrow'><td>0.8</td><td>0.1</td><td>0.0</td><td>0.2</td><td>0.0</td><td>0.0</td></tr>\n'''
-'''<tr class='evenrow'><th rowspan='2'>2</th><td rowspan='2'>21/9(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.914 (-0.061) </td></tr>\n'''
-'''<tr class='evenrow'><td>0.7</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.0</td><td>0.0</td></tr>\n'''
-'''<tr class='oddrow'><th rowspan='2'>3</th><td rowspan='2'>21/15(2) 8/2*(2)</td><td rowspan='2'>0</td><td class='Equity' colspan='6'> +0.614 (-0.362) </td></tr>\n'''
-'''<tr class='oddrow'><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n'''
-       '''</table>\n'''))
+      ("""<table>\n"""
+"""<tr class="headerrow"><th rowspan="2">#</th><th rowspan="2">move</th><th rowspan="2">Ply</th><th colspan="6"> Eq.(diff)</th></tr>\n"""
+"""<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
+"""<tr class="oddrow"><th rowspan="2">1</th><td rowspan="2">21/15(2) 13/7(2)</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.975 </td></tr>\n"""
+"""<tr class="oddrow"><td>0.8</td><td>0.1</td><td>0.0</td><td>0.2</td><td>0.0</td><td>0.0</td></tr>\n"""
+"""<tr class="evenrow"><th rowspan="2">2</th><td rowspan="2">21/9(2)</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.914 (-0.061) </td></tr>\n"""
+"""<tr class="evenrow"><td>0.7</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.0</td><td>0.0</td></tr>\n"""
+"""<tr class="oddrow"><th rowspan="2">3</th><td rowspan="2">21/15(2) 8/2*(2)</td><td rowspan="2">0</td><td class="Equity" colspan="6"> +0.614 (-0.362) </td></tr>\n"""
+"""<tr class="oddrow"><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n"""
+       """</table>\n"""))
 
   def test_analysis_box_2(self):
-    bglib.doc.macro.dispatch(self.editor, 'Analysis', 'haha:hahaha')
+    bglib.doc.macro.dispatch(self.editor, "Analysis", "haha:hahaha")
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '''<div class="error">Bad args "haha:hahaha" for Analysis</div>\n''')
+      """<div class="error">Bad args "haha:hahaha" for Analysis</div>\n""")
   def test_analysis_box_3(self):
-    bglib.doc.macro.dispatch(self.editor, 'Analysis', 'cNcxAxCY54YBBg:cAn7ADAAIAAA'),
+    bglib.doc.macro.dispatch(self.editor, "Analysis", "cNcxAxCY54YBBg:cAn7ADAAIAAA"),
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
       (
-       '''<table>\n'''
-       '''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
-       '''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-       '''<tr class='oddrow'><th rowspan='2'>1</th><td rowspan='2'>21/15(2) 13/7(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.975 </td></tr>\n'''
-       '''<tr class='oddrow'><td>0.8</td><td>0.1</td><td>0.0</td><td>0.2</td><td>0.0</td><td>0.0</td></tr>\n'''
-       '''<tr class='evenrow'><th rowspan='2'>2</th><td rowspan='2'>21/9(2)</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.914 (-0.061) </td></tr>\n'''
-       '''<tr class='evenrow'><td>0.7</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.0</td><td>0.0</td></tr>\n'''
-       '''<tr class='oddrow'><th rowspan='2'>3</th><td rowspan='2'>21/15(2) 8/2*(2)</td><td rowspan='2'>0</td><td class='Equity' colspan='6'> +0.614 (-0.362) </td></tr>\n'''
-       '''<tr class='oddrow'><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n'''
-       '''</table>\n'''
+       """<table>\n"""
+       """<tr class="headerrow"><th rowspan="2">#</th><th rowspan="2">move</th><th rowspan="2">Ply</th><th colspan="6"> Eq.(diff)</th></tr>\n"""
+       """<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
+       """<tr class="oddrow"><th rowspan="2">1</th><td rowspan="2">21/15(2) 13/7(2)</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.975 </td></tr>\n"""
+       """<tr class="oddrow"><td>0.8</td><td>0.1</td><td>0.0</td><td>0.2</td><td>0.0</td><td>0.0</td></tr>\n"""
+       """<tr class="evenrow"><th rowspan="2">2</th><td rowspan="2">21/9(2)</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.914 (-0.061) </td></tr>\n"""
+       """<tr class="evenrow"><td>0.7</td><td>0.1</td><td>0.0</td><td>0.3</td><td>0.0</td><td>0.0</td></tr>\n"""
+       """<tr class="oddrow"><th rowspan="2">3</th><td rowspan="2">21/15(2) 8/2*(2)</td><td rowspan="2">0</td><td class="Equity" colspan="6"> +0.614 (-0.362) </td></tr>\n"""
+       """<tr class="oddrow"><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n"""
+       """</table>\n"""
       ))
   def test_cube_action_table_row_nd(self):
     bglib.doc.macro.CubeAction_table_row(self.editor, 
@@ -139,7 +139,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '''<tr class='oddrow'><th>3</th><td> No double </td><td> +0.926 </td><td> -0.075 </td></tr>\n'''
+      """<tr class="oddrow"><th>3</th><td> No double </td><td> +0.926 </td><td> -0.075 </td></tr>\n"""
       )
 
   def test_cube_action_table_row_dt(self):
@@ -150,7 +150,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '''<tr class='evenrow'><th>2</th><td> Double, take </td><td> +1.296 </td><td> +0.296 </td></tr>\n'''
+      """<tr class="evenrow"><th>2</th><td> Double, take </td><td> +1.296 </td><td> +0.296 </td></tr>\n"""
       )
 
   def test_movelisting_header(self):
@@ -159,45 +159,45 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<tr class='headerrow'><th rowspan='2'>#</th><th rowspan='2'>move</th><th rowspan='2'>Ply</th><th colspan='6'> Eq.(diff)</th></tr>\n'''
-      '''<tr class='headerrow'>'''
-      '''<th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
+      ("""<tr class="headerrow"><th rowspan="2">#</th><th rowspan="2">move</th><th rowspan="2">Ply</th><th colspan="6"> Eq.(diff)</th></tr>\n"""
+      """<tr class="headerrow">"""
+      """<th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
       ))
 
   def test_movelisting_row_odd(self):
     bglib.doc.macro.Movelisting_row(self.editor,
-        nth=1, move='12/10', ply=2, equity=0.321, diff=0.0, 
+        nth=1, move="12/10", ply=2, equity=0.321, diff=0.0, 
         Win=56.2, WinG=11.0, WinBg=0.3, Lose=43.8, LoseG=4.0, LoseBg=0.1, actual=False)
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<tr class='oddrow'><th rowspan='2'>1</th><td rowspan='2'>12/10</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.321 </td></tr>\n'''
-      '''<tr class='oddrow'><td>56.2</td><td>11.0</td><td>0.3</td><td>43.8</td><td>4.0</td><td>0.1</td></tr>\n'''
+      ("""<tr class="oddrow"><th rowspan="2">1</th><td rowspan="2">12/10</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.321 </td></tr>\n"""
+      """<tr class="oddrow"><td>56.2</td><td>11.0</td><td>0.3</td><td>43.8</td><td>4.0</td><td>0.1</td></tr>\n"""
       ))
 
   def test_movelisting_row_even(self):
     bglib.doc.macro.Movelisting_row(self.editor,
-        nth=2, move='12/10',ply=2, equity=0.213, diff=-0.108, 
+        nth=2, move="12/10",ply=2, equity=0.213, diff=-0.108, 
         Win=56.2, WinG=11.0, WinBg=0.3, Lose=43.8, LoseG=4.0, LoseBg=0.1, actual=False)
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<tr class='evenrow'><th rowspan='2'>2</th><td rowspan='2'>12/10</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.213 (-0.108) </td></tr>\n'''
-      '''<tr class='evenrow'><td>56.2</td><td>11.0</td><td>0.3</td><td>43.8</td><td>4.0</td><td>0.1</td></tr>\n'''
+      ("""<tr class="evenrow"><th rowspan="2">2</th><td rowspan="2">12/10</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.213 (-0.108) </td></tr>\n"""
+      """<tr class="evenrow"><td>56.2</td><td>11.0</td><td>0.3</td><td>43.8</td><td>4.0</td><td>0.1</td></tr>\n"""
       ))
 
   def test_movelisting_row_actual(self):
     bglib.doc.macro.Movelisting_row(self.editor,
-        nth=3, move='12/10', ply=2, equity=0.120, diff=-0.201,
+        nth=3, move="12/10", ply=2, equity=0.120, diff=-0.201,
         Win=56.2, WinG=11.0, WinBg=0.3, Lose=43.8, LoseG=4.0, LoseBg=0.1, actual=True)
     self.editor.done()
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<tr class='actualrow'><th rowspan='2'>3</th><td rowspan='2'>12/10</td><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.120 (-0.201) </td></tr>\n'''
-      '''<tr class='actualrow'><td>56.2</td><td>11.0</td><td>0.3</td><td>43.8</td><td>4.0</td><td>0.1</td></tr>\n'''
+      ("""<tr class="actualrow"><th rowspan="2">3</th><td rowspan="2">12/10</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.120 (-0.201) </td></tr>\n"""
+      """<tr class="actualrow"><td>56.2</td><td>11.0</td><td>0.3</td><td>43.8</td><td>4.0</td><td>0.1</td></tr>\n"""
       ))
 
   def test_cubeless_equity(self):
@@ -208,12 +208,12 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ('''<table>\n'''
-       '''<tr class='headerrow'><th rowspan='2'>Ply</th><th colspan='6'> Cubeless Eq. </th></tr>\n'''
-       '''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-       '''<tr class='oddrow'><td rowspan='2'>2</td><td class='Equity' colspan='6'> +0.706 (Moeny +0.696) </td></tr>\n'''
-       '''<tr class='oddrow'><td>76.6</td><td>23.6</td><td>1.0</td><td>23.4</td><td>7.8</td><td>0.3</td></tr>\n'''
-       '''</table>\n'''))
+      ("""<table>\n"""
+       """<tr class="headerrow"><th rowspan="2">Ply</th><th colspan="6"> Cubeless Eq. </th></tr>\n"""
+       """<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
+       """<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.706 (Moeny +0.696) </td></tr>\n"""
+       """<tr class="oddrow"><td>76.6</td><td>23.6</td><td>1.0</td><td>23.4</td><td>7.8</td><td>0.3</td></tr>\n"""
+       """</table>\n"""))
 
   def test_cube_action_table_header(self):
     bglib.doc.macro.CubeAction_table_header(self.editor)
@@ -221,7 +221,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '''<tr class='headerrow'><th>#</th><th>action</th><th colspan='2'> Cubeful Eq. </th></tr>\n'''
+      """<tr class="headerrow"><th>#</th><th>action</th><th colspan="2"> Cubeful Eq. </th></tr>\n"""
       )
 
   def test_cube_action_table_row_dp(self):
@@ -232,6 +232,6 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      '''<tr class='oddrow'><th>1</th><td> Double, pass </td><td> +1.000 </td><td>  </td></tr>\n'''
+      """<tr class="oddrow"><th>1</th><td> Double, pass </td><td> +1.000 </td><td>  </td></tr>\n"""
       )
 

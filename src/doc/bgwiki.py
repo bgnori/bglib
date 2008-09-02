@@ -274,7 +274,7 @@ class LineFormatter(BaseFormatter):
 
   def _handle_pattern_table_cell(self, match, matchobj):
     self.start_on_not_exist_handler(
-        bglib.doc.doctree.TableElement)
+        bglib.doc.doctree.TableElement, **{'class':'wiki'})
     self.start_on_not_exist_handler(
         bglib.doc.doctree.TableRowElement)
     self.end_handler(
