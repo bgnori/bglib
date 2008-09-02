@@ -24,9 +24,17 @@ class BaseFormatter(bglib.doc.Formatter):
     self.editor = bglib.doc.doctree.HtmlEditor()
     self.editor.start(self.doctree)
     
-  def make_pdf(self, text):
+  def make_pdf(self):
     #FIXME not implemented
     return ''
+
+  def make_html(self):
+    self.editor.leave(bglib.doc.doctree.BgWikiElementRoot)
+    self.editor.done()
+    writer = bglib.doc.doctree.HtmlWriter() # Visit
+    self.editor.accept(writer)
+    return writer.html()
+
 
   @classmethod
   def patterns(cls):
@@ -44,6 +52,8 @@ class BaseFormatter(bglib.doc.Formatter):
 
   def end_handler(self, element_class):
     editor = self.editor
+    assert editor 
+    assert isinstance(editor, bglib.doc.doctree.Editor)
     editor.leave(element_class)
 
   def start_on_not_exist_handler(self, element_class, **d):
@@ -75,6 +85,7 @@ class WrappingFormatterElement(bglib.doc.doctree.BgWikiElementNode, BaseFormatte
     self.editor = None
     self.buf = ''
     self.wrapped = None
+    self.ret = ''
     self._known_formatters = dict(
          rst=bglib.doc.rst.Formatter,
          preformat=PreformatFormatter,
@@ -85,7 +96,8 @@ class WrappingFormatterElement(bglib.doc.doctree.BgWikiElementNode, BaseFormatte
   def close(self):
     if self.wrapped is None:
       self.prepare_formatter()
-    return self.wrapped.make_html(self.buf)
+    self.wrapped.parse(self.buf)
+    return self.wrapped.make_html()
 
   def set_editor(self, editor):
     self.editor = editor
@@ -94,20 +106,20 @@ class WrappingFormatterElement(bglib.doc.doctree.BgWikiElementNode, BaseFormatte
     klass = self._known_formatters.get(name, PreformatFormatter)
     self.wrapped = klass()
 
-  def make_html(self, input_line):
+  def parse(self, input_line):
     if input_line:
-      return re.sub(self.get_regexp(), self._format, input_line)
+      for matchobj in self.get_regexp().finditer(input_line):
+        for name, match in matchobj.groupdict().items():
+          if match:
+            handler_name = '_handle' + name
+            handler = getattr(self, handler_name, None)
+            if handler:
+              handler(match, matchobj)
     else:
       self.buf += '\n' # adding EmptyLine
-      return
 
-  def _format(self, matchobj):
-    for name, match in matchobj.groupdict().items():
-      if match:
-        handler_name = '_handle' + name
-        handler = getattr(self, handler_name, None)
-        if handler:
-          return handler(match, matchobj)
+  def make_html(self):
+    assert False
 
   def _handle_pattern_preformat_end(self, match, matchobj):
     self.end_handler(WrappingFormatterElement) #self terminating
@@ -122,9 +134,13 @@ class WrappingFormatterElement(bglib.doc.doctree.BgWikiElementNode, BaseFormatte
 
 
 class PreformatFormatter(bglib.doc.Formatter):
-  def make_html(self, text):
-    return '<pre class="wiki">' + bglib.doc.html.escape(text) + '</pre>\n'
-
+  def __init__(self):
+    bglib.doc.Formatter.__init__(self)
+    self.text = ''
+  def parse(self, text):
+    self.text += text
+  def make_html(self):
+    return '<pre class="wiki">' + bglib.doc.html.escape(self.text) + '</pre>\n'
 
 
 class LineFormatter(BaseFormatter):
@@ -175,14 +191,14 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_definition_header>^\w+::$)",
     r"(?P<_pattern_quote_or_definition_body>^[ ]{2})", # Line starts with WhiteSpaces but NOT ITEMIZE.
     r"(?P<_pattern_escape_html>(%s))"%bglib.doc.html.UNSAFE_LETTERS,
-    r"(?P<_pattern_rest_of_the_world>[^\n])",
+    r"(?P<_pattern_rest_of_the_world>.)",
   ]
 
   def __init__(self, editor, macroprocessor):
     self.editor = editor
     self.macroprocessor = macroprocessor
-    
-  def make_html(self, input_line):
+
+  def parse(self, input_line):
     editor = self.editor
     if input_line:
       if input_line[0] not in ' >':
@@ -199,13 +215,10 @@ class LineFormatter(BaseFormatter):
             handler = getattr(self, handler_name, None)
             if handler:
               handler(match, matchobj)
-    t = editor.done()
-    writer = bglib.doc.doctree.HtmlWriter()
-    t.accept(writer)
-    return writer.html()
+    else:
+      t = editor.done()
 
   def _handle_pattern_rest_of_the_world(self, match, matchobj):
-    #print match
     self.editor.append_text(match)
 
   def _handle_pattern_escape_html(self, match, matchobj):
@@ -286,7 +299,6 @@ class LineFormatter(BaseFormatter):
   def _unnest(self, indent, nest, klass_or_klasses):
     editor = self.editor
     while indent < nest:
-      assert found
       editor.leave(klass_or_klasses)
       nest -= 1
     return nest
@@ -312,10 +324,6 @@ class LineFormatter(BaseFormatter):
 
     assert indent == nest
     self.start_on_not_exist_handler(bglib.doc.doctree.CitationContentElement)
-    #found = editor.ancestor(
-    #    bglib.doc.doctree.CitationContentElement)
-    #if not found:
-    #  editor.enter(bglib.doctree.doctree.CitationContentElement)
 
   def _handle_pattern_itemize(self, match, matchobj):
     editor = self.editor
@@ -326,10 +334,6 @@ class LineFormatter(BaseFormatter):
 
     if indent == nest:
       editor.leave(bglib.doc.doctree.ItemizeElement)
-      #self.end_handler(bglib.doc.doctree.ItemizeElement)
-      #parent = self.current.ancestor(
-      #    bglib.doc.doctree.ListElement)
-      #assert parent
     elif indent > nest:
       while indent > nest + 1:
         #bad indentation, push ListElement to balance.
@@ -339,31 +343,18 @@ class LineFormatter(BaseFormatter):
                         ordered_roman=None,
                         ordered_alpha=None,
                         sign=None)
-        #e = bglib.doc.doctree.ListElement(e, 
-        #                                 star=None,
-        #                                 ordered_numeric=None,
-        #                                 ordered_roman=None,
-        #                                 ordered_alpha=None,
-        #                                 sign=None)
-        #self.current.append(e)
-        #self.current = e
         nest += 1
       assert indent == nest + 1
       # need to nest just one more List Element
       d = matchobj.groupdict()
       editor.enter(bglib.doc.doctree.ListElement, **d)
-      #parent = ListElement(self.current, **d)
-      #self.current.append(parent)
-      #self.current = parent
     else:
       assert indent < nest
       assert False
     d = matchobj.groupdict()
     d.update({'style':editor.current.get_style()})
     editor.enter(bglib.doc.doctree.ItemizeElement, **d)
-    #e = bglib.doc.doctree.ItemizeElement(parent, **d)
-    #self.current.append(e)
-    #self.current = e
+
 
   def _handle_pattern_definition_header(self, match, matchobj):
     r"(?P<_pattern_definition_header>^\w+::$)"
@@ -372,9 +363,6 @@ class LineFormatter(BaseFormatter):
     self.start_on_not_exist_handler(bglib.doc.doctree.DefinitionListElement)
     #FIXME! need to add Node type for dt element
     editor.append_text('<dt>%s</dt>'%bglib.doc.html.escape(match[:-2]))
-    #t = bglib.doc.doctree.Text(self.current)
-    #t.append_text('<dt>%s</dt>'%bglib.doc.html.escape(match[:-2]))
-    #self.current.append(t)
 
   def _handle_pattern_quote_or_definition_body(self, match, matchobj):
     editor = self.editor
@@ -496,16 +484,12 @@ class Formatter(BaseFormatter):
     else:
       return self.line_formatter
 
-  def make_html(self, wiki):
+  def parse(self, wiki):
     for line in wiki.splitlines():
       formatter = self.get_formatter()
-      formatter.make_html(line)
+      formatter.parse(line)
 
-    writer = bglib.doc.doctree.HtmlWriter() # Visit
-    self.doctree.accept(writer)
-    return writer.html()
-
-  def extract_references(self, wiki):
+  def extract_references(self):
     d = dict()
     writer = bglib.doc.doctree.HtmlWriter() # Visit
     self.doctree.accept(writer)

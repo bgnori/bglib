@@ -70,11 +70,17 @@ class Formatter(bglib.doc.Formatter):
     if output_encoding != 'unicode':
         fragment = fragment.encode(output_encoding)
     return fragment
-    
-  def make_html(self, text):
-    return self.html_body(text, input_encoding='us-ascii')
 
-  def make_pdf(self, text):
+  def __init__(self):
+    self.text = ''
+    
+  def parse(self, text):
+    self.text += text
+
+  def make_html(self):
+    return self.html_body(self.text, input_encoding='us-ascii') #ugh!
+
+  def make_pdf(self):
     return ''
 
 from bglib.doc.fuzzing import Gene

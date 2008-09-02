@@ -21,10 +21,13 @@ class Formatter(bglib.doc.Formatter):
     #FIXME 
     # be html Safe
     # add extension
+    self.text = ''
 
-  def make_html(self, text):
-    return self.md.convert(text)
-  def make_pdf(self, text):
+  def parse(self, text):
+    self.text+=text
+  def make_html(self):
+    return self.md.convert(self.text)
+  def make_pdf(self):
     return ''
 
 from bglib.doc.fuzzing import Gene

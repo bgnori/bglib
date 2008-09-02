@@ -30,6 +30,8 @@ class ParseError(Error):
 
 
 class Gene(object):
+  single = ['g','t', 'a', 'c']
+  multi = []
   def count(self):
     return len(self.single) + len(self.multi)
 
@@ -37,8 +39,8 @@ class Gene(object):
     x = self.single + self.multi
     return x[n]
 
-  def __init__(self, rnd, length):
-    self.code = tuple([rnd.randint(0, self.count() - 1 ) for i in range(length)])
+  def __init__(self, length):
+    self.code = tuple([random.randint(0, self.count() - 1 ) for i in range(length)])
     self.html = None
 
   def __hash__(self):
@@ -53,6 +55,10 @@ class Gene(object):
 
   def format(self, formatter):
     text = self.get_text()
+    try:
+      formatter.parse(text)
+    except Exception, e:
+      return FormatError(e) 
     try:
       self.html = formatter.make_html(text)
     except Exception, e:

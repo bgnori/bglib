@@ -13,5 +13,6 @@ class FormatterDuckTypeTest(bglib.doc.viewer_type.FormatterDuckTypeTest):
     self.target = bglib.doc.rst.Formatter()
 
   def sample_test(self):
-    self.target.make_html('hogehoge')
+    self.target.parse('hogehoge')
+    self.target.make_html()
 

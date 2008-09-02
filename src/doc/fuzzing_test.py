@@ -12,16 +12,18 @@ import bglib.doc.mock
 from bglib.doc.fuzzing import Gene, FormatError, ParseError
 
 class MockErrorFormatter(bglib.doc.Formatter):
-  def make_html(self, text):
+  def parse(self, text):
     raise AssertionError, "MockErrorFormatter's mock AssertionError"
 
 class MockBadHTMLFormatter(bglib.doc.Formatter):
-  def make_html(self, text):
+  def parse(self, text):
+    pass
+  def make_html(self):
     return "<div><table></div></table>"
 
 class GeneTest(unittest.TestCase):
   def setUp(self):
-    self.gene = Gene((0, 1))
+    self.gene = Gene(1)
     self.errorformatter = MockErrorFormatter()
     self.badformatter = MockBadHTMLFormatter()
     db = bglib.doc.mock.DataBaseMock()

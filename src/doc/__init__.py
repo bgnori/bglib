@@ -5,15 +5,19 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 class Viewer(object):
-  def make_html(self, *args, **kw):
+  def parse(self, *args, **kw):
     pass
-  def make_pdf(self, *args, **kw):
+  def make_html(self):
+    pass
+  def make_pdf(self):
     pass
 
 class Formatter(Viewer):
-  def make_html(self, text):
+  def parse(self, text):
     pass
-  def make_pdf(self, text):
+  def make_html(self):
+    pass
+  def make_pdf(self):
     pass
 
 

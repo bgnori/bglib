@@ -13,6 +13,10 @@ class ViewerDuckTypeTest(unittest.TestCase):
     self.assert_(isinstance(self.target, bglib.doc.Viewer))
 
   def has_make_html_test(self):
+    self.assert_(hasattr(self.target, 'parse'))
+    self.assert_(callable(getattr(self.target, 'parse')))
+
+  def has_make_html_test(self):
     self.assert_(hasattr(self.target, 'make_html'))
     self.assert_(callable(getattr(self.target, 'make_html')))
 
@@ -27,10 +31,10 @@ class FormatterDuckTypeTest(ViewerDuckTypeTest):
 
   def call_make_html_test(self):
     f = getattr(self.target, 'make_html')
-    self.assert_(isinstance(f(''), (str, unicode)))
+    self.assert_(isinstance(f(), (str, unicode)))
 
   def call_make_pdf_test(self):
     f = getattr(self.target, 'make_pdf')
-    self.assert_(isinstance(f(''), (str, unicode)))
+    self.assert_(isinstance(f(), (str, unicode)))
 
 

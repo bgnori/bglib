@@ -328,6 +328,10 @@ class Editor(object):
       node = node.parent
     return nest
 
+  def accept(self, visitor):
+    assert isinstance(visitor, Visitor)
+    return self.current.accept(visitor)
+    
   def ancestor(self, *klassses):
     node = self.current
     while node:
