@@ -366,6 +366,30 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''</dd></dl>\n'''
        ))
 
+  def test_itemize_in_definition(self):
+    self.wiki.parse(
+       '''hitting::\n'''
+       '''  * gains pips.\n'''
+       '''  * gains tempo.\n'''
+       '''  * may dance.\n'''
+       '''  * put hit chequers behind of the prime.\n'''
+       )
+
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      (
+       '''<dl>\n'''
+       '''<dt>hitting<dt>\n'''
+       '''<dd><ul>'''
+       '''<li>gains pips.</li>'''
+       '''<li>gains tempo.</li>'''
+       '''<li>may dance.</li>'''
+       '''<li>put hit chequers behind of the prime.</li>'''
+       '''</ul>'''
+       '''</dd></dl>\n'''
+       ))
+
+
   def test_get_formatter_0(self):
     f = self.wiki.get_formatter()
     self.assert_(isinstance(f, bglib.doc.bgwiki.LineFormatter))
