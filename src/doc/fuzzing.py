@@ -60,7 +60,7 @@ class Gene(object):
     except Exception, e:
       return FormatError(e) 
     try:
-      self.html = formatter.make_html(text)
+      self.html = formatter.make_html()
     except Exception, e:
       return FormatError(e) 
     return True
@@ -87,7 +87,7 @@ def fuzz_it(gklass, formatter):
   length = int(sys.argv[1])
   trials = int(sys.argv[2])
   for j in range(trials):
-    g = gklass(random, length)
+    g = gklass(length)
     ok_or_error = g.format(formatter)
     if not ok_or_error:
       print ok_or_error.exception, ok_or_error.stacktrace
