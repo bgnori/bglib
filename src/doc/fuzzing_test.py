@@ -30,7 +30,7 @@ class GeneTest(unittest.TestCase):
     self.goodformatter = bglib.doc.bgwiki.Formatter(db)
 
   def get_text_test(self):
-    self.assertEqual(self.gene.get_text(), '\n ')
+    self.assert_(self.gene.get_text() in 'gtac')
 
   def format_bool_test(self):
     self.assertFalse(self.gene.format(self.errorformatter))

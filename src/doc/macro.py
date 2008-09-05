@@ -150,7 +150,7 @@ def CubeAction_table_header(editor):
     editor.leave(bglib.doc.doctree.TableHeaderElement)
 
     editor.enter(bglib.doc.doctree.TableHeaderElement, colspan="2")
-    editor.append_text(' Cubeful. Eq. ')
+    editor.append_text(' Cubeful Eq. ')
     editor.leave(bglib.doc.doctree.TableHeaderElement)
 
     editor.leave(bglib.doc.doctree.TableRowElement)
@@ -209,7 +209,7 @@ def Movelisting_header(editor):
   editor.append_text('Ply')
   editor.leave(bglib.doc.doctree.TableHeaderElement)
   editor.enter(bglib.doc.doctree.TableHeaderElement, colspan="6")
-  editor.append_text('Eq. (diff)')
+  editor.append_text('Eq.(diff)')
   editor.leave(bglib.doc.doctree.TableHeaderElement)
   editor.leave(bglib.doc.doctree.TableRowElement)
 
@@ -349,20 +349,20 @@ def CubelessEquity(editor, ply=0, cubeless=0.0, money=0.0,
     #    '''<table>\n'''
     #    '''<tr class='headerrow'><th rowspan='2'>Ply</th><th colspan='6'> Cubeless Eq. </th></tr>\n'''
     #    '''<tr class='headerrow'><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-    #    '''<tr class='oddrow'><td rowspan='2'>$ply</td><td class='Equity' colspan='6'> $cubeless (Moeny $money) </td></tr>\n'''
+    #    '''<tr class='oddrow'><td rowspan='2'>$ply</td><td class='Equity' colspan='6'> $cubeless (Money $money) </td></tr>\n'''
     #    '''<tr class='oddrow'><td>$Win</td><td>$WinG</td><td>$WinBg</td><td>$Lose</td><td>$LoseG</td><td>$LoseBg</td></tr>\n'''
     #'''</table>\n''')
     #return t.substitute(cubeless=cubeless, money=money, ply=ply,
     #                    Win=Win, WinG=WinG, WinBg=WinBg,
     #                     Lose=Lose, LoseG=LoseG, LoseBg=LoseBg)
 
-    editor.enter(bglib.doc.doctree.TableElement)
+    editor.enter(bglib.doc.doctree.TableElement, **{'class':'cubeless'})
     editor.enter(bglib.doc.doctree.TableRowElement, **{'class':'headerrow'})
     editor.enter(bglib.doc.doctree.TableHeaderElement, rowspan='2')
     editor.append_text('Ply')
     editor.leave(bglib.doc.doctree.TableHeaderElement)
     editor.enter(bglib.doc.doctree.TableHeaderElement, colspan='6')
-    editor.append_text(' Cubeless Eq. ')
+    editor.append_text('Cubeless Eq. ')
     editor.leave(bglib.doc.doctree.TableHeaderElement)
     editor.leave(bglib.doc.doctree.TableRowElement)
 
@@ -392,7 +392,7 @@ def CubelessEquity(editor, ply=0, cubeless=0.0, money=0.0,
     editor.append_text(ply)
     editor.leave(bglib.doc.doctree.TableCellElement)
     editor.enter(bglib.doc.doctree.TableCellElement, **{'class':'Equity', 'colspan':"6"})
-    editor.append_text('%s %s'%(cubeless, money))
+    editor.append_text('%s (Money %s)'%(cubeless, money))
     editor.leave(bglib.doc.doctree.TableCellElement)
     editor.leave(bglib.doc.doctree.TableRowElement)
 

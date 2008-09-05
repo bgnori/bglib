@@ -24,7 +24,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      """<div class="position"><div class="error">No such macro "badname" with argument "None"</div></div>"""
+      """<div class="error">No such macro "badname" with argument "None"</div>"""
       )
     
   def test_BR(self):
@@ -76,13 +76,13 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<table>\n"""
+      ("""<table class="cubeless">\n"""
        """<tr class="headerrow"><th rowspan="2">Ply</th><th colspan="6"> Cubeless Eq. </th></tr>\n"""
        """<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
-       """<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.011 (Moeny +0.008) </td></tr>\n"""
+       """<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.011 (Money +0.008) </td></tr>\n"""
        """<tr class="oddrow"><td>0.5</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.0</td></tr>\n"""
        """</table>\n"""
-       """<table>\n"""
+       """<table class="cubeaction">\n"""
        """<tr class="headerrow"><th>#</th><th>action</th><th colspan="2"> Cubeful Eq. </th></tr>\n"""
        """<tr class="actualrow"><th>1</th><td> No double </td><td> +0.236 </td><td>  </td></tr>\n"""
        """<tr class="evenrow"><th>2</th><td> Double, pass </td><td> +0.236 </td><td> +0.764 </td></tr>\n"""
@@ -95,7 +95,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<table>\n"""
+      ("""<table class="move">\n"""
 """<tr class="headerrow"><th rowspan="2">#</th><th rowspan="2">move</th><th rowspan="2">Ply</th><th colspan="6"> Eq.(diff)</th></tr>\n"""
 """<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
 """<tr class="oddrow"><th rowspan="2">1</th><td rowspan="2">21/15(2) 13/7(2)</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.975 </td></tr>\n"""
@@ -120,7 +120,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       (
-       """<table>\n"""
+       """<table class="move">\n"""
        """<tr class="headerrow"><th rowspan="2">#</th><th rowspan="2">move</th><th rowspan="2">Ply</th><th colspan="6"> Eq.(diff)</th></tr>\n"""
        """<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
        """<tr class="oddrow"><th rowspan="2">1</th><td rowspan="2">21/15(2) 13/7(2)</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.975 </td></tr>\n"""
@@ -208,10 +208,10 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<table>\n"""
+      ("""<table class="cubeless">\n"""
        """<tr class="headerrow"><th rowspan="2">Ply</th><th colspan="6"> Cubeless Eq. </th></tr>\n"""
        """<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n"""
-       """<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.706 (Moeny +0.696) </td></tr>\n"""
+       """<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.706 (Money +0.696) </td></tr>\n"""
        """<tr class="oddrow"><td>76.6</td><td>23.6</td><td>1.0</td><td>23.4</td><td>7.8</td><td>0.3</td></tr>\n"""
        """</table>\n"""))
 

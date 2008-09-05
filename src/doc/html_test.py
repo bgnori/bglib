@@ -87,12 +87,22 @@ class HTMLEscapeTest(unittest.TestCase):
     t = bglib.doc.html.tuplify(a)
     self.assertEqual(
       t,
-      (('blockquote', (('class', 'citation'),)), ('text', ''),
-      ('blockquote', (('class', 'citation'),)), ('text', ''),
-      ('p', ()), ('text', "Someone's original text"), ('p', ()),
-      ('text', ''), ('blockquote', ()), ('text', ''), ('p', ()),
-      ('text', "Someone else's reply text"), ('p', ()), ('text', ''),
-      ('blockquote', ()), ('text', 'My reply text'))
+        (('blockquote', (('class', 'citation'),)),
+         ('text', ''),
+         ('blockquote', (('class', 'citation'),)),
+         ('text', ''),
+         ('p', ()),
+         ('text', "Someone's original text"),
+         ('/p', ()),
+         ('text', ''),
+         ('/blockquote', ()),
+         ('text', ''),
+         ('p', ()),
+         ('text', "Someone else's reply text"),
+         ('/p', ()),
+         ('text', ''),
+         ('/blockquote', ()),
+         ('text', 'My reply text'))
       )
 
 
@@ -102,9 +112,11 @@ class HTMLEscapeTest(unittest.TestCase):
     t = bglib.doc.html.tuplify(a)
     self.assertEqual(
       t,
-       (('a', (('href', 'http://www.tonic-water.com/'), ('class', 'ext-link'),
-       ('title', 'title'))), ('span', (('class', 'icon'),)),
-       ('text', 'http://www.tonic-water.com/'), ('span', ()), ('a', ()))
+       (('a', (('href', 'http://www.tonic-water.com/'), ('class', 'ext-link'), ('title', 'title'))),
+       ('span', (('class', 'icon'),)),
+       ('text', 'http://www.tonic-water.com/'),
+       ('/span', ()), 
+       ('/a', ()))
        )
 
   def test_tuplify_3(self):
@@ -130,9 +142,9 @@ class HTMLEscapeTest(unittest.TestCase):
     t = bglib.doc.html.tuplify(a)
     self.assertEqual(
                     t,
-                    (('tr', (('colspan', '2'),)),
-                     ('tr', (('class', 'hoge'), ('colspan', '2'))),
-                     ('tr', (('class', 'hoge'), ('colspan', '2'), ('rowspan', '3'))))
+                    (('tr', (('colspan', '2'),)), 
+                     ('tr', (('colspan', '2'), ('class', 'hoge'))), 
+                     ('tr', (('colspan', '2'), ('rowspan', '3'), ('class', 'hoge'))))
                     )
 
   def test_cmp_tuplify_1(self):

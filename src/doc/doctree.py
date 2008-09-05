@@ -172,13 +172,13 @@ class BoxElement(BgWikiElementNode):
   def acceptables(self):
     return (SpanElement,)
   
-class HeadingElement(SpanElement):
+class HeadingElement(BoxElement):
   pass
-class H1Element(SpanElement):
+class H1Element(HeadingElement):
   html_element = 'h1'
-class H2Element(SpanElement):
+class H2Element(HeadingElement):
   html_element = 'h2'
-class H3Element(SpanElement):
+class H3Element(HeadingElement):
   html_element = 'h3'
 
 class DivElement(BoxElement):

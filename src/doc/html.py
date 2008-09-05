@@ -29,12 +29,12 @@ def nomalize(html):
   return re.sub(gt, '>\n', crlfless)
 
 
-ELEMENT = r'(?P<element>[a-zA-Z0-9]+)'
+ELEMENT = r'(?P<element>[/a-zA-Z0-9]+)'
 ATTRNAME = r'(?P<attrname>[a-zA-Z]+)'
 ATTRVALUE = r'(?P<attrvalue>[a-zA-Z0-9:;./\-]+)'
 ATTRIBUTE = r'(?P<attribute>' + ATTRNAME + '="' + ATTRVALUE + '")'
 ATTRIBUTE_LIST = '(?P<attribute_list>(' + ATTRIBUTE + '[ ]*)*)'
-TAG = '(?P<tag></?' + ELEMENT + '( ' +  ATTRIBUTE_LIST + ')?>)'
+TAG = '(?P<tag><' + ELEMENT + '( ' +  ATTRIBUTE_LIST + ')?>)'
 TEXT = '(?P<text>[^<>&]*)'
 TAG_OR_TEXT = '(' + TAG + '|' + TEXT + ')'
 
@@ -54,14 +54,14 @@ def dictify_attr(attr):
   for matchobj in r_attribute.finditer(attr):
     d = matchobj.groupdict('')
     r.update({d['attrname']:d['attrvalue']})
-  return tuple(r)
+  return tuple([(key, value) for key, value in r.items()])
 
 def tuplify(normalized):
   r = list()
   for matchobj in r_tag_or_text.finditer(normalized):
     d = matchobj.groupdict('')
     if 'tag' in d and d['element']:
-      r.append((d['element'], tuplify_attr(d['attribute_list'])))
+      r.append((d['element'], dictify_attr(d['attribute_list'])))
     elif 'text' in d and d['text']:
       r.append(('text', d['text'].strip()))
   return tuple(r)

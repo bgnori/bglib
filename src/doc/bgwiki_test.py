@@ -524,9 +524,9 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.line.parse('''Match: m1, [1] or match:1''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''Match: <a class="match" href="/match/1">m1</a>, '''
-'''<a class="match" href="/match/1">[1]</a> '''
-'''or <a class="match" href="/match/1">match:1</a>''')
+'''Match: <a class="match" title="title" href="/match/1">m1</a>, '''
+'''<a class="match" title="title" href="/match/1">[1]</a> '''
+'''or <a class="match" title="title" href="/match/1">match:1</a>''')
 
   def test_escaping_link(self):
     self.line.parse('''!#42 is not a link''')
@@ -562,7 +562,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
-       '''<table>\n'''
+       '''<table class="move">\n'''
        '''<tr class="headerrow"><th rowspan="2">#</th><th rowspan="2">move</th><th rowspan="2">Ply</th><th colspan="6"> Eq.(diff)</th></tr>\n'''
        '''<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
        '''<tr class="oddrow"><th rowspan="2">1</th><td rowspan="2">21/15(2) 13/7(2)</td><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.975 </td></tr>\n'''
@@ -578,13 +578,13 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.wiki.parse('''[[Analysis(vzsAAFhu2xFABA:QYkqASAAIAAA)]]''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<table>\n'''
+      ('''<table class="cubeless">\n'''
        '''<tr class="headerrow"><th rowspan="2">Ply</th><th colspan="6"> Cubeless Eq. </th></tr>\n'''
        '''<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-       '''<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.011 (Moeny +0.008) </td></tr>\n'''
+       '''<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.011 (Money +0.008) </td></tr>\n'''
        '''<tr class="oddrow"><td>0.5</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.0</td></tr>\n'''
        '''</table>\n'''
-       '''<table>\n'''
+      '''<table class="cubeaction">\n'''
        '''<tr class="headerrow"><th>#</th><th>action</th><th colspan="2"> Cubeful Eq. </th></tr>\n'''
        '''<tr class="actualrow"><th>1</th><td> No double </td><td> +0.236 </td><td>  </td></tr>\n'''
        '''<tr class="evenrow"><th>2</th><td> Double, pass </td><td> +0.236 </td><td> +0.764 </td></tr>\n'''
