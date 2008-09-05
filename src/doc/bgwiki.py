@@ -193,7 +193,7 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_citation>^[>]+[ ])",
     #r"(?P<_pattern_definition_header>^([.+])+::$)",
     r"(?P<_pattern_comsume_definition_header>::$)",
-    r"(?P<_pattern_quote_or_definition_body>^[ ]{2})", # Line starts with WhiteSpaces but NOT ITEMIZE.
+    r"(?P<_pattern_quote_or_definition_body>^[ ]{2,})", # Line starts with WhiteSpaces but NOT ITEMIZE.
     r"(?P<_pattern_escape_html>(%s))"%bglib.doc.html.UNSAFE_LETTERS,
     r"(?P<_pattern_rest_of_the_world>.)",
   ]
@@ -354,7 +354,9 @@ class LineFormatter(BaseFormatter):
   def _handle_pattern_itemize(self, match, matchobj):
     editor = self.editor
     indent = self._calc_indent(match, ' ')
-    nest = editor.count_nesting(bglib.doc.doctree.ListElement)
+    nest = editor.count_nesting(bglib.doc.doctree.ListElement) \
+          -  editor.count_nesting(bglib.doc.doctree.DefinitionListElement)
+    
 
     nest = self._unnest(indent, nest, bglib.doc.doctree.ListElement)
 

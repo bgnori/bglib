@@ -357,13 +357,12 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
-       '''<dl>\n'''
-       '''<dt><a href="/wiki/backgammon" class="wiki-link" title="backgammon">backgammon</a></dt>\n'''
-       '''<dd>some kind of board game for two players, with two dice and 15 chequers for each player\n'''
-       '''</dd><dt><a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">'''
-       '''BackgammonBase</a></dt>\n'''
-       '''<dd>Web application to learn backgammon effectively.\n'''
-       '''</dd></dl>\n'''
+       '''<dl>'''
+       '''<dt><a href="/wiki/backgammon" class="wiki-link" title="backgammon">backgammon</a></dt>'''
+       '''<dd>some kind of board game for two players, with two dice and 15 chequers for each player</dd>'''
+       '''<dt><a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">BackgammonBase</a></dt>'''
+       '''<dd>Web application to learn backgammon effectively.</dd>'''
+       '''</dl>'''
        ))
 
   def test_itemize_in_definition(self):
@@ -379,7 +378,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.wiki.make_html(),
       (
        '''<dl>\n'''
-       '''<dt>hitting<dt>\n'''
+       '''<dt>hitting</dt>\n'''
        '''<dd><ul>'''
        '''<li>gains pips.</li>'''
        '''<li>gains tempo.</li>'''

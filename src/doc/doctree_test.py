@@ -47,7 +47,7 @@ class NodeTest(unittest.TestCase):
 
 class EditorTest(unittest.TestCase):
   def setUp(self):
-    self.root = bglib.doc.doctree.Root()
+    self.root = bglib.doc.doctree.BgWikiElementRoot()
     self.editor = bglib.doc.doctree.Editor()
 
   def test_start_done(self):

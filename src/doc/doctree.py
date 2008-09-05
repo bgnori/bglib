@@ -90,6 +90,8 @@ class BgWikiElementRoot(BgWikiElementNode, Root):
   def __init__(self, **d):
     BgWikiElementNode.__init__(self, None)
     self.attrs = dict(**d)
+  def is_acceptable(self, e):
+    return True
 
 
 class LineElement(BgWikiElementNode):
@@ -194,7 +196,7 @@ class DefinitionListElement(BoxElement):
   html_element = 'dl'
   def acceptables(self):
     return super(DefinitionListElement, self).acceptables() + \
-           (DefinitionHeaderElement, DefinitionBodyElement)
+           (DefinitionHeaderElement, DefinitionBodyElement, ListElement)
 
 
 class TableElement(BoxElement):
@@ -331,7 +333,14 @@ class Editor(object):
   def append(self, klass, **d):
     assert issubclass(klass, Node)
     node = klass(self.current, **d)
-    self.current.append(node)
+    c = self.current
+    while c and not c.is_acceptable(node):
+      if not c.parent:
+        print c, node
+        raise
+      c = c.parent
+    c.append(node)
+    self.current = c
     return node
 
   def remove(self, node):
@@ -345,7 +354,7 @@ class Editor(object):
         return
     self.current.append(Text(self.current, text=text))
 
-  def count_nesting(self, klass_or_klasses):
+  def count_nesting(self, *klass_or_klasses):
     nest = 0
     node = self.current
     while node:
