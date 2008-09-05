@@ -185,10 +185,10 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_camelcase>!?[A-Z][a-z0-9]+([A-Z][a-z0-9]+)+)",
     r"(?P<_pattern_itemize>^[ ]+"
       r"((?P<star>[*])"
-       r"|(?P<sign>(?P<plus>[+]{1,3})|(?P<minus>-{1,3}))"
-       r"|(?P<ordered_numeric>[1-8]\.?)"
-       r"|(?P<ordered_alpha>[a-h]\.?)"
-       r"|(?P<ordered_roman>[iv]+\.?)"
+      r"|(?P<sign>(?P<plus>[+]{1,3})|(?P<minus>-{1,3}))"
+      r"|(?P<ordered_numeric>[1-8]\.?)"
+      r"|(?P<ordered_alpha>[a-h]\.?)"
+      r"|(?P<ordered_roman>[iv]+\.?)"
       r")[ ])",
     r"(?P<_pattern_citation>^[>]+[ ])",
     #r"(?P<_pattern_definition_header>^([.+])+::$)",
@@ -206,13 +206,14 @@ class LineFormatter(BaseFormatter):
   def parse(self, input_line):
     editor = self.editor
     if input_line:
-      if input_line[0] not in ' >':
+      if input_line[0] not in ' ':
         editor.leave((bglib.doc.doctree.BlockQuoteElement, 
-                      bglib.doc.doctree.CitationElement, 
                       bglib.doc.doctree.DefinitionBodyElement))
+      if input_line[0] not in '>':
+        editor.leave((bglib.doc.doctree.CitationElement, ))
+
       if input_line.endswith('::'):
         self.start_definition_header()
-        pass
       for matchobj in self.get_regexp().finditer(input_line):
         for name, match in matchobj.groupdict().items():
           if match:
@@ -354,10 +355,7 @@ class LineFormatter(BaseFormatter):
   def _handle_pattern_itemize(self, match, matchobj):
     editor = self.editor
     indent = self._calc_indent(match, ' ')
-    nest = editor.count_nesting(bglib.doc.doctree.ListElement) \
-          -  editor.count_nesting(bglib.doc.doctree.DefinitionListElement)
-    
-
+    nest = editor.count_nesting(bglib.doc.doctree.ListElement)
     nest = self._unnest(indent, nest, bglib.doc.doctree.ListElement)
 
     if indent == nest:
@@ -383,7 +381,6 @@ class LineFormatter(BaseFormatter):
     d.update({'style':editor.current.get_style()})
     editor.enter(bglib.doc.doctree.ItemizeElement, **d)
 
-
   def start_definition_header(self):
     editor = self.editor
     self.start_on_not_exist_handler(bglib.doc.doctree.DefinitionListElement)
@@ -392,12 +389,17 @@ class LineFormatter(BaseFormatter):
   def end_definition_header(self):
     editor = self.editor
     self.end_handler(bglib.doc.doctree.DefinitionHeaderElement)
+    self.start_handler(bglib.doc.doctree.DefinitionBodyElement)
 
   def _handle_pattern_quote_or_definition_body(self, match, matchobj):
     editor = self.editor
     found = self.editor.ancestor(bglib.doc.doctree.DefinitionListElement)
     if found:
-      self.start_on_not_exist_handler(bglib.doc.doctree.DefinitionBodyElement)
+      body = self.editor.ancestor(bglib.doc.doctree.DefinitionBodyElement)
+      if body:
+        self.editor.current = body
+      else:
+        self.start_on_not_exist_handler(bglib.doc.doctree.DefinitionBodyElement)
     else:
       self.start_on_not_exist_handler(bglib.doc.doctree.BlockQuoteElement)
 

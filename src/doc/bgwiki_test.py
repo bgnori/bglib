@@ -354,26 +354,27 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''  Web application to learn backgammon effectively.\n'''
        )
 
+    print self.wiki.make_html()
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
        '''<dl>'''
-       '''<dt><a href="/wiki/backgammon" class="wiki-link" title="backgammon">backgammon</a></dt>'''
-       '''<dd>some kind of board game for two players, with two dice and 15 chequers for each player</dd>'''
-       '''<dt><a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">BackgammonBase</a></dt>'''
-       '''<dd>Web application to learn backgammon effectively.</dd>'''
+       '''<dt><a href="/wiki/backgammon" class="wiki-link" title="backgammon">backgammon</a>\n</dt>'''
+       '''<dd>some kind of board game for two players, with two dice and 15 chequers for each player\n</dd>'''
+       '''<dt><a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">BackgammonBase</a>\n</dt>'''
+       '''<dd>Web application to learn backgammon effectively.\n</dd>'''
        '''</dl>'''
        ))
 
   def test_itemize_in_definition(self):
     self.wiki.parse(
        '''hitting::\n'''
-       '''  * gains pips.\n'''
-       '''  * gains tempo.\n'''
-       '''  * may dance.\n'''
-       '''  * put hit chequers behind of the prime.\n'''
+       ''' * gains pips.\n'''
+       ''' * gains tempo.\n'''
+       ''' * may dance.\n'''
+       ''' * put hit chequers behind of the prime.\n'''
        )
-
+    print self.wiki.make_html()
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
@@ -386,6 +387,64 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''<li>put hit chequers behind of the prime.</li>'''
        '''</ul>'''
        '''</dd></dl>\n'''
+       ))
+
+  def test_itemize_and_text_in_definition(self):
+    self.wiki.parse(
+       '''hitting::\n'''
+       ''' merits are\n'''
+       ''' * gains pips.\n'''
+       ''' * gains tempo.\n'''
+       ''' * may dance.\n'''
+       ''' * put hit chequers behind of the prime.\n'''
+       )
+
+    print self.wiki.make_html()
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      (
+       '''<dl>\n'''
+       '''<dt>hitting</dt>\n'''
+       '''<dd> merits are<ul>'''
+       '''<li>gains pips.</li>'''
+       '''<li>gains tempo.</li>'''
+       '''<li>may dance.</li>'''
+       '''<li>put hit chequers behind of the prime.</li>'''
+       '''</ul>'''
+       '''</dd></dl>\n'''
+       ))
+
+  def test_complex_mix_of_itemize_and_definition(self):
+    self.wiki.parse(
+       '''hitting::\n'''
+       '''  * gains pips.\n'''
+       ''' * gains tempo.\n'''
+       '''  * may dance.\n'''
+       ''' * put hit chequers behind of the prime.\n'''
+       '''  these are merits.(this is in dd, not in li)\n'''
+       '''\n'''
+       '''this is not in dl'''
+       )
+
+    print self.wiki.make_html()
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      (
+       '''<dl>\n'''
+       '''<dt>hitting</dt>\n'''
+       '''<dd><ul><ul>'''
+       '''<li>gains pips.</li>'''
+       '''</ul>'''
+       '''<li>gains tempo.'''
+       '''<ul>'''
+       '''<li>may dance.</li>'''
+       '''</ul>'''
+       '''</li>'''
+       '''<li>put hit chequers behind of the prime.</li>'''
+       '''</ul>'''
+       '''these are merits.(this is in dd, not in li)\n'''
+       '''</dd></dl>\n'''
+       '''this is not in dl'''
        ))
 
 

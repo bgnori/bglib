@@ -19,6 +19,7 @@ class Node(object):
 
   def append(self, node):
     assert isinstance(node, Node)
+    #print self, node
     self.children.append(node)
 
   def remove(self, node):
@@ -98,7 +99,6 @@ class LineElement(BgWikiElementNode):
   def acceptables(self):
     return (SpanElement,)
 
-
 class SpanElement(LineElement):
   html_element = 'span'
 
@@ -162,10 +162,7 @@ class ItemizeElement(LineElement):
 class DefinitionHeaderElement(LineElement):
   html_element = 'dt'
 
-class DefinitionBodyElement(LineElement):
-  html_element = 'dd'
-
-class AnchorElement(LineElement):
+class AnchorElement(SpanElement):
   html_element = 'a'
   def set_url(self, url):
     self.attrs["href"] = url
@@ -182,6 +179,12 @@ class H2Element(HeadingElement):
   html_element = 'h2'
 class H3Element(HeadingElement):
   html_element = 'h3'
+
+class DefinitionBodyElement(BoxElement):
+  html_element = 'dd'
+  def acceptables(self):
+    return super(BoxElement, self).acceptables() + \
+           (ListElement,)
 
 class DivElement(BoxElement):
   html_element = 'div'
@@ -335,9 +338,6 @@ class Editor(object):
     node = klass(self.current, **d)
     c = self.current
     while c and not c.is_acceptable(node):
-      if not c.parent:
-        print c, node
-        raise
       c = c.parent
     c.append(node)
     self.current = c
