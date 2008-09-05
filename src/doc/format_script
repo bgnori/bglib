@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+# -*- coding: us-ascii -*-
+# vim: syntax=python
+
+import sys
+from bglib.doc.bgwiki import Formatter
+from bglib.doc.mock import DataBaseMock
+
+db = DataBaseMock()
+formatter = Formatter(db)
+
+formatter.parse(sys.stdin.read())
+print formatter.make_html()
+  
+
+
+
