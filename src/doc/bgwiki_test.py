@@ -97,6 +97,24 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.line.make_html(),
       '''Line 1<br />Line 2\n''')
 
+  def test_heading_h1(self):
+    self.wiki.parse('''= heading =\n''')
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      '''<h1>heading</h1>\n''')
+
+  def test_heading_h2(self):
+    self.wiki.parse('''== heading ==\n''')
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      '''<h2>heading</h2>\n''')
+
+  def test_heading_h3(self):
+    self.wiki.parse('''=== heading ===\n''')
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      '''<h3>heading</h3>\n''')
+
   def test_itemize_style_unorder(self):
     self.wiki.parse(''' * Item 1\n'''
                     '''  * Item 1.1\n'''

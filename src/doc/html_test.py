@@ -87,14 +87,12 @@ class HTMLEscapeTest(unittest.TestCase):
     t = bglib.doc.html.tuplify(a)
     self.assertEqual(
       t,
-      (('blockquote', (('class', 'citation'),)),
-       ('blockquote', (('class', 'citation'),)),
-       ('p', ()),
-       ('p', ()),
-       ('blockquote', ()),
-       ('p', ()),
-       ('p', ()),
-       ('blockquote', ()))
+      (('blockquote', (('class', 'citation'),)), ('text', ''),
+      ('blockquote', (('class', 'citation'),)), ('text', ''),
+      ('p', ()), ('text', "Someone's original text"), ('p', ()),
+      ('text', ''), ('blockquote', ()), ('text', ''), ('p', ()),
+      ('text', "Someone else's reply text"), ('p', ()), ('text', ''),
+      ('blockquote', ()), ('text', 'My reply text'))
       )
 
 
@@ -104,13 +102,9 @@ class HTMLEscapeTest(unittest.TestCase):
     t = bglib.doc.html.tuplify(a)
     self.assertEqual(
       t,
-      (('a',
-        (('href', 'http://www.tonic-water.com/'),
-         ('class', 'ext-link'),
-         ('title', 'title'))),
-       ('span', (('class', 'icon'),)),
-       ('span', ()),
-       ('a', ()))
+       (('a', (('href', 'http://www.tonic-water.com/'), ('class', 'ext-link'),
+       ('title', 'title'))), ('span', (('class', 'icon'),)),
+       ('text', 'http://www.tonic-water.com/'), ('span', ()), ('a', ()))
        )
 
   def test_tuplify_3(self):
@@ -193,13 +187,13 @@ class HTMLEscapeTest(unittest.TestCase):
 
     r = bglib.doc.html.cmp_tuple(a, b)
     pprint.pprint(r)
-    self.assertFalse(r)
+    self.assert_(r)
 
 
   def test_cmp_tuplify_3(self):
     a = ('''<blockquote class="citation">\n'''
     '''<blockquote class="citation">\n'''
-    '''<p height='2'>\n'''
+    '''<p height="2">\n'''
     '''Someone\'s original text</p>\n'''
     '''</blockquote>\n'''
     '''<p>\n'''
@@ -209,7 +203,7 @@ class HTMLEscapeTest(unittest.TestCase):
     
     b = ('''<blockquote class="citation">\n'''
     '''<blockquote class="citation">\n'''
-    '''<p width='2'>\n'''
+    '''<p width="2">\n'''
     '''Someone\'s original text\n'''
     '''</p>\n'''
     '''</blockquote>\n'''
@@ -221,6 +215,7 @@ class HTMLEscapeTest(unittest.TestCase):
 
     r = bglib.doc.html.cmp_tuple(a, b)
     pprint.pprint(r)
+    self.assert_(r)
 
 
   def test_cmp_htmlthing(self):

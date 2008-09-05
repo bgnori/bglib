@@ -29,15 +29,18 @@ def nomalize(html):
   return re.sub(gt, '>\n', crlfless)
 
 
-ELEMENT = r'(?P<element>[a-zA-Z]+)'
+ELEMENT = r'(?P<element>[a-zA-Z0-9]+)'
 ATTRNAME = r'(?P<attrname>[a-zA-Z]+)'
 ATTRVALUE = r'(?P<attrvalue>[a-zA-Z0-9:;./\-]+)'
 ATTRIBUTE = r'(?P<attribute>' + ATTRNAME + '="' + ATTRVALUE + '")'
 ATTRIBUTE_LIST = '(?P<attribute_list>(' + ATTRIBUTE + '[ ]*)*)'
 TAG = '(?P<tag></?' + ELEMENT + '( ' +  ATTRIBUTE_LIST + ')?>)'
+TEXT = '(?P<text>[^<>&]*)'
+TAG_OR_TEXT = '(' + TAG + '|' + TEXT + ')'
 
 r_attribute =re.compile(ATTRIBUTE)
 r_tag = re.compile(TAG)
+r_tag_or_text  = re.compile(TAG_OR_TEXT)
 
 def tuplify_attr(attr):
   r = list()
@@ -51,32 +54,41 @@ def dictify_attr(attr):
   for matchobj in r_attribute.finditer(attr):
     d = matchobj.groupdict('')
     r.update({d['attrname']:d['attrvalue']})
-  return r
+  return tuple(r)
 
 def tuplify(normalized):
   r = list()
-  for matchobj in r_tag.finditer(normalized):
+  for matchobj in r_tag_or_text.finditer(normalized):
     d = matchobj.groupdict('')
-    r.append((d['element'], tuplify_attr(d['attribute_list'])))
+    if 'tag' in d and d['element']:
+      r.append((d['element'], tuplify_attr(d['attribute_list'])))
+    elif 'text' in d and d['text']:
+      r.append(('text', d['text'].strip()))
   return tuple(r)
 
 def tupdict(normalized):
   r = list()
-  for matchobj in r_tag.finditer(normalized):
+  for matchobj in r_tag_or_text.finditer(normalized):
     d = matchobj.groupdict('')
-    r.append((d['element'], dictify_attr(d['attribute_list'])))
+    if 'tag' in d and d['element']:
+      r.append((d['element'], dictify_attr(d['attribute_list'])))
+    elif 'text' in d and d['text']:
+      r.append(('text', d['text'].strip()))
   return tuple(r)
 
 def cmp_tuple(html_a, html_b):
+  L = list()
   if html_a == html_b:
-    return []
-  a = tuplify(nomalize(html_a))
-  b = tuplify(nomalize(html_b))
+    return L
+  a = tupdict(nomalize(html_a))
+  b = tupdict(nomalize(html_b))
   s = difflib.SequenceMatcher(lambda x: len(x) == 0, a, b)
   for opcode in s.get_opcodes():
-    if opcode[0] != 'equal':
-      print "%6s a[%d:%d] b[%d:%d]"%opcode,
-      print a[opcode[1]: opcode[2]], b[opcode[3]: opcode[4]]
+    #print "%6s a[%d:%d] b[%d:%d]"%opcode,
+    #print a[opcode[1]: opcode[2]], b[opcode[3]: opcode[4]]
+    if not opcode[0].startswith('equal'):
+      L.append((opcode[0], a[opcode[1]: opcode[2]], b[opcode[3]: opcode[4]]))
+  return L
 
 
 def cmp(html_a, html_b):

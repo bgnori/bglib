@@ -170,6 +170,9 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_preformat_end>!?^%s$)"%PREFORMAT_END_TOKEN,
     r"(?P<_pattern_monospace_start>!?%s)"%PREFORMAT_START_TOKEN,
     r"(?P<_pattern_monospace_end>!?%s)"%PREFORMAT_END_TOKEN,
+    r"(?P<_pattern_heading_h3>!?===)",
+    r"(?P<_pattern_heading_h2>!?==)",
+    r"(?P<_pattern_heading_h1>!?=)",
     r"(?P<_pattern_macro>\[\[(?P<macro_name>\w+)(\((?P<macro_args>[a-zA-Z0-9,.=/#:]+)\))?\]\])",
     r"(?P<_pattern_entry_link>!?(#|entry:)\d+)",
     r"(?P<_pattern_query_link>!?((query:\d+)|(\{\d+\})))",
@@ -259,6 +262,21 @@ class LineFormatter(BaseFormatter):
   def _handle_pattern_superscript(self, match, matchobj):
     self.start_or_end_handler(
         bglib.doc.doctree.SuperscriptElement)
+
+  def _handle_pattern_heading_h3(self, match, matchobj):
+    #r"(?P<_pattern_heading_h3>!?===)",
+    self.start_or_end_handler(
+        bglib.doc.doctree.H3Element)
+
+  def _handle_pattern_heading_h2(self, match, matchobj):
+    #r"(?P<_pattern_heading_h2>!?==)",
+    self.start_or_end_handler(
+        bglib.doc.doctree.H2Element)
+
+  def _handle_pattern_heading_h1(self, match, matchobj):
+    #r"(?P<_pattern_heading_h1>!?=)",
+    self.start_or_end_handler(
+        bglib.doc.doctree.H1Element)
 
   def _handle_pattern_monospace(self, match, matchobj):
     self.start_or_end_handler(
