@@ -8,10 +8,8 @@ from bglib.doc.mock import DataBaseMock
 
 db = DataBaseMock()
 formatter = Formatter(db)
-
-formatter.parse(sys.stdin.read())
-print formatter.make_html()
+text = sys.stdin.read().decode('shift-jis')
+formatter.parse(text)
+print formatter.make_html().encode('utf-8')
   
-
-
 
