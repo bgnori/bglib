@@ -43,7 +43,7 @@ class BaseFormatter(bglib.doc.Formatter):
 
   def get_regexp(self):
     if self._compiled is None:
-      self._compiled = re.compile( '(%s)'%'|'.join([re_str for re_str in self.patterns()]), re.UNICODE)
+      self._compiled = re.compile( '(%s)'%'|'.join([re_str for re_str in self.patterns()]), re.UNICODE|re.LOCALE)
     return self._compiled
 
   def start_handler(self, element_class, **d):
