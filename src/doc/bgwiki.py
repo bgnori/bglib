@@ -288,6 +288,7 @@ class LineFormatter(BaseFormatter):
 
   def _handle_pattern_preformat_start(self, match, matchobj):
     self.start_handler(WrappingFormatterElement)
+    self.editor.current.set_editor(self.editor)
 
   def _calc_indent(self, match, letter):
     indent = 0

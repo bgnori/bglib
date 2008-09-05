@@ -74,6 +74,154 @@ class HTMLEscapeTest(unittest.TestCase):
     pprint.pprint(z)
     self.assertEqual(z, a)
 
+  def test_tuplify_1(self):
+    a = ('''<blockquote class="citation">\n'''
+    '''<blockquote class="citation">\n'''
+    '''<p>\n'''
+    '''Someone\'s original text</p>\n'''
+    '''</blockquote>\n'''
+    '''<p>\n'''
+    '''Someone else\'s reply text</p>\n'''
+    '''</blockquote>\n'''
+    '''My reply text''')
+    t = bglib.doc.html.tuplify(a)
+    self.assertEqual(
+      t,
+      (('blockquote', (('class', 'citation'),)),
+       ('blockquote', (('class', 'citation'),)),
+       ('p', ()),
+       ('p', ()),
+       ('blockquote', ()),
+       ('p', ()),
+       ('p', ()),
+       ('blockquote', ()))
+      )
+
+
+  def test_tuplify_2(self):
+    a = ('''<a href="http://www.tonic-water.com/" class="ext-link" title="title">'''
+         '''<span class="icon">http://www.tonic-water.com/</span></a>''')
+    t = bglib.doc.html.tuplify(a)
+    self.assertEqual(
+      t,
+      (('a',
+        (('href', 'http://www.tonic-water.com/'),
+         ('class', 'ext-link'),
+         ('title', 'title'))),
+       ('span', (('class', 'icon'),)),
+       ('span', ()),
+       ('a', ()))
+       )
+
+  def test_tuplify_3(self):
+    a = ('''<a href="http://www.tonic-water.com/">'''
+         '''<a href="http://www.tonic-water.com/" class="ext-link">'''
+         '''<a href="http://www.tonic-water.com/" class="ext-link" title="title">''')
+    t = bglib.doc.html.tuplify(a)
+    self.assertEqual(
+      t,
+      (('a', (('href', 'http://www.tonic-water.com/'),)),
+       ('a', (('href', 'http://www.tonic-water.com/'), ('class', 'ext-link'))),
+       ('a',
+        (('href', 'http://www.tonic-water.com/'),
+         ('class', 'ext-link'),
+         ('title', 'title'))))
+      )
+
+
+  def test_tuplify_4(self):
+    a = ('''<tr colspan="2">'''
+         '''<tr class="hoge" colspan="2">'''
+         '''<tr class="hoge" colspan="2" rowspan="3">''')
+    t = bglib.doc.html.tuplify(a)
+    self.assertEqual(
+                    t,
+                    (('tr', (('colspan', '2'),)),
+                     ('tr', (('class', 'hoge'), ('colspan', '2'))),
+                     ('tr', (('class', 'hoge'), ('colspan', '2'), ('rowspan', '3'))))
+                    )
+
+  def test_cmp_tuplify_1(self):
+    a = ('''<blockquote class="citation">\n'''
+    '''<blockquote class="citation">\n'''
+    '''<p>\n'''
+    '''Someone\'s original text</p>\n'''
+    '''</blockquote>\n'''
+    '''<p>\n'''
+    '''Someone else\'s reply text</p>\n'''
+    '''</blockquote>\n'''
+    '''My reply text''')
+    
+    b = ('''<blockquote class="citation">\n'''
+    '''<blockquote class="citation">\n'''
+    '''<p>\n'''
+    '''Someone\'s original text\n'''
+    '''</p>\n'''
+    '''</blockquote>\n'''
+    '''<p>\n'''
+    '''Someone else\'s reply text\n'''
+    '''</p>\n'''
+    '''</blockquote>\n'''
+    '''My reply text''')
+
+    r = bglib.doc.html.cmp_tuple(a, b)
+    pprint.pprint(r)
+    self.assertFalse(r)
+
+  def test_cmp_tuplify_2(self):
+    a = ('''<blockquote class="citation">\n'''
+    '''<blockquote class="citation">\n'''
+    '''<p height='2'>\n'''
+    '''Someone\'s original text</p>\n'''
+    '''</blockquote>\n'''
+    '''<p>\n'''
+    '''Someone else\'s reply text</p>\n'''
+    '''</blockquote>\n'''
+    '''My reply text''')
+    
+    b = ('''<blockquote class="citation">\n'''
+    '''<blockquote class="citation">\n'''
+    '''<p>\n'''
+    '''Someone\'s original text\n'''
+    '''</p>\n'''
+    '''</blockquote>\n'''
+    '''<p>\n'''
+    '''Someone else\'s reply text\n'''
+    '''</p>\n'''
+    '''</blockquote>\n'''
+    '''My reply text''')
+
+    r = bglib.doc.html.cmp_tuple(a, b)
+    pprint.pprint(r)
+    self.assertFalse(r)
+
+
+  def test_cmp_tuplify_3(self):
+    a = ('''<blockquote class="citation">\n'''
+    '''<blockquote class="citation">\n'''
+    '''<p height='2'>\n'''
+    '''Someone\'s original text</p>\n'''
+    '''</blockquote>\n'''
+    '''<p>\n'''
+    '''Someone else\'s reply text</p>\n'''
+    '''</blockquote>\n'''
+    '''My reply text''')
+    
+    b = ('''<blockquote class="citation">\n'''
+    '''<blockquote class="citation">\n'''
+    '''<p width='2'>\n'''
+    '''Someone\'s original text\n'''
+    '''</p>\n'''
+    '''</blockquote>\n'''
+    '''<p>\n'''
+    '''Someone else\'s reply text\n'''
+    '''</p>\n'''
+    '''</blockquote>\n'''
+    '''My reply text''')
+
+    r = bglib.doc.html.cmp_tuple(a, b)
+    pprint.pprint(r)
+
 
   def test_cmp_htmlthing(self):
     a = ('''<blockquote class="citation">\n'''

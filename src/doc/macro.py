@@ -66,8 +66,7 @@ def _bad_name_handler(editor, name, args):
 
 def _bad_args_handler(editor, name, args):
   editor.enter(bglib.doc.doctree.DivElement, **{"class":"error"})
-  editor.append_text(
-      '''Bad args "%s" for %s\n'''%(bglib.doc.html.escape(args), name))
+  editor.append_text('''Bad args "%s" for %s\n'''%(bglib.doc.html.escape(args or 'None'), name))
   editor.leave(bglib.doc.doctree.DivElement)
 
 class Processor(object):
@@ -84,13 +83,14 @@ register(BR)
 
 def Timestamp(editor, args):
   editor.enter(bglib.doc.doctree.BoldElement)
-  now = datetime.now()
+  now = datetime.datetime.now()
   editor.append_text(now.isoformat())
   editor.leave(bglib.doc.doctree.BoldElement)
+  return True
 register(Timestamp)
 
-def Position(editor, args):
 
+def Position(editor, args):
   editor.enter(bglib.doc.doctree.DivElement, **{"class":"position"})
   matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))", args)
   if not matchobj:
@@ -150,7 +150,7 @@ def CubeAction_table_header(editor):
     editor.leave(bglib.doc.doctree.TableHeaderElement)
 
     editor.enter(bglib.doc.doctree.TableHeaderElement, colspan="2")
-    editor.append_text('Cubeful. Eq.')
+    editor.append_text(' Cubeful. Eq. ')
     editor.leave(bglib.doc.doctree.TableHeaderElement)
 
     editor.leave(bglib.doc.doctree.TableRowElement)
@@ -362,7 +362,7 @@ def CubelessEquity(editor, ply=0, cubeless=0.0, money=0.0,
     editor.append_text('Ply')
     editor.leave(bglib.doc.doctree.TableHeaderElement)
     editor.enter(bglib.doc.doctree.TableHeaderElement, colspan='6')
-    editor.append_text('Cubeless Eq.')
+    editor.append_text(' Cubeless Eq. ')
     editor.leave(bglib.doc.doctree.TableHeaderElement)
     editor.leave(bglib.doc.doctree.TableRowElement)
 
