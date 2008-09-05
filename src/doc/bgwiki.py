@@ -191,7 +191,8 @@ class LineFormatter(BaseFormatter):
        r"|(?P<ordered_roman>[iv]+\.?)"
       r")[ ])",
     r"(?P<_pattern_citation>^[>]+[ ])",
-    r"(?P<_pattern_definition_header>^(\w|\(\))+::$)",
+    #r"(?P<_pattern_definition_header>^([.+])+::$)",
+    r"(?P<_pattern_comsume_definition_header>::$)",
     r"(?P<_pattern_quote_or_definition_body>^[ ]{2})", # Line starts with WhiteSpaces but NOT ITEMIZE.
     r"(?P<_pattern_escape_html>(%s))"%bglib.doc.html.UNSAFE_LETTERS,
     r"(?P<_pattern_rest_of_the_world>.)",
@@ -209,6 +210,9 @@ class LineFormatter(BaseFormatter):
         editor.leave((bglib.doc.doctree.BlockQuoteElement, 
                       bglib.doc.doctree.CitationElement, 
                       bglib.doc.doctree.DefinitionBodyElement))
+      if input_line.endswith('::'):
+        self.start_definition_header()
+        pass
       for matchobj in self.get_regexp().finditer(input_line):
         for name, match in matchobj.groupdict().items():
           if match:
@@ -219,6 +223,8 @@ class LineFormatter(BaseFormatter):
             handler = getattr(self, handler_name, None)
             if handler:
               handler(match, matchobj)
+      if input_line.endswith('::'):
+        self.end_definition_header()
     else:
       t = editor.done()
 
@@ -376,13 +382,14 @@ class LineFormatter(BaseFormatter):
     editor.enter(bglib.doc.doctree.ItemizeElement, **d)
 
 
-  def _handle_pattern_definition_header(self, match, matchobj):
-    r"(?P<_pattern_definition_header>^\w+::$)"
+  def start_definition_header(self):
+    editor = self.editor
+    self.start_on_not_exist_handler(bglib.doc.doctree.DefinitionListElement)
+    self.start_handler(bglib.doc.doctree.DefinitionHeaderElement)
+
+  def end_definition_header(self):
     editor = self.editor
     self.end_handler(bglib.doc.doctree.DefinitionHeaderElement)
-    self.start_on_not_exist_handler(bglib.doc.doctree.DefinitionListElement)
-    #FIXME! need to add Node type for dt element
-    editor.append_text('<dt>%s</dt>'%bglib.doc.html.escape(match[:-2]))
 
   def _handle_pattern_quote_or_definition_body(self, match, matchobj):
     editor = self.editor

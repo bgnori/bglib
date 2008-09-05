@@ -346,6 +346,26 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''</dd></dl>\n'''
        ))
 
+  def test_complicated_definition(self):
+    self.wiki.parse(
+       '''[wiki:backgammon]::\n'''
+       '''  some kind of board game for two players, with two dice and 15 chequers for each player\n'''
+       '''BackgammonBase::\n'''
+       '''  Web application to learn backgammon effectively.\n'''
+       )
+
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      (
+       '''<dl>\n'''
+       '''<dt><a href="/wiki/backgammon" class="wiki-link" title="backgammon">backgammon</a></dt>\n'''
+       '''<dd>some kind of board game for two players, with two dice and 15 chequers for each player\n'''
+       '''</dd><dt><a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">'''
+       '''BackgammonBase</a></dt>\n'''
+       '''<dd>Web application to learn backgammon effectively.\n'''
+       '''</dd></dl>\n'''
+       ))
+
   def test_get_formatter_0(self):
     f = self.wiki.get_formatter()
     self.assert_(isinstance(f, bglib.doc.bgwiki.LineFormatter))
