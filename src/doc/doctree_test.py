@@ -44,6 +44,14 @@ class NodeTest(unittest.TestCase):
     self.assertFalse(b.is_acceptable(o))
     self.assertFalse(b.is_acceptable(i))
 
+  def test_is_acceptable_of_Definition(self):
+    dl = bglib.doc.doctree.DefinitionListElement(self.root)
+    dd = bglib.doc.doctree.DefinitionBodyElement(dl)
+    a = bglib.doc.doctree.AnchorElement(dd)
+    print dl.acceptables()
+    print dd.acceptables()
+    self.assert_(dd.is_acceptable(a))
+
 
 class EditorTest(unittest.TestCase):
   def setUp(self):

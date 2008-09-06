@@ -399,7 +399,7 @@ class LineFormatter(BaseFormatter):
       if body:
         self.editor.current = body
       else:
-        self.start_on_not_exist_handler(bglib.doc.doctree.DefinitionBodyElement)
+        self.start_handler(bglib.doc.doctree.DefinitionBodyElement)
     else:
       self.start_on_not_exist_handler(bglib.doc.doctree.BlockQuoteElement)
 

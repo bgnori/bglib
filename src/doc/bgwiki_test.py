@@ -425,7 +425,6 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''\n'''
        '''this is not in dl'''
        )
-
     print self.wiki.make_html()
     self.assertHtmlEqual(
       self.wiki.make_html(),
@@ -447,6 +446,23 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''this is not in dl'''
        ))
 
+  def test_wikiname_in_definition(self):
+    self.wiki.parse(
+       '''Trice::\n'''
+       '''  WalterTrice is author of backgammon boot camp.'''
+       )
+
+    print self.wiki.make_html()
+    self.assertHtmlEqual(
+      self.wiki.make_html(),
+      (
+       '''<dl>\n'''
+       '''<dt>Trice</dt>\n'''
+       '''<dd> '''
+       '''<dt><a href="/wiki/WalterTrice" class="wiki-link" title="WalterTrice">WalterTrice</a>'''
+       '''is author of backgammon boot camp.'''
+       '''</dd></dl>\n'''
+       ))
 
   def test_get_formatter_0(self):
     f = self.wiki.get_formatter()

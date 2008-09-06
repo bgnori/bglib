@@ -183,8 +183,7 @@ class H3Element(HeadingElement):
 class DefinitionBodyElement(BoxElement):
   html_element = 'dd'
   def acceptables(self):
-    return super(BoxElement, self).acceptables() + \
-           (ListElement,)
+    return super(DefinitionBodyElement, self).acceptables() + (ListElement,)
 
 class DivElement(BoxElement):
   html_element = 'div'
@@ -200,7 +199,6 @@ class DefinitionListElement(BoxElement):
   def acceptables(self):
     return super(DefinitionListElement, self).acceptables() + \
            (DefinitionHeaderElement, DefinitionBodyElement, ListElement)
-
 
 class TableElement(BoxElement):
   html_element = 'table'
