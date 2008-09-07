@@ -300,7 +300,7 @@ class Text(BgWikiElementNode):
     return self.text
 
   def close(self):
-    return ''
+    return '\n'
 
 
 class Editor(object):
