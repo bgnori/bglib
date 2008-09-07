@@ -146,7 +146,7 @@ class BgWikiElementNodeTest(unittest.TestCase):
     self.assertEqual(len(t.children), 3)# Text, BgWikiElementNode, Text
 
     self.root.accept(self.writer)
-    self.assertEqual(
+    self.assertHtmlEqual(
       self.writer.html(),
       ('hoge'
        '<strong>piyo</strong>'

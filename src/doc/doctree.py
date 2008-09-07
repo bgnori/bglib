@@ -71,12 +71,12 @@ class BgWikiElementNode(Node):
       attrs = ''
     if self.is_single:
       if attrs: 
-        return '<%s '%self.html_element + attrs + ' />'
-      return '<%s />'%self.html_element
+        return '<%s '%self.html_element + attrs + ' />\n'
+      return '<%s />\n'%self.html_element
     else:
       if attrs: 
-        return '<%s '%self.html_element + attrs + '>'
-      return '<%s>'%self.html_element
+        return '<%s '%self.html_element + attrs + '>\n'
+      return '<%s>\n'%self.html_element
 
   def close(self):
     if not self.html_element:

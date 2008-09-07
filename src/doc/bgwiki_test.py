@@ -458,8 +458,8 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       (
        '''<dl>\n'''
        '''<dt>Trice</dt>\n'''
-       '''<dd> '''
-       '''<dt><a href="/wiki/WalterTrice" class="wiki-link" title="WalterTrice">WalterTrice</a>'''
+       '''<dd>\n'''
+       '''<a href="/wiki/WalterTrice" class="wiki-link" title="WalterTrice">WalterTrice</a>'''
        '''is author of backgammon boot camp.'''
        '''</dd></dl>\n'''
        ))
