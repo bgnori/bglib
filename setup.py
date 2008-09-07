@@ -5,7 +5,8 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-from distutils.core import setup
+#from distutils.core import setup
+from setuptools import setup
 import os.path
 
 
@@ -38,24 +39,16 @@ setup(
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
   package_dir = {
-                 'bglib':'src',
+                 'bglib':'src', #root
                  },
-#                 'bglib.depot':'src/depot',
-#                 'bglib.doc':'src/doc',
-#                 'bglib.encoding':'src/encoding',
-#                 'bglib.gui':'src/gui',
-#                 'bglib.image':'src/image',
-#                 'bglib.model':'src/model',
-#                 'bglib.protocol':'src/protocol',
-#                 },
   packages = ['bglib', 
-#              'bglib.depot', 
-#              'bglib.doc', 
-#              'bglib.encoding', 
-#              'bglib.gui', 
-#              'bglib.image', 
-#              'bglib.model',
-#              'bglib.protocol'
+              'bglib.depot', 
+              'bglib.doc', 
+              'bglib.encoding', 
+              'bglib.gui', 
+              'bglib.image', 
+              'bglib.model',
+              'bglib.protocol'
               ],
   package_data = {
       'bglib.image.resource.matrix':[os.path.join('image','resource','matrix','default.css'),
