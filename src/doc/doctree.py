@@ -84,7 +84,7 @@ class BgWikiElementNode(Node):
     if self.is_single:
       return ''
     else:
-      return '</%s>'%self.html_element
+      return '</%s>\n'%self.html_element
 
 class BgWikiElementRoot(BgWikiElementNode, Root):
   html_element = None
