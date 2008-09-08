@@ -48,7 +48,6 @@ class Root(Node):
   def __str__(self):
     return "Root"
 
-
 class BgWikiElementNode(Node):
   html_element = None
   is_single = False
@@ -57,7 +56,7 @@ class BgWikiElementNode(Node):
     self.attrs = dict(**d)
 
   def acceptables(self):
-    return ()
+    return (BgWikiElementMacroNode,) #MacroNode can be morphed into anything.
 
   def is_acceptable(self, e):
     return isinstance(e, self.acceptables())
@@ -86,6 +85,9 @@ class BgWikiElementNode(Node):
     else:
       return '</%s>\n'%self.html_element
 
+class BgWikiElementMacroNode(BgWikiElementNode):
+  pass
+
 class BgWikiElementRoot(BgWikiElementNode, Root):
   html_element = None
   def __init__(self, **d):
@@ -97,7 +99,7 @@ class BgWikiElementRoot(BgWikiElementNode, Root):
 
 class LineElement(BgWikiElementNode):
   def acceptables(self):
-    return (SpanElement,)
+    return super(LineElement, self).acceptables() + (SpanElement,)
 
 class SpanElement(LineElement):
   html_element = 'span'
@@ -169,7 +171,7 @@ class AnchorElement(SpanElement):
 
 class BoxElement(BgWikiElementNode):
   def acceptables(self):
-    return (SpanElement,)
+    return super(BoxElement, self).acceptables() + (SpanElement,)
   
 class HeadingElement(BoxElement):
   pass

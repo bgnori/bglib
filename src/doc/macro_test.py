@@ -17,6 +17,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor = bglib.doc.doctree.Editor()
     self.editor.start(self.root)
     self.writer = bglib.doc.doctree.HtmlWriter()
+    self.debugvisitor = bglib.doc.doctree.DebugVisitor()
 
   def test_bad_handler(self):
     bglib.doc.macro.dispatch(self.editor, "badname", None)
@@ -233,5 +234,23 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       """<tr class="oddrow"><th>1</th><td> Double, pass </td><td> +1.000 </td><td>  </td></tr>\n"""
+      )
+
+
+  def test_TOC(self):
+    bglib.doc.macro.TableOfContent(self.editor, None)
+    self.editor.done()
+    self.editor.accept(self.debugvisitor)
+    self.assertEqual(
+      self.debugvisitor.buf,
+      'Root\nTableOfContentNode\n'
+    )
+    # The html tags in TOC are generated on visit
+    self.editor.accept(self.writer)
+    self.assertHtmlEqual(
+      self.writer.html(),
+      """<div>"""
+      """<h2>Table Of Content</h2>"""
+      """</div>"""
       )
 

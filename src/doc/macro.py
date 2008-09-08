@@ -79,8 +79,8 @@ def BR(editor, args):
   return True
 register(BR)
 
-  #r"(?P<_pattern_temp_map>!?temp_map\([a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12}\))",
 
+  #r"(?P<_pattern_temp_map>!?temp_map\([a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12}\))",
 def Timestamp(editor, args):
   editor.enter(bglib.doc.doctree.BoldElement)
   now = datetime.datetime.now()
@@ -88,6 +88,15 @@ def Timestamp(editor, args):
   editor.leave(bglib.doc.doctree.BoldElement)
   return True
 register(Timestamp)
+
+class TableOfContentNode(bglib.doc.doctree.BgWikiElementMacroNode):
+  pass
+
+def TableOfContent(editor, args):
+  editor.enter(TableOfContentNode)
+  editor.leave(TableOfContentNode)
+  return True
+register(TableOfContent)
 
 
 def Position(editor, args):
