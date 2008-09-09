@@ -103,6 +103,7 @@ class TocVisitor(bglib.doc.doctree.Visitor):
     super(TocVisitor, self).__init__()
     self.editor = editor
     self.nesting = 0
+    self.fragment_count = 0
 
   def match_nesting(self, node):
     editor = self.editor
@@ -126,9 +127,13 @@ class TocVisitor(bglib.doc.doctree.Visitor):
       d = dict()
       d.update({'style':editor.current.get_style()})
       editor.enter(bglib.doc.doctree.ItemizeElement, **d)
+      editor.enter(bglib.doc.doctree.AnchorElement, **{'href':'#fragment%i'%self.fragment_count})
       if node.children:
         editor.current.children = list(node.children)#FIXME!
+      editor.leave(bglib.doc.doctree.AnchorElement)
       editor.leave(bglib.doc.doctree.ItemizeElement)
+      node.attrs['id'] = 'fragment%i'%self.fragment_count
+      self.fragment_count += 1
 
 class TableOfContentNode(bglib.doc.doctree.BgWikiElementMacroNode):
   def open(self):

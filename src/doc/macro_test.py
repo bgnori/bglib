@@ -286,14 +286,14 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       """<ol>"""
-      """<li><a href="">This is First H1</a></li>"""
+      """<li><a href="#fragment0">This is First H1</a></li>"""
         """<ol>"""
-        """<li><a href="">This is H2 under First H1</a></li>"""
+        """<li><a href="#fragment1">This is H2 under First H1</a></li>"""
         """</ol>"""
-      """<li><a href="">This is second H1</a></li>"""
+      """<li><a href="#fragment2">This is second H1</a></li>"""
       """</ol>"""
-      """<h1 id="">This is First H1</h1>"""
-      """<h2 id="">This is H2 under First H1</h2>"""
-      """<h1 id="">This is second H1</h1>"""
+      """<h1 id="fragment0">This is First H1</h1>"""
+      """<h2 id="fragment1">This is H2 under First H1</h2>"""
+      """<h1 id="fragment2">This is second H1</h1>"""
       )
 
