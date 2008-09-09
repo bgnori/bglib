@@ -86,7 +86,8 @@ class BgWikiElementNode(Node):
       return '</%s>\n'%self.html_element
 
 class BgWikiElementMacroNode(BgWikiElementNode):
-  pass
+  def acceptables(self):
+    return ()
 
 class BgWikiElementRoot(BgWikiElementNode, Root):
   html_element = None

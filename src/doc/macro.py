@@ -89,12 +89,73 @@ def Timestamp(editor, args):
   return True
 register(Timestamp)
 
-class TableOfContentNode(bglib.doc.doctree.BgWikiElementMacroNode):
+class TocEditor(bglib.doc.doctree.Editor):
   pass
 
+class TocVisitor(bglib.doc.doctree.Visitor):
+  
+  nestingmap = {
+   bglib.doc.doctree.H1Element:0,
+   bglib.doc.doctree.H2Element:1,
+   bglib.doc.doctree.H3Element:2,
+  }
+  def __init__(self, editor):
+    super(TocVisitor, self).__init__()
+    self.editor = editor
+    self.nesting = 0
+
+  def match_nesting(self, node):
+    editor = self.editor
+    n = self.nestingmap[node.__class__]
+    while self.nesting < n:
+      editor.enter(bglib.doc.doctree.ListElement,
+                          star=None,
+                          ordered_numeric=1,
+                          ordered_roman=None,
+                          ordered_alpha=None,
+                          sign=None)
+      self.nesting +=1
+    while self.nesting > n:
+      editor.leave(bglib.doc.doctree.ListElement)#, style='ordered_numeric')
+      self.nesting -=1
+
+  def enter(self, node):
+    editor = self.editor
+    if isinstance(node, bglib.doc.doctree.HeadingElement):
+      self.match_nesting(node)
+      d = dict()
+      d.update({'style':editor.current.get_style()})
+      editor.enter(bglib.doc.doctree.ItemizeElement, **d)
+      if node.children:
+        editor.current.children = list(node.children)#FIXME!
+      editor.leave(bglib.doc.doctree.ItemizeElement)
+
+class TableOfContentNode(bglib.doc.doctree.BgWikiElementMacroNode):
+  def open(self):
+    editor = TocEditor()
+    toc = bglib.doc.doctree.BgWikiElementRoot()
+    editor.start(toc)
+    editor.enter(bglib.doc.doctree.ListElement, 
+                        star=None,
+                        ordered_numeric=1,
+                        ordered_roman=None,
+                        ordered_alpha=None,
+                        sign=None)
+
+    root = self.attrs['editor'].root
+    visitor = TocVisitor(editor)
+    root.accept(visitor)
+
+    editor.leave(bglib.doc.doctree.ListElement)
+    editor.done()
+
+    writer = bglib.doc.doctree.HtmlWriter()
+    toc.accept(writer)
+    return writer.html()
+
+
 def TableOfContent(editor, args):
-  editor.enter(TableOfContentNode)
-  editor.leave(TableOfContentNode)
+  editor.append(TableOfContentNode, editor=editor)
   return True
 register(TableOfContent)
 

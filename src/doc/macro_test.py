@@ -237,7 +237,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
       )
 
 
-  def test_TOC(self):
+  def test_empty_TOC(self):
     bglib.doc.macro.TableOfContent(self.editor, None)
     self.editor.done()
     self.editor.accept(self.debugvisitor)
@@ -247,10 +247,53 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     )
     # The html tags in TOC are generated on visit
     self.editor.accept(self.writer)
+    print self.writer.html()
     self.assertHtmlEqual(
       self.writer.html(),
-      """<div>"""
-      """<h2>Table Of Content</h2>"""
-      """</div>"""
+      """<ol>"""
+      """</ol>"""
+      )
+
+  def test_TOC_1(self):
+    editor = self.editor
+    bglib.doc.macro.TableOfContent(editor, None)
+    editor.enter(bglib.doc.doctree.H1Element)
+    editor.append_text('This is First H1')
+    editor.leave(bglib.doc.doctree.H1Element)
+    editor.enter(bglib.doc.doctree.H2Element)
+    editor.append_text('This is H2 under First H1')
+    editor.leave(bglib.doc.doctree.H2Element)
+    editor.enter(bglib.doc.doctree.H1Element)
+    editor.append_text('This is second H1')
+    editor.leave(bglib.doc.doctree.H1Element)
+
+    editor.done()
+    editor.accept(self.debugvisitor)
+    self.assertEqual(
+      self.debugvisitor.buf,
+      'Root\n'
+      'TableOfContentNode\n'
+      'H1Element\n'
+      'Text:This is First H1\n'
+      'H2Element\n'
+      'Text:This is H2 under First H1\n'
+      'H1Element\n'
+      'Text:This is second H1\n'
+    )
+    # The html tags in TOC are generated on visit
+    self.editor.accept(self.writer)
+    print self.writer.html()
+    self.assertHtmlEqual(
+      self.writer.html(),
+      """<ol>"""
+      """<li>This is First H1</li>"""
+        """<ol>"""
+        """<li>This is H2 under First H1</li>"""
+        """</ol>"""
+      """<li>This is second H1</li>"""
+      """</ol>"""
+      """<h1>This is First H1</h1>"""
+      """<h2>This is H2 under First H1</h2>"""
+      """<h1>This is second H1</h1>"""
       )
 
