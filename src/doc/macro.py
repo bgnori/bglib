@@ -119,6 +119,19 @@ class TocVisitor(bglib.doc.doctree.Visitor):
     while self.nesting > n:
       editor.leave(bglib.doc.doctree.ListElement)#, style='ordered_numeric')
       self.nesting -=1
+  def de_anchor(self, node, parent):
+      if isinstance(node, bglib.doc.doctree.Text):
+        return node
+      elif isinstance(node, bglib.doc.doctree.AnchorElement):
+        text = ''
+        for n in node.children:
+          if isinstance(n, bglib.doc.doctree.Text):
+            text += n.text
+        return bglib.doctree.Text(parent, text=text)
+      else:
+        pass
+      return None
+        
 
   def enter(self, node):
     editor = self.editor
@@ -129,7 +142,7 @@ class TocVisitor(bglib.doc.doctree.Visitor):
       editor.enter(bglib.doc.doctree.ItemizeElement, **d)
       editor.enter(bglib.doc.doctree.AnchorElement, **{'href':'#fragment%i'%self.fragment_count})
       if node.children:
-        editor.current.children = [n for n in node.children if isinstance(n, bglib.doc.doctree.Text)]
+        editor.current.children = [self.de_anchor(n, editor.current) for n in node.children]
       editor.leave(bglib.doc.doctree.AnchorElement)
       editor.leave(bglib.doc.doctree.ItemizeElement)
       node.attrs['id'] = 'fragment%i'%self.fragment_count
