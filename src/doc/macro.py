@@ -129,7 +129,7 @@ class TocVisitor(bglib.doc.doctree.Visitor):
       editor.enter(bglib.doc.doctree.ItemizeElement, **d)
       editor.enter(bglib.doc.doctree.AnchorElement, **{'href':'#fragment%i'%self.fragment_count})
       if node.children:
-        editor.current.children = list(node.children)#FIXME!
+        editor.current.children = [n for n in node.children if isinstance(n, bglib.doc.doctree.Text)]
       editor.leave(bglib.doc.doctree.AnchorElement)
       editor.leave(bglib.doc.doctree.ItemizeElement)
       node.attrs['id'] = 'fragment%i'%self.fragment_count
