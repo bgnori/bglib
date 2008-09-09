@@ -119,6 +119,7 @@ class TocVisitor(bglib.doc.doctree.Visitor):
     while self.nesting > n:
       editor.leave(bglib.doc.doctree.ListElement)#, style='ordered_numeric')
       self.nesting -=1
+
   def de_anchor(self, node, parent):
       if isinstance(node, bglib.doc.doctree.Text):
         return node
@@ -127,7 +128,7 @@ class TocVisitor(bglib.doc.doctree.Visitor):
         for n in node.children:
           if isinstance(n, bglib.doc.doctree.Text):
             text += n.text
-        return bglib.doctree.Text(parent, text=text)
+        return bglib.doc.doctree.Text(parent, text=text)
       else:
         pass
       return None
