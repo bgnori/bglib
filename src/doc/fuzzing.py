@@ -83,20 +83,35 @@ class Gene(object):
         yield sub
 
 def fuzz_it(gklass, formatter):
-  import sys
+  import os
+  import select
+  import signal
   length = int(sys.argv[1])
   trials = int(sys.argv[2])
   for j in range(trials):
     g = gklass(length)
-    ok_or_error = g.format(formatter)
-    if not ok_or_error:
-      print ok_or_error.exception, ok_or_error.stacktrace
-      print g
-      continue
-    ok_or_error = g.verify()
-    if not ok_or_error:
-      print ok_or_error.exception, ok_or_error.stacktrace
-      print g
-      continue
+    r, w = os.pipe()
+    pid = os.fork()
 
-
+    if pid:
+      i, o, e = select.select([r], [], [], 3)
+      assert not o
+      assert not e
+      if i:
+        pass
+      else:
+        os.kill(pid, signal.SIGKILL)
+    else:
+      ok_or_error = g.format(formatter)
+      if not ok_or_error:
+        print ok_or_error.exception, ok_or_error.stacktrace
+        print g
+        os._exit(1)
+      ok_or_error = g.verify()
+      if not ok_or_error:
+        print ok_or_error.exception, ok_or_error.stacktrace
+        print g
+        os._exit(1)
+      os.write(w, '.')
+      os._exit(0)
+      

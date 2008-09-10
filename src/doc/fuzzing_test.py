@@ -58,3 +58,7 @@ class GeneTest(unittest.TestCase):
     self.assert_(e)
     e = self.gene.verify()
     self.assert_(e)
+
+  def fork_test(self):
+    pass
+
