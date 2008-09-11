@@ -196,8 +196,7 @@ def Position(editor, args):
         '''&mid=$mid'''
         '''&height=300&width=400'''
         '''&css=$css''')
-  editor.enter(bglib.doc.doctree.ImgElement,
-      src=t.substitute(d))
+  editor.enter(bglib.doc.doctree.ImgElement, src=t.substitute(d))
   editor.leave(bglib.doc.doctree.DivElement)
   return True
 register(Position)
