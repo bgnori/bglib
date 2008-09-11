@@ -9,7 +9,6 @@
 from setuptools import setup
 import os.path
 
-
 __version__ = "0.0.3"
 
 
@@ -61,6 +60,9 @@ setup(
                                     ],
       },
   py_modules=[],
+  install_requires=[
+      "python-imaging >= 1.1.6",
+  ],
   url="http://www.backgammonbase.com",
   license="proprietary",
 )
