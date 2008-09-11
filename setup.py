@@ -51,14 +51,12 @@ setup(
               'bglib.protocol'
               ],
   package_data = {
-      'bglib.image.resource.matrix':[os.path.join('image','resource','matrix','default.css'),
-                                     os.path.join('image','resource','matrix','*.png'),
-                                    ],
-      'bglib.image.resource.minimal':[os.path.join('image','resource','matrix','default.css'),
-                                    ],
-      'bglib.image.resource.safari':[os.path.join('image','resource','safari','default.css'),
-                                     os.path.join('image','resource','safari','*.jpg'),
-                                    ],
+      'bglib.image.resource':[os.path.join('matrix','default.css'),
+                              os.path.join('matrix','*.png'),
+                              os.path.join('minimal','default.css'),
+                              os.path.join('safari','default.css'),
+                              os.path.join('safari','*.jpg'),
+                             ],
       },
   py_modules=[],
   install_requires=[
