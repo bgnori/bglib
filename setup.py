@@ -62,7 +62,7 @@ setup(
       },
   py_modules=[],
   install_requires=[
-      "python-imaging >= 1.1.6",
+      #"python-imaging >= 1.1.6", #FIXME! packages installed vai RPM do not have egg.
   ],
   url="http://www.backgammonbase.com",
   license="proprietary",
