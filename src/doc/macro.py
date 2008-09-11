@@ -181,17 +181,21 @@ register(TableOfContent)
 
 def Position(editor, args):
   editor.enter(bglib.doc.doctree.DivElement, **{"class":"position"})
-  matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))", args)
+  matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12})(,[ ]*css=(?P<css>[a-zA-Z]+))?)", args)
   if not matchobj:
     return False
-  d = matchobj.groupdict(dict(pid='N/A', mid='N/A'))
-  if d['pid'] == 'N/A' or d['mid'] == 'N/A':
+  d = matchobj.groupdict()
+  if not d['pid'] or not d['mid']:
     return False
+  if not d['css']:
+    d['css']='minimal'
+  print d
   t = string.Template(
         '''/image?format=png'''
         '''&pid=$pid'''
         '''&mid=$mid'''
-        '''&height=300&width=400&css=minimal''')
+        '''&height=300&width=400'''
+        '''&css=$css''')
   editor.enter(bglib.doc.doctree.ImgElement,
       src=t.substitute(d))
   editor.leave(bglib.doc.doctree.DivElement)

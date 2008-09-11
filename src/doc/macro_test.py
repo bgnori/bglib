@@ -71,6 +71,20 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
       self.writer.html(),
       """<div class="position"><div class="error">Bad args "haha:hahaha" for Position</div></div>""")
 
+  def test_position_box_4(self):
+    bglib.doc.macro.dispatch(self.editor, "Position", "vzsAAFhu2xFABA:QYkqASAAIAAA, css=safari")
+    self.editor.done()
+    self.editor.accept(self.writer)
+    print self.writer.html()
+    self.assertHtmlEqual(
+      self.writer.html(),
+      ("""<div class="position">\n"""
+           """<img src="/image?format=png"""
+           """&pid=vzsAAFhu2xFABA"""
+           """&mid=QYkqASAAIAAA"""
+           """&height=300&width=400&css=safari" />\n"""
+       """</div>\n"""))
+
   def test_analysis_box_cubeaction_1(self):
     bglib.doc.macro.dispatch(self.editor, "Analysis", "vzsAAFhu2xFABA:QYkqASAAIAAA")
     self.editor.done()

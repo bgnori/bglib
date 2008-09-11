@@ -86,12 +86,17 @@ def fuzz_it(gklass, formatter):
   import os
   import select
   import signal
+  import time
   length = int(sys.argv[1])
   trials = int(sys.argv[2])
   for j in range(trials):
     g = gklass(length)
     r, w = os.pipe()
-    pid = os.fork()
+    try:
+      pid = os.fork()
+    except OSError:
+      time.sleep(10)
+      continue
 
     if pid:
       try:

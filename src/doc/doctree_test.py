@@ -6,6 +6,7 @@
 #
 import unittest
 import bglib.doc.doctree
+import bglib.doc.html
 
 class NodeTest(unittest.TestCase):
   def setUp(self):
@@ -111,7 +112,7 @@ class EditorTest(unittest.TestCase):
     )
     self.assertEqual(len(t.children), 3)# Text, BgWikiElementNode, Text
 
-class BgWikiElementNodeTest(unittest.TestCase):
+class BgWikiElementNodeTest(bglib.doc.html.HtmlTestCase):
   def setUp(self):
     self.root = bglib.doc.doctree.BgWikiElementRoot()
     self.editor = bglib.doc.doctree.Editor()
