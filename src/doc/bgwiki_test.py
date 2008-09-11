@@ -668,12 +668,12 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.line.parse('''[[Position(vzsAAFhu2xFABA:QYkqASAAIAAA)]]''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      ('''<div class="position">\n'''
+      ('''<span class="position">\n'''
            '''<img src="/image?format=png'''
            '''&pid=vzsAAFhu2xFABA'''
            '''&mid=QYkqASAAIAAA'''
            '''&height=300&width=400&css=minimal" />\n'''
-       '''</div>\n'''))
+       '''</span>\n'''))
 
   def test_macro_analysis_move(self):
     self.wiki.parse('''[[Analysis(cNcxAxCY54YBBg:cAn7ADAAIAAA)]]''')

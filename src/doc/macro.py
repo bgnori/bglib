@@ -57,17 +57,17 @@ def dispatch(editor, name, arg_string):
   
 def _bad_name_handler(editor, name, args):
   t = string.Template('''No such macro "$name" with argument "$args"''')
-  editor.enter(bglib.doc.doctree.DivElement, **{"class":"error"})
+  editor.enter(bglib.doc.doctree.SpanElement, **{"class":"error"})
   editor.append_text(
       t.substitute(name=bglib.doc.html.escape(name), 
                    args=bglib.doc.html.escape(args or 'None'))
                     )
-  editor.leave(bglib.doc.doctree.DivElement)
+  editor.leave(bglib.doc.doctree.SpanElement)
 
 def _bad_args_handler(editor, name, args):
-  editor.enter(bglib.doc.doctree.DivElement, **{"class":"error"})
+  editor.enter(bglib.doc.doctree.SpanElement, **{"class":"error"})
   editor.append_text('''Bad args "%s" for %s\n'''%(bglib.doc.html.escape(args or 'None'), name))
-  editor.leave(bglib.doc.doctree.DivElement)
+  editor.leave(bglib.doc.doctree.SpanElement)
 
 class Processor(object):
   pass
@@ -180,7 +180,7 @@ register(TableOfContent)
 
 
 def Position(editor, args):
-  editor.enter(bglib.doc.doctree.DivElement, **{"class":"position"})
+  editor.enter(bglib.doc.doctree.SpanElement, **{"class":"position"})
   matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12})(,[ ]*css=(?P<css>[a-zA-Z]+))?)", args)
   if not matchobj:
     return False
@@ -197,7 +197,7 @@ def Position(editor, args):
         '''&height=300&width=400'''
         '''&css=$css''')
   editor.enter(bglib.doc.doctree.ImgElement, src=t.substitute(d))
-  editor.leave(bglib.doc.doctree.DivElement)
+  editor.leave(bglib.doc.doctree.SpanElement)
   return True
 register(Position)
 

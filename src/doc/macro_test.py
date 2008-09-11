@@ -25,7 +25,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      """<div class="error">No such macro "badname" with argument "None"</div>"""
+      """<span class="error">No such macro "badname" with argument "None"</span>"""
       )
     
   def test_BR(self):
@@ -43,12 +43,12 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<div class="position">\n"""
+      ("""<span class="position">\n"""
            """<img src="/image?format=png"""
            """&pid=vzsAAFhu2xFABA"""
            """&mid=QYkqASAAIAAA"""
            """&height=300&width=400&css=minimal" />\n"""
-       """</div>\n"""))
+       """</span>\n"""))
 
   def test_position_box_2(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "4HPwATDgc/ABMA:MAAAAAAAAAAA")
@@ -56,12 +56,12 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<div class="position">\n"""
+      ("""<span class="position">\n"""
            """<img src="/image?format=png"""
            """&pid=4HPwATDgc/ABMA"""
            """&mid=MAAAAAAAAAAA"""
            """&height=300&width=400&css=minimal" />\n"""
-       """</div>\n"""))
+       """</span>\n"""))
 
   def test_position_box_3(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "haha:hahaha")
@@ -69,7 +69,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      """<div class="position"><div class="error">Bad args "haha:hahaha" for Position</div></div>""")
+      """<span class="position"><span class="error">Bad args "haha:hahaha" for Position</span></span>""")
 
   def test_position_box_4(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "vzsAAFhu2xFABA:QYkqASAAIAAA, css=safari")
@@ -78,12 +78,12 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     print self.writer.html()
     self.assertEqual(
       self.writer.html(),
-      ("""<div class="position">\n"""
+      ("""<span class="position">\n"""
            """<img src="/image?format=png"""
            """&pid=vzsAAFhu2xFABA"""
            """&mid=QYkqASAAIAAA"""
            """&height=300&width=400&css=safari" />\n"""
-       """</div>\n"""))
+       """</span>\n"""))
 
   def test_position_box_5(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "vzsAAFhu2xFABA:QYkqASAAIAAA,css=safari")
@@ -92,12 +92,12 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     print self.writer.html()
     self.assertEqual(
       self.writer.html(),
-      ("""<div class="position">\n"""
+      ("""<span class="position">\n"""
            """<img src="/image?format=png"""
            """&pid=vzsAAFhu2xFABA"""
            """&mid=QYkqASAAIAAA"""
            """&height=300&width=400&css=safari" />\n"""
-       """</div>\n"""))
+       """</span>\n"""))
 
   def test_analysis_box_cubeaction_1(self):
     bglib.doc.macro.dispatch(self.editor, "Analysis", "vzsAAFhu2xFABA:QYkqASAAIAAA")
@@ -141,7 +141,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      """<div class="error">Bad args "haha:hahaha" for Analysis</div>\n""")
+      """<span class="error">Bad args "haha:hahaha" for Analysis</span>\n""")
   def test_analysis_box_3(self):
     bglib.doc.macro.dispatch(self.editor, "Analysis", "cNcxAxCY54YBBg:cAn7ADAAIAAA"),
     self.editor.done()

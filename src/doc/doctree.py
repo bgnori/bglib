@@ -193,7 +193,7 @@ class DivElement(BoxElement):
   def acceptables(self):
     return (SpanElement, BoxElement) #Any Element...
 
-class ImgElement(BoxElement):
+class ImgElement(SpanElement):
   html_element = 'img'
   is_single = True
 
