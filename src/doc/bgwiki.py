@@ -173,7 +173,7 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_heading_h3>!?===)",
     r"(?P<_pattern_heading_h2>!?==)",
     r"(?P<_pattern_heading_h1>!?=)",
-    r"(?P<_pattern_macro>\[\[(?P<macro_name>\w+)(\((?P<macro_args>[a-zA-Z0-9,.=/#:]+)\))?\]\])",
+    r"(?P<_pattern_macro>\[\[(?P<macro_name>\w+)(\((?P<macro_args>[a-zA-Z0-9, .=/#:]+)\))?\]\])",
     r"(?P<_pattern_entry_link>!?(#|entry:)\d+)",
     r"(?P<_pattern_query_link>!?((query:\d+)|(\{\d+\})))",
     r"(?P<_pattern_match_link>!?((m\d+)|(match:\d+)|(\[\d+\])))",

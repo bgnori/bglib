@@ -76,7 +76,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.done()
     self.editor.accept(self.writer)
     print self.writer.html()
-    self.assertHtmlEqual(
+    self.assertEqual(
       self.writer.html(),
       ("""<div class="position">\n"""
            """<img src="/image?format=png"""
@@ -90,7 +90,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.done()
     self.editor.accept(self.writer)
     print self.writer.html()
-    self.assertHtmlEqual(
+    self.assertEqual(
       self.writer.html(),
       ("""<div class="position">\n"""
            """<img src="/image?format=png"""
