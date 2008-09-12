@@ -189,7 +189,6 @@ def Position(editor, args):
     return False
   if not d['css']:
     d['css']='minimal'
-  print d
   t = string.Template(
         '''/image?format=png'''
         '''&pid=$pid'''
