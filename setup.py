@@ -53,6 +53,7 @@ setup(
   package_data = {
       'bglib.image.resource':[os.path.join('matrix','default.css'),
                               os.path.join('matrix','*.png'),
+                              os.path.join('minimal','DejaVuLGCSans-Bold.ttf'),
                               os.path.join('minimal','default.css'),
                               os.path.join('safari','default.css'),
                               os.path.join('safari','*.jpg'),
