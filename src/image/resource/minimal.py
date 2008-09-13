@@ -4,6 +4,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import re
 import os.path
 import bglib.image.PIL
 import bglib.image.css
