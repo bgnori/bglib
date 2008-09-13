@@ -12,6 +12,7 @@ from bglib.image.theme import themata
 mypath = 'safari'
 testdatapath = os.path.join(themata, mypath, 'test')
 
+REVISION = re.compile(r"[0-9]+").search("$Revision$").group()
 css = bglib.image.css.load(os.path.join(themata, mypath, "default.css"))
 draw = bglib.image.PIL.Draw(css)
 
