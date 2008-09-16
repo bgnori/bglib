@@ -9,6 +9,7 @@ import string
 import re
 import time
 import datetime
+import urllib
 
 import bglib.model.constants
 import bglib.doc.html 
@@ -181,21 +182,26 @@ register(TableOfContent)
 
 def Position(editor, args):
   editor.enter(bglib.doc.doctree.SpanElement, **{"class":"position"})
-  matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12})(,[ ]*css=(?P<css>[a-zA-Z]+))?)", args)
+  matchobj = re.match(r"(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12})"
+                      r"(,[ ]*css=(?P<css>[a-zA-Z]+))?"
+                      r"(,[ ]*format(?P<format>[a-zA-Z]+))?"
+                      r"(,[ ]*width(?P<width>[0-9]+))?"
+                      r"(,[ ]*height(?P<height>[0-9]+))?"
+                      , args)
   if not matchobj:
     return False
   d = matchobj.groupdict()
   if not d['pid'] or not d['mid']:
     return False
+  if not d['width']:
+    d['width'] = 400
+  if not d['height']:
+    d['height'] = 300
+  if not d['format']:
+    d['format']='png'
   if not d['css']:
     d['css']='minimal'
-  t = string.Template(
-        '''/image?format=png'''
-        '''&pid=$pid'''
-        '''&mid=$mid'''
-        '''&height=300&width=400'''
-        '''&css=$css''')
-  editor.enter(bglib.doc.doctree.ImgElement, src=t.substitute(d))
+  editor.enter(bglib.doc.doctree.ImgElement, src='/image?'+urllib.urlencode(d, True))
   editor.leave(bglib.doc.doctree.SpanElement)
   return True
 register(Position)

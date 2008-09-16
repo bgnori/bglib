@@ -44,10 +44,13 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       ("""<span class="position">\n"""
-           """<img src="/image?format=png"""
+           """<img src="/image?"""
+           """format=png"""
            """&pid=vzsAAFhu2xFABA"""
            """&mid=QYkqASAAIAAA"""
-           """&height=300&width=400&css=minimal" />\n"""
+           """&height=300&width=400"""
+           """&css=minimal"""
+           """" />\n"""
        """</span>\n"""))
 
   def test_position_box_2(self):
@@ -58,7 +61,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
       self.writer.html(),
       ("""<span class="position">\n"""
            """<img src="/image?format=png"""
-           """&pid=4HPwATDgc/ABMA"""
+           """&pid=4HPwATDgc%2FABMA"""
            """&mid=MAAAAAAAAAAA"""
            """&height=300&width=400&css=minimal" />\n"""
        """</span>\n"""))
@@ -104,11 +107,11 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.done()
     self.editor.accept(self.writer)
     print self.writer.html()
-    self.assertEqual(
+    self.assertHtmlEqual(
       self.writer.html(),
       ("""<span class="position">\n"""
            """<img src="/image?format=png"""
-           """&pid=jM/BATDQc+QBMA"""
+           """&pid=jM%2FBATDQc%2BQBMA"""
            """&mid=cAkWAAAAAAAA"""
            """&height=300&width=400&css=minimal" />\n"""
        """</span>\n"""))
