@@ -664,7 +664,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.line.make_html(),
 '''<br />''')
 
-  def test_macro_Position(self):
+  def test_macro_Position_1(self):
     self.line.parse('''[[Position(vzsAAFhu2xFABA:QYkqASAAIAAA)]]''')
     self.assertHtmlEqual(
       self.line.make_html(),
@@ -672,6 +672,17 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
            '''<img src="/image?format=png'''
            '''&pid=vzsAAFhu2xFABA'''
            '''&mid=QYkqASAAIAAA'''
+           '''&height=300&width=400&css=minimal" />\n'''
+       '''</span>\n'''))
+
+  def test_macro_Position_2(self):
+    self.line.parse('''[[Position(jM/BATDQc+QBMA:cAkWAAAAAAAA)]]''')
+    self.assertHtmlEqual(
+      self.line.make_html(),
+      ('''<span class="position">\n'''
+           '''<img src="/image?format=png'''
+           '''&pid=jM/BATDQc+QBMA'''
+           '''&mid=cAkWAAAAAAAA'''
            '''&height=300&width=400&css=minimal" />\n'''
        '''</span>\n'''))
 
