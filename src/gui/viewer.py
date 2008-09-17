@@ -11,8 +11,6 @@ import wx.lib.intctrl
 import bglib.model
 import bglib.depot.dict
 import bglib.depot.lines
-import bglib.image.context
-import bglib.image.renderer
 import bglib.image.wxpython
 
 
@@ -71,8 +69,7 @@ class Viewer(wx.Panel):
     self.SetSize(style.image.size.table) # MINIMUM SIZE
     self.reset_regions()
     self.left_q = list()
-    context_factory = bglib.image.context.context_factory
-    self.context = context_factory.new_context('wx', style)
+    self.draw = bglib.image.wxpython.Draw()
 
     self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
     self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
@@ -179,7 +176,7 @@ class Viewer(wx.Panel):
   
   def Notify(self):
     self.reset_regions()
-    bglib.image.renderer.renderer.render(self.context, self.model)
+    self.draw()
     self.Refresh()
     self.Update()
 
