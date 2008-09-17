@@ -206,6 +206,9 @@ class LineFormatter(BaseFormatter):
   def parse(self, input_line):
     editor = self.editor
     if input_line:
+      found =  editor.ancestor(bglib.doc.doctree.DivElement)
+      if not found:
+        editor.enter(bglib.doc.doctree.DivElement)
       if input_line[0] not in ' ':
         editor.leave((bglib.doc.doctree.BlockQuoteElement, 
                       bglib.doc.doctree.DefinitionBodyElement))
@@ -227,7 +230,8 @@ class LineFormatter(BaseFormatter):
       if input_line.endswith('::'):
         self.end_definition_header()
     else:
-      t = editor.done()
+      editor.leave(bglib.doc.doctree.DivElement)
+      editor.done()
 
   def _handle_pattern_rest_of_the_world(self, match, matchobj):
     self.editor.append_text(match)
