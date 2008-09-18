@@ -398,9 +398,18 @@ Element.register(Score)
 
 class Position(BaseElement):
   name = 'position'
-  DTD_ELEMENT =('cubeholder', 'field', 'home', 'bar', 'point',)
+  DTD_ELEMENT =('cubeholder', 'field', 'home', 'bar', 'point', 'top_frame', 'bottom_frame')
 Element.register(Position)
 
+class TopFrame(BaseElement):
+  name = 'top_frame'
+  DTD_ELEMENT = ('#PCDATA', )
+Element.register(TopFrame)
+
+class BottomFrame(BaseElement):
+  name = 'bottom_frame'
+  DTD_ELEMENT = ('#PCDATA', )
+Element.register(BottomFrame)
 
 class CubeHolder(BaseElement):
   name = 'cubeholder'
@@ -850,8 +859,6 @@ class ElementTree(object):
     board.resign_offer
     ))
 
-
-
   def create_tree(self):
     score = list()
     score.append(Element('score', player=bglib.model.constants.player_string[you]))
@@ -891,6 +898,8 @@ class ElementTree(object):
     self.cubeholder = cubeholder
 
     position = Element('position')
+    position.append(TopFrame())
+    position.append(BottomFrame())
     position.append(cubeholder)
     position.append(field[you])
     position.append(home[you])

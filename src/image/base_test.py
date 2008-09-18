@@ -114,7 +114,7 @@ class ElementTest(unittest.TestCase):
     self._append('score', [])
 
   def position_test(self):
-    self._append('position', ['cubeholder', 'field', 'home', 'bar', 'point'])
+    self._append('position', ['cubeholder', 'field', 'home', 'bar', 'point', 'top_frame', 'bottom_frame'])
 
   def cubeholder_test(self):
     self._append('cubeholder', ['cube'])

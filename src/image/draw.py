@@ -85,8 +85,9 @@ if __name__ == '__main__':
   import bglib.model.board
   import bglib.image.base
   b = bglib.model.board.board()
-  d = Draw(bglib.image.css.load("./bglib/image/resource/safari/default.css"))
+  #d = Draw(bglib.image.css.load("./bglib/image/resource/safari/default.css"))
   #d = Draw(bglib.image.css.load("./bglib/image/resource/minimal/default.css"))
+  d = Draw(bglib.image.css.load("./bglib/image/resource/kotobuki/default.css"))
   size = (400, 400)
   for line in d.draw(b, size):
     print line

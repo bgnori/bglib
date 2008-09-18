@@ -187,7 +187,7 @@ class CSSParser(object):
   def selector(self, rule, s):
     assert s
     r = re.compile("""
-        (?P<element>[a-zA-Z]+)
+        (?P<element>[_a-zA-Z]+)
         (?P<attribute>\[(?P<name>[\-_0-9a-zA-Z]+)=(?P<value>[\-_a-zA-Z0-9]+)\])?
         (:data\((?P<data>[^)]+)\))?
       """, re.VERBOSE)
