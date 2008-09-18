@@ -21,7 +21,7 @@ def header(title):
   """<body>"""
   """<link rel="stylesheet" type="text/css" href="backgammonbase.css">"""
   )
-  return html%(title,)
+  return html%title
 
 def footer():
   html = (
