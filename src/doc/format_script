@@ -10,6 +10,28 @@ db = DataBaseMock()
 formatter = Formatter(db)
 text = sys.stdin.read().decode('shift-jis')
 formatter.parse(text)
+
+
+def header(title):
+  html = (
+  """<html>"""
+  """<head>"""
+  """<title>%s</title>"""
+  """</head>"""
+  """<body>"""
+  """<link rel="stylesheet" type="text/css" href="backgammonbase.css">"""
+  )
+  return html
+
+
+def footer():
+  html = (
+  """</body>"""
+  """</html>"""
+  )
+  return html%(title,)
+
+print header('Backgammonbase.com').encode('utf-8')
 print formatter.make_html().encode('utf-8')
-  
+print footer().encode('utf-8')
 

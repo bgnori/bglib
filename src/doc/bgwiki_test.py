@@ -553,7 +553,9 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 '''My reply text''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<blockquote class="citation">\n'''
+      (
+       '''<div>'''
+       '''<blockquote class="citation">\n'''
        '''<blockquote class="citation">\n'''
        '''<p>\n'''
        '''Someone"s original text\n'''
@@ -563,94 +565,142 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''Someone else"s reply text\n'''
        '''</p>\n'''
        '''</blockquote>\n'''
-       '''My reply text'''))
+       '''My reply text'''
+       '''</div>'''
+       ))
 
   def test_table(self):
     self.wiki.parse('''||Cell 1||Cell 2||Cell 3||\n'''
                       '''||Cell 4||Cell 5||Cell 6||\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<table class="wiki">\n'''
+      (
+       '''<div>'''
+       '''<table class="wiki">\n'''
        '''<tr><td>Cell 1</td><td>Cell 2</td><td>Cell 3</td></tr>\n'''
        '''<tr><td>Cell 4</td><td>Cell 5</td><td>Cell 6</td></tr>\n'''
-       '''</table>\n'''))
+       '''</table>\n'''
+       '''</div>'''
+       ))
 
   def test_auto_anchor(self):
     self.line.parse('''http://www.tonic-water.com/''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      ('''<a href="http://www.tonic-water.com/" class="ext-link" title="title">'''
-'''<span class="icon">http://www.tonic-water.com/</span></a>'''))
+      (
+       '''<div>'''
+       '''<a href="http://www.tonic-water.com/"'''
+       ''' class="ext-link" title="title">'''
+       '''<span class="icon">http://www.tonic-water.com/'''
+       '''</span></a>'''
+       '''</div>'''
+       ))
 
   def test_auto_anchor_https(self):
     self.line.parse('''https://www.tonic-water.com/''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      ('''<a href="https://www.tonic-water.com/" class="ext-link" title="title">'''
-'''<span class="icon">https://www.tonic-water.com/</span></a>'''))
+      (
+       '''<div>'''
+       '''<a href="https://www.tonic-water.com/"'''
+       ''' class="ext-link" title="title">'''
+       '''<span class="icon">https://www.tonic-water.com/</span>'''
+       '''</a>'''
+       '''</div>'''
+       ))
 
   def test_external_anchor_noname(self):
     self.line.parse('''[http://www.tonic-water.com/]''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      ('''<a href="http://www.tonic-water.com/" class="ext-link" title="http://www.tonic-water.com/">'''
-      '''<span class="icon">http://www.tonic-water.com/</span></a>'''))
+      (
+       '''<div>'''
+       '''<a href="http://www.tonic-water.com/"'''
+       ''' class="ext-link" title="http://www.tonic-water.com/">'''
+       '''<span class="icon">http://www.tonic-water.com/</span></a>'''
+       '''</div>'''
+       ))
 
   def test_external_anchor_named(self):
     self.line.parse('''[http://www.tonic-water.com/ Nori's personal server]''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      ('''<a href="http://www.tonic-water.com/" class="ext-link" title="Nori's personal server">'''
-       '''<span class="icon">Nori's personal server</span></a>'''))
+      (
+       '''<div>'''
+       '''<a href="http://www.tonic-water.com/" class="ext-link" title="Nori's personal server">'''
+       '''<span class="icon">Nori's personal server</span></a>'''
+       '''</div>'''
+       ))
 
   def test_wikiname_by_camelcase(self):
     self.line.parse('''BackgammonBase''')
     self.assertHtmlEqual(
       self.line.make_html(),
+      '''<div>'''
       '''<a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">'''
-      '''BackgammonBase</a>''')
+      '''BackgammonBase</a>'''
+      '''</div>'''
+      )
 
   def test_wikiname_by_scheme_1(self):
     self.line.parse('''[wiki:BackgammonBase]''')
     self.assertHtmlEqual(
       self.line.make_html(),
+      '''<div>'''
       '''<a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">'''
-      '''BackgammonBase</a>''')
+      '''BackgammonBase</a>'''
+      '''</div>'''
+      )
 
   def test_wikiname_by_scheme_2(self):
     self.line.parse('''[wiki:blot]''')
     self.assertHtmlEqual(
       self.line.make_html(),
+      '''<div>'''
       '''<a href="/wiki/blot" class="wiki-link" title="blot">'''
-      '''blot</a>''')
+      '''blot</a>'''
+      '''</div>'''
+      )
 
   def test_entry_link(self):
     self.line.parse('''Entry: #1 or entry:1''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''Entry: <a href="/entry/1" class="entry" title="#1">#1</a> '''
-'''or <a href="/entry/1" class="entry" title="entry:1">entry:1</a>''')
+      '''<div>'''
+      '''Entry: <a href="/entry/1" class="entry" title="#1">#1</a> '''
+      '''or <a href="/entry/1" class="entry" title="entry:1">entry:1</a>'''
+      '''</div>'''
+      )
 
   def test_query_link(self):
     self.line.parse('''Query: {1} or query:1''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''Query: <a href="/query/1" class="query" title="{1}">{1}</a>'''
-''' or <a href="/query/1" class="query" title="query:1">query:1</a>''')
+      '''<div>'''
+      '''Query: <a href="/query/1" class="query" title="{1}">{1}</a>'''
+      ''' or <a href="/query/1" class="query" title="query:1">query:1</a>'''
+      '''</div>'''
+      )
 
   def test_match_link(self):
     self.line.parse('''Match: m1, [1] or match:1''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''Match: <a class="match" title="title" href="/match/1">m1</a>, '''
-'''<a class="match" title="title" href="/match/1">[1]</a> '''
-'''or <a class="match" title="title" href="/match/1">match:1</a>''')
+      '''<div>'''
+      '''Match: <a class="match" title="title" href="/match/1">m1</a>, '''
+      '''<a class="match" title="title" href="/match/1">[1]</a> '''
+      '''or <a class="match" title="title" href="/match/1">match:1</a>'''
+      '''</div>'''
+      )
 
   def test_escaping_link(self):
     self.line.parse('''!#42 is not a link''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''#42 is not a link''')
+      '''<div>'''
+      '''#42 is not a link'''
+      '''</div>'''
+      )
 
   def test_macro_timestamp(self):
     self.line.parse('''[[Timestamp]]''')
@@ -662,31 +712,40 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.line.parse('''[[BR]]''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''<br />''')
+      '''<div>'''
+      '''<br />'''
+      '''</div>'''
+      )
 
   def test_macro_Position_1(self):
     self.line.parse('''[[Position(vzsAAFhu2xFABA:QYkqASAAIAAA)]]''')
     print self.line.make_html()
     self.assertHtmlEqual(
       self.line.make_html(),
-      ('''<span class="position">\n'''
-           '''<img src="/image?format=png'''
-           '''&pid=vzsAAFhu2xFABA'''
-           '''&mid=QYkqASAAIAAA'''
-           '''&height=300&width=400&css=minimal" />\n'''
-       '''</span>\n'''))
+      '''<div>'''
+      '''<span class="position">\n'''
+      '''<img src="/image?format=png'''
+      '''&pid=vzsAAFhu2xFABA'''
+      '''&mid=QYkqASAAIAAA'''
+      '''&height=300&width=400&css=minimal" />\n'''
+      '''</span>\n'''
+      '''</div>'''
+      )
 
   def test_macro_Position_2(self):
     self.line.parse('''[[Position(jM/BATDQc+QBMA:cAkWAAAAAAAA)]]''')
     print self.line.make_html()
     self.assertHtmlEqual(
       self.line.make_html(),
-      ('''<span class="position">\n'''
-           '''<img src="/image?format=png'''
-           '''&pid=jM%2FBATDQc%2BQBMA'''
-           '''&mid=cAkWAAAAAAAA'''
-           '''&height=300&width=400&css=minimal" />\n'''
-       '''</span>\n'''))
+      '''<div>'''
+      '''<span class="position">\n'''
+      '''<img src="/image?format=png'''
+      '''&pid=jM%2FBATDQc%2BQBMA'''
+      '''&mid=cAkWAAAAAAAA'''
+      '''&height=300&width=400&css=minimal" />\n'''
+      '''</span>\n'''
+      '''</div>'''
+      )
 
   def test_macro_analysis_move(self):
     self.wiki.parse('''[[Analysis(cNcxAxCY54YBBg:cAn7ADAAIAAA)]]''')
