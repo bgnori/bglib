@@ -21,8 +21,7 @@ def header(title):
   """<body>"""
   """<link rel="stylesheet" type="text/css" href="backgammonbase.css">"""
   )
-  return html
-
+  return html%(title,)
 
 def footer():
   html = (
@@ -30,8 +29,11 @@ def footer():
   """</html>"""
   )
   return html%(title,)
-
-print header('Backgammonbase.com').encode('utf-8')
+if len(sys.args) > 1:
+  title = sys.args[1]
+else:
+  title = '''Backgammon Document'''
+print header(title).encode('utf-8')
 print formatter.make_html().encode('utf-8')
 print footer().encode('utf-8')
 
