@@ -29,8 +29,8 @@ def footer():
   """</html>"""
   )
   return html%(title,)
-if len(sys.args) > 1:
-  title = sys.args[1]
+if len(sys.argv) > 1:
+  title = sys.argv[1]
 else:
   title = '''Backgammon Document'''
 print header(title).encode('utf-8')
