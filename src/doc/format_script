@@ -21,14 +21,15 @@ def header(title):
   """<body>"""
   """<link rel="stylesheet" type="text/css" href="backgammonbase.css">"""
   )
-  return html%title
+  return html%(title, )
 
 def footer():
   html = (
   """</body>"""
   """</html>"""
   )
-  return html%(title,)
+  return html
+
 if len(sys.argv) > 1:
   title = sys.argv[1]
 else:
