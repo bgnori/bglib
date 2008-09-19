@@ -2,7 +2,7 @@ board {x: 0; y: 0; width: 341; height: 262; background: red}
 
 board {font:uri("DejaVuLGCSans-Bold.ttf")}
 
-match {x: 291; y: 0; width: 100; height: 232; background:#b0b0b0}
+match {x: 291; y: 0; width: 50; height: 232; background:#b0b0b0}
 length {x: 316; y: 93; width: 25; height: 46 ; color:black}
 
 crawford {x: 291; y: 93; width: 25; height: 46; color:black}
@@ -61,14 +61,19 @@ home {width: 25 ;height: 112}
 home[player=you] {x: 266; y: 116 ; background: #a09797}
 home[player=him] {x: 266; y: 5; background: #a09797; flip:  True  }
 
-field {width: 108; height: 46}
+field {width: 108; height: 46; text: Backgammonbase ; color:#c5c5c5}
+field {font:uri("DejaVuLGCSans-Bold.ttf")}
 field[player=you] {x: 158;y: 93}
 field[player=him] {x: 25 ;y: 93}
 
-field[player=you] die[id=left] {x: 176; y: 95; color:#f0f0f0; background:#c02020}
-field[player=you] die[id=right] {x: 204; y: 95; color:#f0f0f0; background:#c02020}
-field[player=him] die[id=left] {x: 43; y:95 ; color:#c02020; background:#f0f0f0}
-field[player=him] die[id=right] {x: 71; y:95 ; color:#c02020; background:#f0f0f0}
+field[player=you] die[id=left] {x: 176; y: 95;  color:#c02020; background:#f0f0f0}
+field[player=you] die[id=right] {x: 204; y: 95; color:#c02020; background:#f0f0f0}
+field[player=him] die[id=left] {x: 43; y:95 ;   color:#f0f0f0; background:#c02020}
+field[player=him] die[id=right] {x: 71; y:95 ;  color:#f0f0f0; background:#c02020}
+
+
+
+
 die {width: 16; height: 16; diestyle:dot; eyesize:3}
 
 
@@ -90,7 +95,6 @@ bottom_frame {x:0; y:227; height:5; width:291; background:#a09797 }
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=True] chequer {y:6 ;y_offset: 18}
 home[flip=True] chequer{y:6 ;y_offset: 18}
-#chequer[player=you] {color: #459090}
 chequer[player=you] {color: #f0f0f0}
 chequer[player=him] {color: #c02020}
 

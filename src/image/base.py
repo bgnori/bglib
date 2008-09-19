@@ -422,7 +422,22 @@ class Field(BaseElement):
   DTD_ELEMENT = ('#PCDATA', 'die', 'cube', 'resign' )
   #FIXME <!ELEMENT field (EMPTY | (die, die) | cube | resign )>
   DTD_ATTLIST = dict(BaseElement.DTD_ATTLIST,
-                     player=PlayerAttribute)
+                     player=PlayerAttribute,
+                     text=StringAttribute)
+
+  def draw(self, context):
+    size = self.calc_mag((self.width, self.height))
+    position = self.calc_mag((self.x, self.y))
+    image = getattr(self, 'image', None)
+    color = getattr(self, 'color', 'black')
+    font = getattr(self, 'font', None)
+    text = getattr(self, 'text', '')
+    flip = getattr(self, 'flip', None)
+    if image:
+      loaded = context.load_image(image, size, flip)
+      context.paste_image(loaded, position, size)
+    elif text and font:
+      context.draw_text(position, size, text, self.font, color)
   #FIXME
   #<!ATTLIST field basic
   #                player (you|him) #REQUIRED

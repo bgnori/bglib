@@ -1,5 +1,5 @@
 <board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/kotobuki/DejaVuLGCSans-Bold.ttf" height="262">
-  <match y="0" x="291" width="100" background="#b0b0b0" height="232">
+  <match y="0" x="291" width="50" background="#b0b0b0" height="232">
     <action player="him" background="#b0b0b0" width="341" y="232" x="0" color="#c02020" height="30">
       him to move.
     </action>
@@ -26,7 +26,7 @@
         0
       </cube>
     </cubeholder>
-    <field y="93" player="you" height="46" x="158" width="108">
+    <field player="you" x="158" y="93" width="108" color="#c5c5c5" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/kotobuki/DejaVuLGCSans-Bold.ttf" height="46">
     </field>
     <home player="you" background="#a09797" width="25" y="116" x="266" height="112">
     </home>
@@ -147,11 +147,11 @@
     </bar>
     <home player="him" background="#a09797" width="25" y="5" x="266" flip="True" height="112">
     </home>
-    <field y="93" player="him" height="46" x="25" width="108">
-      <die color="#c02020" eyesize="3" diestyle="dot" background="#f0f0f0" width="16" y="95" x="71" id="right" height="16">
+    <field player="him" x="25" y="93" width="108" color="#c5c5c5" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/kotobuki/DejaVuLGCSans-Bold.ttf" height="46">
+      <die color="#f0f0f0" eyesize="3" diestyle="dot" background="#c02020" width="16" y="95" x="71" id="right" height="16">
         2
       </die>
-      <die color="#c02020" eyesize="3" diestyle="dot" background="#f0f0f0" width="16" y="95" x="43" id="left" height="16">
+      <die color="#f0f0f0" eyesize="3" diestyle="dot" background="#c02020" width="16" y="95" x="43" id="left" height="16">
         5
       </die>
     </field>

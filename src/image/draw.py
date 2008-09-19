@@ -48,7 +48,7 @@ class Draw(object):
 
   def draw_text(self, position, size, text, font_name, fill):
     assert self.dc is not None
-    self.dc.append('draw_text "%s" in %s @ %s'%(text, size, position))
+    self.dc.append('draw_text "%s" in %s @ %s with %s'%(text, size, position, fill))
 
   def draw_ellipse(self, position, size, fill=None):
     assert self.dc is not None

@@ -1,16 +1,16 @@
 board {x: 0; y: 0; width: 341; height: 262; background: #596580}
 board {font:uri("DejaVuLGCSans-Bold.ttf")}
 
-match {x: 291; y: 0; width: 100; height: 232}
+match {x: 291; y: 0; width: 50; height: 232; background: #625e5d}
 length {x: 316; y: 93; width: 25; height: 46 ; color:white}
 
 crawford {x: 291; y: 93; width: 25; height: 46; color:white}
 score {width: 50; height: 93}
-score[player=you] {x: 291; y:139; color: #3cb7ff}
+score[player=you] {x: 291; y:139; color: #3ca7e4}
 score[player=him] {x: 291; y: 0 ; color: #fd4993}
 
 
-action{width: 341; height: 30; x:0; y:232 ; background: #596580}
+action{width: 341; height: 30; x:0; y:232 ; background: #625e5d}
 action[player=you] {color: #3cb7ff}
 action[player=him] {color: #fd4993}
 
@@ -18,10 +18,10 @@ player {width:0; height: 0}
 player[player=you]{x:0; y:0}
 player[player=him]{x:0; y:0}
 
-position {x: 0; y: 0; width: 291; height: 232; background: #827e7d}
+position {x: 0; y: 0; width: 291; height: 232; background: #625e5d}
 point {width: 18; height:88}
-point[parity=odd] {color: #cccecf}
-point[parity=even] {color: #15212e}
+point[parity=odd] {color: #7a797b}
+point[parity=even] {color: #4a495a}
 point:data(1) { x: 248 ; y: 139 }
 point:data(2) { x: 230 ; y: 139 }
 point:data(3) { x: 212 ; y: 139 }
@@ -47,25 +47,26 @@ point:data(22) {x: 212 ; y:   5 ; flip:  True  }
 point:data(23) {x: 230 ; y:   5 ; flip:  True  }
 point:data(24) {x: 248 ; y:   5 ; flip:  True  }
 
-bar {width: 25; height: 111; background: #746f6d}
+bar {width: 25; height: 112; background: #453f3d}
 bar[player=you] {x:133; y:116}
 bar[player=him] {x:133; y: 5}
 
-cubeholder {width: 25 ;height: 30; x: 0; y: 101 ;background: #b6bdc6}
+cubeholder {width: 25 ;height: 224; x: 0; y: 5 ;background: #453f3d}
 
-home {width: 25 ;height: 101}
-home[player=you] {x: 266; y: 131 ; background: #746f6d}
-home[player=him] {x: 266; y: 0; background: #746f6d; flip:  True  }
+home {width: 25 ;height: 112}
+home[player=you] {x: 266; y: 116 ; background: #453f3d}
+home[player=him] {x: 266; y: 5; background: #453f3d; flip:  True  }
 
-field {width: 108; height: 46}
+field {width: 108; height: 46; text: Backgammonbase ; color:#7a797b}
+field {font:uri("DejaVuLGCSans-Bold.ttf")}
 field[player=you] {x: 158;y: 93}
 field[player=him] {x: 25 ;y: 93}
 
-field[player=you] die[id=left] {x: 176; y: 95; color:#3cb7ff}
-field[player=you] die[id=right] {x: 204; y: 95; color:#3cb7ff}
-field[player=him] die[id=left] {x: 43; y:95 ; color:#fd4993}
-field[player=him] die[id=right] {x: 71; y:95 ; color:#fd4993}
-die {width: 16; height: 16; background:#cccecf; diestyle:dot; eyesize:3}
+field[player=you] die[id=left] {x: 176; y: 95; background:#3ca7e4}
+field[player=you] die[id=right] {x: 204; y: 95; background:#3ca7e4}
+field[player=him] die[id=left] {x: 43; y:95 ; background:#fd4993}
+field[player=him] die[id=right] {x: 71; y:95 ; background:#fd4993}
+die {width: 16; height: 16 ; color:white; diestyle:dot; eyesize:3}
 
 
 cube {width: 25; height: 25; background: white; color: black; initialCube: 64}
@@ -80,9 +81,12 @@ field[player=you] resign {x: 157;y: 93}
 field[player=him] resign {x: 25 ;y: 93}
 resign {width: 100; height: 46; color: gold}
 
+top_frame {x:0; y:0; height:5; width:291; background:#453f3d}
+bottom_frame {x:0; y:227; height:5; width:291; background:#453f3d}
+
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=True] chequer {y:6 ;y_offset: 18}
 home[flip=True] chequer{y:6 ;y_offset: 18}
-chequer[player=you] {color: #3cb7ff}
+chequer[player=you] {color: #3ca7e4}
 chequer[player=him] {color: #fd4993}
 
