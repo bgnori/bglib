@@ -114,6 +114,7 @@ if __name__ == '__main__':
   import bglib.model.board
   from bglib.image.css import load
   b = bglib.model.board.board()
+  b.flip()
   d = Draw(load("./bglib/image/resource/kotobuki/default.css"))
   image = d.draw(b, (400, 400))
   image.show()

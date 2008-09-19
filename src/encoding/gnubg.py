@@ -144,7 +144,9 @@ def encode(model):
   mid = encode_match(mp)
   return pid, mid
 
-def decode(model, pid, mid):
+def decode(model, pid, mid, flip=None):
+  if flip is None:
+    flip = False
   mp = decode_match(mid)
   model.cube_in_logarithm = mp.cube_in_logarithm
   model.cube_owner = mp.cube_owner
@@ -168,7 +170,10 @@ def decode(model, pid, mid):
   else:
     you = on_action
     him = opp
-  model.position = you, him
+
+  model.position = (you, him)
+  if flip:
+    model.flip()
 
 def convert_to_urlsafe(s):
   return s.replace('+', '-').replace('/', '_')

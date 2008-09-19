@@ -44,6 +44,22 @@ class board(object):
       raise AttributeError
     self._data[name]=value
 
+  def flip(self):
+    self.position = self.position[1], self.position[0]
+    if self.cube_owner == constants.you:
+      self.cube_owner = constants.him
+    if self.cube_owner == constants.him:
+      self.cube_owner=constants.you
+    if self.on_action == constants.you:
+      self.on_action = constants.him
+    if self.on_action == constants.him:
+      self.on_action = constants.you
+    if self.on_inner_action == constants.you:
+      self.on_inner_action = constants.him
+    if self.on_inner_action == constants.him:
+      self.on_inner_action = constants.you
+    self.score = self.score[1], self.score[0]
+
   def has_chequer_to_move(self, n):
     if self.on_action == constants.you:
       to_move, to_hit = self.position

@@ -157,17 +157,35 @@ class MatchProxyTest(unittest.TestCase):
   def MatchProxy_decode_2_test(self):
     import bglib.model.board
     b = bglib.model.board.board()
-    b = decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA')
-
-    b = bglib.model.board.board()
     self.assertEqual(b.cube_owner, 3)
 
     mp = MatchProxy()
     mp.cube_owner = b.cube_owner
-
     self.assertEqual(mp.cube_owner, 3)
 
     pid, mid = encode(b)
     self.assertEqual(pid, '4HPwATDgc/ABMA')
     self.assertEqual(mid, 'MAAAAAAAAAAA')
+
+
+  def MatchProxy_decode_3_test(self):
+    import bglib.model.board
+    b = bglib.model.board.board()
+    assert b.position
+    decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA')
+    assert b.position
+    pid, mid = encode(b)
+    self.assertEqual(pid, 'vzsAAFhu2xFABA')
+    self.assertEqual(mid, 'QYkqASAAIAAA')
+
+
+  def MatchProxy_decode_4_test(self):
+    import bglib.model.board
+    b = bglib.model.board.board()
+    assert b.position
+    decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA', flip=True)
+    assert b.position
+    pid, mid = encode(b)
+    self.assertEqual(pid, 'btsRQAS/OwAAWA')
+    self.assertEqual(mid, 'MAEAAAAAAAAA')
 
