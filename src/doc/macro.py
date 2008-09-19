@@ -179,20 +179,21 @@ def TableOfContent(editor, args):
   return True
 register(TableOfContent)
 
-
-def Position(editor, args):
-  editor.enter(bglib.doc.doctree.SpanElement, **{"class":"position"})
-  matchobj = re.match(r"(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12})"
+_arg_pattern = re.compile(
+                      r"(?P<gnubgid>[a-zA-Z0-9/+]{14}:[a-zA-Z0-9/+]{12})"
                       r"(,[ ]*css=(?P<css>[a-zA-Z]+))?"
                       r"(,[ ]*format(?P<format>[a-zA-Z]+))?"
                       r"(,[ ]*width(?P<width>[0-9]+))?"
                       r"(,[ ]*height(?P<height>[0-9]+))?"
-                      , args)
+                      )
+
+def _parse_position(s):
+  matchobj = _arg_pattern.match(s)
   if not matchobj:
-    return False
+    return None
   d = matchobj.groupdict()
-  if not d['pid'] or not d['mid']:
-    return False
+  if not d['gnubgid']:
+    return None
   if not d['width']:
     d['width'] = 400
   if not d['height']:
@@ -201,6 +202,13 @@ def Position(editor, args):
     d['format']='png'
   if not d['css']:
     d['css']='minimal'
+  return d
+
+def Position(editor, args):
+  d = _parse_position(args)
+  if not d:
+    return False
+  editor.enter(bglib.doc.doctree.SpanElement, **{"class":"position"})
   editor.enter(bglib.doc.doctree.ImgElement, src='/image?'+urllib.urlencode(d, True))
   editor.leave(bglib.doc.doctree.SpanElement)
   return True
@@ -208,13 +216,10 @@ register(Position)
 
 
 def Analysis(editor, args):
-  matchobj = re.match(r"(?P<valid>(?P<pid>[a-zA-Z0-9/+]{14}):(?P<mid>[a-zA-Z0-9/+]{12}))", args)
-  if not matchobj:
+  d = _parse_position(args)
+  if not d:
     return False
-  d = matchobj.groupdict(dict(pid='N/A', mid='N/A'))
-  if d['pid'] == 'N/A' or d['mid'] == 'N/A':
-    return False
-  cubeaction, analysis = _db.get_analysis(d['pid'], d['mid'])
+  cubeaction, analysis = _db.get_analysis(d['gnubgid'][:14], d['gnubgid'][15:27])
 
   if cubeaction:
     CubelessEquity(editor, **(analysis[0]))

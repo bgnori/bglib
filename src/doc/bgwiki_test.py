@@ -41,79 +41,102 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.line.parse(r"""'''bold''', '''!''' can be bold too''', and '''! '''""")
     self.assertHtmlEqual(
       self.line.make_html(),
-      r"""<strong>bold</strong>, <strong>''' can be bold too</strong>, and <strong>! </strong>""")
+      r"""<div><strong>bold</strong>, <strong>''' can be bold too</strong>, and <strong>! </strong></div>""")
 
   def test_italic(self):
     self.line.parse(r"""''italic''""")
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<i>italic</i>''')
+      r'''<div><i>italic</i></div>''')
 
   def test_bolditalic(self):
     self.line.parse(r"""'''''bold italic'''''""")
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<strong><i>bold italic</i></strong>''')
+      r'''<div><strong><i>bold italic</i></strong></div>''')
 
   def test_underline(self):
     self.line.parse(r'''__underline__''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<span class="underline">underline</span>''')
+      '''<div>'''
+      '''<span class="underline">underline</span>'''
+      '''</div>''')
 
   def test_monospace_1(self):
     self.line.parse(r'''`monospace`'''),
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<span class="monospace">monospace</span>''')
+      '''<div>'''
+      '''<span class="monospace">monospace</span>'''
+      '''</div>'''
+      )
+
 
   def test_monospace_2(self):
     self.line.parse(r'''{{{monospace}}}''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<span class="monospace">monospace</span>''')
+       '''<div>'''
+       '''<span class="monospace">monospace</span>'''
+       '''</div>'''
+       )
 
   def test_strike(self):
     self.line.parse(r'''~~strike-through~~''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<del>strike-through</del>''')
+      '''<div>'''
+      '''<del>strike-through</del>'''
+      '''</div>''')
 
   def test_superscript(self):
     self.line.parse(r'''^superscript^''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<sup>superscript</sup> ''')
+      '''<div>'''
+      '''<sup>superscript</sup> '''
+      '''</div>''')
 
   def test_superscript(self):
     self.line.parse(r''',,subscript,,''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      r'''<sub>subscript</sub>''')
+      '''<div>'''
+      '''<sub>subscript</sub>'''
+      '''</div>''')
 
   def test_forced_br(self):
     self.line.parse('''Line 1[[BR]]Line 2\n''')
     self.assertHtmlEqual(
       self.line.make_html(),
-      '''Line 1<br />Line 2\n''')
+      '''<div>'''
+      '''Line 1<br />Line 2\n'''
+      '''</div>''')
 
   def test_heading_h1(self):
     self.wiki.parse('''= heading =\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      '''<h1>heading</h1>\n''')
+      '''<div>'''
+      '''<h1>heading</h1>\n'''
+      '''</div>''')
 
   def test_heading_h2(self):
     self.wiki.parse('''== heading ==\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      '''<h2>heading</h2>\n''')
+      '''<div>'''
+      '''<h2>heading</h2>\n'''
+      '''</div>''')
 
   def test_heading_h3(self):
     self.wiki.parse('''=== heading ===\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      '''<h3>heading</h3>\n''')
+      '''<div>'''
+      '''<h3>heading</h3>\n'''
+      '''</div>''')
 
   def test_itemize_style_unorder(self):
     self.wiki.parse(''' * Item 1\n'''
@@ -121,28 +144,32 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
                     ''' * Item 2\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<ul>\n'''
+       '''<div>'''
+       '''<ul>\n'''
        '''<li>Item 1\n'''
        '''<ul>\n'''
        '''<li>Item 1.1\n'''
        '''</li></ul>\n'''
        '''</li><li>Item 2\n'''
        '''</li></ul>\n'''
-       ))
+       '''</div>'''
+       )
   def test_itemize_style_order_numeric(self):
     self.wiki.parse(''' 1. Item 1\n'''
                       '''  1. Item 1.1\n'''
                       ''' 1. Item 2\n'''),
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<ol>\n'''
+       '''<div>'''
+       '''<ol>\n'''
        '''<li>Item 1\n'''
        '''<ol>\n'''
        '''<li>Item 1.1\n'''
        '''</li></ol>\n'''
        '''</li><li>Item 2\n'''
        '''</li></ol>\n'''
-       ))
+       '''</div>'''
+       )
 
   def test_itemize_style_order_alpha(self):
     self.wiki.parse(''' a. Item 1\n'''
@@ -150,14 +177,16 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 ''' a. Item 2\n'''),
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<ol class="loweralpha">\n'''
+       '''<div>'''
+       '''<ol class="loweralpha">\n'''
        '''<li>Item 1\n'''
        '''<ol>\n'''
        '''<li>Item 1.1\n'''
        '''</li></ol>\n'''
        '''</li><li>Item 2\n'''
        '''</li></ol>\n'''
-       ))
+       '''</div>'''
+       )
 
   def test_itemize_style_order_alpha_maxmin(self):
     self.wiki.parse(''' a. Item a\n'''
@@ -170,7 +199,8 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
                     ''' h. Item h\n'''),
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<ol class="loweralpha">\n'''
+       '''<div>'''
+       '''<ol class="loweralpha">\n'''
        '''<li>Item a\n'''
        '''</li><li>Item b\n'''
        '''</li><li>Item c\n'''
@@ -180,7 +210,8 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''</li><li>Item g\n'''
        '''</li><li>Item h\n'''
        '''</li></ol>\n'''
-       ))
+       '''</div>'''
+       )
 
   def test_itemize_style_order_roman(self):
     self.wiki.parse(''' i. Item 1\n'''
@@ -188,14 +219,16 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
                     ''' i. Item 2\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<ol class="lowerroman">\n'''
+       '''<div>'''
+       '''<ol class="lowerroman">\n'''
        '''<li>Item 1\n'''
        '''<ol>\n'''
        '''<li>Item 1.1\n'''
        '''</li></ol>\n'''
        '''</li><li>Item 2\n'''
        '''</li></ol>\n'''
-       ))
+       '''</div>'''
+       )
 
   def test_itemize_style_order_roman_maxmin(self):
     self.wiki.parse(''' i. Item i\n'''
@@ -209,7 +242,8 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
                     )
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<ol class="lowerroman">\n'''
+       '''<div>'''
+       '''<ol class="lowerroman">\n'''
        '''<li>Item i\n'''
        '''</li><li>Item ii\n'''
        '''</li><li>Item iii\n'''
@@ -219,7 +253,8 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''</li><li>Item vii\n'''
        '''</li><li>Item viii\n'''
        '''</li></ol>\n'''
-       ))
+       '''</div>'''
+       )
 
 
   def test_itemize_full(self):
@@ -237,14 +272,16 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
                         ),
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<ul>\n'''
+       '''<div>'''
+       '''<ul>\n'''
        '''<li>Item 1\n'''
        '''<ul>\n'''
        '''<li>Item 1.1\n'''
        '''</li></ul>\n'''
        '''</li><li>Item 2\n'''
        '''</li></ul>\n'''
-       '''\n'''
+       '''</div>'''
+       '''<div>'''
        '''<ol>\n'''
        '''<li>Item 1\n'''
        '''<ol class="loweralpha">\n'''
@@ -257,7 +294,8 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''</li></ol>\n'''
        '''</li><li>Item 2\n'''
        '''</li></ol>\n'''
-      ))
+       '''</div>'''
+      )
 
   def test_itemize_plus_minus(self):
     self.wiki.parse(
@@ -270,58 +308,72 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
                         ),
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ( '''<ul class="sign">\n'''
-        '''<li class="minus">Item 1\n'''
-        '''</li><li class="plus">Item 2\n'''
-        '''</li><li class="doubleminus">Item 3\n'''
-        '''</li><li class="doubleplus">Item 4\n'''
-        '''</li><li class="tripleminus">Item 5\n'''
-        '''</li><li class="tripleplus">Item 6\n'''
-        '''</li></ul>\n'''
-      ))
+       '''<div>'''
+       '''<ul class="sign">\n'''
+       '''<li class="minus">Item 1\n'''
+       '''</li><li class="plus">Item 2\n'''
+       '''</li><li class="doubleminus">Item 3\n'''
+       '''</li><li class="doubleplus">Item 4\n'''
+       '''</li><li class="tripleminus">Item 5\n'''
+       '''</li><li class="tripleplus">Item 6\n'''
+       '''</li></ul>\n'''
+       '''</div>'''
+      )
 
   def test_bad_indent(self):
     self.wiki.parse('''  8 ''')
     #AssertionError: "<ul>\n<ol>\n<li>\n</li></ol>\n</ul>\n" != "<ul>\n<li><ol>\n<li>Item 1\n'''
     self.assertHtmlEqual(self.wiki.make_html(),
-      ( '''<ul>\n'''
+      ( 
+        '''<div>\n'''
+        '''<ul>\n'''
         '''<ol>\n'''
         '''<li>\n'''
         '''</li></ol>\n'''
         '''</ul>\n'''
+        '''</div>\n'''
        )
     )
 
   def test_bad_indent_a(self):
     self.wiki.parse('''  a. Item a''')
     self.assertHtmlEqual(self.wiki.make_html(),
-      ( '''<ul>\n'''
+      (
+        '''<div>\n'''
+        '''<ul>\n'''
         '''<ol class="loweralpha">\n'''
         '''<li>Item a\n'''
         '''</li></ol>\n'''
         '''</ul>\n'''
+        '''</div>\n'''
        )
     )
 
   def test_bad_indent_i(self):
     self.wiki.parse('''  i. Item 1''')
     self.assertHtmlEqual(self.wiki.make_html(),
-      ('''<ul>\n'''
+      (
+       '''<div>\n'''
+       '''<ul>\n'''
        '''<ol class="lowerroman">\n'''
        '''<li>Item 1\n'''
        '''</li></ol>\n'''
        '''</ul>\n'''
+       '''</div>\n'''
        )
     )
 
   def test_bad_indent_1(self):
     self.wiki.parse('''  1. Item 1''')
     self.assertHtmlEqual(self.wiki.make_html(),
-      ('''<ul>\n'''
+      (
+       '''<div>\n'''
+       '''<ul>\n'''
        '''<ol>\n'''
        '''<li>Item 1\n'''
        '''</li></ol>\n'''
        '''</ul>\n'''
+       '''</div>\n'''
        )
     )
 
@@ -337,6 +389,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
+       '''<div>'''
        '''<dl>\n'''
        '''<dt>llama</dt>\n'''
        '''<dd>some kind of mammal, with hair\n'''
@@ -344,6 +397,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''<dd>some kind of reptile, without hair\n'''
        '''(can you spot the typo?)\n'''
        '''</dd></dl>\n'''
+       '''</div>'''
        ))
 
   def test_complicated_definition(self):
@@ -358,12 +412,14 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
+       '''<div>'''
        '''<dl>'''
        '''<dt><a href="/wiki/backgammon" class="wiki-link" title="backgammon">backgammon</a>\n</dt>'''
        '''<dd>some kind of board game for two players, with two dice and 15 chequers for each player\n</dd>'''
        '''<dt><a href="/wiki/BackgammonBase" class="wiki-link" title="BackgammonBase">BackgammonBase</a>\n</dt>'''
        '''<dd>Web application to learn backgammon effectively.\n</dd>'''
        '''</dl>'''
+       '''</div>'''
        ))
 
   def test_itemize_in_definition(self):
@@ -378,6 +434,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
+       '''<div>'''
        '''<dl>\n'''
        '''<dt>hitting</dt>\n'''
        '''<dd><ul>'''
@@ -387,6 +444,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''<li>put hit chequers behind of the prime.</li>'''
        '''</ul>'''
        '''</dd></dl>\n'''
+       '''</div>'''
        ))
 
   def test_itemize_and_text_in_definition(self):
@@ -403,6 +461,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
+       '''<div>'''
        '''<dl>\n'''
        '''<dt>hitting</dt>\n'''
        '''<dd> merits are<ul>'''
@@ -412,6 +471,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''<li>put hit chequers behind of the prime.</li>'''
        '''</ul>'''
        '''</dd></dl>\n'''
+       '''</div>'''
        ))
 
   def test_complex_mix_of_itemize_and_definition(self):
@@ -429,6 +489,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
+       '''<div>'''
        '''<dl>\n'''
        '''<dt>hitting</dt>\n'''
        '''<dd><ul><ul>'''
@@ -443,7 +504,10 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''</ul>'''
        '''these are merits.(this is in dd, not in li)\n'''
        '''</dd></dl>\n'''
+       '''</div>'''
+       '''<div>'''
        '''this is not in dl'''
+       '''</div>'''
        ))
 
   def test_wikiname_in_definition(self):
@@ -456,12 +520,14 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
+       '''<div>'''
        '''<dl>\n'''
        '''<dt>Trice</dt>\n'''
        '''<dd>\n'''
        '''<a href="/wiki/WalterTrice" class="wiki-link" title="WalterTrice">WalterTrice</a>'''
        '''is author of backgammon boot camp.'''
        '''</dd></dl>\n'''
+       '''</div>'''
        ))
 
   def test_get_formatter_0(self):
@@ -477,19 +543,28 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.wiki.parse('''{{{\n}}}\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      '''<pre class="wiki"></pre>\n''')
+      '''<div>'''
+      '''<pre class="wiki"></pre>'''
+      '''</div>'''
+      )
 
   def test_preformatted_emptyline(self):
     self.wiki.parse('''{{{\n\n}}}\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      '''<pre class="wiki">\n</pre>\n''')
+      '''<div>'''
+      '''<pre class="wiki">\n</pre>\n'''
+      '''</div>'''
+      )
 
   def test_preformatted_emptylines(self):
     self.wiki.parse('''{{{\n\n\n}}}\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      '''<pre class="wiki">\n\n</pre>\n''')
+      '''<div>'''
+      '''<pre class="wiki">\n\n</pre>\n'''
+      '''</div>'''
+      )
 
   def test_preformatted(self):
     self.wiki.parse('''{{{\n'''
@@ -498,9 +573,12 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 '''}}}\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<pre class="wiki">  def HelloWorld():\n'''
+'''<div>'''
+'''<pre class="wiki">  def HelloWorld():\n'''
 '''     print "Hello World"\n'''
-'''</pre>\n'''))
+'''</pre>'''
+'''</div>'''
+      )
 
   def test_preformatted_2(self):
     self.wiki.parse('''{{{\n'''
@@ -510,19 +588,24 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 '''}}}\n'''),
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<pre class="wiki">  def HelloWorld():\n'''
+'''<div>'''
+'''<pre class="wiki">  def HelloWorld():\n'''
 '''     print "Hello World"\n'''
-'''</pre>\n'''))
+'''</pre>'''
+'''</div>''')
 
   def test_blockquoate(self):
     self.wiki.parse('''  This text is a quote from someone else.\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<blockquote>\n'''
-'''<p>\n'''
-'''This text is a quote from someone else.\n'''
-'''</p>\n'''
-'''</blockquote>\n'''))
+       '''<div>\n'''
+       '''<blockquote>\n'''
+       '''<p>\n'''
+       '''This text is a quote from someone else.\n'''
+       '''</p>\n'''
+       '''</blockquote>\n'''
+       '''</div>\n'''
+      )
 
   def test_blockquoate_multilines(self):
     self.wiki.parse(
@@ -532,7 +615,9 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 '''  This text is an another quote from someone else.\n''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<blockquote>\n'''
+      (
+'''<div>\n'''
+'''<blockquote>\n'''
 '''<p>\n'''
 '''This text is a quote from someone else.\n'''
 '''quote continues.\n'''
@@ -544,6 +629,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 '''This text is an another quote from someone else.\n'''
 '''</p>\n'''
 '''</blockquote>\n'''
+'''</div>\n'''
        ))
 
   def test_DiscussionCitations(self):
@@ -724,10 +810,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.line.make_html(),
       '''<div>'''
       '''<span class="position">\n'''
-      '''<img src="/image?format=png'''
-      '''&pid=vzsAAFhu2xFABA'''
-      '''&mid=QYkqASAAIAAA'''
-      '''&height=300&width=400&css=minimal" />\n'''
+      '''<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=minimal&height=300" />'''
       '''</span>\n'''
       '''</div>'''
       )
@@ -739,10 +822,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.line.make_html(),
       '''<div>'''
       '''<span class="position">\n'''
-      '''<img src="/image?format=png'''
-      '''&pid=jM%2FBATDQc%2BQBMA'''
-      '''&mid=cAkWAAAAAAAA'''
-      '''&height=300&width=400&css=minimal" />\n'''
+      '''<img src="/image?gnubgid=jM%2FBATDQc%2BQBMA%3AcAkWAAAAAAAA&format=png&width=400&css=minimal&height=300" />'''
       '''</span>\n'''
       '''</div>'''
       )
@@ -752,6 +832,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.wiki.make_html(),
       (
+'''<div>'''
        '''<table class="move">\n'''
        '''<tr class="headerrow"><th rowspan="2">#</th><th rowspan="2">move</th><th rowspan="2">Ply</th><th colspan="6"> Eq.(diff)</th></tr>\n'''
        '''<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
@@ -762,61 +843,77 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
        '''<tr class="oddrow"><th rowspan="2">3</th><td rowspan="2">21/15(2) 8/2*(2)</td><td rowspan="2">0</td><td class="Equity" colspan="6"> +0.614 (-0.362) </td></tr>\n'''
        '''<tr class="oddrow"><td>0.7</td><td>0.2</td><td>0.0</td><td>0.3</td><td>0.1</td><td>0.0</td></tr>\n'''
        '''</table>\n'''
+'''</div>'''
       ))
 
   def test_macro_analysis_cube(self):
     self.wiki.parse('''[[Analysis(vzsAAFhu2xFABA:QYkqASAAIAAA)]]''')
     self.assertHtmlEqual(
       self.wiki.make_html(),
-      ('''<table class="cubeless">\n'''
-       '''<tr class="headerrow"><th rowspan="2">Ply</th><th colspan="6"> Cubeless Eq. </th></tr>\n'''
-       '''<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
-       '''<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.011 (Money +0.008) </td></tr>\n'''
-       '''<tr class="oddrow"><td>0.5</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.0</td></tr>\n'''
-       '''</table>\n'''
-      '''<table class="cubeaction">\n'''
-       '''<tr class="headerrow"><th>#</th><th>action</th><th colspan="2"> Cubeful Eq. </th></tr>\n'''
-       '''<tr class="actualrow"><th>1</th><td> No double </td><td> +0.236 </td><td>  </td></tr>\n'''
-       '''<tr class="evenrow"><th>2</th><td> Double, pass </td><td> +0.236 </td><td> +0.764 </td></tr>\n'''
-       '''<tr class="oddrow"><th>3</th><td> Double, take </td><td> -0.096 </td><td> -0.332 </td></tr>\n'''
-       '''</table>\n'''))
+'''<div>'''
+'''<table class="cubeless">\n'''
+'''<tr class="headerrow"><th rowspan="2">Ply</th><th colspan="6"> Cubeless Eq. </th></tr>\n'''
+'''<tr class="headerrow"><th>Win</th><th>WinG</th><th>WinBg</th><th>Lose</th><th>LoseG</th><th>LoseBg</th></tr>\n'''
+'''<tr class="oddrow"><td rowspan="2">2</td><td class="Equity" colspan="6"> +0.011 (Money +0.008) </td></tr>\n'''
+'''<tr class="oddrow"><td>0.5</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.0</td></tr>\n'''
+'''</table>\n'''
+'''<table class="cubeaction">\n'''
+'''<tr class="headerrow"><th>#</th><th>action</th><th colspan="2"> Cubeful Eq. </th></tr>\n'''
+'''<tr class="actualrow"><th>1</th><td> No double </td><td> +0.236 </td><td>  </td></tr>\n'''
+'''<tr class="evenrow"><th>2</th><td> Double, pass </td><td> +0.236 </td><td> +0.764 </td></tr>\n'''
+'''<tr class="oddrow"><th>3</th><td> Double, take </td><td> -0.096 </td><td> -0.332 </td></tr>\n'''
+'''</table>\n'''
+'''</div>''')
 
 
   def test_escape_lt(self):
     self.line.parse('''<''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''&lt;''')
+'''<div>'''
+'''&lt;'''
+'''</div>''')
 
   def test_escape_gt(self):
     self.line.parse('''>''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''&gt;''')
+'''<div>'''
+'''&gt;'''
+'''</div>''')
 
   def test_escape_amp(self):
     self.line.parse('''&''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''&amp;''')
+'''<div>'''
+'''&amp;'''
+'''</div>''')
 
   def test_escape_combined(self):
     self.line.parse('''&<>''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''&amp;&lt;&gt;''')
+'''<div>'''
+'''&amp;&lt;&gt;'''
+'''</div>''')
 
   def test_escape_wiki(self):
     self.line.parse('''!HogeHoge''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''HogeHoge''')
+'''<div>'''
+'''HogeHoge'''
+'''</div>'''
+)
 
   def test_escape_combined(self):
     self.line.parse('''!&<>''')
     self.assertHtmlEqual(
       self.line.make_html(),
-'''!&amp;&lt;&gt;''')
+'''<div>'''
+'''!&amp;&lt;&gt;'''
+'''</div>''')
 
   def test_extract_references_wikiname_by_camelcase(self):
     self.wiki.parse('''BackgammonBase''')

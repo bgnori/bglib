@@ -41,30 +41,23 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     bglib.doc.macro.dispatch(self.editor, "Position", "vzsAAFhu2xFABA:QYkqASAAIAAA")
     self.editor.done()
     self.editor.accept(self.writer)
+    print self.writer.html()
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<span class="position">\n"""
-           """<img src="/image?"""
-           """format=png"""
-           """&pid=vzsAAFhu2xFABA"""
-           """&mid=QYkqASAAIAAA"""
-           """&height=300&width=400"""
-           """&css=minimal"""
-           """" />\n"""
-       """</span>\n"""))
+      """<span class="position">\n"""
+      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=minimal&height=300" />"""
+      """</span>\n""")
 
   def test_position_box_2(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "4HPwATDgc/ABMA:MAAAAAAAAAAA")
     self.editor.done()
     self.editor.accept(self.writer)
+    print self.writer.html()
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<span class="position">\n"""
-           """<img src="/image?format=png"""
-           """&pid=4HPwATDgc%2FABMA"""
-           """&mid=MAAAAAAAAAAA"""
-           """&height=300&width=400&css=minimal" />\n"""
-       """</span>\n"""))
+      """<span class="position">\n"""
+      """<img src="/image?gnubgid=4HPwATDgc%2FABMA%3AMAAAAAAAAAAA&format=png&width=400&css=minimal&height=300" />"""
+      """</span>\n""")
 
   def test_position_box_3(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "haha:hahaha")
@@ -72,35 +65,29 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.editor.accept(self.writer)
     self.assertHtmlEqual(
       self.writer.html(),
-      """<span class="position"><span class="error">Bad args "haha:hahaha" for Position</span></span>""")
+      """<span class="error">Bad args "haha:hahaha" for Position</span>""")
 
   def test_position_box_4(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "vzsAAFhu2xFABA:QYkqASAAIAAA, css=safari")
     self.editor.done()
     self.editor.accept(self.writer)
     print self.writer.html()
-    self.assertEqual(
+    self.assertHtmlEqual(
       self.writer.html(),
-      ("""<span class="position">\n"""
-           """<img src="/image?format=png"""
-           """&pid=vzsAAFhu2xFABA"""
-           """&mid=QYkqASAAIAAA"""
-           """&height=300&width=400&css=safari" />\n"""
-       """</span>\n"""))
+      """<span class="position">\n"""
+      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=safari&height=300" />"""
+      """</span>\n""")
 
   def test_position_box_5(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "vzsAAFhu2xFABA:QYkqASAAIAAA,css=safari")
     self.editor.done()
     self.editor.accept(self.writer)
     print self.writer.html()
-    self.assertEqual(
+    self.assertHtmlEqual(
       self.writer.html(),
-      ("""<span class="position">\n"""
-           """<img src="/image?format=png"""
-           """&pid=vzsAAFhu2xFABA"""
-           """&mid=QYkqASAAIAAA"""
-           """&height=300&width=400&css=safari" />\n"""
-       """</span>\n"""))
+      """<span class="position">"""
+      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=safari&height=300" />"""
+      """</span>""")
 
   def test_position_box_6(self):
     bglib.doc.macro.dispatch(self.editor, "Position", "jM/BATDQc+QBMA:cAkWAAAAAAAA")
@@ -109,12 +96,9 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     print self.writer.html()
     self.assertHtmlEqual(
       self.writer.html(),
-      ("""<span class="position">\n"""
-           """<img src="/image?format=png"""
-           """&pid=jM%2FBATDQc%2BQBMA"""
-           """&mid=cAkWAAAAAAAA"""
-           """&height=300&width=400&css=minimal" />\n"""
-       """</span>\n"""))
+      """<span class="position">\n"""
+      """<img src="/image?gnubgid=jM%2FBATDQc%2BQBMA%3AcAkWAAAAAAAA&format=png&width=400&css=minimal&height=300" />"""
+      """</span>\n""")
 
   def test_analysis_box_cubeaction_1(self):
     bglib.doc.macro.dispatch(self.editor, "Analysis", "vzsAAFhu2xFABA:QYkqASAAIAAA")
