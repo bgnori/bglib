@@ -1,5 +1,5 @@
 board {x: 0; y: 0; width: 341; height: 262; background: #596580}
-board {font:uri("Digital-dream-Skew-Narrow.ttf")}
+board {font:uri("Alien-Encounters-Bold-Italic.ttf")}
 
 match {x: 291; y: 0; width: 50; height: 232; background: #625e5d}
 length {x: 316; y: 93; width: 25; height: 46 ; color:white}
@@ -58,7 +58,7 @@ home[player=you] {x: 266; y: 116 ; background: #453f3d}
 home[player=him] {x: 266; y: 5; background: #453f3d; flip:  True  }
 
 field {width: 108; height: 46; text: Backgammonbase ; color:#7a797b}
-field {font:uri("Digital-dream-Skew-Narrow.ttf")}
+field {font:uri("Alien-Encounters-Bold-Italic.ttf")}
 field[player=you] {x: 158;y: 93}
 field[player=him] {x: 25 ;y: 93}
 
