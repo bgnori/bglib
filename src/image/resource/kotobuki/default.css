@@ -95,6 +95,7 @@ bottom_frame {x:0; y:227; height:5; width:291; background:#a09797 }
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=True] chequer {y:6 ;y_offset: 18}
 home[flip=True] chequer{y:6 ;y_offset: 18}
+bar[player=him] chequer{y:6 ;y_offset: 18}
 chequer[player=you] {color: #f0f0f0}
 chequer[player=him] {color: #c02020}
 
