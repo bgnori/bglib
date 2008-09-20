@@ -155,7 +155,7 @@ class LineFormatter(BaseFormatter):
   MONOSPACE_TOKEN = r"`"
   PREFORMAT_START_TOKEN = r"{{{"
   PREFORMAT_END_TOKEN = r"}}}"
-  URL = r"(?P<url%s>https?://[a-zA-Z0-9_./\-]+)"
+  URL = r"(?P<url%s>https?://[a-zA-Z0-9_#./\-]+)"
 
   _patterns = [ #order matters!, first come first match.
     r"(?P<_pattern_bolditalic>!?%s)"%BOLDITALIC_TOKEN, # must come earlier than BOLD and italic
