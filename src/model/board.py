@@ -44,21 +44,29 @@ class board(object):
       raise AttributeError
     self._data[name]=value
 
+  def __repr__(self):
+    return '\n'.join(['='*5 + 'start of board dump' + '='*5] + \
+                     ['%s: %s'%(key, value) for key, value in self._data.items()] + \
+                     ['='*5 + 'end of board dump' + '='*5]
+                     )
+
   def flip(self):
-    self.position = self.position[1], self.position[0]
     if self.cube_owner == constants.you:
       self.cube_owner = constants.him
     if self.cube_owner == constants.him:
       self.cube_owner=constants.you
-    if self.on_action == constants.you:
-      self.on_action = constants.him
-    if self.on_action == constants.him:
-      self.on_action = constants.you
+
+    self.score = (self.score[1], self.score[0])
+    self.position = (self.position[1], self.position[0])
+
     if self.on_inner_action == constants.you:
       self.on_inner_action = constants.him
-    if self.on_inner_action == constants.him:
+    else:
       self.on_inner_action = constants.you
-    self.score = self.score[1], self.score[0]
+    if self.on_action == constants.you:
+      self.on_action = constants.him
+    else:
+      self.on_action = constants.you
 
   def has_chequer_to_move(self, n):
     if self.on_action == constants.you:
