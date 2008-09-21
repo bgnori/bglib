@@ -126,10 +126,7 @@ def decode_match(s):
   return MatchProxy(bin)
 
 def encode(model):
-  #pid = bglib.encoding.gnubg.encode_position(model.position)
-  pid = encode_position(model.position)
   mp = MatchProxy()
-
   mp.cube_in_logarithm = model.cube_in_logarithm 
   mp.cube_owner = model.cube_owner 
   mp.on_action = model.on_action 
@@ -140,13 +137,21 @@ def encode(model):
   mp.resign_offer = model.resign_offer 
   mp.rolled = model.rolled 
   mp.match_length = model.match_length 
-  mp.score = model.score 
+  mp.score = model.score
   mid = encode_match(mp)
+
+  # this is the difference between gnubg and bglib
+  # gnubg's view from on_action 
+  # bglib's view from you
+  # FIXME: what about on_inner_action?
+  if mp.on_action == bglib.model.constants.you:
+    on_action, opp = model.position
+  else:
+    opp, on_action = model.position
+  pid = encode_position((on_action, opp))
   return pid, mid
 
-def decode(model, pid, mid, flip=None):
-  if flip is None:
-    flip = False
+def decode(model, pid, mid):
   mp = decode_match(mid)
   model.cube_in_logarithm = mp.cube_in_logarithm
   model.cube_owner = mp.cube_owner
@@ -160,24 +165,22 @@ def decode(model, pid, mid, flip=None):
   model.match_length = mp.match_length
   model.score = mp.score
 
-  on_action, opp = decode_position(pid)
   # this is the difference between gnubg and bglib
   # gnubg's view from on_action 
   # bglib's view from you
+  # FIXME: what about on_inner_action?
+  on_action, opp = decode_position(pid)
   if mp.on_action == bglib.model.constants.you:
-    you = opp
-    him = on_action
-  else:
     you = on_action
     him = opp
-
+  else:
+    you = opp
+    him = on_action
   model.position = (you, him)
-  if flip:
-    model.flip()
+
 
 def convert_to_urlsafe(s):
   return s.replace('+', '-').replace('/', '_')
-
 
 def convert_from_urlsafe(s):
   return s.replace('-', '+').replace('_', '/')

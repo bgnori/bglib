@@ -9,6 +9,7 @@ import tempfile
 import unittest
 import nose
 
+import bglib.model.board
 
 from gnubg import *
 
@@ -155,7 +156,6 @@ class MatchProxyTest(unittest.TestCase):
     self.assertEqual(s, '100000101001000101010100100000000000010000000000000001000000000000')
 
   def MatchProxy_decode_2_test(self):
-    import bglib.model.board
     b = bglib.model.board.board()
     self.assertEqual(b.cube_owner, 3)
 
@@ -163,29 +163,51 @@ class MatchProxyTest(unittest.TestCase):
     mp.cube_owner = b.cube_owner
     self.assertEqual(mp.cube_owner, 3)
 
+    print b
     pid, mid = encode(b)
+    decode(b, pid, mid)
+    print b
     self.assertEqual(pid, '4HPwATDgc/ABMA')
     self.assertEqual(mid, 'MAAAAAAAAAAA')
 
-
   def MatchProxy_decode_3_test(self):
-    import bglib.model.board
     b = bglib.model.board.board()
     assert b.position
     decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA')
-    assert b.position
+    print b
     pid, mid = encode(b)
+    decode(b, pid, mid)
+    print b
     self.assertEqual(pid, 'vzsAAFhu2xFABA')
     self.assertEqual(mid, 'QYkqASAAIAAA')
 
-
   def MatchProxy_decode_4_test(self):
-    import bglib.model.board
     b = bglib.model.board.board()
-    assert b.position
-    decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA', flip=True)
-    assert b.position
+    decode(b, 's+sNAAhwtxsAGA', 'QYlyASAAGAAA')
+    print b
     pid, mid = encode(b)
-    self.assertEqual(pid, 'btsRQAS/OwAAWA')
-    self.assertEqual(mid, 'MAEAAAAAAAAA')
+    decode(b, pid, mid)
+    print b
+    self.assertEqual(pid, 's+sNAAhwtxsAGA')
+    self.assertEqual(mid, 'QYlyASAAGAAA')
+
+  def MatchProxy_decode_5_test(self):
+    b = bglib.model.board.board()
+    decode(b, 'd5sBIQJurwcAQA', 'AYH0ACAAAAAA')
+    print b
+    pid, mid = encode(b)
+    decode(b, pid, mid)
+    print b
+    self.assertEqual(pid, 'd5sBIQJurwcAQA')
+    self.assertEqual(mid, 'AYH0ACAAAAAA')
+
+  def MatchProxy_decode_6_test(self):
+    b = bglib.model.board.board()
+    decode(b, '29kDAICdOwAAAA', 'cAmgACAAGAAA')
+    print b
+    pid, mid = encode(b)
+    decode(b, pid, mid)
+    print b
+    self.assertEqual(pid, '29kDAICdOwAAAA')
+    self.assertEqual(mid, 'cAmgACAAGAAA')
 
