@@ -145,9 +145,11 @@ def encode(model):
   # bglib's view from you
   # FIXME: what about on_inner_action?
   if mp.on_action == bglib.model.constants.you:
+    opp, on_action = model.position
+  elif mp.on_action == bglib.model.constants.him:
     on_action, opp = model.position
   else:
-    opp, on_action = model.position
+    assert False
   pid = encode_position((on_action, opp))
   return pid, mid
 
@@ -170,12 +172,14 @@ def decode(model, pid, mid):
   # bglib's view from you
   # FIXME: what about on_inner_action?
   on_action, opp = decode_position(pid)
-  if mp.on_action == bglib.model.constants.you:
+  if mp.on_action == 0:#gnubg player 0 == bglib.model.constants.him
+    you = opp
+    him = on_action 
+  elif mp.on_action == 1:#gnubg player 1 == bglib.model.constants.you
     you = on_action
     him = opp
   else:
-    you = opp
-    him = on_action
+    assert False
   model.position = (you, him)
 
 
