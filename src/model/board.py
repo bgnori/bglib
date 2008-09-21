@@ -53,20 +53,27 @@ class board(object):
   def flip(self):
     if self.cube_owner == constants.you:
       self.cube_owner = constants.him
-    if self.cube_owner == constants.him:
-      self.cube_owner=constants.you
+    elif self.cube_owner == constants.him:
+      self.cube_owner = constants.you
+    else:
+      assert self.cube_owner == constants.center
 
     self.score = (self.score[1], self.score[0])
     self.position = (self.position[1], self.position[0])
 
     if self.on_inner_action == constants.you:
       self.on_inner_action = constants.him
-    else:
+    elif self.on_inner_action == constants.him:
       self.on_inner_action = constants.you
+    else:
+      assert self.on_inner_action == constants.center
+
     if self.on_action == constants.you:
       self.on_action = constants.him
-    else:
+    elif self.on_action == constants.him:
       self.on_action = constants.you
+    else:
+      assert self.on_action == constants.center
 
   def has_chequer_to_move(self, n):
     if self.on_action == constants.you:
