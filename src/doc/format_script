@@ -14,8 +14,8 @@ formatter.parse(text)
 
 def header(title):
   html = (
-  """<html>"""
-  """<head>"""
+  """<html>\n""" #to make content-type text/hml.
+  """<head>\n"""
   """<title>%s</title>"""
   """</head>"""
   """<body>"""
