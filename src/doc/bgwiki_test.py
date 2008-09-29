@@ -33,8 +33,8 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
     #stack = bglib.doc.bgwiki.ElementStack()
     #macroprocessor = bglib.doc.macro.Processor(db)
     bglib.doc.macro.setup(db)
-    self.wiki = bglib.doc.bgwiki.Formatter(db)
-    self.line = bglib.doc.bgwiki.LineFormatter(self.wiki.editor)
+    self.wiki = bglib.doc.bgwiki.Formatter(db, wikipath='/wiki/')
+    self.line = bglib.doc.bgwiki.LineFormatter(self.wiki.editor, wikipath='/wiki/')
     #, macroprocessor)
 
   def test_bold(self):

@@ -198,10 +198,14 @@ class LineFormatter(BaseFormatter):
     r"(?P<_pattern_rest_of_the_world>.)",
   ]
 
-  def __init__(self, editor):
+  def __init__(self, editor, wikipath=None):
   #, macroprocessor):
     self.editor = editor
     #self.macroprocessor = macroprocessor
+    if wikipath:
+      self.wikipath = wikipath
+    else:
+      self.wikipath = '/'
 
   def parse(self, input_line):
     editor = self.editor
@@ -452,7 +456,7 @@ class LineFormatter(BaseFormatter):
   def _handle_pattern_camelcase(self, match, matchobj):
     editor = self.editor
     a = editor.enter(bglib.doc.doctree.AnchorElement, **{'class':"wiki-link", 'title':match})
-    a.set_url("/wiki/%s"%match)
+    a.set_url("%s%s"%(self.wikipath, match))
     editor.append_text(match)
     editor.leave(bglib.doc.doctree.AnchorElement)
 
@@ -477,7 +481,7 @@ class LineFormatter(BaseFormatter):
     editor = self.editor
     a = editor.enter(bglib.doc.doctree.AnchorElement, 
                       **{'class':"wiki-link", 'title':match[6:-1]})
-    a.set_url("/wiki/%s"%match[6:-1])
+    a.set_url("%s%s"%(self.wikipath, match[6:-1]))
     editor.append_text(match[6:-1])
     editor.leave(bglib.doc.doctree.AnchorElement)
 
@@ -505,13 +509,13 @@ class LineFormatter(BaseFormatter):
     bglib.doc.macro.dispatch(editor, d['macro_name'], d['macro_args'])
     
 class Formatter(BaseFormatter):
-  def __init__(self, db):
+  def __init__(self, db, wikipath=None):
     self.db = db
     self.doctree = bglib.doc.doctree.BgWikiElementRoot()
     self.editor = bglib.doc.doctree.Editor()
     self.editor.start(self.doctree)
     #self.macroprocessor = bglib.doc.macro.Processor(db)
-    self.line_formatter = LineFormatter(self.editor)
+    self.line_formatter = LineFormatter(self.editor, wikipath)
    # , self.macroprocessor)
     self.preformat_formatter = None
 
