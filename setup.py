@@ -63,8 +63,15 @@ setup(
       },
   py_modules=[],
   install_requires=[
-      #"python-imaging >= 1.1.6", #FIXME! packages installed vai RPM do not have egg.
+      #FIXME! packages installed via RPM do not have egg.
+      #"python-imaging >= 1.1.6", 
+      #"wxPython >= 2.8.7.1",
   ],
+  requires=[
+    'python-imageing >=1.1.6',
+    'wxPython >=2.8.7.1',
+  ],
+  provides=['bglib'],
   url="http://www.backgammonbase.com",
   license="proprietary",
 )
