@@ -35,7 +35,7 @@
       </die>
     </field>
     <home player="you" background="#a09797" width="25" y="116" x="266" height="112">
-      <chequer player="you" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#f0f0f0" max_count="5">
+      <chequer player="you" y_offset="18" x_offset="0" width="16" y="125" x="269" height="16" color="#f0f0f0" max_count="5">
         7
       </chequer>
     </home>
@@ -131,7 +131,7 @@
     <bar player="you" background="#a09797" width="25" y="116" x="133" height="112">
     </bar>
     <home player="him" background="#a09797" width="25" y="5" x="266" flip="True" height="112">
-      <chequer player="him" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#c02020" max_count="5">
+      <chequer player="him" y_offset="-18" x_offset="0" width="16" y="90" x="269" height="16" color="#c02020" max_count="5">
         11
       </chequer>
     </home>

@@ -31,7 +31,7 @@
     <home player="you" background="#a09797" width="25" y="116" x="266" height="112">
     </home>
     <bar player="him" background="#a09797" width="25" y="5" x="133" height="112">
-      <chequer player="him" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#c02020" max_count="5">
+      <chequer player="him" y_offset="-18" x_offset="0" width="16" y="80" x="137" height="16" color="#c02020" max_count="4">
         2
       </chequer>
     </bar>

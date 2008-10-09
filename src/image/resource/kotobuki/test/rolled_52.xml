@@ -141,7 +141,7 @@
       </chequer>
     </point>
     <bar player="you" background="#a09797" width="25" y="116" x="133" height="112">
-      <chequer player="you" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#f0f0f0" max_count="5">
+      <chequer player="you" y_offset="18" x_offset="0" width="16" y="135" x="137" height="16" color="#f0f0f0" max_count="4">
         1
       </chequer>
     </bar>

@@ -24,6 +24,8 @@ player[player=him]{x:0; y:0}
 position {x: 0; y: 0; width: 291; height: 232; background: #b0b0b0}
 
 point {width: 18; height:88}
+#; padding:0; border:0;margin:0;}
+
 point[parity=odd] {color: #c5c5c5}
 point[parity=even] {color: #f06060}
 point:data(1) { x: 248 ; y: 139 }
@@ -80,7 +82,7 @@ die {width: 16; height: 16; diestyle:dot; eyesize:3}
 cube {width: 25; height: 25; background: white; color: black; initialCube: 64}
 cubeholder cube {x: 0 ; y: 105}
 home[player=you] cube {x: 0; y: 197} 
-home[player=him] cube {x: 0; y: 5}
+home[player=him] cube {x: 0; y: 5; flip=True}
 field[player=you] cube {x: 50; y: 100}
 field[player=him] cube {x: 180; y: 100}
 cubeholder cube {x: 0; y: 105}
@@ -94,8 +96,10 @@ bottom_frame {x:0; y:227; height:5; width:291; background:#a09797 }
 
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=True] chequer {y:6 ;y_offset: 18}
-home[flip=True] chequer{y:6 ;y_offset: 18}
-bar[player=him] chequer{y:6 ;y_offset: 18}
+home[player=him] chequer{x:269; y:90 ;y_offset: -18}
+home[player=you] chequer{x:269; y:125 ;y_offset: 18}
+bar[player=him] chequer{x:137; y:80 ;y_offset: -18; max_count:4}
+bar[player=you] chequer{x:137; y:135 ;y_offset: 18; max_count:4}
 chequer[player=you] {color: #f0f0f0}
 chequer[player=him] {color: #c02020}
 
