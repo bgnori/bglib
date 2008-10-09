@@ -156,11 +156,11 @@
       </chequer>
     </point>
     <bar player="you" background="#453f3d" width="25" y="116" x="133" height="112">
-      <chequer player="you" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#3ca7e4" max_count="5">
+      <chequer player="you" y_offset="18" x_offset="0" width="16" y="135" x="137" height="16" color="#3ca7e4" max_count="4">
         1
       </chequer>
     </bar>
-    <home player="him" background="#453f3d" width="25" y="5" x="266" flip="True" height="112">
+    <home player="him" background="#453f3d" width="25" y="5" x="266" height="112">
     </home>
     <field player="him" x="25" y="93" width="108" color="#7a797b" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/minimal/Alien-Encounters-Bold-Italic.ttf" height="46">
       <die color="white" eyesize="3" diestyle="dot" background="#fd4993" width="16" y="95" x="71" id="right" height="16">

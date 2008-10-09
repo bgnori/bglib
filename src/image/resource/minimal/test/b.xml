@@ -139,7 +139,7 @@
     </point>
     <bar player="you" background="#453f3d" width="25" y="116" x="133" height="112">
     </bar>
-    <home player="him" background="#453f3d" width="25" y="5" x="266" flip="True" height="112">
+    <home player="him" background="#453f3d" width="25" y="5" x="266" height="112">
     </home>
     <field player="him" x="25" y="93" width="108" color="#7a797b" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/minimal/Alien-Encounters-Bold-Italic.ttf" height="46">
     </field>

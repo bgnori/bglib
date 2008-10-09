@@ -49,13 +49,15 @@ point:data(24) {x: 248 ; y:   5 ; flip:  True  }
 
 bar {width: 25; height: 112; background: #453f3d}
 bar[player=you] {x:133; y:116}
-bar[player=him] {x:133; y: 5; flip=True}
+bar[player=him] {x:133; y: 5}
+#; flip=True}
 
 cubeholder {width: 25 ;height: 224; x: 0; y: 5 ;background: #453f3d}
 
 home {width: 25 ;height: 112}
 home[player=you] {x: 266; y: 116 ; background: #453f3d}
-home[player=him] {x: 266; y: 5; background: #453f3d; flip:  True  }
+home[player=him] {x: 266; y: 5; background: #453f3d}
+#; flip:  True  }
 
 field {width: 108; height: 46; text: Backgammonbase ; color:#7a797b}
 field {font:uri("Alien-Encounters-Bold-Italic.ttf")}
@@ -86,8 +88,10 @@ bottom_frame {x:0; y:227; height:5; width:291; background:#453f3d}
 
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=True] chequer {y:6 ;y_offset: 18}
-home[flip=True] chequer{y:6 ;y_offset: 18}
-bar[player=him] chequer{y:6 ;y_offset: 18}
+home[player=him] chequer{x:269; y:90 ;y_offset: -18}
+home[player=you] chequer{x:269; y:125 ;y_offset: 18}
+bar[player=him] chequer{x:137; y:80 ;y_offset: -18; max_count:4}
+bar[player=you] chequer{x:137; y:135 ;y_offset: 18; max_count:4}
 chequer[player=you] {color: #3ca7e4}
 chequer[player=him] {color: #fd4993}
 
