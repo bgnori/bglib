@@ -2,18 +2,18 @@ board {x: 0; y: 0; width: 341; height: 262; background: red}
 
 board {font:uri("DejaVuLGCSans-Bold.ttf")}
 
-match {x: 291; y: 0; width: 50; height: 232; background:#b0b0b0}
+match {x: 291; y: 0; width: 50; height: 232; background:#184a29}
 length {x: 316; y: 93; width: 25; height: 46 ; color:black}
 
 crawford {x: 291; y: 93; width: 25; height: 46; color:black}
 score {width: 50; height: 93}
-score[player=you] {x: 291; y:139; color: #f0f0f0}
-score[player=him] {x: 291; y: 0 ; color: #c02020}
+score[player=you] {x: 291; y:139; color: #e0e0e0}
+score[player=him] {x: 291; y: 0 ; color: #5078b8}
 
 
-action{width: 341; height: 30; x:0; y:232 ; background: #b0b0b0}
-action[player=you] {color: #f0f0f0}
-action[player=him] {color: #c02020}
+action{width: 341; height: 30; x:0; y:232 ; background: #184a29}
+action[player=you] {color: #e0e0e0}
+action[player=him] {color: #5078b8}
 
 
 player {width:0; height: 0}
@@ -21,13 +21,12 @@ player[player=you]{x:0; y:0}
 player[player=him]{x:0; y:0}
 
 
-position {x: 0; y: 0; width: 291; height: 232; background: #b0b0b0}
+position {x: 0; y: 0; width: 291; height: 232; background: #184a28}
 
 point {width: 18; height:88}
-#; padding:0; border:0;margin:0;}
 
-point[parity=odd] {color: #c5c5c5}
-point[parity=even] {color: #f06060}
+point[parity=odd] {color: #083a18}
+point[parity=even] {color: #285a38}
 point:data(1) { x: 248 ; y: 139 }
 point:data(2) { x: 230 ; y: 139 }
 point:data(3) { x: 212 ; y: 139 }
@@ -53,25 +52,25 @@ point:data(22) {x: 212 ; y:   5 ; flip:  True  }
 point:data(23) {x: 230 ; y:   5 ; flip:  True  }
 point:data(24) {x: 248 ; y:   5 ; flip:  True  }
 
-bar {width: 25; height: 112; background: #a09797}
+bar {width: 25; height: 112; background: #583017}
 bar[player=you] {x:133; y:116}
 bar[player=him] {x:133; y: 5}
 
-cubeholder {width: 25 ;height: 224; x: 0; y: 5 ;background: #a09797}
+cubeholder {width: 25 ;height: 224; x: 0; y: 5 ;background: #583017}
 
 home {width: 25 ;height: 112}
-home[player=you] {x: 266; y: 116 ; background: #a09797}
-home[player=him] {x: 266; y: 5; background: #a09797; flip:  True  }
+home[player=you] {x: 266; y: 116 ; background: #583017}
+home[player=him] {x: 266; y: 5; background: #583017; flip:  True  }
 
-field {width: 108; height: 46; text: Backgammonbase ; color:#c5c5c5}
+field {width: 108; height: 46; text: Backgammonbase ; color:#285a38}
 field {font:uri("DejaVuLGCSans-Bold.ttf")}
 field[player=you] {x: 158;y: 93}
 field[player=him] {x: 25 ;y: 93}
 
-field[player=you] die[id=left] {x: 176; y: 95;  color:#c02020; background:#f0f0f0}
-field[player=you] die[id=right] {x: 204; y: 95; color:#c02020; background:#f0f0f0}
-field[player=him] die[id=left] {x: 43; y:95 ;   color:#f0f0f0; background:#c02020}
-field[player=him] die[id=right] {x: 71; y:95 ;  color:#f0f0f0; background:#c02020}
+field[player=you] die[id=left] {x: 176; y: 95;  color:#5078b8; background:#e0e0e0}
+field[player=you] die[id=right] {x: 204; y: 95; color:#5078b8; background:#e0e0e0}
+field[player=him] die[id=left] {x: 43; y:95 ;   color:#e0e0e0; background:#5078b8}
+field[player=him] die[id=right] {x: 71; y:95 ;  color:#e0e0e0; background:#5078b8}
 
 
 
@@ -91,8 +90,8 @@ field[player=you] resign {x: 157;y: 93}
 field[player=him] resign {x: 25 ;y: 93}
 resign {width: 100; height: 46; color: gold}
 
-top_frame {x:0; y:0; height:5; width:291; background:#a09797}
-bottom_frame {x:0; y:227; height:5; width:291; background:#a09797 }
+top_frame {x:0; y:0; height:5; width:291; background:#583017}
+bottom_frame {x:0; y:227; height:5; width:291; background:#583017 }
 
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=True] chequer {y:6 ;y_offset: 18}
@@ -100,6 +99,6 @@ home[player=him] chequer{x:269; y:90 ;y_offset: -18}
 home[player=you] chequer{x:269; y:125 ;y_offset: 18}
 bar[player=him] chequer{x:137; y:80 ;y_offset: -18; max_count:4}
 bar[player=you] chequer{x:137; y:135 ;y_offset: 18; max_count:4}
-chequer[player=you] {color: #f0f0f0}
-chequer[player=him] {color: #c02020}
+chequer[player=you] {color: #e0e0e0}
+chequer[player=him] {color: #5078b8}
 

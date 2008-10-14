@@ -10,7 +10,7 @@ import bglib.image.PIL
 import bglib.image.css
 from bglib.image.theme import themata
 
-mypath = 'kotobuki'
+mypath = 'nature'
 testdatapath = os.path.join(themata, mypath, 'test')
 
 REVISION = re.compile(r"[0-9]+").search("$Revision: 1876 $").group()
@@ -20,8 +20,7 @@ draw = bglib.image.PIL.Draw(css)
 if __name__ == '__main__':
   import bglib.image.testwriter
   w = bglib.image.testwriter.Writer()
-  f = file(os.path.join(themata, 'kotobuki_test.py'), 'w')
-  w.write(f, 'kotobuki')
+  f = file(os.path.join(themata, 'nature_test.py'), 'w')
+  w.write(f, 'nature')
   f.close()
-
 
