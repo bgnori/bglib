@@ -57,6 +57,8 @@ setup(
                               os.path.join('minimal','default.css'),
                               os.path.join('kotobuki','*.ttf'),
                               os.path.join('kotobuki','default.css'),
+                              os.path.join('nature','*.ttf'),
+                              os.path.join('nature','default.css'),
                               os.path.join('safari','default.css'),
                               os.path.join('safari','*.jpg'),
                              ],
