@@ -1,0 +1,104 @@
+board {x: 0; y: 0; width: 341; height: 262; background: red}
+
+board {font:uri("DejaVuLGCSans-Bold.ttf")}
+
+match {x: 291; y: 0; width: 50; height: 232; background:#184a29}
+length {x: 316; y: 93; width: 25; height: 46 ; color:black}
+
+crawford {x: 291; y: 93; width: 25; height: 46; color:black}
+score {width: 50; height: 93}
+score[player=you] {x: 291; y:139; color: #e0e0e0}
+score[player=him] {x: 291; y: 0 ; color: #5078b8}
+
+
+action{width: 341; height: 30; x:0; y:232 ; background: #184a29}
+action[player=you] {color: #e0e0e0}
+action[player=him] {color: #5078b8}
+
+
+player {width:0; height: 0}
+player[player=you]{x:0; y:0}
+player[player=him]{x:0; y:0}
+
+
+position {x: 0; y: 0; width: 291; height: 232; background: #184a28}
+
+point {width: 18; height:88}
+
+point[parity=odd] {color: #083a18}
+point[parity=even] {color: #285a38}
+point:data(1) { x: 248 ; y: 139 }
+point:data(2) { x: 230 ; y: 139 }
+point:data(3) { x: 212 ; y: 139 }
+point:data(4) { x: 194 ; y: 139 }
+point:data(5) { x: 176 ; y: 139 }
+point:data(6) { x: 158 ; y: 139 }
+point:data(7) { x: 115 ; y: 139 }
+point:data(8) { x:  97 ; y: 139 }
+point:data(9) { x:  79 ; y: 139 }
+point:data(10) {x:  61 ; y: 139 }
+point:data(11) {x:  43 ; y: 139 }
+point:data(12) {x:  25 ; y: 139 }
+point:data(13) {x:  25 ; y:   5 ; flip:  True  }
+point:data(14) {x:  43 ; y:   5 ; flip:  True  }
+point:data(15) {x:  61 ; y:   5 ; flip:  True  }
+point:data(16) {x:  79 ; y:   5 ; flip:  True  }
+point:data(17) {x:  97 ; y:   5 ; flip:  True  }
+point:data(18) {x: 115 ; y:   5 ; flip:  True  }
+point:data(19) {x: 158 ; y:   5 ; flip:  True  }
+point:data(20) {x: 176 ; y:   5 ; flip:  True  }
+point:data(21) {x: 194 ; y:   5 ; flip:  True  }
+point:data(22) {x: 212 ; y:   5 ; flip:  True  }
+point:data(23) {x: 230 ; y:   5 ; flip:  True  }
+point:data(24) {x: 248 ; y:   5 ; flip:  True  }
+
+bar {width: 25; height: 112; background: #583017}
+bar[player=you] {x:133; y:116}
+bar[player=him] {x:133; y: 5}
+
+cubeholder {width: 25 ;height: 224; x: 0; y: 5 ;background: #583017}
+
+home {width: 25 ;height: 112}
+home[player=you] {x: 266; y: 116 ; background: #583017}
+home[player=him] {x: 266; y: 5; background: #583017; flip:  True  }
+
+field {width: 108; height: 46; text: Backgammonbase ; color:#285a38}
+field {font:uri("DejaVuLGCSans-Bold.ttf")}
+field[player=you] {x: 158;y: 93}
+field[player=him] {x: 25 ;y: 93}
+
+field[player=you] die[id=left] {x: 176; y: 95;  color:#5078b8; background:#e0e0e0}
+field[player=you] die[id=right] {x: 204; y: 95; color:#5078b8; background:#e0e0e0}
+field[player=him] die[id=left] {x: 43; y:95 ;   color:#e0e0e0; background:#5078b8}
+field[player=him] die[id=right] {x: 71; y:95 ;  color:#e0e0e0; background:#5078b8}
+
+
+
+
+die {width: 16; height: 16; diestyle:dot; eyesize:3}
+
+
+cube {width: 25; height: 25; background: white; color: black; initialCube: 64}
+cubeholder cube {x: 0 ; y: 105}
+home[player=you] cube {x: 0; y: 197} 
+home[player=him] cube {x: 0; y: 5; flip=True}
+field[player=you] cube {x: 50; y: 100}
+field[player=him] cube {x: 180; y: 100}
+cubeholder cube {x: 0; y: 105}
+
+field[player=you] resign {x: 157;y: 93}
+field[player=him] resign {x: 25 ;y: 93}
+resign {width: 100; height: 46; color: gold}
+
+top_frame {x:0; y:0; height:5; width:291; background:#583017}
+bottom_frame {x:0; y:227; height:5; width:291; background:#583017 }
+
+chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
+point[flip=True] chequer {y:6 ;y_offset: 18}
+home[player=him] chequer{x:269; y:90 ;y_offset: -18}
+home[player=you] chequer{x:269; y:125 ;y_offset: 18}
+bar[player=him] chequer{x:137; y:80 ;y_offset: -18; max_count:4}
+bar[player=you] chequer{x:137; y:135 ;y_offset: 18; max_count:4}
+chequer[player=you] {color: #e0e0e0}
+chequer[player=him] {color: #5078b8}
+
