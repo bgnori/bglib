@@ -1,6 +1,6 @@
 board {x: 0; y: 0; width: 341; height: 262; background: red}
 
-board {font:uri("Advert-Italic.ttf")}
+board {font:uri("Cake.ttf")}
 
 match {x: 291; y: 0; width: 50; height: 232; background:#ee40d6}
 length {x: 316; y: 93; width: 25; height: 46 ; color:#345c4f}
@@ -63,7 +63,7 @@ home[player=you] {x: 266; y: 116 ; background: #c630e0}
 home[player=him] {x: 266; y: 5; background: #c630e0; flip:  True  }
 
 field {width: 108; height: 46; text: Backgammonbase ; color:#e670d8}
-field {font:uri("Advert-Italic.ttf")}
+field {font:uri("Cake.ttf")}
 field[player=you] {x: 158;y: 93}
 field[player=him] {x: 25 ;y: 93}
 

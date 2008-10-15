@@ -1,4 +1,4 @@
-<board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Advert-Italic.ttf" height="262">
+<board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Cake.ttf" height="262">
   <match y="0" x="291" width="50" background="#ee40d6" height="232">
     <action player="him" background="#ee40d6" width="341" y="232" x="0" color="#b41d1f" height="30">
       him to roll or double.
@@ -26,7 +26,7 @@
         0
       </cube>
     </cubeholder>
-    <field player="you" x="158" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Advert-Italic.ttf" height="46">
+    <field player="you" x="158" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Cake.ttf" height="46">
     </field>
     <home player="you" background="#c630e0" width="25" y="116" x="266" height="112">
       <chequer player="you" y_offset="18" x_offset="0" width="16" y="125" x="269" height="16" color="#e0d010" max_count="5">
@@ -117,7 +117,7 @@
         14
       </chequer>
     </home>
-    <field player="him" x="25" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Advert-Italic.ttf" height="46">
+    <field player="him" x="25" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Cake.ttf" height="46">
     </field>
   </position>
 </board>
