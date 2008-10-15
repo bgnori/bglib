@@ -65,7 +65,9 @@ class BgWikiElementNode(Node):
     if not self.html_element:
       return ''
     if self.attrs:
-      attrs = ' '.join(['%s="%s"'%(key, item) for key, item in self.attrs.items()])
+      import bglib.doc.html as html
+      attrs = ' '.join(['%s="%s"'%(key, html.escape(item)) for key, item in self.attrs.items()])
+      #attrs = ' '.join(['%s="%s"'%(key, item) for key, item in self.attrs.items()])
     else:
       attrs = ''
     if self.is_single:

@@ -10,7 +10,7 @@ import pprint
 import difflib
 import xml.parsers.expat
 
-UNSAFE_LETTERS = '(?P<lt>[<])|(?P<gt>[>])|(?P<amp>[&])'
+UNSAFE_LETTERS = r'(?P<lt>[<])|(?P<gt>[>])|(?P<amp>[&])|(?P<question>[?])'
 def escape(s):
   def handler(matchobj):
     d = matchobj.groupdict()
@@ -20,6 +20,9 @@ def escape(s):
       return '&gt;'
     if d['amp']:
       return '&amp;'
+    if d['question']:
+      return '?'
+      #return '&#63;'
   return re.sub(UNSAFE_LETTERS, handler, s)
 
 crlf = re.compile(r'\n')

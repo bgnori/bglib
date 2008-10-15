@@ -23,6 +23,11 @@ class HTMLEscapeTest(unittest.TestCase):
     self.assertEqual(
       bglib.doc.html.escape('&'),
       '&amp;')
+  def test_escape_question(self):
+    self.assertEqual(
+      bglib.doc.html.escape('?'),
+      '?')
+      #'&#63;')
 
   def test_escape_combined(self):
     self.assertEqual(
