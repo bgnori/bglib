@@ -1,4 +1,4 @@
-<board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/deutsche/DejaVuLGCSans-Bold.ttf" height="262">
+<board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/deutsche/ActionManShadedItalic.ttf" height="262">
   <match y="0" x="291" width="50" background="#181818" height="232">
     <action player="you" background="#181818" width="341" y="232" x="0" color="#d8c810" height="30">
       you to roll or double.
@@ -23,7 +23,7 @@
     </bottom_frame>
     <cubeholder y="5" width="25" height="224" background="#083008" x="0">
     </cubeholder>
-    <field player="you" x="158" y="93" width="108" color="#383838" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/deutsche/DejaVuLGCSans-Bold.ttf" height="46">
+    <field player="you" x="158" y="93" width="108" color="#383838" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/deutsche/ActionManShadedItalic.ttf" height="46">
     </field>
     <home player="you" background="#083008" width="25" y="116" x="266" height="112">
       <chequer player="you" y_offset="18" x_offset="0" width="16" y="125" x="269" height="16" color="#d8c810" max_count="5">
@@ -114,7 +114,7 @@
         15
       </chequer>
     </home>
-    <field player="him" x="25" y="93" width="108" color="#383838" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/deutsche/DejaVuLGCSans-Bold.ttf" height="46">
+    <field player="him" x="25" y="93" width="108" color="#383838" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/deutsche/ActionManShadedItalic.ttf" height="46">
     </field>
   </position>
 </board>
