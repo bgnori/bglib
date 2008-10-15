@@ -1,12 +1,12 @@
 <board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="262">
-  <match y="0" x="291" width="50" background="#ee40d6" height="232">
-    <action player="him" background="#ee40d6" width="341" y="232" x="0" color="#b41d1f" height="30">
+  <match y="0" x="291" width="50" background="#184a29" height="232">
+    <action player="him" background="#184a29" width="341" y="232" x="0" color="#b41d1f" height="30">
       him to move.
     </action>
-    <length y="93" x="316" width="25" color="#345c4f" height="46">
+    <length y="93" x="316" width="25" color="#448c6f" height="46">
       5
     </length>
-    <crawford y="93" x="291" width="25" color="#345c4f" height="46">
+    <crawford y="93" x="291" width="25" color="#448c6f" height="46">
       True
     </crawford>
     <score player="you" width="50" y="139" x="291" color="#e0d010" height="93">
@@ -16,138 +16,138 @@
       0
     </score>
   </match>
-  <position y="0" x="0" width="291" background="#ee40d5" height="232">
-    <top_frame y="0" x="0" height="5" background="#c630e0" width="291">
+  <position y="0" x="0" width="291" background="#184a28" height="232">
+    <top_frame y="0" x="0" height="5" background="#583017" width="291">
     </top_frame>
-    <bottom_frame y="227" x="0" height="5" background="#c630e0" width="291">
+    <bottom_frame y="227" x="0" height="5" background="#583017" width="291">
     </bottom_frame>
-    <cubeholder y="5" width="25" height="224" background="#c630e0" x="0">
-      <cube width="25" y="105" background="#649c7f" initialCube="64" color="#345c4f" x="0" height="25">
+    <cubeholder y="5" width="25" height="224" background="#583017" x="0">
+      <cube width="25" y="105" background="#107010" initialCube="64" color="#448c6f" x="0" height="25">
         0
       </cube>
     </cubeholder>
-    <field player="you" x="158" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="46">
+    <field player="you" x="158" y="93" width="108" color="#285a39" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="46">
     </field>
-    <home player="you" background="#c630e0" width="25" y="116" x="266" height="112">
+    <home player="you" background="#583017" width="25" y="116" x="266" height="112">
     </home>
-    <bar player="him" background="#c630e0" width="25" y="5" x="133" height="112">
+    <bar player="him" background="#583017" width="25" y="5" x="133" height="112">
     </bar>
-    <point parity="odd" y="139" width="18" color="#e026b6" x="248" height="88">
+    <point parity="odd" y="139" width="18" color="#083a18" x="248" height="88">
       1
       <chequer player="him" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#b41d1f" max_count="5">
         2
       </chequer>
     </point>
-    <point parity="even" y="139" width="18" color="#e670d8" x="230" height="88">
+    <point parity="even" y="139" width="18" color="#285a39" x="230" height="88">
       2
     </point>
-    <point parity="odd" y="139" width="18" color="#e026b6" x="212" height="88">
+    <point parity="odd" y="139" width="18" color="#083a18" x="212" height="88">
       3
     </point>
-    <point parity="even" y="139" width="18" color="#e670d8" x="194" height="88">
+    <point parity="even" y="139" width="18" color="#285a39" x="194" height="88">
       4
     </point>
-    <point parity="odd" y="139" width="18" color="#e026b6" x="176" height="88">
+    <point parity="odd" y="139" width="18" color="#083a18" x="176" height="88">
       5
     </point>
-    <point parity="even" y="139" width="18" color="#e670d8" x="158" height="88">
+    <point parity="even" y="139" width="18" color="#285a39" x="158" height="88">
       6
       <chequer player="you" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#e0d010" max_count="5">
         5
       </chequer>
     </point>
-    <point parity="odd" y="139" width="18" color="#e026b6" x="115" height="88">
+    <point parity="odd" y="139" width="18" color="#083a18" x="115" height="88">
       7
     </point>
-    <point parity="even" y="139" width="18" color="#e670d8" x="97" height="88">
+    <point parity="even" y="139" width="18" color="#285a39" x="97" height="88">
       8
       <chequer player="you" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#e0d010" max_count="5">
         4
       </chequer>
     </point>
-    <point parity="odd" y="139" width="18" color="#e026b6" x="79" height="88">
+    <point parity="odd" y="139" width="18" color="#083a18" x="79" height="88">
       9
     </point>
-    <point parity="even" y="139" width="18" color="#e670d8" x="61" height="88">
+    <point parity="even" y="139" width="18" color="#285a39" x="61" height="88">
       10
     </point>
-    <point parity="odd" y="139" width="18" color="#e026b6" x="43" height="88">
+    <point parity="odd" y="139" width="18" color="#083a18" x="43" height="88">
       11
       <chequer player="you" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#e0d010" max_count="5">
         1
       </chequer>
     </point>
-    <point parity="even" y="139" width="18" color="#e670d8" x="25" height="88">
+    <point parity="even" y="139" width="18" color="#285a39" x="25" height="88">
       12
       <chequer player="him" y_offset="-18" x_offset="0" width="16" y="210" height="16" color="#b41d1f" max_count="5">
         2
       </chequer>
     </point>
-    <point parity="odd" y="5" width="18" color="#e026b6" x="25" flip="True" height="88">
+    <point parity="odd" y="5" width="18" color="#083a18" x="25" flip="True" height="88">
       13
       <chequer player="you" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#e0d010" max_count="5">
         3
       </chequer>
     </point>
-    <point parity="even" y="5" width="18" color="#e670d8" x="43" flip="True" height="88">
+    <point parity="even" y="5" width="18" color="#285a39" x="43" flip="True" height="88">
       14
     </point>
-    <point parity="odd" y="5" width="18" color="#e026b6" x="61" flip="True" height="88">
+    <point parity="odd" y="5" width="18" color="#083a18" x="61" flip="True" height="88">
       15
       <chequer player="him" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#b41d1f" max_count="5">
         1
       </chequer>
     </point>
-    <point parity="even" y="5" width="18" color="#e670d8" x="79" flip="True" height="88">
+    <point parity="even" y="5" width="18" color="#285a39" x="79" flip="True" height="88">
       16
       <chequer player="him" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#b41d1f" max_count="5">
         2
       </chequer>
     </point>
-    <point parity="odd" y="5" width="18" color="#e026b6" x="97" flip="True" height="88">
+    <point parity="odd" y="5" width="18" color="#083a18" x="97" flip="True" height="88">
       17
       <chequer player="him" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#b41d1f" max_count="5">
         3
       </chequer>
     </point>
-    <point parity="even" y="5" width="18" color="#e670d8" x="115" flip="True" height="88">
+    <point parity="even" y="5" width="18" color="#285a39" x="115" flip="True" height="88">
       18
       <chequer player="you" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#e0d010" max_count="5">
         1
       </chequer>
     </point>
-    <point parity="odd" y="5" width="18" color="#e026b6" x="158" flip="True" height="88">
+    <point parity="odd" y="5" width="18" color="#083a18" x="158" flip="True" height="88">
       19
       <chequer player="him" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#b41d1f" max_count="5">
         3
       </chequer>
     </point>
-    <point parity="even" y="5" width="18" color="#e670d8" x="176" flip="True" height="88">
+    <point parity="even" y="5" width="18" color="#285a39" x="176" flip="True" height="88">
       20
     </point>
-    <point parity="odd" y="5" width="18" color="#e026b6" x="194" flip="True" height="88">
+    <point parity="odd" y="5" width="18" color="#083a18" x="194" flip="True" height="88">
       21
       <chequer player="him" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#b41d1f" max_count="5">
         2
       </chequer>
     </point>
-    <point parity="even" y="5" width="18" color="#e670d8" x="212" flip="True" height="88">
+    <point parity="even" y="5" width="18" color="#285a39" x="212" flip="True" height="88">
       22
     </point>
-    <point parity="odd" y="5" width="18" color="#e026b6" x="230" flip="True" height="88">
+    <point parity="odd" y="5" width="18" color="#083a18" x="230" flip="True" height="88">
       23
       <chequer player="you" y_offset="18" x_offset="0" width="16" y="6" height="16" color="#e0d010" max_count="5">
         1
       </chequer>
     </point>
-    <point parity="even" y="5" width="18" color="#e670d8" x="248" flip="True" height="88">
+    <point parity="even" y="5" width="18" color="#285a39" x="248" flip="True" height="88">
       24
     </point>
-    <bar player="you" background="#c630e0" width="25" y="116" x="133" height="112">
+    <bar player="you" background="#583017" width="25" y="116" x="133" height="112">
     </bar>
-    <home player="him" background="#c630e0" width="25" y="5" x="266" flip="True" height="112">
+    <home player="him" background="#583017" width="25" y="5" x="266" flip="True" height="112">
     </home>
-    <field player="him" x="25" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="46">
+    <field player="him" x="25" y="93" width="108" color="#285a39" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="46">
       <die color="#e0d010" eyesize="3" diestyle="dot" background="#b41d1f" width="16" y="95" x="71" id="right" height="16">
         2
       </die>

@@ -2,16 +2,16 @@ board {x: 0; y: 0; width: 341; height: 262; background: red}
 
 board {font:uri("Advert-Italic.ttf")}
 
-match {x: 291; y: 0; width: 50; height: 232; background:#ee40d6}
-length {x: 316; y: 93; width: 25; height: 46 ; color:#345c4f}
+match {x: 291; y: 0; width: 50; height: 232; background:#184a29}
+length {x: 316; y: 93; width: 25; height: 46 ; color:#448c6f}
 
-crawford {x: 291; y: 93; width: 25; height: 46; color:#345c4f}
+crawford {x: 291; y: 93; width: 25; height: 46; color:#448c6f}
 score {width: 50; height: 93}
 score[player=you] {x: 291; y:139; color: #e0d010}
 score[player=him] {x: 291; y: 0 ; color: #b41d1f}
 
 
-action{width: 341; height: 30; x:0; y:232 ; background: #ee40d6}
+action{width: 341; height: 30; x:0; y:232 ; background: #184a29}
 action[player=you] {color: #e0d010}
 action[player=him] {color: #b41d1f}
 
@@ -21,12 +21,12 @@ player[player=you]{x:0; y:0}
 player[player=him]{x:0; y:0}
 
 
-position {x: 0; y: 0; width: 291; height: 232; background: #ee40d5}
+position {x: 0; y: 0; width: 291; height: 232; background: #184a28}
 
 point {width: 18; height:88}
 
-point[parity=odd] {color: #e026b6}
-point[parity=even] {color: #e670d8}
+point[parity=odd] {color: #083a18}
+point[parity=even] {color: #285a39}
 point:data(1) { x: 248 ; y: 139 }
 point:data(2) { x: 230 ; y: 139 }
 point:data(3) { x: 212 ; y: 139 }
@@ -52,17 +52,17 @@ point:data(22) {x: 212 ; y:   5 ; flip:  True  }
 point:data(23) {x: 230 ; y:   5 ; flip:  True  }
 point:data(24) {x: 248 ; y:   5 ; flip:  True  }
 
-bar {width: 25; height: 112; background: #c630e0}
+bar {width: 25; height: 112; background: #583017}
 bar[player=you] {x:133; y:116}
 bar[player=him] {x:133; y: 5}
 
-cubeholder {width: 25 ;height: 224; x: 0; y: 5 ;background: #c630e0}
+cubeholder {width: 25 ;height: 224; x: 0; y: 5 ;background: #583017}
 
 home {width: 25 ;height: 112}
-home[player=you] {x: 266; y: 116 ; background: #c630e0}
-home[player=him] {x: 266; y: 5; background: #c630e0; flip:  True  }
+home[player=you] {x: 266; y: 116 ; background: #583017}
+home[player=him] {x: 266; y: 5; background: #583017; flip:  True  }
 
-field {width: 108; height: 46; text: Backgammonbase ; color:#e670d8}
+field {width: 108; height: 46; text: Backgammonbase ; color:#285a39}
 field {font:uri("Advert-Italic.ttf")}
 field[player=you] {x: 158;y: 93}
 field[player=him] {x: 25 ;y: 93}
@@ -77,8 +77,7 @@ field[player=him] die[id=right] {x: 71; y:95 ;  color:#e0d010; background:#b41d1
 
 die {width: 16; height: 16; diestyle:dot; eyesize:3}
 
-
-cube {width: 25; height: 25; background: #649c7f; color: #345c4f; initialCube: 64}
+cube {width: 25; height: 25; background: #107010; color: #448c6f; initialCube: 64}
 cubeholder cube {x: 0 ; y: 105}
 home[player=you] cube {x: 0; y: 197} 
 home[player=him] cube {x: 0; y: 5; flip=True}
@@ -90,8 +89,8 @@ field[player=you] resign {x: 157;y: 93}
 field[player=him] resign {x: 25 ;y: 93}
 resign {width: 100; height: 46; color: gold}
 
-top_frame {x:0; y:0; height:5; width:291; background:#c630e0}
-bottom_frame {x:0; y:227; height:5; width:291; background:#c630e0 }
+top_frame {x:0; y:0; height:5; width:291; background:#583017}
+bottom_frame {x:0; y:227; height:5; width:291; background:#583017 }
 
 chequer {width:16; height:16; y:210 ; x_offset: 0; y_offset: -18; max_count:5}
 point[flip=True] chequer {y:6 ;y_offset: 18}
