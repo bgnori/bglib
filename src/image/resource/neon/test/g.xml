@@ -1,4 +1,4 @@
-<board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="262">
+<board width="341" background="red" y="0" x="0" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Advert-Italic.ttf" height="262">
   <match y="0" x="291" width="50" background="#ee40d6" height="232">
     <action player="you" background="#ee40d6" width="341" y="232" x="0" color="#e0d010" height="30">
       you to accept his resignation or not.
@@ -26,7 +26,7 @@
         0
       </cube>
     </cubeholder>
-    <field player="you" x="158" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="46">
+    <field player="you" x="158" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Advert-Italic.ttf" height="46">
       <resign y="93" x="157" height="46" color="gold" width="100">
         2
       </resign>
@@ -138,7 +138,7 @@
     </bar>
     <home player="him" background="#c630e0" width="25" y="5" x="266" flip="True" height="112">
     </home>
-    <field player="him" x="25" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/flower/Advert-Italic.ttf" height="46">
+    <field player="him" x="25" y="93" width="108" color="#e670d8" text="Backgammonbase" font="/home/nori/Desktop/work/bglib/src/bglib/image/resource/neon/Advert-Italic.ttf" height="46">
     </field>
   </position>
 </board>
