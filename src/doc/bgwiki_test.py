@@ -545,7 +545,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.wiki.make_html(),
       '''<div>'''
       '''<pre class="wiki"></pre>'''
-      '''</div>'''
+      '''</div>\n'''
       )
 
   def test_preformatted_emptyline(self):
@@ -554,7 +554,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.wiki.make_html(),
       '''<div>'''
       '''<pre class="wiki">\n</pre>\n'''
-      '''</div>'''
+      '''</div>\n'''
       )
 
   def test_preformatted_emptylines(self):
@@ -563,7 +563,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.wiki.make_html(),
       '''<div>'''
       '''<pre class="wiki">\n\n</pre>\n'''
-      '''</div>'''
+      '''</div>\n'''
       )
 
   def test_preformatted(self):
@@ -571,8 +571,11 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 '''  def HelloWorld():\n'''
 '''     print "Hello World"\n'''
 '''}}}\n''')
+    html = self.wiki.make_html()
+    print repr(html)
     self.assertHtmlEqual(
-      self.wiki.make_html(),
+      html,
+      #self.wiki.make_html(),
 '''<div>'''
 '''<pre class="wiki">  def HelloWorld():\n'''
 '''     print "Hello World"\n'''
@@ -592,7 +595,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
 '''<pre class="wiki">  def HelloWorld():\n'''
 '''     print "Hello World"\n'''
 '''</pre>'''
-'''</div>''')
+'''</div>\n''')
 
   def test_blockquoate(self):
     self.wiki.parse('''  This text is a quote from someone else.\n''')
@@ -810,7 +813,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.line.make_html(),
       '''<div>'''
       '''<span class="position">\n'''
-      '''<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=minimal&height=300" />'''
+      '''<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&amp;format=png&amp;width=400&amp;css=minimal&amp;height=300" />'''
       '''</span>\n'''
       '''</div>'''
       )
@@ -822,7 +825,7 @@ class FormatterTest(bglib.doc.html.HtmlTestCase):
       self.line.make_html(),
       '''<div>'''
       '''<span class="position">\n'''
-      '''<img src="/image?gnubgid=jM%2FBATDQc%2BQBMA%3AcAkWAAAAAAAA&format=png&width=400&css=minimal&height=300" />'''
+      '''<img src="/image?gnubgid=jM%2FBATDQc%2BQBMA%3AcAkWAAAAAAAA&amp;format=png&amp;width=400&amp;css=minimal&amp;height=300" />'''
       '''</span>\n'''
       '''</div>'''
       )

@@ -45,7 +45,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       """<span class="position">\n"""
-      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=minimal&height=300" />"""
+      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&amp;format=png&amp;width=400&amp;css=minimal&amp;height=300" />"""
       """</span>\n""")
 
   def test_position_box_2(self):
@@ -56,7 +56,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       """<span class="position">\n"""
-      """<img src="/image?gnubgid=4HPwATDgc%2FABMA%3AMAAAAAAAAAAA&format=png&width=400&css=minimal&height=300" />"""
+      """<img src="/image?gnubgid=4HPwATDgc%2FABMA%3AMAAAAAAAAAAA&amp;format=png&amp;width=400&amp;css=minimal&amp;height=300" />"""
       """</span>\n""")
 
   def test_position_box_3(self):
@@ -75,7 +75,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       """<span class="position">\n"""
-      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=safari&height=300" />"""
+      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&amp;format=png&amp;width=400&amp;css=safari&amp;height=300" />"""
       """</span>\n""")
 
   def test_position_box_5(self):
@@ -86,7 +86,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       """<span class="position">"""
-      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&format=png&width=400&css=safari&height=300" />"""
+      """<img src="/image?gnubgid=vzsAAFhu2xFABA%3AQYkqASAAIAAA&amp;format=png&amp;width=400&amp;css=safari&amp;height=300" />"""
       """</span>""")
 
   def test_position_box_6(self):
@@ -97,7 +97,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
     self.assertHtmlEqual(
       self.writer.html(),
       """<span class="position">\n"""
-      """<img src="/image?gnubgid=jM%2FBATDQc%2BQBMA%3AcAkWAAAAAAAA&format=png&width=400&css=minimal&height=300" />"""
+      """<img src="/image?gnubgid=jM%2FBATDQc%2BQBMA%3AcAkWAAAAAAAA&amp;format=png&amp;width=400&amp;css=minimal&amp;height=300" />"""
       """</span>\n""")
 
   def test_analysis_box_cubeaction_1(self):

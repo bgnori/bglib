@@ -8,6 +8,7 @@ import unittest
 import bglib.doc.mock
 import bglib.doc.bgwiki
 import bglib.doc.html
+import bglib.doc.doctree
 
 class FormatterTest(unittest.TestCase):
   def setUp(self):
@@ -47,3 +48,36 @@ class FormatterTest(unittest.TestCase):
     self.wiki.parse('  8 ')
 
 
+class FormatterTest2(unittest.TestCase):
+  def setUp(self):
+    db = bglib.doc.mock.DataBaseMock()
+    bglib.doc.macro.setup(db)
+    self.wiki = bglib.doc.bgwiki.Formatter(db)
+
+  def test_table_and_itemize(self):
+    self.wiki.parse(
+'''
+ 1. Sample1
+  a. Q
+  b. Ans.
+|| - || 1   || 2 || 3 || 4 || 5 || 6 ||
+|| 1 || 11  || 21 || 31 || 41 || 51 || 61 ||
+|| 2 || 12  || 22 || 32 || 42 || 52 || 62 ||
+|| 3 || 13  || 23 || 33 || 43 || 53 || 63 ||
+|| 4 || 14  || 24 || 34 || 44 || 54 || 64 ||
+|| 5 || 15  || 25 || 35 || 45 || 55 || 65 ||
+|| 6 || 16  || 26 || 36 || 46 || 56 || 66 ||
+ 1. Sample2
+  a. Q
+  b. A
+|| - || 1   || 2 || 3 || 4 || 5 || 6 ||
+|| 1 || 11  || 21 || 31 || 41 || 51 || 61 ||
+|| 2 || 12  || 22 || 32 || 42 || 52 || 62 ||
+|| 3 || 13  || 23 || 33 || 43 || 53 || 63 ||
+|| 4 || 14  || 24 || 34 || 44 || 54 || 64 ||
+|| 5 || 15  || 25 || 35 || 45 || 55 || 65 ||
+|| 6 || 16  || 26 || 36 || 46 || 56 || 66 ||
+''')
+    p = bglib.doc.doctree.PrintVisitor()
+    self.wiki.doctree.accept(p)
+    #assert False

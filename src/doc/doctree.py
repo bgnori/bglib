@@ -153,7 +153,7 @@ class ItemizeElement(LineElement):
   html_element = 'li'
   def acceptables(self):
     return super(ItemizeElement, self).acceptables() + \
-          (ListElement, ItemizeElement)
+          (ListElement, ItemizeElement, TableElement, TableRowElement, TableHeaderElement, TableCellElement)
     
   def open(self):
     style = self.attrs['style']
@@ -412,4 +412,15 @@ class HtmlWriter(Visitor):
   def html(self):
     return self.buf
 
+
+class PDFWriter(Visitor):
+  def __init__(self):
+    Visitor.__init__(self)
+    self.buf = ''
+  def enter(self, node):
+    self.buf += node.open()
+  def leave(self, node):
+    self.buf += node.close()
+  def pdf(self):
+    return self.buf
 
