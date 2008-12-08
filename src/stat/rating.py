@@ -15,11 +15,11 @@ def winning_chance(high, low, length):
   return 1.0 - upset_chance(high, low, length)
   
 
-def gain_won_win(player, opp, length):
+def gain_on_win(player, opp, length):
   '''
-    >>> gain_won_win(1000, 1100, 9)
+    >>> gain_on_win(1000, 1100, 9)
     5.2694881080462856
-    >>> gain_won_win(1100, 1000, 9)
+    >>> gain_on_win(1100, 1000, 9)
     3.7305118919537144
   '''
   if player >= opp:
