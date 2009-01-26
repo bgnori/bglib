@@ -27,8 +27,6 @@ def signedchr(n):
     return chr(256 + n)
   return chr(n)
 
-def decode_position(s):
-  assert isinstance(s, str)
 
 def encode_position(xs):
   assert isinstance(xs, tuple)
@@ -44,6 +42,16 @@ def encode_position(xs):
                    for i in range(0, 26)])
 
 
+def decode_position(s):
+  assert isinstance(s, str)
+  assert len(s) == 26
+  onaction = [n > 0 and n or 0 for n in 
+              (signedord(c) for c in s)]
+  opponent = [n < 0 and -n or 0 for n in 
+              (signedord(c) for c in reversed(s))]
+  return (tuple(onaction[1:]), tuple(opponent[1:]))
+
+
 class DatabaseBytesExpression(object):
   def __new__(cls, init=None):
     self = object.__new__(cls)
@@ -52,7 +60,7 @@ class DatabaseBytesExpression(object):
     assert isinstance(init , Board)
     for key, item in Board.defaults.items():
       if key == 'position':
-        self.__dict__[key] = str(item)
+        self.__dict__[key] = encode_position(item)
       else:
         self.__dict__[key] = str(item)
     return self

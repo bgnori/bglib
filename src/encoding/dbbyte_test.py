@@ -43,15 +43,30 @@ class utilTest(unittest.TestCase):
         (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
          5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
       )
-    encoded = encode_position(pos)
-    self.assertEqual(encoded,
-      (
+    expected = (
       '\x00'
       '\xfe\x00\x00\x00\x00\x05\x00\x03\x00\x00\x00\xfb'
       '\x05\x00\x00\x00\xfd\x00\xfb\x00\x00\x00\x00\x02'
       '\x00'
-      )
-      )
+    )
+    encoded = encode_position(pos)
+    self.assertEqual(encoded, expected)
+
+  def decode_position_test(self):
+    src = (
+      '\x00'
+      '\xfe\x00\x00\x00\x00\x05\x00\x03\x00\x00\x00\xfb'
+      '\x05\x00\x00\x00\xfd\x00\xfb\x00\x00\x00\x00\x02'
+      '\x00'
+    )
+    expected = (
+        (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
+         5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), 
+        (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
+         5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
+    )
+    decoded = decode_position(src)
+    self.assertEqual(decoded, expected)
 
 
 class dbbyteTest(unittest.TestCase):
