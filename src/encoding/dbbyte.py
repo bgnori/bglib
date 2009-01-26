@@ -6,6 +6,7 @@
 #
 
 from bglib.model.board import board as Board
+from bglib.model import constants
 
 
 # I do not need them in python 3.x
@@ -58,11 +59,17 @@ class DatabaseBytesExpression(object):
     if init is None:
       init = Board()
     assert isinstance(init , Board)
-    for key, item in Board.defaults.items():
+    for key in Board.defaults.keys():
+      item = getattr(init, key)
       if key == 'position':
-        self.__dict__[key] = encode_position(item)
+        if init.on_action == constants.you:
+          self.__dict__[key] = encode_position(item)
+        elif init.on_action == constants.him:
+          self.__dict__[key] = encode_position((item[1], item[0]))
+        else:
+          assert False
       else:
-        self.__dict__[key] = str(item)
+        self.__dict__[key] = item
     return self
 
   def __getattr__(self, name):
@@ -72,4 +79,19 @@ class DatabaseBytesExpression(object):
   def __setattr__(self, name, value):
     assert False # immutable
 
+  def tomodel(self):
+    b = Board()
+    for key in Board.defaults.keys():
+      item = getattr(self, key)
+      if key == 'position':
+        if self.on_action == constants.you:
+          b.__dict__[key] = decode_position(item)
+        elif init.on_action == constants.him:
+          p = decode_position(item)
+          b.__dict__[key] = (p[1], p[0])
+        else:
+          assert False
+      else:
+        b.__dict__[key] = item
+    return b
 

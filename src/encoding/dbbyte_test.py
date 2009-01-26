@@ -8,6 +8,9 @@
 import unittest
 import nose
 
+from bglib.model.board import board as Board
+from bglib.model import constants
+
 from bglib.encoding.dbbyte import *
 
 class utilTest(unittest.TestCase):
@@ -80,11 +83,6 @@ class dbbyteTest(unittest.TestCase):
     exp = DatabaseBytesExpression()
     self.assert_(isinstance(exp, DatabaseBytesExpression))
 
-  def test_attr(self):
-    exp = DatabaseBytesExpression()
-    for key, item in (vars(exp)).items():
-      self.assert_(isinstance(item, str))
-
   def test_initialposition(self):
     exp = DatabaseBytesExpression()
     self.assertEqual(exp.position, 
@@ -95,5 +93,48 @@ class dbbyteTest(unittest.TestCase):
       '\x00'
       )
     )
+
+  def test_initialposition_you(self):
+    exp = DatabaseBytesExpression(
+            Board(position=(
+                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+                (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
+                 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
+               ),
+              on_action=constants.you))
+    self.assertEqual(exp.position, 
+      (
+      '\x00'
+      '\xfe\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb'
+      '\x00\x00\x00\x00\xfd\x00\xfb\x00\x00\x00\x00\x00'
+      '\x00'
+      )
+    )
+
+  def test_initialposition_him(self):
+    exp = DatabaseBytesExpression(
+            Board(position=(
+                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+                (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
+                 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
+               ),
+              on_action=constants.him))
+    self.assertEqual(exp.position, 
+      (
+      '\x00'
+      '\x00\x00\x00\x00\x00\x05\x00\x03\x00\x00\x00\x00'
+      '\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02'
+      '\x00'
+      )
+    )
+
+  def test_decode(self):
+    exp = DatabaseBytesExpression()
+    b = exp.tomodel()
+
+    for key, item in Board.defaults.items():
+      self.assertEqual(getattr(b, key), item)
 
 
