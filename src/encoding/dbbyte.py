@@ -53,6 +53,13 @@ def decode_position(s):
   return (tuple(onaction[1:]), tuple(opponent[1:]))
 
 
+def distance(xs, ys):
+  d = 0
+  for x, y in zip(xs, ys):
+    d += (signedord(x) - signedord(y))**2
+  return d
+
+
 class DatabaseBytesExpression(object):
   def __new__(cls, init=None):
     self = object.__new__(cls)
