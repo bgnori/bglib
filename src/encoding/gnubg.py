@@ -7,6 +7,7 @@
 from base64 import standard_b64encode, standard_b64decode
 
 # local 
+from tonic import BitsArray
 #from bglib.encoding.base import *
 import bglib.encoding.base
 
@@ -30,46 +31,46 @@ def decode_position(s):
   return bglib.encoding.base.twoside_decode(bin)
 
 class Validator(object):
-  def to_bitarray(self, value, bitarray, begin, end):
-    assert isinstance(bitarray, bglib.encoding.base.BitsArray)
-    bitarray.set_shiftable(value, begin, end)
-  def from_bitarray(self, bitarray):
+  def to_bitsarray(self, value, bitsarray, begin, end):
+    assert isinstance(bitsarray, BitsArray)
+    bitsarray.set_shiftable(value, begin, end)
+  def from_bitsarray(self, bitsarray):
     pass
 
 class SingleIntValidator(Validator):
-  def to_bitarray(self, value, bitarray, begin, end):
+  def to_bitsarray(self, value, bitsarray, begin, end):
     d = value
     for n in range(begin, end):
       d, m = divmod(d, 2)
-      bitarray[n] = m
+      bitsarray[n] = m
 
-  def from_bitarray(self, bitarray):
-    return bitarray.int()
+  def from_bitsarray(self, bitsarray):
+    return bitsarray.int()
 
 single_int = SingleIntValidator()
 
 class SingleBooleanValidator(Validator):
-  def to_bitarray(self, value, bitarray, begin, end):
-    bitarray.set_shiftable(value, begin, end)
-  def from_bitarray(self, bitarray):
-    return bitarray.int()!=0
+  def to_bitsarray(self, value, bitsarray, begin, end):
+    bitsarray.set_shiftable(value, begin, end)
+  def from_bitsarray(self, bitsarray):
+    return bitsarray.int()!=0
 single_boolean = SingleBooleanValidator()
 
 class DoubleIntValidator(Validator):
-  def to_bitarray(self, value, bitarray, begin, end):
+  def to_bitsarray(self, value, bitsarray, begin, end):
     top, bottom = value
     top_begin = begin
     bottom_end = end
     top_end = bottom_begin = begin + (end - begin)/2
-    bitarray.set_shiftable(top, top_begin, top_end)
-    bitarray.set_shiftable(bottom, bottom_begin, bottom_end)
+    bitsarray.set_shiftable(top, top_begin, top_end)
+    bitsarray.set_shiftable(bottom, bottom_begin, bottom_end)
 
-  def from_bitarray(self, bitarray):
-    n = bitarray.size
+  def from_bitsarray(self, bitsarray):
+    n = bitsarray.size
     assert n
     assert isinstance(n, int)
-    upper=bitarray[0:n/2]
-    bottom = bitarray[n/2:n]
+    upper=bitsarray[0:n/2]
+    bottom = bitsarray[n/2:n]
     return upper.int(), bottom.int()
 double_int_tuple = DoubleIntValidator()
 
@@ -92,18 +93,18 @@ class MatchProxy(object):
   def __getattr__(self, name):
     begin, end, validator = self.index[name]
     assert validator
-    return validator.from_bitarray(self._data[begin:end])
+    return validator.from_bitsarray(self._data[begin:end])
 
   def __setattr__(self, name, value):
     begin, end, validator = self.index[name]
     assert validator
-    validator.to_bitarray(value, self._data, begin, end)
+    validator.to_bitsarray(value, self._data, begin, end)
 
   def __init__(self, s=None):
-    self.__dict__['_data'] = bglib.encoding.base.BitsArray(66, binary=s, endian='<')
+    self.__dict__['_data'] = BitsArray(66, binary=s, endian='<')
 
   def decode(self, s):
-    self._data = bglib.encoding.base.BitsArray(s)
+    self._data = BitsArray(s)
 
   def encode(self):
     return self._data.binary
