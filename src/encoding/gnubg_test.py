@@ -61,9 +61,9 @@ class MatchProxyTest(unittest.TestCase):
     self.assertEqual(m._data[2], 0)
     self.assertEqual(m._data[3], 0)
 
-    self.assertEqual(repr(m._data[0:4]), "<BitArray Instance '1:0:0:0'>")
-    self.assertEqual(repr(m._data[0:8]), "<BitArray Instance '1:0:0:0:0:0:1:0'>")
-    self.assertEqual(repr(m._data[8:16]), "<BitArray Instance '1:0:0:1:0:0:0:1'>")
+    self.assertEqual(repr(m._data[0:4]), "<BitsArray Instance '1:0:0:0'>")
+    self.assertEqual(repr(m._data[0:8]), "<BitsArray Instance '1:0:0:0:0:0:1:0'>")
+    self.assertEqual(repr(m._data[8:16]), "<BitsArray Instance '1:0:0:1:0:0:0:1'>")
 
   def MatchProxy_bit_from_1_to_5_test(self):
     """Bit 1-4 contains the 2-logarithm of the cube value. For example, a 8-cube is encoded as 0011 binary (or 3), since 2 to the power of 3 is 8. The maximum value of the cube in with this encoding is 2 to the power of 15, i.e., a 32768-cube."""

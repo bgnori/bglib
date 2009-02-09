@@ -146,7 +146,7 @@ def byte_length(length_in_bit):
 
 
 
-class BitArray(object):
+class BitsArray(object):
   strcut_fmt = '!B'
   def __init__(self, size, binary=None, endian=None):
     self.size = size
@@ -221,7 +221,7 @@ class BitArray(object):
       assert isinstance(nth_or_slice.start, int)
       assert isinstance(nth_or_slice.stop, int)
       slice_length = nth_or_slice.stop - nth_or_slice.start
-      ret = BitArray(size=slice_length, 
+      ret = BitsArray(size=slice_length, 
                      endian=self.endian
                       )
       for i in range(ret.size):
@@ -249,7 +249,7 @@ class BitArray(object):
       yield self[i]
 
   def __repr__(self):
-    return "<BitArray Instance '%s'>"%(':'.join(map(str, list(self))))
+    return "<BitsArray Instance '%s'>"%(':'.join(map(str, list(self))))
 
   '''unsupported'''
   def __contains__(self, item):raise NotImplemented

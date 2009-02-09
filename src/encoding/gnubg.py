@@ -31,7 +31,7 @@ def decode_position(s):
 
 class Validator(object):
   def to_bitarray(self, value, bitarray, begin, end):
-    assert isinstance(bitarray, bglib.encoding.base.BitArray)
+    assert isinstance(bitarray, bglib.encoding.base.BitsArray)
     bitarray.set_shiftable(value, begin, end)
   def from_bitarray(self, bitarray):
     pass
@@ -100,10 +100,10 @@ class MatchProxy(object):
     validator.to_bitarray(value, self._data, begin, end)
 
   def __init__(self, s=None):
-    self.__dict__['_data'] = bglib.encoding.base.BitArray(66, binary=s, endian='<')
+    self.__dict__['_data'] = bglib.encoding.base.BitsArray(66, binary=s, endian='<')
 
   def decode(self, s):
-    self._data = bglib.encoding.base.BitArray(s)
+    self._data = bglib.encoding.base.BitsArray(s)
 
   def encode(self):
     return self._data.binary
