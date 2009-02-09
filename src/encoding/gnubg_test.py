@@ -11,7 +11,7 @@ import nose
 
 import bglib.model.board
 
-from gnubg import *
+from bglib.encoding.gnubg import *
 
 class gnubgTest(unittest.TestCase):
   def setUp(self):
