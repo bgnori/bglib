@@ -59,12 +59,12 @@ class recursiveDTest(unittest.TestCase):
         print i, j
         self.assertEqual(recursiveD(i, j), D(i, j))
 class BitArrayTest(unittest.TestCase):
-  def BitarrayCreation_test(self):
+  def BitArrayCreation_test(self):
     b = BitArray(8, '\x00')
     self.assertEqual(b.endian, '<')
     self.assertEqual(b.binary, '\x00')
 
-  def BitarrayIndex_test(self):
+  def BitArrayIndex_test(self):
     b = BitArray(8, '\x00')
     self.assertEqual(b[0], 0)
     self.assertEqual(b[7], 0)
@@ -81,11 +81,11 @@ class BitArrayTest(unittest.TestCase):
     except ValueError, e:
       self.assertEqual(str(e), "value for asignment must be 0 or 1")
 
-  def BitarraySlice1_test(self):
+  def BitArraySlice1_test(self):
     b = BitArray(8, '\x00')
     self.assertEqual(b[0:1].binary, '\x00')
 
-  def BitarraySlice2_test(self):
+  def BitArraySlice2_test(self):
     b = BitArray(8, '\x00')
     c = b[0:2]
     c[0] = 0
@@ -104,23 +104,23 @@ class BitArrayTest(unittest.TestCase):
     self.assertEqual(c.binary, '\x08')
     self.assertEqual(repr(c), "<BitArray Instance '0:0:0:1'>")
 
-  def BitarraySlice3_test(self):
+  def BitArraySlice3_test(self):
     b = BitArray(8, '\x00')
     b[0] = 1
     self.assertEqual(b.int(), 1)
 
-  def BitarraySlice4_test(self):
+  def BitArraySlice4_test(self):
     b = BitArray(8, '\x00')
     b[7] = 1
     self.assertEqual(b.int(), 128)
 
-  def BitarraySlice5_test(self):
+  def BitArraySlice5_test(self):
     b = BitArray(8, '\x00')
     b[0] = 1
     b[7] = 1
     self.assertEqual(b.int(), 129)
 
-  def BitarraySlice6_test(self):
+  def BitArraySlice6_test(self):
     b = BitArray(16, '\x41\x89')
     self.assertEqual(ord(b.binary[0]), ord('\x41'))
     self.assertEqual(ord(b.binary[1]), ord('\x89'))
@@ -132,80 +132,80 @@ class BitArrayTest(unittest.TestCase):
     self.assertEqual(ord(b[0:8].binary), 65)
     self.assertEqual(repr(b[8:16]), "<BitArray Instance '1:0:0:1:0:0:0:1'>")
 
-  def BitarraySetter_test(self):
+  def BitArraySetter_test(self):
     b = BitArray(16)
     for i,x in enumerate('1000001010010001'):
         b[i] = int(x)
     self.assertEqual(repr(b), "<BitArray Instance '1:0:0:0:0:0:1:0:1:0:0:1:0:0:0:1'>")
 
-  def BitarrayEndian1_test(self):
+  def BitArrayEndian1_test(self):
     b = BitArray(8, endian='<')
     b[7] = 1
     self.assertEqual(b.binary, '\x80')
 
-  def BitarrayEndian2_test(self):
+  def BitArrayEndian2_test(self):
     b = BitArray(8, endian='>')
     self.assertEqual(b.binary, '\x00')
     self.assertEqual(b.endian, '>')
     b[0] = 1
     self.assertEqual(b.binary, '\x80')
 
-  def BitarrayEndian3_test(self):
+  def BitArrayEndian3_test(self):
     b = BitArray(8, endian='>')
     b[7] = 1
     self.assertEqual(b.binary, '\x01')
 
-  def BitarrayEndian3_test(self):
+  def BitArrayEndian3_test(self):
     b = BitArray(16, endian='<')
     b[0] = 1
     self.assertEqual(b.binary, '\x01\x00')
 
-  def BitarrayEndian5_test(self):
+  def BitArrayEndian5_test(self):
     b = BitArray(16, endian='<')
     b[15] = 1
     self.assertEqual(b.binary, '\x00\x80')
 
 
-  def BitarrayEndian6_test(self):
+  def BitArrayEndian6_test(self):
     b = BitArray(16, endian='>')
     b[0] = 1
     self.assertEqual(b.binary, '\x80\x00')
 
-  def BitarrayEndian7_test(self):
+  def BitArrayEndian7_test(self):
     b = BitArray(16, endian='>')
     b[15] = 1
     self.assertEqual(b.binary, '\x00\x01')
 
 
-  def BitarrayEndian8_test(self):
+  def BitArrayEndian8_test(self):
     b = BitArray(12, endian='>')
     self.assertEqual(b.binary, '\x00\x00')
     b[0] = 1
     self.assertEqual(b.binary, '\x80\x00')
 
-  def BitarrayEndian9_test(self):
+  def BitArrayEndian9_test(self):
     b = BitArray(12, endian='>')
     b[11] = 1
     self.assertEqual(b.binary, '\x00\x10')
 
-  def BitarrayEndian10_test(self):
+  def BitArrayEndian10_test(self):
     b = BitArray(12, endian='<')
     self.assertEqual(b.binary, '\x00\x00')
     b[0] = 1
     self.assertEqual(b.binary, '\x01\x00')
 
-  def BitarrayCasting1_test(self):
+  def BitArrayCasting1_test(self):
     b = BitArray(12, endian='<')
     b[0] = 1
     self.assertEqual(b.int(), 1)
 
-  def BitarrayCasting2_test(self):
+  def BitArrayCasting2_test(self):
     b = BitArray(12, endian='<')
     b[11] = 1
     self.assertEqual(b.binary, '\x00\x08')
     self.assertEqual(b.int(), 2048)
 
-  def BitarrayCasting3_test(self):
+  def BitArrayCasting3_test(self):
     b = BitArray(20, endian='<')
     self.assertEqual(b.binary, '\x00\x00\x00')
     b[0] = 1
