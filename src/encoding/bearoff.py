@@ -7,6 +7,8 @@
 
 import struct
 from bglib.encoding.base import C
+from bglib.encoding.base import C_Hash
+from bglib.encoding.base import D
 from bglib.encoding.gnubg import decode_position
 
 
@@ -75,13 +77,29 @@ def gnubg_Hugh_indexing(key):
    */
   '''
 
+def recursive_onside(key):
+  assert isinstance(key, str)
+  pid, mid = key.split(":")[:2]
+  us, them = decode_position(pid)
+  assert backward(us) < 6
+  assert backward(them) < 6
+  assert count(us) >= 0
+  assert count(them) >= 0
+  c = count(us)
+
+  return D(7, c - 1) + C_Hash(us[:6], 6)
+
 def trice_indexing(key):
   assert isinstance(key, str)
   pid, mid = key.split(":")[:2]
   us, them = decode_position(pid)
-  points, chequers = bearoff_param(us, them)
+  assert backward(us) < 6
+  assert backward(them) < 6
+  assert count(us) >= 0
+  assert count(them) >= 0
+  c = count(us)
+  return recursive_onside(key)
 
-  return oneside_index(us+them, points, chequers)
 
 
 def key_to_index(key):

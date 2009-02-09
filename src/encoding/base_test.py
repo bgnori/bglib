@@ -5,7 +5,6 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 from base import *
-from base import _fact
 
 import tempfile
 import unittest
@@ -20,21 +19,6 @@ class EncodingTest(unittest.TestCase):
     pass
   def tearDown(self):
     pass
-  def fact_test(self):
-    fact = Fact()
-    self.assert_(fact)
-    for i in range(0, 10):
-      self.assertEqual(fact(i), _fact(i))
-
-  def combination_test(self):
-    self.assertEqual(C(0, 0), 1)
-    self.assertEqual(C(1, 1), 1)
-    self.assertEqual(C(4, 2), 6)
-    def _C(n, m):
-      return fact(n)/(fact(m) * fact(n-m))
-    for i in range(0, 20):
-      for j in range(0, i):
-        self.assertEqual(_C(i, j), C(i, j))
 
   def bgcombination_1_test(self):
     sum = 0
@@ -47,17 +31,6 @@ class EncodingTest(unittest.TestCase):
     for m in range(0, 16):
         sum += BackgammonCombination_allC(m)
     self.assertEqual(WTN, sum)
-
-  def perfecthash1_test(self):
-    xs = [1, 0, 1, 0, 0]
-    self.assertEqual(C_Hash(xs, r=2), 8)
-
-  def perfecthash2_test(self):
-    xs = [0, 0, 0, 1, 1]
-    self.assertEqual(C_Hash(xs, r=2), 0)
-
-  def perfecthash3_test(self):
-    self.assertEqual(C_RHash(8, 5, 2), [1, 0, 1, 0, 0])
 
   def encode_test(self):
     x = list(encode((0, 0, 0, 0, 0, 5, 2, 3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)))
@@ -79,7 +52,13 @@ class EncodingTest(unittest.TestCase):
     self.assertEqual(twoside_decode(twoside_encode(((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1), (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0)))), 
 ((6, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1), (0, 3, 2, 2, 2, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0)))
 
-
+class recursiveDTest(unittest.TestCase):
+  def test(self):
+    for i in range(1, 12):
+      for j in range(1, 12):
+        print i, j
+        self.assertEqual(recursiveD(i, j), D(i, j))
+class BitArrayTest(unittest.TestCase):
   def BitarrayCreation_test(self):
     b = BitArray(8, '\x00')
     self.assertEqual(b.endian, '<')

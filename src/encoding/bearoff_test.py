@@ -12,7 +12,11 @@ from bglib.encoding.bearoff import key_to_index
 from bglib.encoding.bearoff import human_readable_eq
 from bglib.encoding.bearoff import DBReader
 
-class gnubgTest(unittest.TestCase):
+class noriTest(unittest.TestCase):
+  def oneside_index_1_test(self):
+    self.assertEqual(1, oneside_index((1,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0), 1, 1))
+
+class ReaderTest(unittest.TestCase):
   def setUp(self):
     self.reader = DBReader()
     self.reader.open('/home/nori/Desktop/work/BearoffDatabase/BEAR4.DTA')

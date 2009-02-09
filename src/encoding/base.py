@@ -7,80 +7,28 @@
 
 import struct
 
-def _fact(n):
-  if n == 0:
-    return 1
-  elif n == 1:
-    return 1
-  else:
-    return fact(n-1)*n
+from tonic.math import fact, C, C_Hash, C_RHash
+from tonic.cache import hub
+from tonic.cache.imp import Dict
+from tonic.cache import memoize
 
-class Fact:
-  def __init__(self):
-    self._cache = list()
-    self._cache.append(1) #  0! = 1
-    self._cache.append(1) #  1! = 1
+hub.connect(Dict())
 
-  def _expand(self):
-    self._cache.append(self._cache[-1] * len(self._cache))
-
-  def __contains__(self, n):
-    return len(self._cache) > n
-    
-  def __call__(self, n):
-    assert(n >= 0)
-    while n not in self:
-      self._expand()
-    return self._cache[n]
-
-fact = Fact()
-
-
-class Combination:
-  def __init__(self):
-    self._cache = dict()
-    self._update(0, 0, 1) # C(0, 0)
-    self._size = 1
-
-  def _update(self, n, r, value):
-    self._cache.update({(n, r): value})
-
-  def _read(self, n, r):
-    if n < 0 or r < 0:
-      return 0
-    elif n < r:
-      return 0
-    else:
-      return self._cache[(n, r)]
-
-  def _expand(self):
-    if self._size > 100:
-      import sys
-      print len(self._cache)
-      sys.exit('too big cache')
-    n = self._size 
-    for i in range(0, n+1):
-      self._update(n=n, 
-                   r=i, 
-                   value=self._read(n=n-1, r=i-1)+self._read(n=n-1, r=i)
-                  )
-    self._size = n + 1
-
-  def __contains__(self, n):
-    return self._size > n
-
-  def __call__(self, n, r):
-    while n not in self:
-      self._expand()
-    return self._read(n, r)
-C = Combination()
-
-
+@memoize(hub)
 def D(n, m):
   '''D of Walter Trice.
   http://www.bkgm.com/rgb/rgb.cgi?view+371
   '''
   return C(n+m-1, m)
+
+def recursiveD(n, m):
+  if n == 1:
+    return 1
+  elif m == 1:
+    return n
+  else:
+    return recursiveD(n, m-1) + recursiveD(n-1, m)
+
 
 WTN = 18528584051601162496
 '''
@@ -96,38 +44,6 @@ def BackgammonCombination(m):
 def BackgammonCombination_allC(m):
   '''by definition of D, it must give same result.'''
   return C(24, m) * C(16, 15-m) * C(40-m, 15)
-
-
-def C_Hash(xs, r):
-  '''perfect hash for Combination, such as
-    C(5, 2)  xs = [1, 0, 1, 0, 0]
-  '''
-  n = len(xs) - 1
-  i = 0
-  hash = 0
-  while n >= r and r > 0:
-    if xs[i]:
-      hash += C(n, r)
-      r-=1
-    i+=1
-    n-=1
-  return hash
-
-
-def C_RHash(x, n, r):
-  '''Reverse function of C_Hash.
-  parameters are hash value x, and C(n, r)
-  retuns xs
-  '''
-  result = list()
-  for i in range(n, 0, -1):
-    if x >= C(i - 1, r):
-      result.append(1)
-      x -= C(i - 1, r)
-      r -= 1
-    else:
-      result.append(0)
-  return result
 
 
 def D_Hash(xs, m):
