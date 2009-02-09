@@ -47,7 +47,7 @@ class MatchProxyTest(unittest.TestCase):
     self.m = MatchProxy('\x41\x89\x2a\x01\x20\x00\x20\x00\x00')
   def tearDown(self):
     pass
-  def MatchProxy_bitarray_test(self):
+  def MatchProxy_bitsarray_test(self):
     m = self.m
     s = ''.join(map(str, list(m._data)))
     self.assertEqual(s, '100000101001000101010100100000000000010000000000000001000000000000')
