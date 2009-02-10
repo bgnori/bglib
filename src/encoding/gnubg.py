@@ -4,6 +4,8 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
+import struct
+
 from base64 import standard_b64encode, standard_b64decode
 
 # local 
@@ -11,10 +13,82 @@ from tonic import BitsArray
 #from bglib.encoding.base import *
 import bglib.encoding.base
 
+class ByteContext:
+  def __init__(self):
+    self.byte = 0 # r'\x00'
+    self.count = 0
+    
+  def write(self, bit):
+    self.byte |= bit << self.count
+    self.count += 1
+    return self.count < 8
+    
+  def pack(self):
+    r = struct.pack('<B', self.byte)
+    self.reset()
+    return r
+
+  def pad(self):
+    for i in range(self.count, 8): # padding
+      self.write(0)
+    return self.pack()
+
+  def reset(self):
+    self.byte = 0 # r'\x00'
+    self.count = 0
+
+
+def seq2bytes (xs):
+  """encode given xs to binary.
+  0 2 3 0 ---> 0 110 1110 0 : D mapping to binary.
+  and endian is little endian.
+  """
+  byte = ByteContext()
+  for x in xs:
+    for i in range(0, x):
+      if not byte.write(1):
+        yield byte.pack()
+    if not byte.write(0):
+      yield byte.pack()
+  if byte.count == 0:
+    raise StopIteration
+  else:
+    yield byte.pad()
+
+
+def byts2seq(b):
+  n = 0
+  for fragment in b:
+    byte = struct.unpack('<B', fragment)[0]
+    for j in range(8):
+      if byte & (1 << j):
+        n += 1
+      else:
+        yield n
+        n = 0
+  yield n
+
+
+#def oneside_encode(xs):
+#  return ''.join(list(encode(xs)))
+
+
+#def oneside_decode(s):
+#  return tuple(decode(s))[:25]
+
+
+def twoside_encode(xs):
+  s = list(seq2bytes( list(xs[0])+ list(xs[1])))
+  return ''.join(s)
+
+
+def twoside_decode(s):
+  xs = list(byts2seq(s))
+  return tuple(xs[:25]), tuple(xs[25:50]) # (on_action, opp)
 
 def encode_position(xs):
   """ encodes tuple expression into gnubg position id """
-  return standard_b64encode(bglib.encoding.base.twoside_encode(xs)).rstrip('=')
+  return standard_b64encode(twoside_encode(xs)).rstrip('=')
 
 
 def decode_position(s):
@@ -28,7 +102,7 @@ def decode_position(s):
       s += '='
     else:
       break
-  return bglib.encoding.base.twoside_decode(bin)
+  return twoside_decode(bin)
 
 class Validator(object):
   def to_bitsarray(self, value, bitsarray, begin, end):
@@ -191,7 +265,4 @@ def convert_from_urlsafe(s):
   return s.replace('-', '+').replace('_', '/')
 
 
-if __name__ == '__main__':
-  import doctest
-  doctest.testfile('gnubg.test')
 
