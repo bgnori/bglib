@@ -9,7 +9,7 @@ import struct
 from bglib.encoding.base import C
 from bglib.encoding.base import C_Hash
 from bglib.encoding.base import D
-from bglib.encoding.gnubg import decode_position
+from bglib.encoding.gnubgid import decode_position
 
 
 def f(b, n, r):

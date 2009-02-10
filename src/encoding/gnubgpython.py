@@ -8,7 +8,7 @@
 from bglib.model import constants
 import bglib.model.board
 import bglib.encoding.base
-from bglib.encoding.gnubg import decode, encode
+from bglib.encoding.gnubgid import decode, encode
 
 
 class Tracer(object):

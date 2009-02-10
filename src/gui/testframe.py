@@ -9,7 +9,7 @@ import sys
 import wx
 
 import bglib.model.board
-import bglib.encoding.gnubg
+import bglib.encoding.gnubgid
 
 import bglib.gui.viewer
 import bglib.gui.player

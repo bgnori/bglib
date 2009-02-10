@@ -11,7 +11,7 @@ import nose
 
 import bglib.model.board
 
-from bglib.encoding.gnubg import *
+from bglib.encoding.gnubgid import *
 
 class EncodingTest(unittest.TestCase):
   def seq2bytes_test(self):
