@@ -6,12 +6,32 @@
 #
 
 import struct
-from bglib.encoding.base import C
+from tonic.math import C
 from bglib.encoding.base import C_Hash
 from bglib.encoding.base import D
 from bglib.encoding.gnubgid import decode_position
 
 
+'''
+  utilities
+'''
+
+def backward(t):
+  i = 24
+  while not t[i]:
+    i -= 1
+  return i + 1
+
+def count(t):
+  sum = 0
+  for x in t:
+    sum += x
+  return sum
+
+
+'''
+  gnubg indexing
+'''
 def f(b, n, r):
   assert b > -1
   assert n > -1
@@ -37,18 +57,6 @@ def oneside_index(t, p, c):
       pass
       #bits |= (1 >> -j)
   return f(bits, p+c ,p)
-
-def backward(t):
-  i = 24
-  while not t[i]:
-    i -= 1
-  return i + 1
-
-def count(t):
-  sum = 0
-  for x in t:
-    sum += x
-  return sum
 
 def bearoff_param(us, them):
   return max(backward(us), backward(them), 0), \
@@ -77,6 +85,13 @@ def gnubg_Hugh_indexing(key):
    */
   '''
 
+'''
+  trice indexing
+'''
+def oneside(xs):
+  assert highest(xs) < 6
+  return D(count(xs) - 1, 7) + D_Hash(xs, 6)
+
 def recursive_onside(key):
   assert isinstance(key, str)
   pid, mid = key.split(":")[:2]
@@ -88,18 +103,6 @@ def recursive_onside(key):
   c = count(us)
 
   return D(7, c - 1) + C_Hash(us[:6], 6)
-
-def trice_indexing(key):
-  assert isinstance(key, str)
-  pid, mid = key.split(":")[:2]
-  us, them = decode_position(pid)
-  assert backward(us) < 6
-  assert backward(them) < 6
-  assert count(us) >= 0
-  assert count(them) >= 0
-  c = count(us)
-  return recursive_onside(key)
-
 
 
 def key_to_index(key):
@@ -116,7 +119,7 @@ class DBReader(object):
     self.f = None
   
   def open(self, path):
-    self.f = file(path, 'rb', 16)
+    self.f = file(path, 'rb', DATALEN)
 
   def close(self):
     self.f.close()
@@ -145,5 +148,12 @@ class DBReader(object):
     return human_readable_eq(self.dump(position_number - 1))
 
   def __getitem__(self, key):
-    return self.dump(key_to_index(key))
+    return self.dump(self.key_to_index(key))
+
+class GnubgDBRreader(DBReader)
+  def key_to_index(self):
+    return 0
+
+
+
 
