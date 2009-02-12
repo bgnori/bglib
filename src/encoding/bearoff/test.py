@@ -21,11 +21,4 @@ class recursiveDTest(unittest.TestCase):
         sum += BackgammonCombination_allC(m)
     self.assertEqual(WTN, sum)
 
-  def test(self):
-    for i in range(1, 12):
-      for j in range(1, 12):
-        print i, j
-        self.assertEqual(recursiveD(i, j), D(i, j))
-
-
 

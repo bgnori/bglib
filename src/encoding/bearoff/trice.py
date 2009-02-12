@@ -7,15 +7,12 @@
 import struct
 from bglib.encoding.gnubgid import decode_position
 import bglib.encoding.bearoff
-from bglib.encoding.bearoff import C, count, backward
+from bglib.encoding.bearoff import C, C_Hash, C_RHash, D, D_Hash
+from bglib.encoding.bearoff import count, backward
 
 '''
   trice indexing
 '''
-def oneside(xs):
-  assert highest(xs) < 6
-  return D(count(xs) - 1, 7) + D_Hash(xs, 6)
-
 def recursive_onside(key):
   assert isinstance(key, str)
   pid, mid = key.split(":")[:2]
@@ -25,11 +22,14 @@ def recursive_onside(key):
   assert count(us) >= 0
   assert count(them) >= 0
   c = count(us)
+  return t2k(us, c)
 
-  return D(7, c - 1) + C_Hash(us[:6], 6)
+
+def t2k(t, c):
+  return 0 #D(7, c-1) + D_Hash(t[:6], c)
 
 def trice_indexing(position):
-  pass
+  return 0
 
 def human_readable_eq(t):
   CenterCubeEq, OpponentHasCubeEq, RollerHasCubeEq, CPW = t

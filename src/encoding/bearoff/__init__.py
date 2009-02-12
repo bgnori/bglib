@@ -27,16 +27,27 @@ def count(t):
 def D(n, m):
   '''D of Walter Trice.
   http://www.bkgm.com/rgb/rgb.cgi?view+371
+
+  rem.
+  D(n, m) == D(n, m -1) + D(n -1, m)
   '''
   return C(n+m-1, m)
 
-def recursiveD(n, m):
-  if n == 1:
-    return 1
-  elif m == 1:
-    return n
-  else:
-    return recursiveD(n, m-1) + recursiveD(n-1, m)
+
+def D_Hash(t, x):
+  c = count(t)
+  b = list()
+  for i in t:
+    b += [1 for j in range(i)]
+    b.append(0)
+  print b
+  s = 0
+  for n in range(c):
+    s += D(len(t), n +x)
+  return s + C_Hash(b, c)
+
+def D_RHash():
+  pass
 
 
 WTN = 18528584051601162496
@@ -52,7 +63,6 @@ def BackgammonCombination(m):
 def BackgammonCombination_allC(m):
   '''by definition of D, it must give same result.'''
   return C(24, m) * C(16, 15-m) * C(40-m, 15)
-
 
 
 class DBReader(object):

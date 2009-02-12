@@ -2,18 +2,21 @@
 # -*- coding: us-ascii -*-
 # vim: syntax=python
 #
-# Copyright 2006-2009 Noriyuki Hosaka nori@backgammon.gr.jp
+# Copyright 2006-2009 Noriyuki Hosaka bgnori@gmail.com
 #
 import unittest
 from bglib.encoding.bearoff.trice import *
 
-class TriceTest(unittest.TestCase):
+class ReaderTest(unittest.TestCase):
   def setUp(self):
     self.reader = DBRreader()
     self.reader.open('/home/nori/Desktop/work/BearoffDatabase/BEAR4.DTA')
   def tearDown(self):
     self.reader.close()
 
+  def key_to_index_test(self):
+    pid = 'AQAABAAAAAAAAA:cAkAAAAAAAAA'
+    self.assertEqual(recursive_onside(pid), 3-1)
 
   def key_to_index_1_test(self):
     pid = 'AQAABAAAAAAAAA:cAkAAAAAAAAA'
