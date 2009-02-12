@@ -18,8 +18,8 @@ def writetest(c):
   print '  def %s(self):'%name
   print '    self.assertEqual(t2k('
   print '        ', t, ','
-  print '        ', n, ')'
-  print '    )'
+  print '        ),'
+  print '   ', n, ')'
 
 
 dat = '''\

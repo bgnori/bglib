@@ -35,16 +35,7 @@ def D(n, m):
 
 
 def D_Hash(t, x):
-  c = count(t)
-  b = list()
-  for i in t:
-    b += [1 for j in range(i)]
-    b.append(0)
-  print b
-  s = 0
-  for n in range(c):
-    s += D(len(t), n +x)
-  return s + C_Hash(b, c)
+  pass
 
 def D_RHash():
   pass

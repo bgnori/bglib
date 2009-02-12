@@ -14,10 +14,6 @@ class ReaderTest(unittest.TestCase):
   def tearDown(self):
     self.reader.close()
 
-  def key_to_index_test(self):
-    pid = 'AQAABAAAAAAAAA:cAkAAAAAAAAA'
-    self.assertEqual(recursive_onside(pid), 3-1)
-
   def key_to_index_1_test(self):
     pid = 'AQAABAAAAAAAAA:cAkAAAAAAAAA'
     self.assertEqual(trice_indexing(pid), 3-1)

@@ -11,42 +11,45 @@ from bglib.encoding.bearoff import C, C_Hash, C_RHash, D, D_Hash
 from bglib.encoding.bearoff import count, backward
 
 '''
-  trice indexing
+  nori's original indexing
 '''
+sigmaD = dict(((-1, 0), (0, 1),))
 
-def t2k(t):
-  us, them = t
-  if True:
-    xs = [(us[i], them[i]) for i in range(6)]
-    xs = list()
-    for i, j in zip(us, them):
-      xs.append(i)
-      xs.append(j)
-  else:
-    xs = tuple(reversed(us + them))
+for i in range(0, 16):
+  sigmaD[i] = sigmaD[i-1] + D(6 , i)
 
-  c = count(xs)
-  if c == 0:
-    return 0
-  elif c == 1:
-    b = [0]
-    for i in xs:
-      b += [1 for j in range(i)]
-      b.append(0)
-    return 1 + C_Hash(b, c)
-  else:
-    b = [0]
-    for i in xs:
-      b += [1 for j in range(i)]
-      b.append(0)
-    return D(c - 1, 7) ** 2 + C_Hash(b, c)
+def oneside_upto6_t2k(t):
+  assert len(t) == 6
+  xs = []
+  c = count(t)
+  for i in t:
+    xs += [1 for j in  range(i)]
+    xs.append(0)
 
-def trice_indexing(position):
-  return 0
+  #C_Hash treats  highest bit as Least Significant bit
+  xs.reverse()
+  return sigmaD[c-1] + C_Hash(xs, c)
 
-def human_readable_eq(t):
-  CenterCubeEq, OpponentHasCubeEq, RollerHasCubeEq, CPW = t
-  return CenterCubeEq, OpponentHasCubeEq*2, RollerHasCubeEq*2, CPW
+
+def oneside_upto6_k2t(n):
+  for c in range(15):
+    if n < sigmaD[c]:
+      k = 0
+      xs = [0, 0, 0, 0, 0, 0]
+      print n-sigmaD[c-1],  c
+      b = C_RHash(n - sigmaD[c-1], 6+c-1, c)
+      print b
+      for j in b:
+        if j == 1:
+          xs[k]+=1
+        elif j == 0:
+          k+=1
+        else:
+          assert False
+      print xs
+      return tuple(reversed(xs))
+  assert False
+
 
 class DBRreader(bearoff.DBReader):
   datalen = 16
@@ -63,4 +66,5 @@ class DBRreader(bearoff.DBReader):
 
   def key_to_index(self):
     return 0
+
 
