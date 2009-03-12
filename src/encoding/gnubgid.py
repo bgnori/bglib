@@ -11,7 +11,7 @@ from base64 import standard_b64encode, standard_b64decode
 # local 
 from tonic import BitsArray
 #from bglib.encoding.base import *
-import bglib.encoding.base
+import bglib.encoding
 
 class ByteContext:
   def __init__(self):
@@ -119,7 +119,7 @@ class SingleIntValidator(Validator):
       bitsarray[n] = m
 
   def from_bitsarray(self, bitsarray):
-    return bitsarray.int()
+    return int(bitsarray)
 
 single_int = SingleIntValidator()
 
@@ -127,7 +127,7 @@ class SingleBooleanValidator(Validator):
   def to_bitsarray(self, value, bitsarray, begin, end):
     bitsarray.set_shiftable(value, begin, end)
   def from_bitsarray(self, bitsarray):
-    return bitsarray.int()!=0
+    return int(bitsarray)!=0
 single_boolean = SingleBooleanValidator()
 
 class DoubleIntValidator(Validator):
@@ -145,7 +145,7 @@ class DoubleIntValidator(Validator):
     assert isinstance(n, int)
     upper=bitsarray[0:n/2]
     bottom = bitsarray[n/2:n]
-    return upper.int(), bottom.int()
+    return int(upper), int(bottom)
 double_int_tuple = DoubleIntValidator()
 
 class MatchProxy(object):
