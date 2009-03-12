@@ -13,6 +13,15 @@ import bglib.model.board
 
 from bglib.encoding.gnubgid import *
 
+class ValidatorTest(unittest.TestCase):
+  def setUp(self):
+    self.b = BitsArray(20, endian='<')    
+  def tearDown(self):
+    pass
+  def test_boolean(self):
+    self.assertFalse(single_boolean.from_bitsarray(self.b))
+
+
 class EncodingTest(unittest.TestCase):
   def seq2bytes_test(self):
     x = list(seq2bytes((0, 0, 0, 0, 0, 5, 2, 3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)))
@@ -49,6 +58,13 @@ class gnubgTest(unittest.TestCase):
          ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
           (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))),
         '4HPwATDgc/ABMA')
+
+  def decode_baditem_test(self):
+    try:
+      m = decode_position(1)
+      self.assert_(False)
+    except:
+      pass
 
   def decode_1_test(self):
     self.assertEqual(decode_position("vzsAAFhu2xFABA"),
@@ -170,6 +186,7 @@ class MatchProxyTest(unittest.TestCase):
   def MatchProxy_encode_test(self):
     m = self.m
     self.assertEqual(encode_match(m), 'QYkqASAAIAAA')
+
 
   def MatchProxy_decode_1_test(self):
     m = decode_match('QYkqASAAIAAA')

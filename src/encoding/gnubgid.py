@@ -10,7 +10,6 @@ from base64 import standard_b64encode, standard_b64decode
 
 # local 
 from tonic import BitsArray
-#from bglib.encoding.base import *
 import bglib.encoding
 
 class ByteContext:
@@ -106,18 +105,14 @@ def decode_position(s):
 
 class Validator(object):
   def to_bitsarray(self, value, bitsarray, begin, end):
-    assert isinstance(bitsarray, BitsArray)
-    bitsarray.set_shiftable(value, begin, end)
+    raise
   def from_bitsarray(self, bitsarray):
-    pass
+    raise
 
 class SingleIntValidator(Validator):
   def to_bitsarray(self, value, bitsarray, begin, end):
-    d = value
-    for n in range(begin, end):
-      d, m = divmod(d, 2)
-      bitsarray[n] = m
-
+    assert isinstance(bitsarray, BitsArray)
+    bitsarray.set_shiftable(value, begin, end)
   def from_bitsarray(self, bitsarray):
     return int(bitsarray)
 
@@ -125,9 +120,10 @@ single_int = SingleIntValidator()
 
 class SingleBooleanValidator(Validator):
   def to_bitsarray(self, value, bitsarray, begin, end):
+    assert isinstance(bitsarray, BitsArray)
     bitsarray.set_shiftable(value, begin, end)
   def from_bitsarray(self, bitsarray):
-    return int(bitsarray)!=0
+    return bool(bitsarray)
 single_boolean = SingleBooleanValidator()
 
 class DoubleIntValidator(Validator):
@@ -258,11 +254,11 @@ def decode(model, pid, mid):
   model.position = (you, him)
 
 
-def convert_to_urlsafe(s):
-  return s.replace('+', '-').replace('/', '_')
+#def convert_to_urlsafe(s):
+#  return s.replace('+', '-').replace('/', '_')
 
-def convert_from_urlsafe(s):
-  return s.replace('-', '+').replace('_', '/')
+#def convert_from_urlsafe(s):
+#  return s.replace('-', '+').replace('_', '/')
 
 
 
