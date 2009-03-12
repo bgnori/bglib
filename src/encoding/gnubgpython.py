@@ -7,7 +7,7 @@
 
 from bglib.model import constants
 import bglib.model.board
-import bglib.encoding.base
+import bglib.encoding
 from bglib.encoding.gnubgid import decode, encode
 
 
