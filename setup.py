@@ -38,7 +38,7 @@ setup(
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
   package_dir = {
-                 'bglib':'src', #root
+                 'bglib':'bglib', #root
                  },
   packages = ['bglib', 
               'bglib.depot', 

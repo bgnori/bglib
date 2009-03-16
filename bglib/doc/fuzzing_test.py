@@ -40,11 +40,8 @@ class GeneTest(unittest.TestCase):
     self.assert_(isinstance(e, FormatError))
     self.assert_(isinstance(e.exception, Exception))
     self.assertEqual(str(e.exception), '''MockErrorFormatter's mock AssertionError''')
-    self.assertEqual(e.stacktrace, (
-      '''  File "/home/nori/Desktop/work/bglib/src/bglib/doc/fuzzing.py", line 59, in format\n'''
-      '''    formatter.parse(text)\n'''
-      '''  File "/home/nori/Desktop/work/bglib/src/bglib/doc/fuzzing_test.py", line 16, in parse\n'''
-      '''    raise AssertionError, "MockErrorFormatter's mock AssertionError"\n'''))
+    self.assert_('''bglib/doc/fuzzing.py", line 59, in format\n    formatter.parse(text)\n''' in e.stacktrace)
+    self.assert_('''bglib/doc/fuzzing_test.py", line 16, in parse\n    raise AssertionError, "MockErrorFormatter's mock AssertionError"\n''' in e.stacktrace)
 
   def parse_error_test(self):
     e = self.gene.format(self.badformatter)
