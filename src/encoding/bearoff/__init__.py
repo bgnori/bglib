@@ -4,7 +4,7 @@
 #
 # Copyright 2006-2009 Noriyuki Hosaka nori@backgammon.gr.jp
 #
-from tonic.math import fact, C, C_Hash, C_RHash
+from tonic.combination import fact, C, C_Hash, C_RHash
 
 
 '''

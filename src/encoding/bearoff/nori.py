@@ -15,7 +15,7 @@ from bglib.encoding.bearoff import count, backward
 '''
 sigmaD = dict(((-1, 0), (0, 1),))
 
-for i in range(0, 16):
+for i in range(1, 16):
   sigmaD[i] = sigmaD[i-1] + D(6 , i)
 
 def oneside_upto6_t2k(t):
