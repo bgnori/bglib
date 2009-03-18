@@ -8,9 +8,10 @@ import logging
 import wx
 import wx.lib.intctrl
 
+import tonic.depot.dict
+import tonic.depot.lines
+
 import bglib.model
-import bglib.depot.dict
-import bglib.depot.lines
 import bglib.image.wxpython
 
 
