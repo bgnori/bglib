@@ -4,9 +4,9 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
-import bglib.depot.base
+import bglib.depot
 
-class DictProxy(bglib.depot.base.Proxy):
+class DictProxy(bglib.depot.Proxy):
   def __repr__(self):
     return "<dict.Proxy for %s of  %s>"%(self._apth, str(self._impl))
 

@@ -6,9 +6,9 @@
 #
 import ConfigParser
 
-import bglib.depot.base
+import bglib.depot
 
-class Proxy(bglib.depot.base.Proxy):
+class Proxy(bglib.depot.Proxy):
   def __repr__(self):
     return "<cfg.Proxy for %s of  %s>"%(self._apth, str(self._impl))
 
