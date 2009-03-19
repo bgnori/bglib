@@ -21,8 +21,6 @@ setup(
 """This package contains:
   * model 
    this module provides model to all other modules in this library.
-  * depot
-   this module provides config loader in various formats.
   * encoding 
    - base module provides basic operations to other modules in this subpackage
    - gnubg module is gnubg postion id decoder/decoder
@@ -41,7 +39,6 @@ setup(
                  'bglib':'bglib', #root
                  },
   packages = ['bglib', 
-              'bglib.depot', 
               'bglib.doc', 
               'bglib.encoding', 
               'bglib.gui', 
