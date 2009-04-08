@@ -5,20 +5,17 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-#from distutils.core import setup
-from setuptools import setup
+from distutils.core import setup
+#from setuptools import setup
 import os.path
 
-__version__ = "0.0.3"
 
-
-setup(
-  name='python-bglib-library',
-  version=__version__,
-  #zip_safe=False,
-  description="backgammon programming utilities for python",
-  long_description=
-"""This package contains:
+NAME = 'python-bglib-library'
+AUTHOR = "Noriyuki Hosaka", "bgnori@gmail.com"
+VERSION = open("VERSION").read().strip()
+DESCRIPTION = "backgammon programming utilities for python"
+LONG_DESCRIPTION="""\
+This package contains:
   * model 
    this module provides model to all other modules in this library.
   * encoding 
@@ -32,9 +29,25 @@ setup(
    this module provides some GUI widgets using wxpython.
   * doc
    this  module provides bgwiki formatting engine.
-""",
-  author="Noriyuki Hosaka",
-  author_email="bgnori@gmail.com",
+"""
+HOMEPAGE="http://www.backgammonbase.com"
+
+try:
+    # add classifiers and download_url syntax to distutils
+    from distutils.dist import DistributionMetadata
+    DistributionMetadata.classifiers = None
+    DistributionMetadata.download_url = None
+except:
+    pass
+
+setup(
+  name=NAME,
+  version=VERSION,
+  zip_safe=False,
+  description=DESCRIPTION,
+  long_description=LONG_DESCRIPTION,
+  author=AUTHOR[0],
+  author_email=AUTHOR[1],
   package_dir = {
                  'bglib':'bglib', #root
                  },
@@ -77,7 +90,7 @@ setup(
     'wxPython >=2.8.7.1',
   ],
   provides=['bglib'],
-  url="http://www.backgammonbase.com",
+  url=HOMEPAGE,
   license="proprietary",
 )
 
