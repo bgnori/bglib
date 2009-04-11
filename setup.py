@@ -87,6 +87,7 @@ setup(
   ],
   requires=[
     'python-imageing >=1.1.6',
+    'python-tonic-library>=0.0.13',
     'wxPython >=2.8.7.1',
   ],
   provides=['bglib'],

@@ -6,14 +6,24 @@
 #
 import re
 import os.path
+
+import tonic.moduleid
+
 import bglib.image.PIL
 import bglib.image.css
 from bglib.image.theme import themata
 
+
 mypath = 'safari'
+__moduleid_deps__ = [
+    mypath+'/default.css',
+    mypath+'/*.jpg',
+    mypath+'/*.png']
+tonic.moduleid.register(globals())
+
 testdatapath = os.path.join(themata, mypath, 'test')
 
-REVISION = re.compile(r"[0-9]+").search("$Revision$").group()
+
 css = bglib.image.css.load(os.path.join(themata, mypath, "default.css"))
 draw = bglib.image.PIL.Draw(css)
 

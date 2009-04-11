@@ -13,12 +13,3 @@ for filename in os.listdir('.'):
     j.save(f)
 
 
-
-    
-  
-
-
-
-
-
-
