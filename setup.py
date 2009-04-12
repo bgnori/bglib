@@ -77,6 +77,7 @@ setup(
                               os.path.join('deutsche','default.css'),
                               os.path.join('safari','default.css'),
                               os.path.join('safari','*.jpg'),
+                              os.path.join('safari','*.png'),
                              ],
       },
   py_modules=[],
