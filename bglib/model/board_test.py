@@ -21,6 +21,13 @@ class ModelTest(unittest.TestCase):
   def tearDown(self):
     pass
 
+  def bad_setattr_test(self):
+    try:
+      self.board.foobar = 1
+      self.assert_(False)
+    except:
+      pass
+
   def position_test(self):
     self.assert_(self.board.position, 
                 ((0, 0, 0, 0, 0, 5,
@@ -54,6 +61,7 @@ class ModelTest(unittest.TestCase):
     self.assertEqual(self.board.rolled, (0, 0))
     self.assertEqual(self.board.match_length, 0)
     self.assertEqual(self.board.score, (0, 0))
+
 
   def move_test(self):
     self.assert_(self.board.has_chequer_to_move(23))

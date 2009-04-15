@@ -248,8 +248,7 @@ class MoveFactory(object):
     assert isinstance(src, int)
 
     if b is None:
-      b = board.board(src=self.board)
-    #assert isinstance(b, board.board)
+      b = self.board
     if available is None:
       available = AvailableToPlay(rolled=None, copy_src=self.available)
     assert isinstance(available, AvailableToPlay)
@@ -287,7 +286,7 @@ class MoveFactory(object):
     assert isinstance(dest, int)
 
     if b is None:
-      b = board.board(src=self.board)
+      b = self.board
     #assert isinstance(b, board.board)
     if available is None:
       available = AvailableToPlay(rolled=None, copy_src=self.available)
@@ -326,7 +325,7 @@ class MoveFactory(object):
     '''
 
     if b is None:
-      b = board.board(src=self.board)
+      b = self.board
     if available is None:
       available = AvailableToPlay(rolled=None, copy_src=self.available)
     if mv is None:
@@ -364,7 +363,7 @@ class MoveFactory(object):
 
   def guess_your_multiple_partial_undoes(self, src, dest, b=None, available=None, mv=None):
     if b is None:
-      b = board.board(src=self.board)
+      b = self.board
     if available is None:
       available = AvailableToPlay(rolled=None, copy_src=self.available)
     if mv is None:

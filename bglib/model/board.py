@@ -24,29 +24,25 @@ class board(object):
                   match_length=0,
                   score=(0, 0),
                   )
+  __slots__ = defaults.keys()
+  # immutable! immutable! immutable!
+    
+  def __new__(cls, **kw):
+    self = object.__new__(cls)
+    x = dict(self.defaults)
+    for key, value in kw.items():
+      assert key in x
+      x[key] = value
+    for key, value in x.items():
+      setattr(self, key, value)
+    return self
 
-  def __init__(self, src=None, **kw):
-    x = dict()
-    if src is not None:
-      #if not isinstance(src, board):
-      #  raise TypeError('expected bglib.model.board.board but got %s'%type(src))
-      x.update(src._data)
-    else:
-      x.update(self.defaults)
-    x.update(kw)
-    self.__dict__["_data"] = x
-
-  def __getattr__(self, name):
-    return self._data[name]
-
-  def __setattr__(self, name, value):
-    if name not in self._data:
-      raise AttributeError
-    self._data[name]=value
+  def __copy__(self):
+    return self #immutable
 
   def __repr__(self):
     return '\n'.join(['='*5 + 'start of board dump' + '='*5] + \
-                     ['%s: %s'%(key, value) for key, value in self._data.items()] + \
+                     ['%s: %s'%(key, getattr(self, key)) for key in self.defaults.keys()] + \
                      ['='*5 + 'end of board dump' + '='*5]
                      )
 
