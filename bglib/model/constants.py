@@ -6,43 +6,43 @@
 #
 
 # constants
-you = 0
-him = 1
-center = 3 # in gnubg 11
+YOU = 0
+HIM = 1
+CENTER = 3 # in gnubg 11
 player_string = ('you', 'him')
 owner_string = ('your', 'his', None, 'center')
 
-off = -1
-bar = 24
-points = range(0, 24)
-none_bearoff_points =range(6, 25)
-points_strings = ['%i'%i for i in range(1, 25)]
+OFF = -1
+BAR = 24
+POINTS = range(0, 24)
+NONE_BEAROFF_POINTS =range(6, 25)
+POINTS_STRINGS = ('%i'%i for i in range(1, 25))
 
 #game state
-not_started = 0
-on_going = 1
-finished = 2
-resigned = 3
-doubled_out = 4
+NOT_STARTED = 0
+ON_GOING = 1
+FINISHED = 2
+RESIGNED = 3
+DOUBLED_OUT = 4
 
 # for match length
-money_game = 0
+MONEY_GAME = 0
 
 #resing type
-resign_none = 0
-resign_single = 1
-resign_gammon = 2
-resign_backgammon = 3
-resign_types = (resign_single, resign_gammon, resign_backgammon)
-resign_strings = ('none', 'single', 'gammon', 'backgammon')
+RESIGN_NONE = 0
+RESIGN_SINGLE = 1
+RESIGN_GAMMON = 2
+RESIGN_BACKGAMMON = 3
+RESIGN_TYPES = (RESIGN_SINGLE, RESIGN_GAMMON, RESIGN_BACKGAMMON)
+RESIGN_STRINGS = ('none', 'single', 'gammon', 'backgammon')
 
-initial_position = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
+INITIAL_POSITION = ((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0), (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0))
 
 
-no_double = 0
-double_take = 1
-double_pass = 2
-too_good_to_double = 3
-cubeaction_types = (no_double, double_take, double_pass, too_good_to_double)
-cubeaction_strings = ('No double', 'Double, take', 'Double, pass', 'Too good to double')
+NO_DOUBLE = 0
+DOUBLE_TAKE = 1
+DOUBLE_PASS = 2
+TOO_GOOD_TO_DOUBLE = 3
+CUBEACTION_TYPES = (NO_DOUBLE, DOUBLE_TAKE, DOUBLE_PASS, TOO_GOOD_TO_DOUBLE)
+CUBEACTION_STRINGS = ('No double', 'Double, take', 'Double, pass', 'Too good to double')
 

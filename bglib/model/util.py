@@ -6,7 +6,7 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-import constants
+from bglib.model.constants import *
 
 def flip_point(n):
   return 23 - n
@@ -19,7 +19,7 @@ def position_pton(p, on_action):
   else:
     i = int(p)
     if 0 < i and i < 25:
-      if on_action == constants.you:
+      if on_action == YOU:
         return i-1
       else:
         return 24 - i
@@ -27,16 +27,16 @@ def position_pton(p, on_action):
 
 def position_ntop(n, on_action):
   if n < 0:
-    return constants.owner_string[on_action] + ' home'
+    return OWNER_STRING[on_action] + ' home'
   elif 0 <= n and n < 24:
-    if on_action == constants.you:
+    if on_action == YOU:
       return str(n+1)
-    elif on_action == constants.him:
+    elif on_action == HIM:
       return str(24-n)
     else:
       assert False
   elif n == 24:
-    return constants.owner_string[on_action] + ' bar'
+    return OWNER_STRING[on_action] + ' bar'
   else:
     assert False
 
@@ -62,10 +62,10 @@ def move_pton(p):
   assert False
 
 def get_opp(player):
-  if player == constants.him:
-    return constants.you
-  elif player == constants.you:
-    return constants.him
+  if player == HIM:
+    return YOU
+  elif player == YOU:
+    return HIM
   else:
     pass
   assert False

@@ -5,10 +5,9 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-import constants
-import util
-import board
-
+from bglib.model.constants import *
+from bglib.model import util
+from bglib.model import *
 
 
 class AvailableToPlay(object):
@@ -202,7 +201,7 @@ class MoveFactory(object):
     if self.board.has_chequer_to_move(bar):
       if not self.guess_your_single_pm_from_source(bar):
         return True #dance
-    for pt in constants.points:
+    for pt in POINTS:
       if self.board.has_chequer_to_move(pt):
         if self.guess_your_single_pm_from_source(pt):
           return False
@@ -216,7 +215,7 @@ class MoveFactory(object):
     # No need to check doubles.
     # care only about small-big use.
     # thus ...
-    for src in constants.points:
+    for src in POINTS:
       if mf.board.has_chequer_to_move(src):
         for dst in range(0, src):
           if mf.board.is_open_to_land(dst) or mf.board.is_hitting_to_land(dst):
@@ -232,7 +231,7 @@ class MoveFactory(object):
       return True #max is used.
 
     die = mf.available.get_max()
-    for src in constants.points:
+    for src in POINTS:
       if mf.board.has_chequer_to_move(src):
         pm = mf.guess_your_single_pm_from_source(src, available=AvailableToPlay(rolled=(die, 0)))
         if pm:
@@ -263,8 +262,8 @@ class MoveFactory(object):
     if dest < 0: #= constants.off:
       if not b.is_ok_to_bearoff_from(src, die):
         return self.Error('Not allowed to bear off from %i'%src)
-      return PartialMove(die, src, constants.off, False) 
-    elif dest in constants.points:
+      return PartialMove(die, src, OFF, False) 
+    elif dest in POINTS:
       if b.is_open_to_land(dest):
         # some one is there, hit it
         return PartialMove(die, src, dest, b.is_hitting_to_land(dest))
@@ -303,7 +302,7 @@ class MoveFactory(object):
       else:
         available.consume(die)
         return self.guess_your_single_pm_from_dest(dest, b, available)
-    elif dest in constants.points:
+    elif dest in POINTS:
       if b.is_open_to_land(dest):
         if b.has_chequer_to_move(dest + die):
           return PartialMove(die, dest+die, dest, b.is_hitting_to_land(dest))
