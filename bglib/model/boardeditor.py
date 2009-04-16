@@ -9,26 +9,27 @@ from bglib.model import *
 from bglib.model.constants import *
 import util
 
+from bglib.model.board import AbstractBoard
 
-class BoardEditor(object):
-  defaults = Board.defaults
+class BoardEditor(AbstractBoard):
   def __init__(self, b=None):
     if isinstance(b, Board):
-      d = dict(BoardEditor.defaults)
-      for key in BoardEditor.defaults:
+      d = dict(AbstractBoard.defaults)
+      for key in AbstractBoard.defaults:
         d.update({key: getattr(b, key)})
     elif isinstance(b, BoardEditor):
       d = dict(b._d)
     elif b is None:
-      d = dict(BoardEditor.defaults)
+      d = dict(AbstractBoard.defaults)
     else:
       assert False
     self.__dict__['_d'] = d
 
   def __getattr__(self, name):
-    self.__dict__['_d'].get(name)
+    return self.__dict__['_d'].get(name)
 
   def __setattr__(self, name, value):
+    print '%s:%s'%(name, value)
     self.__dict__['_d'][name] = value
 
   def freeze(self):

@@ -9,7 +9,7 @@ from bglib.model import *
 from bglib.model.constants import *
 import util
 
-class Board(object):
+class AbstractBoard(object):
   defaults = dict(
                   position=INITIAL_POSITION,
                   cube_in_logarithm=0,
@@ -24,29 +24,6 @@ class Board(object):
                   match_length=0,
                   score=(0, 0),
                   )
-  __slots__ = defaults.keys()
-  # immutable! immutable! immutable!
-
-  def __new__(cls, **kw):
-    self = object.__new__(cls)
-    x = dict(self.defaults)
-    for key, value in kw.items():
-      assert key in x
-      x[key] = value
-    setter = object.__setattr__
-    for key, value in x.items():
-      setter(self, key, value)
-    return self
-
-  def __setattr__(self, name, value):
-    raise TypeError('Tried to mutate immutable object attr of "%s" with %s'%(name, value))
-
-  def __hash__(self):
-    pass
-
-  def __copy__(self):
-    return self #immutable
-
   def __repr__(self):
     return '\n'.join(['='*5 + 'start of board dump' + '='*5] + \
                      ['%s: %s'%(key, getattr(self, key)) for key in self.defaults.keys()] + \
@@ -69,6 +46,8 @@ class Board(object):
       to_move, to_hit = self.position
     elif self.on_action == HIM:
       to_hit, to_move = self.position
+    else:
+      assert False
     if to_move[BAR] == 0:
       return to_move[n]
     elif n == BAR:
@@ -192,4 +171,30 @@ class Board(object):
                                  RESIGN_BACKGAMMON
                                  ) \
            and self.on_inner_action == who
+  
+
+class Board(AbstractBoard):
+  __slots__ = AbstractBoard.defaults.keys()
+  # immutable! immutable! immutable!
+
+  def __new__(cls, **kw):
+    self = object.__new__(cls)
+    x = dict(self.defaults)
+    for key, value in kw.items():
+      assert key in x
+      x[key] = value
+    setter = object.__setattr__
+    for key, value in x.items():
+      setter(self, key, value)
+    return self
+
+  def __setattr__(self, name, value):
+    raise TypeError('Tried to mutate immutable object attr of "%s" with %s'%(name, value))
+
+  def __hash__(self):
+    pass
+
+  def __copy__(self):
+    return self #immutable
+
 

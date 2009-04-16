@@ -21,11 +21,6 @@ class BoardEditorTest(unittest.TestCase):
   def tearDown(self):
     pass
 
-  def cube_in_logarithm_test(self):
-    self.assertEqual(self.board.cube_in_logarithm, 0)
-    self.board.cube_in_logarithm = 3
-    self.assertEqual(self.board.cube_in_logarithm, 3)
-
   def cube_owner_test(self):
     self.assertEqual(self.board.cube_owner, CENTER)
     self.board.cube_owner = YOU

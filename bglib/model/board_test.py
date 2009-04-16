@@ -95,5 +95,11 @@ class BoardTest(unittest.TestCase):
     board = Board(cube_owner = YOU)
     self.assertEqual(board.cube_owner, YOU)
 
+  def cube_in_logarithm_1_test(self):
+    board = Board()
+    self.assertEqual(board.cube_in_logarithm, 0)
 
+  def cube_in_logarithm_2_test(self):
+    board = Board(cube_in_logarithm=3)
+    self.assertEqual(board.cube_in_logarithm, 3)
 
