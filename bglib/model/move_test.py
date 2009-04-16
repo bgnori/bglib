@@ -185,8 +185,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(m), "<Move: [<PartialMove: 2/off>]>")
 
   def mf_1_test(self):
-    b = Board()
-    b.rolled = (3, 1)
+    b = Board(rolled=(3, 1))
     mf = MoveFactory(b)
     found = mf.guess_your_single_pm_from_source(util.move_pton('bar'))
     self.assertEqual(repr(found), "<MoveFactory.Error: No chequer to move>")

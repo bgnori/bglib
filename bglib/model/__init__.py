@@ -6,7 +6,7 @@
 #
 
 from bglib.model.board import Board
-from bglib.model.board import BoardEditor
+from bglib.model.boardeditor import BoardEditor
 from bglib.model.move import AvailableToPlay
 from bglib.model.move import PartialMove
 from bglib.model.move import Move
