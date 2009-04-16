@@ -21,6 +21,41 @@ class BoardEditorTest(unittest.TestCase):
   def tearDown(self):
     pass
 
+  def new_via_Board_test(self):
+    i = Board()
+    m = BoardEditor(i) 
+    self.assertEqual(m.cube_owner, CENTER)
+
+  def flip_1_test(self):
+    i = Board()
+    m = BoardEditor(i) 
+    m.flip()
+
+  def flip_2_test(self):
+    i = Board(cube_owner=HIM, on_action=HIM, 
+              on_inner_action=YOU, doubled=True)
+    m = BoardEditor(i) 
+    m.flip()
+    self.assertEqual(m.cube_owner, YOU)
+    self.assertEqual(m.on_action, YOU)
+    self.assertEqual(m.on_inner_action, HIM)
+    self.assert_(m.doubled)
+    m.flip()
+    self.assertEqual(m.cube_owner, HIM)
+    self.assertEqual(m.on_action, HIM)
+    self.assertEqual(m.on_inner_action, YOU)
+    self.assert_(m.doubled)
+    
+  def flip_3_test(self):
+    i = Board(cube_owner=HIM, on_action=HIM, 
+              on_inner_action=CENTER, doubled=False)
+    m = BoardEditor(i) 
+    m.flip()
+    self.assertEqual(m.cube_owner, YOU)
+    self.assertEqual(m.on_action, YOU)
+    self.assertEqual(m.on_inner_action, CENTER)
+    self.assert_(not m.doubled)
+
   def cube_owner_test(self):
     self.assertEqual(self.board.cube_owner, CENTER)
     self.board.cube_owner = YOU
