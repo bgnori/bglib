@@ -156,6 +156,7 @@ class Move(object):
   def __len__(self):
     return len(self._pms)
 
+
 class MoveFactory(object):
   class Error(object):
     def __init__(self, s):

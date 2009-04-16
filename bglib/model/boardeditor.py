@@ -12,7 +12,7 @@ import util
 from bglib.model.board import AbstractBoard
 
 class BoardEditor(AbstractBoard):
-  def __init__(self, b=None):
+  def __init__(self, b=None, **kw):
     if isinstance(b, Board):
       d = dict(AbstractBoard.defaults)
       for key in AbstractBoard.defaults:
@@ -23,6 +23,10 @@ class BoardEditor(AbstractBoard):
       d = dict(AbstractBoard.defaults)
     else:
       assert False
+    for key in AbstractBoard.defaults:
+      v = kw.get(key, None)
+      if v is not None:
+        d.update({key: v})
     self.__dict__['_d'] = d
 
   def __getattr__(self, name):

@@ -9,8 +9,8 @@
 YOU = 0
 HIM = 1
 CENTER = 3 # in gnubg 11
-player_string = ('you', 'him')
-owner_string = ('your', 'his', None, 'center')
+PLAYER_STRING = ('you', 'him')
+OWNER_STRING = ('your', 'his', None, 'center')
 
 OFF = -1
 BAR = 24

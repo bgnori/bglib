@@ -13,12 +13,8 @@ from bglib.model.constants import *
 from bglib.model import *
 
 class MoveTest(unittest.TestCase):
-  def setUp(self):
-    self.board = Board()
-    self.temp = tempfile.NamedTemporaryFile()
-
-  def tearDown(self):
-    pass
+  def setUp(self):pass
+  def tearDown(self):pass
 
   def av_non_doubles_test(self):
     av = AvailableToPlay((3, 2))
@@ -185,7 +181,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(m), "<Move: [<PartialMove: 2/off>]>")
 
   def mf_1_test(self):
-    b = Board(rolled=(3, 1))
+    b = BoardEditor(rolled=(3, 1))
     mf = MoveFactory(b)
     found = mf.guess_your_single_pm_from_source(util.move_pton('bar'))
     self.assertEqual(repr(found), "<MoveFactory.Error: No chequer to move>")
@@ -203,7 +199,7 @@ class MoveTest(unittest.TestCase):
                     util.move_pton('6'))
     self.assertEqual(repr(found), "<PartialMove: 6/5>")
     mf.append(found)
-    self.assertEqual(mf.board.position[constants], 
+    self.assertEqual(mf.board.position[YOU], 
       (0, 0, 1, 0, 1, 3, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
       )
     self.assertEqual(repr(mf.move), "<Move: [<PartialMove: 6/3>, <PartialMove: 6/5>]>")
@@ -213,13 +209,15 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<MoveFactory.Error: No die is available>")
 
   def mf_2_test(self):
-    b = Board(position=((0, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)), rolled = (6, 1))
+    b = BoardEditor(
+        position=((0, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
+        rolled = (6, 1))
     mf = MoveFactory(b)
     found = mf.guess_your_single_pm_from_source(util.move_pton('6')) 
     self.assertEqual(repr(found), "<PartialMove: 6/off>")
 
   def mf_3_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 5, 4, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)), 
         rolled=(6, 1)
         )
@@ -229,7 +227,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<PartialMove: 5/off>")
 
   def mf_4_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 5, 4, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
         rolled = (4, 1)
         )
@@ -238,7 +236,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<MoveFactory.Error: No die is available>")
 
   def mf_5_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
         rolled = (4, 1))
 
@@ -256,7 +254,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<MoveFactory.Error: No die is available>")
 
   def mf_6_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
         rolled = (4, 1))
 
@@ -272,7 +270,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<MoveFactory.Error: No die is available>")
 
   def mf_7_test(self):
-    b = Board(rolled=(3, 1))
+    b = BoardEditor(rolled=(3, 1))
     mf = MoveFactory(b)
     found = mf.guess_your_single_pm_from_dest(util.move_pton('6'))
     self.assertEqual(repr(found), "<MoveFactory.Error: No die is available>")
@@ -296,7 +294,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<MoveFactory.Error: No die is available>")
 
   def mf_8_test(self):
-    b = Board(
+    b = BoardEditor(
           position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
           rolled = (4, 1))
     self.assertEqual(b.position, 
@@ -308,7 +306,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<MoveFactory.Error: Can't land there>")
 
   def mf_9_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
         rolled = (6, 4))
 
@@ -322,7 +320,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<Move: [<PartialMove: 24/18>, <PartialMove: 18/14>]>")
 
   def mf_10_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
         rolled = (6, 4))
 
@@ -337,7 +335,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(util.move_ntop(found.dest)), "'14'")
 
   def mf_11_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)),
         rolled = (6, 4))
 
@@ -346,7 +344,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<Move: [<PartialMove: 24/20>, <PartialMove: 20/14>]>")
 
   def mf_12_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 1, 4, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)),
         rolled = (4, 4))
 
@@ -355,7 +353,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(found), "<Move: [<PartialMove: 13/9>, <PartialMove: 9/5>, <PartialMove: 5/1*>]>")
 
   def mf_13_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),(8, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)), rolled=(4, 2))
     mf = MoveFactory(b)
     found = mf.guess_your_multiple_pms(util.move_pton('5'), util.move_pton('3'))
@@ -371,7 +369,7 @@ class MoveTest(unittest.TestCase):
 
 
   def mf_14_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 1, 4, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)),
         rolled=(4, 4))
 
@@ -389,7 +387,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(mf.move), "<Move: [<PartialMove: 13/9>, <PartialMove: 13/9>, <PartialMove: 9/5>, <PartialMove: 5/1*>]>")
 
   def mf_15_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((0, 0, 0, 0, 1, 4, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)),
         rolled = (5, 5))
 
@@ -407,7 +405,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(repr(mf.move), "<Move: [<PartialMove: bar/20>, <PartialMove: 20/15>]>")
 
   def mf_16_test(self):
-    b = Board(
+    b = BoardEditor(
         position=((2, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),(1, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0)),
         rolled = (6, 5))
 
@@ -420,7 +418,7 @@ class MoveTest(unittest.TestCase):
     self.assert_(mf.is_leagal_to_pickup_dice())
 
   def mf_17_test(self):
-    b = Board(
+    b = BoardEditor(
       position=((2, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0),(1, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0)),
       rolled=(6, 5)
       )
@@ -434,7 +432,7 @@ class MoveTest(unittest.TestCase):
     self.assert_(mf.is_leagal_to_pickup_dice())
 
   def mf_18_test(self):
-    b = Board(
+    b = BoardEditor(
           position=((0, 2, 3, 3, 3, 0, 
                      0, 0, 0, 0, 0, 0, 
                      2, 0, 0, 0, 0, 0, 
@@ -454,7 +452,7 @@ class MoveTest(unittest.TestCase):
     self.assertFalse(mf.is_leagal_to_pickup_dice())
 
   def mf_19_test(self):
-    b = Board(
+    b = BoardEditor(
           position=((0, 3, 3, 3, 3, 2,
                      0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
@@ -472,7 +470,7 @@ class MoveTest(unittest.TestCase):
     self.assert_(mf.is_leagal_to_pickup_dice())
 
   def mf_20_test(self):
-    b = Board(
+    b = BoardEditor(
           position=((0, 3, 3, 3, 3, 2,
                      0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
