@@ -23,7 +23,7 @@ def position_pton(p, on_action):
         return i-1
       else:
         return 24 - i
-  assert(false)
+  raise ValueError('Non-point numeric %s'%(p,))
 
 def position_ntop(n, on_action):
   if n < 0:
@@ -34,11 +34,11 @@ def position_ntop(n, on_action):
     elif on_action == HIM:
       return str(24-n)
     else:
-      assert False
+      raise ValueError('Bad on action %s'%(on_action,))
   elif n == 24:
     return OWNER_STRING[on_action] + ' bar'
   else:
-    assert False
+    raise ValueError('Non-point numeric %s'%(n,))
 
 def move_ntop(n):
   if n < 0:
@@ -48,7 +48,7 @@ def move_ntop(n):
   elif n == 24:
     return 'bar'
   else:
-    assert False
+    raise ValueError('Non-point numeric %s'%(n,))
 
 def move_pton(p):
   if p == 'bar':
@@ -59,15 +59,11 @@ def move_pton(p):
     i = int(p)
     if 0 < i and i < 25:
       return i-1
-  assert False
+  raise ValueError('Non-point numeric %s'%(p,))
 
 def get_opp(player):
   if player == HIM:
     return YOU
   elif player == YOU:
     return HIM
-  else:
-    pass
-  assert False
-
-
+  raise ValueError('Non-player value %s'%(player,))

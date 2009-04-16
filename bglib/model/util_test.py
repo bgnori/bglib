@@ -19,6 +19,7 @@ class ModelTest(unittest.TestCase):
   def tearDown(self):
     pass
 
+
   def t001_test(self):
     self.assertEqual(util.position_pton('1', YOU), 0)
 
@@ -85,3 +86,58 @@ class ModelTest(unittest.TestCase):
   def t023_test(self):
     self.assertEqual(util.move_pton('off'), -1)
 
+  def t024_test(self):
+    try:
+      util.position_pton('100', YOU)
+      self.assert_(False)
+    except ValueError:
+      pass
+
+  def t025_test(self):
+    try:
+      util.position_pton('abc', YOU)
+      self.assert_(False)
+    except ValueError:
+      pass
+
+  def t026_test(self):
+    try:
+      util.position_ntop(0, CENTER)
+      self.assert_(False)
+    except ValueError:
+      pass
+
+  def t027_test(self):
+    try:
+      util.position_ntop(26, YOU)
+      self.assert_(False)
+    except ValueError:
+      pass
+
+  def t028_test(self):
+    try: 
+      util.move_ntop(25)
+      self.assert_(False)
+    except ValueError:
+      pass
+
+  def t029_test(self):
+    try: 
+      util.move_pton('hoge')
+      self.assert_(False)
+    except ValueError:
+      pass
+
+  def t030_test(self):
+    try: 
+      util.move_pton('100')
+      self.assert_(False)
+    except ValueError:
+      pass
+
+  def t031_test(self):
+    try: 
+      util.get_opp(CENTER)
+      self.assert_(False)
+    except ValueError:
+      pass
