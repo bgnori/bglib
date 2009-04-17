@@ -70,8 +70,8 @@ class FIBSTest(unittest.TestCase):
        (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)))
 
   def decode_test(self):
-    import bglib.model.board
-    b = bglib.model.board.board()
+    from bglib.model import BoardEditor
+    b = BoardEditor()
     from FIBS import decode 
     decode(b, 'board:You:MonteCarlo:1:0:0:0:3:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:-1:-2:0:1:2:2:0:0:1:1:1:0:1:-1:0:25:12:12:0:0:3:1:0:0')
     self.assertEqual(b.position, 

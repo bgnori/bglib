@@ -8,7 +8,7 @@
 import unittest
 import nose
 
-from bglib.model.board import board as Board
+from bglib.model import Board
 from bglib.model import constants
 
 from bglib.encoding.dbbyte import *
@@ -156,7 +156,7 @@ class dbbyteTest(unittest.TestCase):
                 (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
                  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
                ),
-              on_action=constants.you))
+              on_action=constants.YOU))
     self.assertEqual(exp.position, 
       (
       '\x00'
@@ -174,7 +174,7 @@ class dbbyteTest(unittest.TestCase):
                 (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
                  5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
                ),
-              on_action=constants.him))
+              on_action=constants.HIM))
     self.assertEqual(exp.position, 
       (
       '\x00'
@@ -184,12 +184,59 @@ class dbbyteTest(unittest.TestCase):
       )
     )
 
+  def test_getattr(self):
+    exp = DatabaseBytesExpression(
+            Board(position=(
+                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+                (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
+                 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
+               ),
+              on_action=constants.HIM))
+    self.assertEqual(exp.on_action, constants.HIM)
+    getattr(exp, 'position')
+    getattr(exp, 'on_action')
+    getattr(exp, 'on_inner_action')
+    try:
+      getattr(exp, 'hoge')
+      self.assert_(False)
+    except AttributeError:
+      pass
+
+  def test_setattr(self):
+    exp = DatabaseBytesExpression(
+            Board(position=(
+                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+                (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
+                 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
+               ),
+              on_action=constants.HIM))
+    try:
+      exp.on_action = constants.YOU
+      self.assert_(False)
+    except TypeError:
+      pass
 
   def test_decode(self):
     exp = DatabaseBytesExpression()
     b = exp.tomodel()
-
     for key, item in Board.defaults.items():
       self.assertEqual(getattr(b, key), item)
+
+  def test_decode(self):
+    b = Board(position=(
+                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+                (0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0,
+                 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0)
+               ),
+              on_action=constants.HIM)
+    exp = DatabaseBytesExpression(b)
+    c = exp.tomodel()
+    self.assertEqual(b, c)
+
+
+
 
 

@@ -6,8 +6,8 @@
 #
 import re
 
-import bglib.model.constants
-import bglib.model.board
+from bglib.model import BoardEditor
+from bglib.model.constants import *
 
 class _FIBSBoardState(object):
   '''
@@ -90,51 +90,51 @@ def decode(m, s):
       r+=1
     return r
 
-  assert isinstance(m, bglib.model.board.board)
+  assert isinstance(m, BoardEditor)
      
   fibs = _FIBSBoardState(s)
   m.position = fibs.position()
   m.cube_in_logarithm = log(fibs.doubling_cube)
 
   if fibs.you_may_double and fibs.he_may_double:
-    m.cube_owner = bglib.model.constants.center
+    m.cube_owner = CENTER
     m.crawford = False
   elif fibs.you_may_double and not fibs.he_may_double:
-    m.cube_owner = bglib.model.constants.you
+    m.cube_owner = YOU
     m.crawford = False
   elif not fibs.you_may_double and fibs.he_may_double:
-    m.cube_owner = bglib.model.constants.him
+    m.cube_owner = HIM
     m.crawford = False
   else:
-    m.cube_owner = bglib.model.constants.center
+    m.cube_owner = CENTER
     m.crawford = True
 
   if fibs.turn == fibs.your_colour:
-    m.on_action = bglib.model.constants.you
-    m.on_inner_action = bglib.model.constants.you
+    m.on_action = YOU
+    m.on_inner_action = YOU
     m.rolled = fibs.your_dice
-    m.game_state = bglib.model.constants.on_going
+    m.game_state = ON_GOING
   elif fibs.turn == fibs.your_colour * -1: #opposite colour
     m.rolled = fibs.his_dice
-    m.on_action = bglib.model.constants.him
-    m.on_inner_action = bglib.model.constants.him
+    m.on_action = HIM
+    m.on_inner_action = HIM
     m.game_state = bglib.model.constants.on_going
   else:
     m.rolled=(0, 0)
-    m.on_action = bglib.model.constants.invalid
-    m.game_state = bglib.model.constants.finished
+    m.on_action = INVALID
+    m.game_state = FINISHED
     #m.game_state = bglib.model.constants.resigned
     #ugh! There is no way to define it
     #may be we need to add some thing.
 
   if fibs.was_doubled:
     m.doubled = True
-    if m.on_action == bglib.model.constants.you:
-      m.on_inner_action=bglib.model.constants.him
-    elif m.on_action == bglib.model.constants.him:
-      m.on_inner_action=bglib.model.constants.you
+    if m.on_action == YOU:
+      m.on_inner_action = HIM
+    elif m.on_action == HIM:
+      m.on_inner_action = YOU
 
-  m.resign_offer = bglib.model.constants.resign_none
+  m.resign_offer = RESIGN_NONE
   # can't define!
 
   m.match_length = fibs.matchlength

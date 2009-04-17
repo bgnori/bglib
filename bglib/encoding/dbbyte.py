@@ -5,7 +5,8 @@
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
 
-from bglib.model.board import board as Board
+from bglib.model import Board
+from bglib.model import BoardEditor
 from bglib.model import constants
 
 
@@ -69,9 +70,9 @@ class DatabaseBytesExpression(object):
     for key in Board.defaults.keys():
       item = getattr(init, key)
       if key == 'position':
-        if init.on_action == constants.you:
+        if init.on_action == constants.YOU:
           self.__dict__[key] = encode_position(item)
-        elif init.on_action == constants.him:
+        elif init.on_action == constants.HIM:
           self.__dict__[key] = encode_position((item[1], item[0]))
         else:
           assert False
@@ -80,25 +81,26 @@ class DatabaseBytesExpression(object):
     return self
 
   def __getattr__(self, name):
-    assert name in Board.defaults
+    if name not in Board.defaults:
+      raise AttributeError('No such attribute: "%s"'%(name,))
     return self._data[name]
 
   def __setattr__(self, name, value):
-    assert False # immutable
+    raise TypeError('DatabaseBytesExpression is immutable')
 
   def tomodel(self):
-    b = Board()
+    b = BoardEditor()
     for key in Board.defaults.keys():
       item = getattr(self, key)
       if key == 'position':
-        if self.on_action == constants.you:
-          b.__dict__[key] = decode_position(item)
-        elif init.on_action == constants.him:
+        if self.on_action == constants.YOU:
+          setattr(b, key, decode_position(item))
+        elif self.on_action == constants.HIM:
           p = decode_position(item)
-          b.__dict__[key] = (p[1], p[0])
+          setattr(b, key, (p[1], p[0]))
         else:
           assert False
       else:
-        b.__dict__[key] = item
-    return b
+        setattr(b, key, item)
+    return b.freeze()
 

@@ -77,11 +77,11 @@ class AvailableToPlay(object):
     return '<AvailableToPlay: ' + str(self.items()) + '>'
 
   def __str__(self):
-    s = 'Available to play:'
+    s = 'Available to play: '
+    t = []
     for die, count in self.items():
-      for i in range(count):
-        s +='%i, '%die
-    return s
+      t.extend(['%i'%die for i in range(count)])
+    return s + ', '.join(t)
 
 
 class PartialMove(object):
@@ -126,10 +126,11 @@ class Move(object):
     return "<Move: %s>"%str(self._pms)
 
   def __str__(self):
-    s = ''
-    for pm in self:
-      s += '%s, '%str(pm)
-    return s
+    if self:
+      return ', '.join(['%s'%str(pm) for pm in self])
+    else:
+      return 'o-o'
+      
 
   def append(self, pm):
     assert isinstance(pm, PartialMove)
@@ -191,6 +192,7 @@ class MoveFactory(object):
     self.board.make_partial_move(pm)
 
   def add(self, mv):
+    assert isinstance(mv, Move)
     for pm in mv:
       self.append(pm)
     
@@ -384,10 +386,13 @@ class MoveFactory(object):
         return self.guess_your_multiple_partial_undoes(inverse.dest, dest, b, available, mv)
       else:
         assert(inverse.dest > dest)
-        return self.Error('Overrun, bad (src, dest)=(%i, %i)'%(src, dest))
-    return self.Error('Overrun, bad (src, dest)=(%i, %i)'%(src, dest))
+        return self.Error('Overrun, bad (src, dest)=(%s, %s)'%
+                    (util.move_ntop(src), util.move_ntop(dest)))
+    return self.Error('Not found, (src, dest)=(%s, %s)'%
+                (util.move_ntop(src), util.move_ntop(dest)))
 
   def guess_your_making_point(self, dest, position=None, available=None, pms=None):
+    b = self.board
     if available is None:
       available = AvailableToPlay(self.board.rolled)
     if position is None:
@@ -398,8 +403,10 @@ class MoveFactory(object):
     pm = self.guess_your_single_pm_from_dest(dest)
     if pm:
       pms.append(pm)
-      available = available.consume(pm)
-      pm = self.guess_your_single_pm_from_dest(dest, position=pm.apply_to(position), available=available)
+      available = available.consume(pm.die)
+      pm = self.guess_your_single_pm_from_dest(
+                dest, b=b.make_partial_move(pm),
+                available=available)
       if pm:
         pms.append(pm)
         return pms

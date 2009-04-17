@@ -40,6 +40,15 @@ class BoardTest(unittest.TestCase):
                   5, 0, 0, 0, 0, 0,
                   0, 0, 0, 0, 0, 2, 0))
                 )
+  def eq_test(self):
+    b = Board()
+    c = Board()
+    self.assertEqual(b, c)
+
+  def not_eq_test(self):
+    b = Board()
+    c = Board(on_action=HIM)
+    self.assertNotEqual(b, c)
 
   def find_src_of_bearoff_with_1_test(self):
     board = Board()

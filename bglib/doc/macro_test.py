@@ -4,7 +4,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
-import bglib.model.constants
+from bglib.model.constants import *
 import bglib.doc.html
 import bglib.doc.macro
 import bglib.doc.mock
@@ -163,7 +163,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
       ))
   def test_cube_action_table_row_nd(self):
     bglib.doc.macro.CubeAction_table_row(self.editor, 
-        nth=3, action=bglib.model.constants.no_double, 
+        nth=3, action=NO_DOUBLE, 
         equity=0.926, diff=-0.075, actual=False)
     self.editor.done()
     self.editor.accept(self.writer)
@@ -174,7 +174,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
 
   def test_cube_action_table_row_dt(self):
     bglib.doc.macro.CubeAction_table_row(self.editor,
-        nth=2, action=bglib.model.constants.double_take,
+        nth=2, action=DOUBLE_TAKE,
         equity=1.296, diff=0.296, actual=False)
     self.editor.done()
     self.editor.accept(self.writer)
@@ -256,7 +256,7 @@ class MacroTest(bglib.doc.html.HtmlTestCase):
 
   def test_cube_action_table_row_dp(self):
     bglib.doc.macro.CubeAction_table_row(self.editor,
-        nth=1, action=bglib.model.constants.double_pass,
+        nth=1, action=DOUBLE_PASS,
         equity=1.000, actual=False)
     self.editor.done()
     self.editor.accept(self.writer)

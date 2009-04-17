@@ -4,7 +4,7 @@
 #
 # Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
 #
-import bglib.model.constants
+from bglib.model.constants import *
 
 class DataBaseMock(object):
   def get_analysis(self, pid, mid):
@@ -13,11 +13,11 @@ class DataBaseMock(object):
                         ply=2, cubeless=0.011, money=0.008, 
                         Win=0.519, WinG=0.072, WinBg=0.002,
                         Lose=0.481, LoseG=0.101, LoseBg=0.002),
-                   dict(nth=1, action=bglib.model.constants.no_double, 
+                   dict(nth=1, action=NO_DOUBLE, 
                         name='No double', equity=0.236, diff=None, actual=True),
-                   dict(nth=2, action=bglib.model.constants.double_pass, 
+                   dict(nth=2, action=DOUBLE_PASS, 
                         name='Double, pass', equity=0.236, diff=0.764),
-                   dict(nth=3, action=bglib.model.constants.double_take, 
+                   dict(nth=3, action=DOUBLE_TAKE, 
                         name='Double, take', equity=-0.096, diff=-0.332),
                  ),
 

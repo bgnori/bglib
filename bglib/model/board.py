@@ -29,6 +29,13 @@ class AbstractBoard(object):
                      ['%s: %s'%(key, getattr(self, key)) for key in self.defaults.keys()] + \
                      ['='*5 + 'end of board dump' + '='*5]
                      )
+  def __eq__(self, other):
+    if not isinstance(other, AbstractBoard):
+      raise TypeError
+    for key in AbstractBoard.defaults:
+      if getattr(self, key) != getattr(other, key):
+        return False
+    return True
 
   def is_open_to_land(self, n):
     if self.on_action == YOU:

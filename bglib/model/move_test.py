@@ -36,6 +36,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(av.items(), [(1, 0), (2, 1), (3, 1), (4, 0), (5, 0), (6, 0)])
     self.assertFalse(av.is_doubles())
     self.assertEqual(repr(av), '<AvailableToPlay: [(1, 0), (2, 1), (3, 1), (4, 0), (5, 0), (6, 0)]>')
+    self.assertEqual(str(av), 'Available to play: 2, 3')
     self.assertEqual(3, av.get_max())
 
     av.consume(2)
@@ -58,6 +59,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(av.items(), [(1, 0), (2, 0), (3, 1), (4, 0), (5, 0), (6, 0)])
     self.assertFalse(av.is_doubles())
     self.assertEqual(repr(av), '<AvailableToPlay: [(1, 0), (2, 0), (3, 1), (4, 0), (5, 0), (6, 0)]>')
+    self.assertEqual(str(av), 'Available to play: 3')
     self.assertEqual(3, av.get_max())
 
     try:
@@ -86,7 +88,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(av.items(), [(1, 0), (2, 0), (3, 1), (4, 1), (5, 0), (6, 0)])
     self.assertFalse(av.is_doubles())
     self.assertEqual(repr(av), '<AvailableToPlay: [(1, 0), (2, 0), (3, 1), (4, 1), (5, 0), (6, 0)]>')
-
+    self.assertEqual(str(av), 'Available to play: 3, 4')
     self.assertEqual(4, av.get_max())
 
 
@@ -110,6 +112,7 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(av.items(), [(1, 0), (2, 0), (3, 0), (4, 4), (5, 0), (6, 0)])
     self.assert_(av.is_doubles())
     self.assertEqual(repr(av), '<AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 4), (5, 0), (6, 0)]>')
+    self.assertEqual(str(av), 'Available to play: 4, 4, 4, 4')
 
   def av_creation_by_copy_test(self):
     src = AvailableToPlay((3, 2))
@@ -395,14 +398,17 @@ class MoveTest(unittest.TestCase):
     found = mf.guess_your_multiple_pms(util.move_pton('bar'), util.move_pton('5'))
 
     self.assertEqual(repr(found), "<Move: [<PartialMove: bar/20>, <PartialMove: 20/15>, <PartialMove: 15/10>, <PartialMove: 10/5>]>")
+    self.assertEqual(str(found), "bar/20, 20/15, 15/10, 10/5")
     mf.add(found)
 
     found = None
     found = mf.guess_your_multiple_partial_undoes(util.move_pton('5'), util.move_pton('15'))
     self.assertEqual(repr(found), "<Move: [<PartialMove: 5/10>, <PartialMove: 10/15>]>")
+    self.assertEqual(str(found), "5/10, 10/15")
 
     mf.add(found)
     self.assertEqual(repr(mf.move), "<Move: [<PartialMove: bar/20>, <PartialMove: 20/15>]>")
+    self.assertEqual(str(mf.move), "bar/20, 20/15")
 
   def mf_16_test(self):
     b = BoardEditor(
@@ -419,7 +425,14 @@ class MoveTest(unittest.TestCase):
 
   def mf_17_test(self):
     b = BoardEditor(
-      position=((2, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0),(1, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0)),
+      position=((2, 0, 3, 3, 3, 0,
+                 0, 0, 0, 0, 0, 0, 
+                 2, 0, 0, 0, 0, 0, 
+                 0, 0, 0, 0, 2, 0, 0),
+                (1, 0, 0, 2, 2, 2,
+                 2, 0, 0, 0, 0, 0,
+                 2, 0, 0, 0, 2, 0,
+                 0, 0, 0, 0, 2, 0, 0)),
       rolled=(6, 5)
       )
 
@@ -466,6 +479,7 @@ class MoveTest(unittest.TestCase):
     mf = MoveFactory(b)
     found = mf.guess_your_single_pm_from_source(util.move_pton('23'))
     self.assertEqual(repr(found), "<PartialMove: 23/17>")
+    self.assertEqual(str(found), "23/17")
     mf.append(found)
     self.assert_(mf.is_leagal_to_pickup_dice())
 
@@ -484,6 +498,134 @@ class MoveTest(unittest.TestCase):
     mf = MoveFactory(b)
     found = mf.guess_your_multiple_pms(util.move_pton('23'), util.move_pton('18'))
     self.assertEqual(repr(found), "<Move: [<PartialMove: 23/18>]>")
+    self.assertEqual(str(found), "23/18")
     mf.add(found)
     self.assertFalse(mf.is_leagal_to_pickup_dice())
+
+  def mf_20_test(self):
+    b = BoardEditor(
+          position=((0, 3, 3, 3, 3, 2,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 1, 0, 1),
+                    (1, 0, 0, 2, 2, 4,
+                     0, 0, 0, 0, 0, 0,
+                     2, 0, 0, 0, 2, 0,
+                     0, 0, 0, 0, 0, 2, 0)),
+          rolled = (6, 5))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_multiple_pms(util.move_pton('23'), util.move_pton('18'))
+    self.assertEqual(repr(found), "<MoveFactory.Error: No chequer to move>")
+    #mf.add(found)
+    self.assert_(mf.is_leagal_to_pickup_dice())
+
+  def mf_21_test(self):
+    b = BoardEditor(
+          position=((0, 3, 3, 3, 0, 6,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 0, 0, 0, 0),
+                    (1, 0, 0, 2, 2, 4,
+                     0, 0, 0, 0, 0, 0,
+                     2, 0, 0, 0, 2, 0,
+                     0, 0, 0, 0, 0, 2, 0)),
+          rolled = (4, 5))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_multiple_pms(util.move_pton('6'), util.move_pton('2'))
+    self.assertEqual(repr(found), "<Move: [<PartialMove: 6/2>]>")
+    self.assertEqual(str(found), "6/2")
+    mf.add(found)
+    self.assert_(mf.is_leagal_to_pickup_dice())
+
+
+  def mf_22_test(self):
+    #FIXME
+    '''
+    Test Code for cover line 388.
+    but not covering... 
+    '''
+    b = BoardEditor(
+        position=((0, 0, 0, 0, 1, 4, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)),
+        rolled = (5, 5))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_multiple_pms(util.move_pton('20'), util.move_pton('10'))
+
+    self.assertEqual(repr(found), "<Move: [<PartialMove: 20/15>, <PartialMove: 15/10>]>")
+    self.assertEqual(str(found), "20/15, 15/10")
+    mf.add(found)
+
+    found = None
+    found = mf.guess_your_multiple_partial_undoes(util.move_pton('6'), util.move_pton('15'))
+    self.assertFalse(found)
+    self.assertEqual(repr(found), '<MoveFactory.Error: Not found, (src, dest)=(6, 15)>')
+
+  def mf_23_test(self):
+    b = BoardEditor(
+        position=((0, 0, 0, 0, 1, 4, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)),
+        rolled = (5, 5))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_multiple_pms(util.move_pton('bar'), util.move_pton('5'))
+
+    self.assertEqual(repr(found), "<Move: [<PartialMove: bar/20>, <PartialMove: 20/15>, <PartialMove: 15/10>, <PartialMove: 10/5>]>")
+    self.assertEqual(str(found), "bar/20, 20/15, 15/10, 10/5")
+    mf.add(found)
+
+    found = None
+    found = mf.guess_your_multiple_partial_undoes(util.move_pton('1'), util.move_pton('6'))
+    self.assertFalse(found)
+    self.assertEqual(repr(found), '<MoveFactory.Error: Not found, (src, dest)=(1, 6)>')
+
+  def mf_24_test(self):
+    b = BoardEditor(
+        position=((0, 0, 0, 0, 0, 5,
+                   0, 3, 0, 0, 0, 0,
+                   5, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 0, 2, 0),
+                  (0, 0, 0, 0, 0, 5,
+                   2, 2, 0, 0, 0, 0,
+                   4, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 1, 1, 0)),
+        rolled = (3, 1))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_making_point(util.move_pton('5'))
+    self.assertFalse(found is None)
+
+    self.assertEqual(repr(found), "[<PartialMove: 8/5>, <PartialMove: 6/5>]")
+
+  def mf_25_test(self):
+    b = BoardEditor(
+        position=((0, 0, 0, 0, 0, 5,
+                   0, 3, 0, 0, 0, 0,
+                   5, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 0, 2, 0),
+                  (0, 0, 0, 0, 0, 5,
+                   2, 2, 0, 0, 0, 0,
+                   4, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 1, 1, 0)),
+        rolled = (3, 3))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_making_point(util.move_pton('5'))
+    self.assertFalse(found is None)
+
+    self.assertEqual(repr(found), "[<PartialMove: 8/5>, <PartialMove: 8/5>]")
+
+
+  def mf_26_test(self):
+    b = BoardEditor(
+        position=((0, 0, 0, 0, 0, 4, 0, 3, 0, 0, 0, 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1),(0, 0, 0, 0, 0, 5, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)),
+        rolled = (5, 5))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_making_point(util.move_pton('10'))
+    self.assertFalse(found is None)
+
+    self.assertEqual(repr(found), "<Move: [<PartialMove: bar/20>, <PartialMove: 20/15>, <PartialMove: 15/10>, <PartialMove: 15/10>]>")
+    self.assertEqual(str(found), "bar/20, 20/15, 15/10, 15/10")
+
 

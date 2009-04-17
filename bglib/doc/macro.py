@@ -11,7 +11,7 @@ import time
 import datetime
 import urllib
 
-import bglib.model.constants
+from bglib.model.constants import *
 import bglib.doc.html 
 import bglib.doc.doctree
 
@@ -259,7 +259,7 @@ def CubeAction_table_header(editor):
 
 def CubeAction_table_row(editor, nth=0, action=0, equity=0.0, diff=None, actual=False, **kw):
     assert isinstance(nth, int)
-    assert actual in bglib.model.constants.cubeaction_types
+    assert actual in CUBEACTION_TYPES
     assert isinstance(equity, float)
     assert diff is None or isinstance(diff, float)
 
@@ -275,14 +275,14 @@ def CubeAction_table_row(editor, nth=0, action=0, equity=0.0, diff=None, actual=
       klass = ('evenrow', 'oddrow')[nth%2]
     #t = string.Template('''<tr class='$klass'><th>$nth</th><td> $action </td><td> $equity </td><td> $diff </td></tr>\n''')
     #t.substitute(klass=klass, nth=nth, 
-    #                    action=bglib.model.constants.cubeaction_strings[action],
+    #                    action=cubeaction_strings[action],
     #                    equity=equity, diff=diff)
     editor.enter(bglib.doc.doctree.TableRowElement, **{'class':klass})
     editor.enter(bglib.doc.doctree.TableHeaderElement)
     editor.append_text('%i'%nth)
     editor.leave(bglib.doc.doctree.TableHeaderElement)
     editor.enter(bglib.doc.doctree.TableCellElement)
-    editor.append_text(bglib.model.constants.cubeaction_strings[action])
+    editor.append_text(CUBEACTION_STRINGS[action])
     editor.leave(bglib.doc.doctree.TableCellElement)
     editor.enter(bglib.doc.doctree.TableCellElement)
     editor.append_text(equity)

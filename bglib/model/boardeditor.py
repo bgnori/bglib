@@ -37,7 +37,7 @@ class BoardEditor(AbstractBoard):
     self.__dict__['_d'][name] = value
 
   def freeze(self):
-    return Board(self._d)
+    return Board(**self._d)
 
   def flip(self):
     if self.cube_owner == YOU:
