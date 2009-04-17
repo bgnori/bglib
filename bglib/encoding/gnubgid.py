@@ -10,6 +10,7 @@ from base64 import standard_b64encode, standard_b64decode
 
 # local 
 from tonic import BitsArray
+from bglib.model.constants import *
 import bglib.encoding
 
 class ByteContext:
@@ -92,6 +93,8 @@ def encode_position(xs):
 
 def decode_position(s):
   """ decode tuple expression from gnubg position id """
+  if '=' in s:
+    raise TypeError
   while True:
     try:
       bin = standard_b64decode(s)
@@ -173,8 +176,8 @@ class MatchProxy(object):
   def __init__(self, s=None):
     self.__dict__['_data'] = BitsArray(66, binary=s, endian='<')
 
-  def decode(self, s):
-    self._data = BitsArray(s)
+  #def decode(self, s):
+  #  self._data = BitsArray(s)
 
   def encode(self):
     return self._data.binary
@@ -185,6 +188,8 @@ def encode_match(m):
 
 def decode_match(s):
   """ decode tuple expression from gnubg position id """
+  if '=' in s:
+    raise TypeError
   while True:
     try:
       bin = standard_b64decode(s)
@@ -215,9 +220,9 @@ def encode(model):
   # gnubg's view from on_action 
   # bglib's view from you
   # FIXME: what about on_inner_action?
-  if mp.on_action == bglib.model.constants.you:
+  if mp.on_action == YOU:
     opp, on_action = model.position
-  elif mp.on_action == bglib.model.constants.him:
+  elif mp.on_action == HIM:
     on_action, opp = model.position
   else:
     assert False
@@ -243,10 +248,10 @@ def decode(model, pid, mid):
   # bglib's view from you
   # FIXME: what about on_inner_action?
   on_action, opp = decode_position(pid)
-  if mp.on_action == 0:#gnubg player 0 == bglib.model.constants.him
+  if mp.on_action == 0:#gnubg player 0 == HIM
     you = opp
     him = on_action 
-  elif mp.on_action == 1:#gnubg player 1 == bglib.model.constants.you
+  elif mp.on_action == 1:#gnubg player 1 == YOU
     you = on_action
     him = opp
   else:

@@ -9,7 +9,7 @@ import tempfile
 import unittest
 import nose
 
-import bglib.model.board
+from bglib.model import BoardEditor
 
 from bglib.encoding.gnubgid import *
 
@@ -194,7 +194,7 @@ class MatchProxyTest(unittest.TestCase):
     self.assertEqual(s, '100000101001000101010100100000000000010000000000000001000000000000')
 
   def MatchProxy_decode_2_test(self):
-    b = bglib.model.board.board()
+    b = BoardEditor()
     self.assertEqual(b.cube_owner, 3)
 
     mp = MatchProxy()
@@ -209,7 +209,7 @@ class MatchProxyTest(unittest.TestCase):
     self.assertEqual(mid, 'MAAAAAAAAAAA')
 
   def MatchProxy_decode_3_test(self):
-    b = bglib.model.board.board()
+    b = BoardEditor()
     assert b.position
     decode(b, 'vzsAAFhu2xFABA','QYkqASAAIAAA')
     print b
@@ -220,7 +220,7 @@ class MatchProxyTest(unittest.TestCase):
     self.assertEqual(mid, 'QYkqASAAIAAA')
 
   def MatchProxy_decode_4_test(self):
-    b = bglib.model.board.board()
+    b = BoardEditor()
     decode(b, 's+sNAAhwtxsAGA', 'QYlyASAAGAAA')
     print b
     pid, mid = encode(b)
@@ -230,7 +230,7 @@ class MatchProxyTest(unittest.TestCase):
     self.assertEqual(mid, 'QYlyASAAGAAA')
 
   def MatchProxy_decode_5_test(self):
-    b = bglib.model.board.board()
+    b = BoardEditor()
     decode(b, 'd5sBIQJurwcAQA', 'AYH0ACAAAAAA')
     print b
     pid, mid = encode(b)
@@ -240,7 +240,7 @@ class MatchProxyTest(unittest.TestCase):
     self.assertEqual(mid, 'AYH0ACAAAAAA')
 
   def MatchProxy_decode_6_test(self):
-    b = bglib.model.board.board()
+    b = BoardEditor()
     decode(b, '29kDAICdOwAAAA', 'cAmgACAAGAAA')
     print b
     pid, mid = encode(b)
@@ -248,6 +248,23 @@ class MatchProxyTest(unittest.TestCase):
     print b
     self.assertEqual(pid, '29kDAICdOwAAAA')
     self.assertEqual(mid, 'cAmgACAAGAAA')
+
+
+  def MatchProxy_badpadded_pid_test(self):
+    b = BoardEditor()
+    try:
+      decode(b, '29kDAICdOwAAA=', 'cAmgACAAGAAA')
+    except TypeError:
+      pass
+
+  def MatchProxy_badpadded_mid_test(self):
+    b = BoardEditor()
+    try:
+      decode(b, '29kDAICdOwAAAA', 'cAmgACAAGAA=')
+    except TypeError:
+      pass
+
+
 
 
 
