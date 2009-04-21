@@ -117,7 +117,7 @@ class SnowietxtTest(unittest.TestCase):
 
   f = tempfile.TemporaryFile()
   try:
-    call('sha1sum bglib/record/testdata/*.txt', shell=True, stdout=f)
+    call('sha1sum bglib/record/snowietxt/*.txt', shell=True, stdout=f)
     f.seek(0)
     xs = [line.split() for line in f.readlines()]
   finally:

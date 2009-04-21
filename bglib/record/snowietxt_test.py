@@ -11,7 +11,7 @@ from bglib.record.snowietxt import Validator
 
 class SnowietxtTest(unittest.TestCase):
   def test1857680(self):
-    f = open('bglib/record/testdata/1857680.txt')
+    f = open('bglib/record/snowietxt/1857680.txt')
     v = Validator(f)
     h = v.validate()
     self.assertEqual(h.hexdigest(),
