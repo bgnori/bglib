@@ -6,6 +6,7 @@
 #
 
 import unittest
+import StringIO
 from bglib.record.snowietxt import Validator
 
 class SnowietxtTest(unittest.TestCase):
@@ -15,3 +16,11 @@ class SnowietxtTest(unittest.TestCase):
     h = v.validate()
     self.assertEqual(h.hexdigest(),
                      'a1d23325d0c8a614756529de960e4e7bdc1f6737')
+  def testbad(self):
+    f = StringIO.StringIO('hogehoge\nzooba\n')
+    v = Validator(f)
+    try:
+      h = v.validate()
+      self.assert_(False)
+    except ValueError:
+      pass

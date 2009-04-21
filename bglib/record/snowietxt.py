@@ -10,40 +10,62 @@ import sha
 
 from tonic.lineparser import LineParser
 
+DEBUG = True
 class LineValidator(LineParser):
   _first = (
+  r"""(?P<emptyline>^ *$)"""
+  r'|'
   r"""(?P<mathclength>(^ \d+ point match))"""
   r'|'
-  r"""(?P<gameheader>(^ Game \d+))"""
+  r"""(?P<gameheader>(^ *Game \d+))"""
   r'|'
   r"""(?P<playerheader>(^ """
-    r"""(?P<player1>[^,]+,\d+ : \d+)"""
+    r"""(?P<player1>[^,:]+(,\d+)? : \d+)"""
     r""" *"""
-    r"""(?P<player2>[^,]+,\d+ : \d+)"""
-    r"""))"""
+    r"""(?P<player2>[^,:]+(,\d+)? : \d+)"""
+    r""")"""
+  r""")"""
   r'|'
-  r"""(?P<moves>(^ """
+  r"""(?P<moves>^"""
     r"""(?P<movecount> *\d+\)"""
-    r""" """
+    r""" +"""
     r"""(?P<player1_action>"""
-      r"""(?P<rolled1>[1-6][1-6]: +(?P<move1>([1-9]+)/([0-9]+))*)"""
+      r"""(?P<rolled1>[1-6][1-6]: +(?P<move1>[0-9*/ ]+))"""
+      r'|'
       r"""(?P<action1> (Takes)|(Doubles => \d+)|(Drops))"""
-      r""")"""
+      r""")?"""
     r""" *"""
-    r"""(?P<player2_action>[^,]+,\d+ : \d+)"""
-      r"""(?P<rolled2>[1-6][1-6]: +(?P<move2>([1-9]+)/([0-9]+))*)"""
+    r"""(?P<player2_action>"""
+      r"""(?P<rolled2>[1-6][1-6]: +(?P<move2>[0-9*/ ]+))"""
+      r'|'
       r"""(?P<action2> (Takes)|(Doubles => \d+)|(Drops))"""
-    r"""))"""
+    r""")?"""
+  r""")"""
   r'|'
-  r"""(?P<results>^ *Wins \d+ points)"""
+  r"""(?P<results>^ *Wins \d+ points?)"""
   r""")"""
   )
-  _last = r"""(<?P<baddata>.*)"""
-  def handle_mathclength(self, match, matchobj):pass
-  def handle_gameheader(self, match, matchobj):pass
-  def handle_playerheader(self, match, matchobj):pass
-  def handle_moves(self, match, matchobj):pass
+  _last = r"""(?P<baddata>^.*)"""
+
+  def handle_emptyline(self, match, matchobj):
+    if DEBUG:
+      print match
+  def handle_mathclength(self, match, matchobj):
+    if DEBUG:
+      print match
+  def handle_gameheader(self, match, matchobj):
+    if DEBUG:
+      print match
+  def handle_playerheader(self, match, matchobj):
+    if DEBUG:
+      print match
+  def handle_moves(self, match, matchobj):
+    if DEBUG:
+      print match
   def handle_baddata(self, match, matchobj):
+    if True:
+      print matchobj
+      print match
     raise ValueError(match)
 
 
@@ -51,10 +73,12 @@ class Validator(object):
   def __init__(self, f):
     self.h = sha.new()
     self.f = f
+    self.linev = LineValidator()
 
   def validate(self):
     for line in self.f:
       self.h.update(line)
+      self.linev.parse(line)
 
     return self.h
 
@@ -89,7 +113,7 @@ class SnowietxtTest(unittest.TestCase):
 
   import sys
   import tempfile
-  from subprocess import call, PIPE
+  from subprocess import call
 
   f = tempfile.TemporaryFile()
   try:
