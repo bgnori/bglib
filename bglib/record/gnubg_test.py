@@ -7,9 +7,9 @@
 import unittest
 import nose
 
-from bglib.model import constants
-import bglib.model.board
-from gnubgpython import *
+from bglib.model import *
+from bglib.model.constants import *
+from bglib.record.gnubg import *
 
 
 class GnuBGPythonTest(unittest.TestCase):
@@ -19,12 +19,13 @@ class GnuBGPythonTest(unittest.TestCase):
     pass
 
   def decode_1_test(self):
-    b = bglib.model.board.board()
-    b.rolled=(1, 3)
-    b.match_length = 17
-    b.game_state = constants.on_going
-    b.on_action = constants.him
-    b.on_inner_action = constants.him
+    b = Board(
+      rolled=(1, 3),
+      match_length=17,
+      game_state=ON_GOING,
+      on_action=HIM,
+      on_inner_action=HIM,
+      )
     t = Tracer(board=b)
     d = {'action': 'move', 'player': 'O',
          'move': ((7, 4), (5, 4)), 'dice': (1, 3),
