@@ -1,0 +1,31 @@
+This package contains:
+ * model
+  provides model to all other modules in this library.
+
+ * encoding
+  gnubgid : provides gnubg postion id decoder/encoder
+  FIBS : provides FIBS 'board:' responce  decoder
+  asciiart : provides ascii art decoder/encoder.
+  dbbyte : encoding for databasing position
+  bearoff : encoding for bear off database
+
+ * doc
+  provides bgwiki formatting engine.
+
+ * gui 
+  provides some GUI widgets using wxpython.
+
+ * image 
+  board imaging functions using PIL.
+
+ * protocol
+  FIBS/session
+
+ * record
+  gnubg: gnubg python module support
+  snowietxt: snowietxt format file support
+
+ * stat
+  rating: rating calculation
+  tourney: tourney equity based on rating
+

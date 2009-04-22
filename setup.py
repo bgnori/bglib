@@ -14,22 +14,7 @@ NAME = 'python-bglib-library'
 AUTHOR = "Noriyuki Hosaka", "bgnori@gmail.com"
 VERSION = open("VERSION").read().strip()
 DESCRIPTION = "backgammon programming utilities for python"
-LONG_DESCRIPTION="""\
-This package contains:
-  * model 
-   this module provides model to all other modules in this library.
-  * encoding 
-   - base module provides basic operations to other modules in this subpackage
-   - gnubg module is gnubg postion id decoder/decoder
-   - urlsafe module is urlsafe version of gnubg position decoder/encoder
-   - FIBS module is FIBS 'board:' responce  decoder
-  * image 
-   this module provides board imagin functions using PIL.
-  * gui 
-   this module provides some GUI widgets using wxpython.
-  * doc
-   this  module provides bgwiki formatting engine.
-"""
+LONG_DESCRIPTION=open("DESCRIPTION").read()
 HOMEPAGE="http://www.backgammonbase.com"
 
 try:
