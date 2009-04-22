@@ -26,7 +26,8 @@ ACCEPTABLES = {
 def statevalidate(method):
   def entangle(xxx):
     def statevalidate(func, *args, **kw):
-      current = args[0].state
+      self = args[0]
+      current = self.state
       #func.im_self.state
       next = method.__name__
       if next != 'handle_emptyline':
@@ -34,6 +35,11 @@ def statevalidate(method):
           if DEBUG:
             print args[1]
           raise ValueError('current:%s, next:%s'%(current, next))
+      if current == 'handle_moves' and next == 'handle_moves':
+        self.count += 1
+      else:
+        self.count = 1
+
       args[0].state = next
       return method(*args, **kw)
     return statevalidate 
@@ -55,29 +61,31 @@ class LineValidator(LineParser):
     r""")"""
   r""")"""
   r'|'
-  r"""(?P<moves>^"""
-    r"""(?P<nthmove> *\d+\)"""
-    r""" +"""
+  r"""(?P<moves>^ *"""
+    r"""(?P<nthmove>\d+)"""
+    r"""\) +"""
     r"""(?P<player1_action>"""
       r"""(?P<rolled1>[1-6][1-6]:(?P<move1>( [0-9]{1,2}/[0-9]{1,2}\*?])*))"""
-      r'|'
+      r'''|'''
       r"""(?P<action1> (Takes)|(Doubles => \d+)|(Drops))"""
       r""")?"""
     r""" *"""
     r"""(?P<player2_action>"""
       r"""(?P<rolled2>[1-6][1-6]:(?P<move2>( [0-9]{1,2}/[0-9]{1,2}\*?])*))"""
-      r'|'
+      r'''|'''
       r"""(?P<action2> (Takes)|(Doubles => \d+)|(Drops))"""
     r""")?"""
+    r""" *"""
+    r"""(?P<results1>^ *Wins \d+ points?)?"""
   r""")"""
   r'|'
-  r"""(?P<results>^ *Wins \d+ points?)"""
-  r""")"""
+  r"""(?P<results2>^ *Wins \d+ points?)"""
   )
   _last = r"""(?P<baddata>^.*)"""
 
   def __init__(self):
     self.state = None
+    self.count = None
     
   @statevalidate
   def handle_emptyline(self, match, matchobj):
@@ -103,6 +111,9 @@ class LineValidator(LineParser):
   def handle_moves(self, match, matchobj):
     if DEBUG:
       print match
+    d = matchobj.groupdict()
+    if self.count != int(d['nthmove']):
+      raise ValueError('Expected %i, but got %s'%(self.count, match))
 
   def handle_baddata(self, match, matchobj):
     if DEBUG:
