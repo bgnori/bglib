@@ -8,9 +8,38 @@
 __all__ = ['Validator']
 import sha
 
+from turbogears.decorator import weak_signature_decorator
+
 from tonic.lineparser import LineParser
 
 DEBUG = True
+
+ACCEPTABLES = {
+  None: ('handle_mathclength',),
+  'handle_emptyline':('handle_gameheader',),
+  'handle_mathclength': ('handle_gameheader',),
+  'handle_gameheader': ('handle_playerheader',),
+  'handle_playerheader': ('handle_moves',),
+  'handle_moves': ('handle_moves', 'handle_emptyline', 'handle_gameheader'),
+}
+
+def statevalidate(method):
+  def entangle(xxx):
+    def statevalidate(func, *args, **kw):
+      current = args[0].state
+      #func.im_self.state
+      next = method.__name__
+      if next != 'handle_emptyline':
+        if next not in ACCEPTABLES[current]:
+          if DEBUG:
+            print args[1]
+          raise ValueError('current:%s, next:%s'%(current, next))
+      args[0].state = next
+      return method(*args, **kw)
+    return statevalidate 
+  return weak_signature_decorator(entangle)
+
+
 class LineValidator(LineParser):
   _first = (
   r"""(?P<emptyline>^ *$)"""
@@ -47,24 +76,36 @@ class LineValidator(LineParser):
   )
   _last = r"""(?P<baddata>^.*)"""
 
+  def __init__(self):
+    self.state = None
+    
+  @statevalidate
   def handle_emptyline(self, match, matchobj):
     if DEBUG:
       print match
+
+  @statevalidate
   def handle_mathclength(self, match, matchobj):
     if DEBUG:
       print match
+
+  @statevalidate
   def handle_gameheader(self, match, matchobj):
     if DEBUG:
       print match
+
+  @statevalidate
   def handle_playerheader(self, match, matchobj):
     if DEBUG:
       print match
+
+  @statevalidate
   def handle_moves(self, match, matchobj):
     if DEBUG:
       print match
+
   def handle_baddata(self, match, matchobj):
-    if True:
-      print matchobj
+    if DEBUG:
       print match
     raise ValueError(match)
 
@@ -159,5 +200,4 @@ class SnowietxtTest(unittest.TestCase):
 
   for i, x in enumerate(xs):
     print mutated%(i, x[1], x[0])
-
 
