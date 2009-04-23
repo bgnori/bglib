@@ -48,7 +48,7 @@ def statevalidate(method):
 
 class LineValidator(LineParser):
   _first = (
-  r"""(?P<emptyline>^ *$)"""
+  r"""(?P<emptyline>^\s*\Z)"""
   r'|'
   r"""(?P<mathclength>(^ \d+ point match))"""
   r'|'
