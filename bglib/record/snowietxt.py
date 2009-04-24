@@ -12,7 +12,7 @@ from turbogears.decorator import weak_signature_decorator
 
 from tonic.lineparser import LineParser
 
-DEBUG = True
+DEBUG = False
 
 ACCEPTABLES = {
   None: ('handle_mathclength',),
@@ -122,16 +122,49 @@ class LineValidator(LineParser):
 
 
 class Validator(object):
-  def __init__(self):
+  def __init__(self, max_size=None):
     self.h = sha.new()
     self.linev = LineValidator()
+    self.size = 0
+    if max_size is None:
+      max_size = 0
+    self.max = max_size
 
   def feed(self, line):
     self.h.update(line)
     self.linev.parse(line)
+    self.size += len(line)
 
   def done(self):
     return self.h
+
+  def validate(self, f):
+    for line in f:
+      self.feed(line)
+      if self.max and self.size >= self.max:
+        raise ValueError('Too long content. max is %dK'%self.max)
+    return self.done()
+
+def chop(txt):
+  linev = LineValidator()
+  match_length = 0
+  xs = []
+  first = True
+  for line in txt:
+    linev.parse(line)
+    if linev.state == 'handle_mathclength':
+      match_length = line
+      continue
+    if linev.state == 'handle_emptyline':
+      continue
+    if linev.state == 'handle_gameheader':
+      if first:
+        first = False
+      else:
+        yield ''.join([match_length, '\n'] + xs)
+        xs = []
+    xs.append(line)
+  yield ''.join([match_length, '\n'] + xs)
 
 
 if __name__ == '__main__':
