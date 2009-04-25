@@ -146,11 +146,12 @@ class Validator(object):
     return self.done()
 
 def chop(txt):
+  assert isinstance(txt, str)
   linev = LineValidator()
   match_length = 0
   xs = []
   first = True
-  for line in txt:
+  for line in txt.splitlines(True):
     linev.parse(line)
     if linev.state == 'handle_mathclength':
       match_length = line

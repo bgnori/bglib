@@ -38,7 +38,8 @@ class SnowietxtValidatorTest(unittest.TestCase):
 class SnowietxtChopTest(unittest.TestCase):
   def test_chop_1857680(self):
     f = open('bglib/record/snowietxt/1857680.txt')
-    xs = [x for x in chop(f)]
+    xs = [x for x in chop(f.read())]
+    print xs[0][20]
     s = '''\
  5 point match
 
@@ -95,8 +96,9 @@ class SnowietxtChopTest(unittest.TestCase):
 
   def test_chop_zoonk_nori_2009Jan151857(self):
     f = open('bglib/record/snowietxt/zoonk-nori-2009Jan151857.txt')
-    xs = [x for x in chop(f)]
+    xs = [x for x in chop(f.read())]
     self.assertEqual(len(xs),1)
+    print xs[0][20]
     s = '''\
  3 point match
 
