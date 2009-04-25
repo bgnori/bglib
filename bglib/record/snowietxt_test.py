@@ -91,3 +91,17 @@ class SnowietxtChopTest(unittest.TestCase):
                                       Wins 1 point and the match
 '''
     self.assert_(xs[2].endswith(s))
+
+
+  def test_chop_zoonk_nori_2009Jan151857(self):
+    f = open('bglib/record/snowietxt/zoonk-nori-2009Jan151857.txt')
+    xs = [x for x in chop(f)]
+    self.assertEqual(len(xs),1)
+    s = '''\
+ 3 point match
+
+ Game 1
+ zoonk,1666 : 0                   nori,1699 : 0
+  1)                             26: 24/18 13/11
+'''
+    self.assert_(xs[0].startswith(s))
