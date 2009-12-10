@@ -43,16 +43,20 @@ def seq2bytes (xs):
   0 2 3 0 ---> 0 110 1110 0 : D mapping to binary.
   and endian is little endian.
   """
+  count = 0
   byte = ByteContext()
   for x in xs:
     for i in range(0, x):
       if not byte.write(1):
+        count += 1
         yield byte.pack()
     if not byte.write(0):
+      count += 1
       yield byte.pack()
-  if byte.count == 0:
-    raise StopIteration
-  else:
+  if byte.count != 0:
+    yield byte.pad()
+  while count < 9:
+    count += 1
     yield byte.pad()
 
 

@@ -264,7 +264,13 @@ class MatchProxyTest(unittest.TestCase):
     except TypeError:
       pass
 
+  def Zeropad_test(self):
+    b = BoardEditor()
 
+    decode(b, "ZwAAwGwAAAAAAA", "cIkkAAAAAAAA")
+    pid, mid = encode(b)
+    self.assertEqual(pid, "ZwAAwGwAAAAAAA")
+    self.assertEqual(mid, "cIkkAAAAAAAA")
 
 
 
