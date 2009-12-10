@@ -649,3 +649,29 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(str(found), "13/9")
 
 
+  def mf_28_test(self):
+    b = BoardEditor(
+        position=((0, 0, 0, 2, 2, 3, 0, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0),(0, 0, 0, 2, 0, 4, 0, 3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0)),
+        rolled = (1, 1))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_multiple_pms(util.move_pton('8'), util.move_pton('6'))
+    print 'found 8/7, 7/6'
+
+    self.assertEqual(repr(found), "<Move: [<PartialMove: 8/7>, <PartialMove: 7/6>]>")
+    self.assertEqual(str(found), "8/7, 7/6")
+    mf.add(found)
+    print 'added 8/7, 7/6'
+    
+    self.assertEqual(repr(mf.available), "<AvailableToPlay: [(1, 2), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0)]>") 
+    self.assertEqual(mf.available.get_max(), 1)
+
+    found = mf.guess_your_multiple_pms(util.move_pton('8'), util.move_pton('7'))
+    self.assertEqual(repr(found), "<Move: [<PartialMove: 8/7>]>")
+    self.assertEqual(str(found), "8/7")
+    mf.add(found)
+
+    found = mf.guess_your_multiple_pms(util.move_pton('8'), util.move_pton('7'))
+    self.assertEqual(repr(found), "<Move: [<PartialMove: 8/7>]>")
+    self.assertEqual(str(found), "8/7")
+

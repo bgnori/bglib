@@ -354,7 +354,10 @@ class MoveFactory(object):
       mv.append(pm)
       available.consume(pm.die)
       b.make_partial_move(pm)
-      return self.guess_your_multiple_pms(pm.dest, dest, b, available, mv)
+      mv = self.guess_your_multiple_pms(pm.dest, dest, b, available, mv)
+      rewind = PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting)
+      b.make_partial_move(rewind)
+      return mv
     else:
       # over run
       assert pm,dest < dest
