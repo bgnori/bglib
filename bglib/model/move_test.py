@@ -629,3 +629,23 @@ class MoveTest(unittest.TestCase):
     self.assertEqual(str(found), "bar/20, 20/15, 15/10, 15/10")
 
 
+  def mf_27_test(self):
+    b = BoardEditor(
+        position=((2, 2, 2, 0, 0, 3, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),(0, 0, 0, 0, 2, 4, 0, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0)),
+        rolled = (2, 4))
+
+    mf = MoveFactory(b)
+    found = mf.guess_your_multiple_pms(util.move_pton('24'), util.move_pton('22'))
+
+    self.assertEqual(repr(found), "<Move: [<PartialMove: 24/22>]>")
+    self.assertEqual(str(found), "24/22")
+    mf.add(found)
+    
+    self.assertEqual(repr(mf.available), "<AvailableToPlay: [(1, 0), (2, 0), (3, 0), (4, 1), (5, 0), (6, 0)]>") 
+    self.assertEqual(mf.available.get_max(), 4)
+
+    found = mf.guess_your_multiple_pms(util.move_pton('13'), util.move_pton('9'))
+    self.assertEqual(repr(found), "<Move: [<PartialMove: 13/9>]>")
+    self.assertEqual(str(found), "13/9")
+
+
