@@ -207,6 +207,7 @@ bglib/image/resource/safari/score_template.jpg
 bglib/image/resource/safari/your-home.jpg
 bglib/model/__init__.py
 bglib/model/board.py
+bglib/model/boardeditor.py
 bglib/model/constants.py
 bglib/model/model.py
 bglib/model/move.py
