@@ -208,15 +208,25 @@ class MoveFactory(object):
     if self.board.has_chequer_to_move(bar):
       if not self.guess_your_single_pm_from_source(bar):
         return True #dance
+
     for pt in POINTS:
       if self.board.has_chequer_to_move(pt):
         if self.guess_your_single_pm_from_source(pt):
           return False
+          #if self.board.rolled[0] == self.board.rolled[1]:
+          #  print 'can move checker from', util.move_ntop(pt);
+
+    if self.board.is_doubles():
+      return True
+            
     #rewind all moves and check for blocked moves.
     mf = MoveFactory(self.board, self.move, self.available)
+    inverses  = []
     for pm in mf.move:
-      inverse = PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting)
-      mf.append(inverse)
+      inverses.append(PartialMove(die=pm.die, src=pm.dest, dest=pm.src, is_hitting=pm.is_hitting))
+    for i in inverses:
+      mf.append(i)
+
     assert len(mf.move) == 0
 
     # No need to check doubles.
@@ -251,6 +261,7 @@ class MoveFactory(object):
     - acceptable: partial move
     - not acceptable: None
     '''
+    print 'guess_your_single_pm_from_source', src, available
     assert isinstance(src, int)
 
     if b is None:
@@ -267,7 +278,13 @@ class MoveFactory(object):
 
     dest = src - die
     if dest < 0: #= constants.off:
+      print src, dest
       if not b.is_ok_to_bearoff_from(src, die):
+        av = AvailableToPlay(rolled=None, copy_src=available)
+        av.consume(die)
+        if len(available):
+          pm = self.guess_your_single_pm_from_source(src, b, av)
+          return pm
         return self.Error('Not allowed to bear off from %i'%src)
       return PartialMove(die, src, OFF, False) 
     elif dest in POINTS:
@@ -276,9 +293,12 @@ class MoveFactory(object):
         return PartialMove(die, src, dest, b.is_hitting_to_land(dest))
       else:
         # then try another die.
-        available = AvailableToPlay(rolled=None, copy_src=available)
-        available.consume(die)
-        return self.guess_your_single_pm_from_source(src, b, available)
+        av = AvailableToPlay(rolled=None, copy_src=available)
+        av.consume(die)
+        pm = self.guess_your_single_pm_from_source(src, b, av)
+        #rewind = PartialMove(die=die, src=dest, dest=src, is_hitting=b.is_hitting_to_land(dest))
+        #b.make_partial_move(rewind)
+        return pm
     else:
       return self.Error('bad destination: %i'%dest)
     assert False
@@ -329,6 +349,7 @@ class MoveFactory(object):
     - accepted: list of partial move
     - not acceptable: None
     '''
+    print 'guess_your_multiple_pms', src, dest
 
     if b is None:
       b = self.board
@@ -346,7 +367,8 @@ class MoveFactory(object):
     assert isinstance(mv, Move)
 
     pm = self.guess_your_single_pm_from_source(src, b, available)
-    if not pm :
+    print pm
+    if not pm:
       return pm 
 
     assert pm.src == src
@@ -364,10 +386,14 @@ class MoveFactory(object):
       return mv
     else:
       # over run
-      assert pm,dest < dest
+      print 'over run'
+      assert pm.dest < dest
       available.consume(pm.die)
       # retry with other die
-      return self.guess_your_multiple_pms(src, dest, b, available, mv)
+      mv = self.guess_your_multiple_pms(src, dest, b, available, mv)
+      #rewind = PartialMove(die=pm.die, src=src, dest=pm.dest, is_hitting=pm.is_hitting)
+      #b.make_partial_move(rewind)
+      return mv
     assert False
 
   def guess_your_multiple_partial_undoes(self, src, dest, b=None, available=None, mv=None):

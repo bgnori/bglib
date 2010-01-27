@@ -57,7 +57,9 @@ def move_pton(p):
     return -1
   else:
     i = int(p)
-    if 0 < i and i < 25:
+    if 0 <= i and i <= 25:
+      #ugh! 25 is not well defined
+      #ugh! 0 is not well defined
       return i-1
   raise ValueError('Non-point numeric %s'%(p,))
 

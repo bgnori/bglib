@@ -116,6 +116,10 @@ class AbstractBoard(object):
       return False
     return True
 
+  def is_doubles(self):
+    assert self.has_rolled()
+    return self.rolled[0] == self.rolled[1]
+
   def is_cube_take_or_pass(self, who):
     return self.doubled and self.on_inner_action != self.on_action and \
       self.on_inner_action == who
