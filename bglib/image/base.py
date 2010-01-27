@@ -10,7 +10,7 @@ import os.path
 import bglib.image.css
 import bglib.model.constants
 
-from bglib.model.constants import you, him
+from bglib.model.constants import YOU, HIM
 
 class  ElementFactory(object):
   def __init__(self):
@@ -166,7 +166,7 @@ class ParityAttribute(StringAttribute):
 class PlayerAttribute(StringAttribute):
   name='player'
   def is_acceptable(self, v):
-    return isinstance(v, str) and v in bglib.model.constants.player_string
+    return isinstance(v, str) and v in bglib.model.constants.PLAYER_STRING
 
 class InitialCubeString(StringAttribute):
   name='initialCube'
@@ -440,7 +440,7 @@ class Field(BaseElement):
       context.draw_text(position, size, text, self.font, color)
   #FIXME
   #<!ATTLIST field basic
-  #                player (you|him) #REQUIRED
+  #                player (YOU|HIM) #REQUIRED
 Element.register(Field)
 
 
@@ -557,7 +557,7 @@ class Resign(BaseElement):
         position = (position[0] + x_offset, position[1] + y_offset)
         context.paste_image(loaded, position, size)
     elif font:
-      s = bglib.model.constants.resign_strings[int(self.children[0])]
+      s = bglib.model.constants.RESIGN_STRINGS[int(self.children[0])]
       context.draw_text(position, size, s, self.font, color)
     else:
       assert False
@@ -573,7 +573,7 @@ class Home(BaseElement):
                      player=PlayerAttribute)
   #FIXME
   #<!ATTLIST home basic
-  #                player (you|him) #REQUIRED
+  #                player (YOU|HIM) #REQUIRED
 Element.register(Home)
 
 
@@ -591,7 +591,7 @@ class Chequer(BaseElement):
                     )
   #FIXME
   #<!ATTLIST chequerbasic
-  #                player (you|him) #REQUIRED
+  #                player (YOU|HIM) #REQUIRED
   def draw(self, context):
     count = int(self.children[0]) #FIXME
     height = self.apply_mag(self.height)
@@ -635,7 +635,7 @@ class Bar(BaseElement):
                      player=PlayerAttribute)
   #FIXME
   #<!ATTLIST bar basic
-  #                player (you|him) #REQUIRED
+  #                player (YOU|HIM) #REQUIRED
 Element.register(Bar)
 
 
@@ -722,140 +722,140 @@ class ElementTree(object):
     self.visit(apply, [self.board])
 
   def set(self, board):
-    self.score[you].append(str(board.score[you]))
-    self.score[him].append(str(board.score[him]))
+    self.score[YOU].append(str(board.score[YOU]))
+    self.score[HIM].append(str(board.score[HIM]))
     self.length.append(str(board.match_length))
     self.crawford.append(str(board.crawford))
 
     for i in range(1, 25):
-      chequer_count = board.position[you][i-1]
+      chequer_count = board.position[YOU][i-1]
       if chequer_count:
-        chequer = Element('chequer',player=bglib.model.constants.player_string[you])
+        chequer = Element('chequer',player=bglib.model.constants.PLAYER_STRING[YOU])
         chequer.append(str(chequer_count))
         self.points[i].append(chequer)
 
-      chequer_count = board.position[him][i-1]
+      chequer_count = board.position[HIM][i-1]
       if chequer_count:
-        chequer = Element('chequer', player=bglib.model.constants.player_string[him])
+        chequer = Element('chequer', player=bglib.model.constants.PLAYER_STRING[HIM])
         chequer.append(str(chequer_count))
         self.points[25-i].append(chequer)
 
-    chequer_count = board.position[you][24]
+    chequer_count = board.position[YOU][24]
     if chequer_count:
-      chequer = Element('chequer', player=bglib.model.constants.player_string[you])
+      chequer = Element('chequer', player=bglib.model.constants.PLAYER_STRING[YOU])
       chequer.append(str(chequer_count))
-      self.bar[you].append(chequer)
+      self.bar[YOU].append(chequer)
 
-    chequer_count = board.position[him][24]
+    chequer_count = board.position[HIM][24]
     if chequer_count:
-      chequer = Element('chequer', player=bglib.model.constants.player_string[him])
+      chequer = Element('chequer', player=bglib.model.constants.PLAYER_STRING[HIM])
       chequer.append(str(chequer_count))
-      self.bar[him].append(chequer)
+      self.bar[HIM].append(chequer)
 
-    chequer_count = 15 - reduce(lambda x, y: x+y, board.position[you])
+    chequer_count = 15 - reduce(lambda x, y: x+y, board.position[YOU])
     if chequer_count:
-      chequer = Element('chequer', player=bglib.model.constants.player_string[you])
+      chequer = Element('chequer', player=bglib.model.constants.PLAYER_STRING[YOU])
       chequer.append(str(chequer_count))
-      self.home[you].append(chequer)
+      self.home[YOU].append(chequer)
 
-    chequer_count = 15 - reduce(lambda x, y: x+y, board.position[him])
+    chequer_count = 15 - reduce(lambda x, y: x+y, board.position[HIM])
     if chequer_count:
-      chequer = Element('chequer', player=bglib.model.constants.player_string[him])
+      chequer = Element('chequer', player=bglib.model.constants.PLAYER_STRING[HIM])
       chequer.append(str(chequer_count))
-      self.home[him].append(chequer)
+      self.home[HIM].append(chequer)
 
     if not board.doubled or board.on_inner_action == board.on_action:
-      if board.cube_owner == you:
+      if board.cube_owner == YOU:
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm))
-        self.home[you].append(cube)
-      elif board.cube_owner == him:
+        self.home[YOU].append(cube)
+      elif board.cube_owner == HIM:
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm))
-        self.home[him].append(cube)
-      elif board.cube_owner == bglib.model.constants.center:
+        self.home[HIM].append(cube)
+      elif board.cube_owner == bglib.model.constants.CENTER:
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm))
         self.cubeholder.append(cube)
       else:
         assert False
 
-    if board.on_action == you and board.rolled == (0, 0):
-      if not board.doubled and board.on_inner_action == you:
-        self.action.player = bglib.model.constants.player_string[you]
+    if board.on_action == YOU and board.rolled == (0, 0):
+      if not board.doubled and board.on_inner_action == YOU:
+        self.action.player = bglib.model.constants.PLAYER_STRING[YOU]
         self.action.append('you to roll or double.')
         return
 
-      if not board.doubled and board.on_inner_action == him and board.resign_offer in bglib.model.constants.resign_types:
-        self.action.player = bglib.model.constants.player_string[him]
+      if not board.doubled and board.on_inner_action == HIM and board.resign_offer in bglib.model.constants.RESIGN_TYPES:
+        self.action.player = bglib.model.constants.PLAYER_STRING[HIM]
         self.action.append('him to accept your resignation or not.')
         resign = Element('resign')
         resign.append(str(board.resign_offer))
-        self.field[him].append(resign)
+        self.field[HIM].append(resign)
         return
 
-      if board.doubled and board.on_inner_action == him:
+      if board.doubled and board.on_inner_action == HIM:
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm+1))
-        self.field[him].append(cube)
-        self.action.player = bglib.model.constants.player_string[you]
+        self.field[HIM].append(cube)
+        self.action.player = bglib.model.constants.PLAYER_STRING[YOU]
         self.action.append('you doubled. him to take or drop.')
         return
 
-      if board.doubled and board.on_inner_action == you:
-        self.action.player = bglib.model.constants.player_string[you]
+      if board.doubled and board.on_inner_action == YOU:
+        self.action.player = bglib.model.constants.PLAYER_STRING[YOU]
         self.action.append('you doubled. he took. you to roll.')
         return
 
-    if board.on_action == you and  board.rolled != (0, 0):
-      self.action.player = bglib.model.constants.player_string[you]
+    if board.on_action == YOU and  board.rolled != (0, 0):
+      self.action.player = bglib.model.constants.PLAYER_STRING[YOU]
       self.action.append('you to move.')
       die = Element('die', id='right')
       die.append(str(board.rolled[0]))
-      self.field[you].append(die)
+      self.field[YOU].append(die)
       die = Element('die', id='left')
       die.append(str(board.rolled[1]))
-      self.field[you].append(die)
+      self.field[YOU].append(die)
       return
 
-    if board.on_action == him and board.rolled == (0, 0):
-      if not board.doubled and board.on_inner_action == him:
-        self.action.player = bglib.model.constants.player_string[him]
+    if board.on_action == HIM and board.rolled == (0, 0):
+      if not board.doubled and board.on_inner_action == HIM:
+        self.action.player = bglib.model.constants.PLAYER_STRING[HIM]
         self.action.append('him to roll or double.')
         return
-      if not board.doubled and board.on_inner_action == you and board.resign_offer in bglib.model.constants.resign_types:
-        self.action.player = bglib.model.constants.player_string[you]
+      if not board.doubled and board.on_inner_action == YOU and board.resign_offer in bglib.model.constants.RESIGN_TYPES:
+        self.action.player = bglib.model.constants.PLAYER_STRING[YOU]
         self.action.append('you to accept his resignation or not.')
         resign = Element('resign')
         resign.append(str(board.resign_offer))
-        self.field[you].append(resign)
+        self.field[YOU].append(resign)
         return
 
-      if board.doubled and board.on_inner_action == you:
-        self.action.player = bglib.model.constants.player_string[you]
+      if board.doubled and board.on_inner_action == YOU:
+        self.action.player = bglib.model.constants.PLAYER_STRING[YOU]
         cube = Element('cube')
         cube.append(str(board.cube_in_logarithm+1))
-        self.field[you].append(cube)
+        self.field[YOU].append(cube)
         self.action.append('he doubled. you to take or drop.')
         return
 
-      if board.doubled and board.on_inner_action == him:
-        self.action.player = bglib.model.constants.player_string[him]
+      if board.doubled and board.on_inner_action == HIM:
+        self.action.player = bglib.model.constants.PLAYER_STRING[HIM]
         self.action.append('he doubled. you took. him to roll.')
         return
 
-    if board.on_action == him and  board.rolled !=(0, 0):
-      self.action.player = bglib.model.constants.player_string[him]
+    if board.on_action == HIM and  board.rolled !=(0, 0):
+      self.action.player = bglib.model.constants.PLAYER_STRING[HIM]
       self.action.append('him to move.')
       die = Element('die', id='right')
       die.append( str(board.rolled[0]))
-      self.field[him].append(die)
+      self.field[HIM].append(die)
       die = Element('die', id='left')
       die.append(str(board.rolled[1]))
-      self.field[him].append(die)
+      self.field[HIM].append(die)
       return
 
-    #assert not board.doubled and board.on_inner_action == him and board.resign_offer not in bglib.model.constants.resign_types
+    #assert not board.doubled and board.on_inner_action == HIM and board.resign_offer not in bglib.model.constants.resign_types
 
     raise AssertionError("""
     Bad element tree with
@@ -876,8 +876,8 @@ class ElementTree(object):
 
   def create_tree(self):
     score = list()
-    score.append(Element('score', player=bglib.model.constants.player_string[you]))
-    score.append(Element('score',  player=bglib.model.constants.player_string[him]))
+    score.append(Element('score', player=bglib.model.constants.PLAYER_STRING[YOU]))
+    score.append(Element('score',  player=bglib.model.constants.PLAYER_STRING[HIM]))
     self.score = score
     length = Element('length')
     self.length = length
@@ -890,24 +890,24 @@ class ElementTree(object):
     match.append(action)
     match.append(length)
     match.append(crawford)
-    match.append(score[you])
-    match.append(score[him])
+    match.append(score[YOU])
+    match.append(score[HIM])
     self.match = match
 
     points = list()
     points.append(None)
     self.points = points
     home = list()
-    home.append(Element('home', player=bglib.model.constants.player_string[you]))
-    home.append(Element('home', player=bglib.model.constants.player_string[him]))
+    home.append(Element('home', player=bglib.model.constants.PLAYER_STRING[YOU]))
+    home.append(Element('home', player=bglib.model.constants.PLAYER_STRING[HIM]))
     self.home = home
     bar = list()
-    bar.append(Element('bar', player=bglib.model.constants.player_string[you]))
-    bar.append(Element('bar', player=bglib.model.constants.player_string[him]))
+    bar.append(Element('bar', player=bglib.model.constants.PLAYER_STRING[YOU]))
+    bar.append(Element('bar', player=bglib.model.constants.PLAYER_STRING[HIM]))
     self.bar = bar
     field = list()
-    field.append(Element('field', player=bglib.model.constants.player_string[you]))
-    field.append(Element('field', player=bglib.model.constants.player_string[him]))
+    field.append(Element('field', player=bglib.model.constants.PLAYER_STRING[YOU]))
+    field.append(Element('field', player=bglib.model.constants.PLAYER_STRING[HIM]))
     self.field = field
     cubeholder = CubeHolder()
     self.cubeholder = cubeholder
@@ -916,9 +916,9 @@ class ElementTree(object):
     position.append(TopFrame())
     position.append(BottomFrame())
     position.append(cubeholder)
-    position.append(field[you])
-    position.append(home[you])
-    position.append(bar[him])
+    position.append(field[YOU])
+    position.append(home[YOU])
+    position.append(bar[HIM])
     for i in range(1, 25):
       if i%2:
         pt = Element('point', parity='odd')
@@ -928,9 +928,9 @@ class ElementTree(object):
       position.append(pt)
       points.append(pt)
       self.points = points
-    position.append(bar[you])
-    position.append(home[him])
-    position.append(field[him])
+    position.append(bar[YOU])
+    position.append(home[HIM])
+    position.append(field[HIM])
     self.position = position
 
     board = Element('board')

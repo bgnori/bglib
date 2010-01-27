@@ -31,6 +31,7 @@ tests = {
      's':('AAAAwOfgA2AAAA', 'cAk7AAAAAAAA'),
      't':('AAAAwOfgA2AAAA', 'cAkgAAAAAAAA'),
      'u':('AAAAwLeDgwEAAA', 'cAk7AAAAAAAA'),
+     'v':("4HPhASjgc/ABMA", "MAmgAAAAAAAA"),
      'rolled_31':('vzsAAFhu2xFABA','QYksASAAIAAA'),
      'rolled_52':('vzsAAFhu2xFABA','QYkqASAAIAAA'),
      'rolled_64':('vzsAAFhu2xFABA','QQkzASAAIAAA'),
@@ -47,6 +48,7 @@ class Writer(object):
       '''import unittest\n'''
       '''import Image\n'''
       '''import bglib.model.board\n'''
+      '''import bglib.model.boardeditor\n'''
       '''import bglib.encoding.gnubgid\n'''
       '''import bglib.image.css\n'''
       '''from bglib.image.resource.${css} import css\n'''
@@ -61,7 +63,7 @@ class Writer(object):
     klass = (
       '''class theTest(unittest.TestCase):\n'''
       '''  def setUp(self):\n'''
-      '''    self.b = bglib.model.board.board()\n'''
+      '''    self.b = bglib.model.boardeditor.BoardEditor()\n'''
       '''    \n'''
       '''  def tearDown(self):\n'''
       '''    pass\n'''
@@ -79,7 +81,7 @@ class Writer(object):
       '''  return Image.open(os.path.join(testdatapath, name + '.png'))\n'''
       '''\n'''
       '''def make_image(name, pid, mid):\n'''
-      '''  b = bglib.model.board.board()\n'''
+      '''  b = bglib.model.boardeditor.BoardEditor()\n'''
       '''  load(b, pid, mid)\n'''
       '''  image = draw.draw(b, (1000, 800))\n'''
       '''  image.save(os.path.join(testdatapath, '%s.png'%name))\n'''
@@ -97,7 +99,7 @@ class Writer(object):
       '''  return tree\n'''
       '''  \n'''
       '''def make_xml(name, pid, mid):\n'''
-      '''  b = bglib.model.board.board()\n'''
+      '''  b = bglib.model.boardeditor.BoardEditor()\n'''
       '''  load(b, pid, mid)\n'''
       '''  tree = make_tree(b)\n'''
       '''  f = file(os.path.join(testdatapath, '%s.xml'%name), 'w')\n'''
@@ -199,7 +201,7 @@ class WriterTest(unittest.TestCase):
     self.assertLinesEqual(class_code,(
       '''class theTest(unittest.TestCase):\n'''
       '''  def setUp(self):\n'''
-      '''    self.b = bglib.model.board.board()\n'''
+      '''    self.b = bglib.model.boardeditor.BoardEditor()\n'''
       '''    \n'''
       '''  def tearDown(self):\n'''
       '''    pass\n'''
@@ -216,7 +218,7 @@ class WriterTest(unittest.TestCase):
       '''  return Image.open(os.path.join(testdatapath, name + '.png'))\n'''
       '''\n'''
       '''def make_image(name, pid, mid):\n'''
-      '''  b = bglib.model.board.board()\n'''
+      '''  b = bglib.model.boardeditor.BoardEditor()\n'''
       '''  load(b, pid, mid)\n'''
       '''  image = draw.draw(b, (1000, 800))\n'''
       '''  image.save(os.path.join(testdatapath, '%s.png'%name))\n'''
@@ -234,7 +236,7 @@ class WriterTest(unittest.TestCase):
       '''  return tree\n'''
       '''  \n'''
       '''def make_xml(name, pid, mid):\n'''
-      '''  b = bglib.model.board.board()\n'''
+      '''  b = bglib.model.boardeditor.BoardEditor()\n'''
       '''  load(b, pid, mid)\n'''
       '''  tree = make_tree(b)\n'''
       '''  f = file(os.path.join(testdatapath, '%s.xml'%name), 'w')\n'''

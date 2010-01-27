@@ -182,6 +182,10 @@ class MoveFactory(object):
     else:
       self.available = AvailableToPlay(self.board.rolled)
 
+  def pickupdice(self):
+    assert self.is_leagal_to_pickup_dice()
+    self.board.pickupdice()
+
   def append(self, pm):
     assert(isinstance(pm, PartialMove))
     self.move.append(pm)

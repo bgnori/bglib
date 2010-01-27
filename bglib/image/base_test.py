@@ -312,7 +312,7 @@ class TreeTest(unittest.TestCase):
     forms = ClientForm.ParseResponse(res, backwards_compat=False)
     form = forms[1]
 
-    self.tree.set(bglib.model.board.board())
+    self.tree.set(bglib.model.board.Board())
     self.buf.write(self.tree.xml())
     self.buf.flush()
     self.buf.seek(0)

@@ -139,5 +139,10 @@ class BoardEditor(AbstractBoard):
     self.resign_offer = RESIGN_NONE
 
 
-
+  def pickupdice(self):
+    self.rolled = (0, 0)
+    print self.on_action
+    self.on_action = util.get_opp(self.on_action)
+    self.on_inner_action = util.get_opp(self.on_inner_action)
+    print self.on_action
 
