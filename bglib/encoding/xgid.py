@@ -52,6 +52,8 @@ def decode(model, s):
 
   # 3番目の部分はcubeの位置を表していて 1の場合は自分がキューブを持っていて、
   # -1の場合は相手がキューブを持っていて、0の場合はセンターキューブです。
+
+  # mapping player1 == YOU player2 == HIM
   cube_owner = int(cube_owner) 
   if cube_owner == XGID_PLAYER1:
     model.cube_owner = YOU

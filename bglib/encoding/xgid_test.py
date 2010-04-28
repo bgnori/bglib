@@ -109,7 +109,96 @@ class EncodingTest(unittest.TestCase):
     gnubgid.decode(from_gnubgid, 'awEAgHUAAAAAAA','UQkAAAAAAAAA')
     self.assertEqual(from_gnubgid, from_xgid)
 
+  def xgid2gnubg_itikawa_SecondWorstRoll_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '---CBbB-B----E-a--bcbcb-A-:1:1:1:21:0:1:0:5:10')
+    gnubgid.decode(from_gnubgid, '7HYjAAPczOADIA','UQmlABAAAAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_itikawa_DenmarkVWorldAtNordic2010_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-Ba-CBBCB----------Abc-ed-:1:1:1:00:7:1:0:15:16')
+    gnubgid.decode(from_gnubgid, '73MDABDjthsAAQ','UQngARAAOAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_itikawa_OhsakaOpenQuiz2010_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '--BBCbB---BBd------c-Bbca-:0:0:1:33:0:0:3:0:10')
+    gnubgid.decode(from_gnubgid, '3TjgAQO2M2wABg','cIkNAAAAAAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ01_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-aBa--DaB---cE---d-e---AA-:0:0:1:56:3:1:0:5:8')
+    gnubgid.decode(from_gnubgid, '4PPgICSGZ/ABKA','cIm6ABAAGAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ02_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-bB-BBC-B---bBA--bbdc---A-:0:0:1:35:0:0:3:0:8')
+    gnubgid.decode(from_gnubgid, 'cG+DATBmO4MFIA','cIkVAAAAAAAA')
+
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ03_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '---a--EBBBB-b----ccd--b-B-:0:0:1:12:1:0:0:3:8')
+    gnubgid.decode(from_gnubgid, 'jHcHAwjg2zYAMA','cIloAAAACAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ04_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-a---BDaCb---A--b-bcbbCB--:1:1:1:55:0:2:0:5:8')
+    gnubgid.decode(from_gnubgid, '2G4GTCCw5yCAGw','UYm2ACAAAAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ05_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '--BBCBC-a-----A----cBce-c-:0:0:1:32:0:0:3:0:8')
+    gnubgid.decode(from_gnubgid, '5zsHQAC22wECAw','cIkJAAAAAAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ06_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-B-BCaC-BB--b-ab-a-c-bb-aA:0:0:1:21:4:2:1:5:10')
+    gnubgid.decode(from_gnubgid, '2ZwsAwKzczYAQA','8AmlACAAIAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ07_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-A--b-D-D--BeB---c-e-AA---:0:0:1:66:0:0:3:0:8')
+    gnubgid.decode(from_gnubgid, '4HPwAQbB85gBCg','cAkbAAAAAAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
+
+  def xgid2gnubg_Festival2009QuizQ08_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '--D-CaBbB---BBa---bbbc-b--:0:0:1:23:1:0:0:3:8')
+    gnubgid.decode(from_gnubgid, '5rYhYAKeM8MGAA','cAltAAAACAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
 
 
+  def xgid2gnubg_Festival2009QuizQ09_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-aa-B-DBB--AdB--ab-d-b--B-:0:0:1:51:0:0:3:0:10')
+    gnubgid.decode(from_gnubgid, 'mGfhASiYt5EBMA', 'cIkGAAAAAAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
 
+  def xgid2gnubg_Festival2009QuizQ10_test(self):
+    from_xgid = BoardEditor()
+    from_gnubgid = BoardEditor()
+    xgid.decode(from_xgid, '-B-bABEAA--Ba---accc--b-A-:1:-1:1:43:0:0:3:0:8')
+    gnubgid.decode(from_gnubgid, 'jLsLAQyjfcUAIA','QQkOAAAAAAAA')
+    self.assertEqual(from_gnubgid, from_xgid)
 
