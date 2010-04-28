@@ -19,6 +19,7 @@ class EncodingTest(unittest.TestCase):
     from_gnubgid2 = BoardEditor()
     gnubgid.decode(from_gnubgid1, 'sM/BATCwZ/ABMA','cAmgAEAAGAAA')
     gnubgid.decode(from_gnubgid2, 'sM/BATCwZ/ABMA','cAmgAEAAGAAA')
+    print from_gnubgid1 == from_gnubgid2
     self.assertEqual(from_gnubgid1, from_gnubgid2)
 
   def xgid2gnubg_1_test(self):
@@ -38,8 +39,9 @@ class EncodingTest(unittest.TestCase):
   def xgid2gnubg_bgonline_HowToTrapAnAnchor_test(self):
     '''
       from
-      http://www.bgonline.org/forums/webbbs_config.pl?read=65226
       How to trap an anchor
+        gnuid http://www.bgonline.org/forums/webbbs_config.pl?read=65226
+        xgid  http://www.bgonline.org/forums/webbbs_config.pl?read=65334
     '''
     from_xgid = BoardEditor()
     from_gnubgid = BoardEditor()

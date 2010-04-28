@@ -7,13 +7,15 @@
 from bglib.model.constants import *
 
 
-XGID_YOU= -1
-XGID_HIM = 1
+XGID_PLAYER2= 1
+XGID_PLAYER1 = -1
 XGID_CENTER= 0
 
 #              0123456789012345
 CHEQUER_HIM = "-abcdefghijklmno"
 CHEQUER_YOU = "-ABCDEFGHIJKLMNO"
+conv_him = dict([(v, i) for i, v in enumerate(CHEQUER_HIM)])
+conv_you = dict([(v, i) for i, v in enumerate(CHEQUER_YOU)])
 
 
 def decode_position(s):
@@ -24,14 +26,12 @@ def decode_position(s):
   # の駒の数を表していて最後にバーにある自分の駒の数を表します。
   assert len(s) == 26
 
-  conv_him = dict([(v, i) for i, v in enumerate(CHEQUER_HIM)])
-  conv_you = dict([(v, i) for i, v in enumerate(CHEQUER_YOU)])
 
   you = s[1:26]
   him = "".join(reversed(s[0:25]))
 
-  return tuple([conv_you.get(y, 0) for y in you]), \
-         tuple([conv_him.get(h, 0) for h in him])
+  return tuple([conv_him.get(h, 0) for h in him]), \
+         tuple([conv_you.get(y, 0) for y in you])
     
 
 def decode(model, s):
@@ -42,8 +42,8 @@ def decode(model, s):
   = s.split(':')
 
   # 最初の部分の英文字と-からなる26文字の文字列はボードの上の駒の分布を表しています。
-  you, him = decode_position(position)
-  model.position = (you, him)
+  him, you = decode_position(position)
+  model.position = (him, you)
 
   # 2番目の部分はキューブの値を示します。 0のときはキューブの値は１,１のときは
   # キューブの値は2...
@@ -53,9 +53,9 @@ def decode(model, s):
   # 3番目の部分はcubeの位置を表していて 1の場合は自分がキューブを持っていて、
   # -1の場合は相手がキューブを持っていて、0の場合はセンターキューブです。
   cube_owner = int(cube_owner) 
-  if cube_owner == XGID_YOU:
+  if cube_owner == XGID_PLAYER1:
     model.cube_owner = YOU
-  elif cube_owner == XGID_HIM:
+  elif cube_owner == XGID_PLAYER2:
     model.cube_owner =  HIM
   elif cube_owner == XGID_CENTER:
     model.cube_owner = CENTER
@@ -66,19 +66,17 @@ def decode(model, s):
   # 4番めの部分はターンを示していて、1のときは自分の番で-1のときは相手の番
   # となります。
   on_action = int(on_action)
-  if on_action == XGID_YOU:
+  if on_action == XGID_PLAYER1:
     model.on_action = YOU
-  elif cube_owner == XGID_HIM:
-    model.cube_owner =  HIM
-  elif cube_owner == XGID_CENTER:
-    model.cube_owner = CENTER
+  elif on_action == XGID_PLAYER2:
+    model.on_action =  HIM
   else:
     assert False
 
   assert len(rolled) == 2
   model.rolled = int(rolled[0]), int(rolled[1])
 
-  model.score = (int(your_score), int(his_score))
+  model.score = (int(his_score), int(your_score))
 
   is_crawford_jacoby = int(is_crawford_jacoby)
   match_length = int(match_length)
@@ -89,11 +87,14 @@ def decode(model, s):
     model.crawford = bool(is_crawford_jacoby)
     model.match_length = match_length
 
-  #model.game_state = mp.game_state
-  #model.on_inner_action = mp.on_inner_action
+  #UGH!
+  model.game_state = ON_GOING  
+
+  #UGH!
+  model.on_inner_action = model.on_action
+
   #model.doubled = mp.doubled
   #model.resign_offer = mp.resign_offer
-
 
 
 
