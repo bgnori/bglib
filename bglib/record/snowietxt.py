@@ -8,7 +8,9 @@
 __all__ = ['Validator']
 import sha
 
-from turbogears.decorator import weak_signature_decorator
+#from turbogears.decorator import weak_signature_decorator
+from decorator import decorator
+
 
 from tonic.lineparser import LineParser
 
@@ -24,26 +26,24 @@ ACCEPTABLES = {
 }
 
 def statevalidate(method):
-  def entangle(xxx):
-    def statevalidate(func, *args, **kw):
-      self = args[0]
-      current = self.state
-      #func.im_self.state
-      next = method.__name__
-      if next != 'handle_emptyline':
-        if next not in ACCEPTABLES[current]:
-          if DEBUG:
-            print args[1]
-          raise ValueError('current:%s, next:%s'%(current, next))
-      if current == 'handle_moves' and next == 'handle_moves':
-        self.count += 1
-      else:
-        self.count = 1
+  def statevalidate(method, *args, **kw):
+    self = args[0]
+    current = self.state
+    #func.im_self.state
+    next = method.__name__
+    if next != 'handle_emptyline':
+      if next not in ACCEPTABLES[current]:
+        if DEBUG:
+          print args[1]
+        raise ValueError('current:%s, next:%s'%(current, next))
+    if current == 'handle_moves' and next == 'handle_moves':
+      self.count += 1
+    else:
+      self.count = 1
 
-      args[0].state = next
-      return method(*args, **kw)
-    return statevalidate 
-  return weak_signature_decorator(entangle)
+    args[0].state = next
+    return method(*args, **kw)
+  return decorator(statevalidate, method)
 
 
 class LineValidator(LineParser):

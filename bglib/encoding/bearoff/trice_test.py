@@ -10,7 +10,7 @@ from bglib.encoding.bearoff.trice import *
 class ReaderTest(unittest.TestCase):
   def setUp(self):
     self.reader = DBRreader()
-    self.reader.open('/home/nori/Desktop/work/BearoffDatabase/BEAR4.DTA')
+    self.reader.open('./bglib/encoding/bearoff/BEAR4.DTA')
   def tearDown(self):
     self.reader.close()
 
