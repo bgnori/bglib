@@ -15,7 +15,7 @@ __moduleid_deps__ = [
     mypath+'/default.css',
     mypath+'/*.png']
 
-tonic.moduleid.register(globals())
+#tonic.moduleid.register(globals())
 testdatapath = os.path.join(themata, mypath, 'test')
 
 

@@ -7,7 +7,7 @@
 import re
 import os.path
 
-import tonic.moduleid 
+#import tonic.moduleid 
 
 import bglib.image.PIL
 import bglib.image.css
@@ -18,7 +18,7 @@ __moduleid_deps__ = [
     mypath+'/Advert-Italic.ttf',
     mypath+'/default.css']
 
-tonic.moduleid.register(globals())
+#tonic.moduleid.register(globals())
 testdatapath = os.path.join(themata, mypath, 'test')
 
 css = bglib.image.css.load(os.path.join(themata, mypath, "default.css"))
