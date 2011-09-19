@@ -12,3 +12,6 @@ class DecodeError(exceptions.Exception):
 
 class InconsistentData(exceptions.Exception):
   pass
+
+class UndefinedTurn(exceptions.Exception):
+  pass
