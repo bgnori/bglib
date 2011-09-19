@@ -19,11 +19,13 @@ conv_you = dict([(v, i) for i, v in enumerate(CHEQUER_YOU)])
 
 
 def decode_position(s):
-  # 最初の部分の英文字と-からなる26文字の文字列はボードの上の駒の分布を表しています。
-  # 小文字は相手の駒の数をあらわしていて,aが１bが2...大文字は自分の駒の数を表
-  # していてAが１,Bが２...となっています。-は0を表しています。１番最初の文字は
-  # バーにある相手の駒の数であり２番目の文字から２４ポイントから１ポイントまで
-  # の駒の数を表していて最後にバーにある自分の駒の数を表します。
+  '''
+    最初の部分の英文字と-からなる26文字の文字列はボードの上の駒の分布を表しています。
+    小文字は相手の駒の数をあらわしていて,aが１bが2...大文字は自分の駒の数を表
+    していてAが１,Bが２...となっています。-は0を表しています。１番最初の文字は
+    バーにある相手の駒の数であり２番目の文字から２４ポイントから１ポイントまで
+    の駒の数を表していて最後にバーにある自分の駒の数を表します。
+  '''
   assert len(s) == 26
 
 
@@ -35,25 +37,33 @@ def decode_position(s):
     
 
 def decode(model, s):
-  # :がデータを区切るデリミタになっています。
+  '''
+    :がデータを区切るデリミタになっています。 
+  '''
   position, cube_in_logarithm, cube_owner, \
   on_action, rolled, your_score, his_score, \
   is_crawford_jacoby, match_length, cube_max, \
   = s.split(':')
 
-  # 最初の部分の英文字と-からなる26文字の文字列はボードの上の駒の分布を表しています。
+  '''
+    最初の部分の英文字と-からなる26文字の文字列はボードの上の駒の分布を表しています。
+  '''
   him, you = decode_position(position)
   model.position = (him, you)
 
-  # 2番目の部分はキューブの値を示します。 0のときはキューブの値は１,１のときは
-  # キューブの値は2...
+  '''
+   2番目の部分はキューブの値を示します。 0のときはキューブの値は１,１のときは
+   キューブの値は2...
+  '''
   model.cube_in_logarithm = int(cube_in_logarithm)
 
 
-  # 3番目の部分はcubeの位置を表していて 1の場合は自分がキューブを持っていて、
-  # -1の場合は相手がキューブを持っていて、0の場合はセンターキューブです。
+  '''
+   3番目の部分はcubeの位置を表していて 1の場合は自分がキューブを持っていて、
+   -1の場合は相手がキューブを持っていて、0の場合はセンターキューブです。
+   i.e. mapping player1 == YOU player2 == HIM
+  '''
 
-  # mapping player1 == YOU player2 == HIM
   cube_owner = int(cube_owner) 
   if cube_owner == XGID_PLAYER1:
     model.cube_owner = YOU
@@ -65,8 +75,10 @@ def decode(model, s):
     print cube_owner
     assert False
 
-  # 4番めの部分はターンを示していて、1のときは自分の番で-1のときは相手の番
-  # となります。
+  '''
+   4番めの部分はターンを示していて、1のときは自分の番で-1のときは相手の番
+   となります。
+  '''
   on_action = int(on_action)
   if on_action == XGID_PLAYER1:
     model.on_action = YOU
@@ -95,8 +107,9 @@ def decode(model, s):
   #UGH!
   model.on_inner_action = model.on_action
 
+  '''
   #model.doubled = mp.doubled
   #model.resign_offer = mp.resign_offer
-
+  '''
 
 

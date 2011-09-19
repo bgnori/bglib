@@ -2,7 +2,7 @@
 # -*- coding: us-ascii -*-
 # vim: syntax=python
 #
-# Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
+# Copyright 2006-2011 Noriyuki Hosaka bgnori@gmail.com
 #
 import struct
 
@@ -12,6 +12,7 @@ from base64 import standard_b64encode, standard_b64decode
 from tonic import BitsArray
 from bglib.model.constants import *
 import bglib.encoding
+
 
 class ByteContext:
   def __init__(self):
@@ -108,7 +109,10 @@ def decode_position(s):
       s += '='
     else:
       break
-  return twoside_decode(bin)
+  r = twoside_decode(bin)
+  if not len(r) == 2 or not len(r[0])==25 or not len(r[1])==25:
+    raise bglib.encoding.DecodeError('got bad data: %s '%(s,))
+  return r
 
 class Validator(object):
   def to_bitsarray(self, value, bitsarray, begin, end):
@@ -234,6 +238,7 @@ def encode(model):
   return pid, mid
 
 def decode(model, pid, mid):
+  msg = None
   mp = decode_match(mid)
   model.cube_in_logarithm = mp.cube_in_logarithm
   model.cube_owner = mp.cube_owner
@@ -246,6 +251,16 @@ def decode(model, pid, mid):
   model.rolled = mp.rolled
   model.match_length = mp.match_length
   model.score = mp.score
+ 
+  # FIXME not sure... 
+  if model.game_state == ON_GOING and \
+    model.match_length == 0 and  \
+    (model.score[0] > model.match_length or \
+     model.score[1] > model.match_length):
+    msg = 'bad score'
+
+  if msg:
+    raise bglib.encoding.InconsistentData(msg + ', got bad data: %s '%(mid,))
 
   # this is the difference between gnubg and bglib
   # gnubg's view from on_action 
@@ -259,7 +274,7 @@ def decode(model, pid, mid):
     you = on_action
     him = opp
   else:
-    assert False
+    raise bglib.encoding.UndefinedTurn('failed to find who to play. data: %s '%(mid,))
   model.position = (you, him)
 
 
