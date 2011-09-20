@@ -7,11 +7,14 @@
 
 import exceptions
 
-class DecodeError(exceptions.Exception):
+class EncodingError(exceptions.Exception):
   pass
 
-class InconsistentData(exceptions.Exception):
+class DecodeError(EncodingError):
   pass
 
-class UndefinedTurn(exceptions.Exception):
+class InconsistentData(EncodingError):
+  pass
+
+class UndefinedTurn(EncodingError):
   pass

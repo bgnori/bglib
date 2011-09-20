@@ -2,9 +2,10 @@
 # -*- coding: utf8 -*-
 # vim: syntax=python
 #
-# Copyright 2006-2008 Noriyuki Hosaka nori@backgammon.gr.jp
+# Copyright 2006-2011 Noriyuki Hosaka bgnori@gmail.com
 #
 from bglib.model.constants import *
+import bglib.encoding
 
 
 XGID_PLAYER2= 1
@@ -26,8 +27,8 @@ def decode_position(s):
     バーにある相手の駒の数であり２番目の文字から２４ポイントから１ポイントまで
     の駒の数を表していて最後にバーにある自分の駒の数を表します。
   '''
-  assert len(s) == 26
-
+  if len(s) != 26:
+    raise bglib.encoding.DecodeError('got bad data: %s '%(s,))
 
   you = s[1:26]
   him = "".join(reversed(s[0:25]))
@@ -37,13 +38,20 @@ def decode_position(s):
     
 
 def decode(model, s):
+
+  if not s:
+    raise bglib.encoding.DecodeError('got empty data. possible bad encoding')
+
   '''
     :がデータを区切るデリミタになっています。 
   '''
-  position, cube_in_logarithm, cube_owner, \
-  on_action, rolled, your_score, his_score, \
-  is_crawford_jacoby, match_length, cube_max, \
-  = s.split(':')
+  try:
+    position, cube_in_logarithm, cube_owner, \
+    on_action, rolled, your_score, his_score, \
+    is_crawford_jacoby, match_length, cube_max, \
+    = s.split(':')
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data (maybe lack of items or too many items): %s '%(s,))
 
   '''
     最初の部分の英文字と-からなる26文字の文字列はボードの上の駒の分布を表しています。
@@ -55,7 +63,10 @@ def decode(model, s):
    2番目の部分はキューブの値を示します。 0のときはキューブの値は１,１のときは
    キューブの値は2...
   '''
-  model.cube_in_logarithm = int(cube_in_logarithm)
+  try:
+    model.cube_in_logarithm = int(cube_in_logarithm)
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data, non integer cube logarithm: %s '%(cube_in_logarithm,))
 
 
   '''
@@ -64,7 +75,11 @@ def decode(model, s):
    i.e. mapping player1 == YOU player2 == HIM
   '''
 
-  cube_owner = int(cube_owner) 
+  try:
+    cube_owner = int(cube_owner) 
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data, non integer cube owner: %s '%(cube_owner,))
+
   if cube_owner == XGID_PLAYER1:
     model.cube_owner = YOU
   elif cube_owner == XGID_PLAYER2:
@@ -72,34 +87,59 @@ def decode(model, s):
   elif cube_owner == XGID_CENTER:
     model.cube_owner = CENTER
   else:
-    print cube_owner
-    assert False
+    raise bglib.encoding.InconsistentData('bad cube owner: %d '%(cube_owner,))
 
   '''
    4番めの部分はターンを示していて、1のときは自分の番で-1のときは相手の番
    となります。
   '''
-  on_action = int(on_action)
+  try:
+    on_action = int(on_action)
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data, non integer on action: %s '%(on_action,))
   if on_action == XGID_PLAYER1:
     model.on_action = YOU
   elif on_action == XGID_PLAYER2:
     model.on_action =  HIM
   else:
-    assert False
+    raise bglib.encoding.InconsistentData('bad turn: %d '%(on_action,))
 
-  assert len(rolled) == 2
-  model.rolled = int(rolled[0]), int(rolled[1])
+  if not len(rolled) == 2:
+    raise bglib.encoding.InconsistentData('bad roll: %s '%(rolled, ))
 
-  model.score = (int(his_score), int(your_score))
+  try:
+    model.rolled = int(rolled[0]), int(rolled[1])
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data, non integer roll: %s '%(rolled,))
 
-  is_crawford_jacoby = int(is_crawford_jacoby)
-  match_length = int(match_length)
+  try:
+    model.score = (int(his_score), int(your_score))
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data, non interger score: %s '%(his_score, your_score,))
+
+  try:
+    is_crawford_jacoby = int(is_crawford_jacoby)
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data, non integer Crawford/Jacoby flag: %s '%(is_crawford_jacoby,))
+
+  if is_crawford_jacoby not in (0, 1):
+    raise bglib.encoding.InconsistentData('bad Crawford/Jacoby flag: %d '%(is_crawford_jacoby, ))
+
+
+  try:
+    match_length = int(match_length)
+  except ValueError:
+    raise bglib.encoding.DecodeError('got bad data, non integer match length: %s '%(match_length,))
+
   if match_length == 0:
     model.crawford = False
     model.match_length = match_length
-  else:
+  elif match_length > 0:
     model.crawford = bool(is_crawford_jacoby)
     model.match_length = match_length
+  else:
+    raise bglib.encoding.InconsistentData('negative match length: %d '%(match_length, ))
+
 
   #UGH!
   model.game_state = ON_GOING  
