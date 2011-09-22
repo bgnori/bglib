@@ -1,0 +1,9 @@
+ClientForm==0.2.10
+Markdown==2.0.3
+PIL==1.1.7
+decorator==3.3.2
+distribute==0.6.19
+docutils==0.8.1
+nose==1.1.2
+python-memcached==1.47
+wsgiref==0.1.2
