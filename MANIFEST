@@ -19,11 +19,6 @@ bglib/encoding/__init__.py
 bglib/encoding/asciiart.py
 bglib/encoding/dbbyte.py
 bglib/encoding/gnubgid.py
-bglib/gui/__init__.py
-bglib/gui/ideditor.py
-bglib/gui/player.py
-bglib/gui/viewer.py
-bglib/gui/wysiwygeditor.py
 bglib/image/PIL.py
 bglib/image/__init__.py
 bglib/image/base.py

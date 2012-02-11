@@ -62,7 +62,6 @@ setup(
   packages = ['bglib', 
               'bglib.doc', 
               'bglib.encoding', 
-              'bglib.gui', 
               'bglib.image', 
               'bglib.image.resource', 
               'bglib.model',
