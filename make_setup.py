@@ -5,6 +5,28 @@
 # Copyright 2006-2012 Noriyuki Hosaka bgnori@gmail.com
 #
 
+
+d = dict(
+  NAME='python-bglib-library',
+  AUTHOR="Noriyuki Hosaka",
+  AUTHOR_EMAIL= "bgnori@gmail.com",
+  VERSION=open("VERSION").read().strip(),
+  HOMEPAGE="https://github.com/bgnori/bglib",
+  DESCRIPTION = "backgammon programming utilities for python",
+  LONG_DESCRIPTION=open("DESCRIPTION").read(),
+  install_requires=open("freeze.txt").readlines(),
+)
+
+
+
+setup_str = '''\
+#!/usr/bin/python
+# -*- coding: us-ascii -*-
+# vim: syntax=python
+#
+# Copyright 2006-2012 Noriyuki Hosaka bgnori@gmail.com
+#
+
 from setuptools import setup
 
 
@@ -20,44 +42,13 @@ setup(
   name=NAME,
   version=VERSION,
   zip_safe=False,
-  description=backgammon programming utilities for python,
-  long_description=This package contains:
- * model
-  provides model to all other modules in this library.
-
- * encoding
-  gnubgid : provides gnubg postion id decoder/encoder
-  FIBS : provides FIBS 'board:' responce  decoder
-  asciiart : provides ascii art decoder/encoder.
-  dbbyte : encoding for databasing position
-  bearoff : encoding for bear off database
-
- * doc
-  provides bgwiki formatting engine.
-
- * gui 
-  provides some GUI widgets using wxpython.
-
- * image 
-  board imaging functions using PIL.
-
- * protocol
-  FIBS/session
-
- * record
-  gnubg: gnubg python module support
-  snowietxt: snowietxt format file support
-
- * stat
-  rating: rating calculation
-  tourney: tourney equity based on rating
-
-,
-  author=Noriyuki Hosaka,
-  author_email=bgnori@gmail.com,
-  package_dir = {
+  description={DESCRIPTION},
+  long_description={LONG_DESCRIPTION},
+  author={AUTHOR},
+  author_email={AUTHOR_EMAIL},
+  package_dir = {{
                  'bglib':'bglib', #root
-                 },
+                 }},
   packages = ['bglib', 
               'bglib.doc', 
               'bglib.encoding', 
@@ -67,7 +58,7 @@ setup(
               'bglib.model',
               'bglib.protocol'
               ],
-  package_data = {
+  package_data = {{
       'bglib.image.resource':[os.path.join('matrix','default.css'),
                               os.path.join('matrix','*.png'),
                               os.path.join('minimal','*.ttf'),
@@ -86,12 +77,14 @@ setup(
                               os.path.join('safari','*.jpg'),
                               os.path.join('safari','*.png'),
                              ],
-      },
+      }},
   py_modules=[],
-  install_requires= ['BeautifulSoup==3.2.0\n', 'ClientForm==0.2.10\n', 'Markdown==2.1.1\n', 'decorator==3.3.2\n', 'distribute==0.6.19\n', 'docutils==0.8.1\n', 'elementtree==1.2.7-20070827-preview\n', 'feedparser==5.0.1\n', 'nose==1.1.2\n', 'python-memcached==1.47\n', 'python-tonic-library==0.0.16.rev\n', 'wsgiref==0.1.2\n'],
+  install_requires= {install_requires},
   provides=['bglib'],
-  url=https://github.com/bgnori/bglib,
+  url={HOMEPAGE},
   license="proprietary",
 )
 
+'''
 
+print setup_str.format(**d)
