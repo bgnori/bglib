@@ -17,11 +17,11 @@ except:
     pass
 
 setup(
-  name=NAME,
-  version=VERSION,
+  name="python-bglib-library",
+  version="0.0.10",
   zip_safe=False,
-  description=backgammon programming utilities for python,
-  long_description=This package contains:
+  description="backgammon programming utilities for python",
+  long_description="This package contains:
  * model
   provides model to all other modules in this library.
 
@@ -52,9 +52,9 @@ setup(
   rating: rating calculation
   tourney: tourney equity based on rating
 
-,
-  author=Noriyuki Hosaka,
-  author_email=bgnori@gmail.com,
+",
+  author="Noriyuki Hosaka",
+  author_email="bgnori@gmail.com",
   package_dir = {
                  'bglib':'bglib', #root
                  },
@@ -90,7 +90,7 @@ setup(
   py_modules=[],
   install_requires= ['BeautifulSoup==3.2.0\n', 'ClientForm==0.2.10\n', 'Markdown==2.1.1\n', 'decorator==3.3.2\n', 'distribute==0.6.19\n', 'docutils==0.8.1\n', 'elementtree==1.2.7-20070827-preview\n', 'feedparser==5.0.1\n', 'nose==1.1.2\n', 'python-memcached==1.47\n', 'python-tonic-library==0.0.16.rev\n', 'wsgiref==0.1.2\n'],
   provides=['bglib'],
-  url=https://github.com/bgnori/bglib,
+  url="https://github.com/bgnori/bglib",
   license="proprietary",
 )
 

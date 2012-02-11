@@ -39,13 +39,13 @@ except:
     pass
 
 setup(
-  name=NAME,
-  version=VERSION,
+  name="{NAME}",
+  version="{VERSION}",
   zip_safe=False,
-  description={DESCRIPTION},
-  long_description={LONG_DESCRIPTION},
-  author={AUTHOR},
-  author_email={AUTHOR_EMAIL},
+  description="{DESCRIPTION}",
+  long_description="{LONG_DESCRIPTION}",
+  author="{AUTHOR}",
+  author_email="{AUTHOR_EMAIL}",
   package_dir = {{
                  'bglib':'bglib', #root
                  }},
@@ -81,7 +81,7 @@ setup(
   py_modules=[],
   install_requires= {install_requires},
   provides=['bglib'],
-  url={HOMEPAGE},
+  url="{HOMEPAGE}",
   license="proprietary",
 )
 
