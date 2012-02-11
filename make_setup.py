@@ -28,6 +28,7 @@ setup_str = '''\
 #
 
 from setuptools import setup
+import os.path
 
 
 try:
