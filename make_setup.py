@@ -42,8 +42,8 @@ setup(
   name="{NAME}",
   version="{VERSION}",
   zip_safe=False,
-  description="{DESCRIPTION}",
-  long_description="{LONG_DESCRIPTION}",
+  description="""{DESCRIPTION}""",
+  long_description="""{LONG_DESCRIPTION}""",
   author="{AUTHOR}",
   author_email="{AUTHOR_EMAIL}",
   package_dir = {{

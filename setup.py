@@ -20,8 +20,8 @@ setup(
   name="python-bglib-library",
   version="0.0.10",
   zip_safe=False,
-  description="backgammon programming utilities for python",
-  long_description="This package contains:
+  description="""backgammon programming utilities for python""",
+  long_description="""This package contains:
  * model
   provides model to all other modules in this library.
 
@@ -52,7 +52,7 @@ setup(
   rating: rating calculation
   tourney: tourney equity based on rating
 
-",
+""",
   author="Noriyuki Hosaka",
   author_email="bgnori@gmail.com",
   package_dir = {
